@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using UnityEngine;
+
 namespace UnityMiniGameFramework
 {
-    public class Character
+    public class CharacterComponent : ActorComponent
     {
         protected Dictionary<string, Attribute> _attributes; // key name => attributes
         protected Dictionary<string, AvatarParts> _avatars; // position => avatar part

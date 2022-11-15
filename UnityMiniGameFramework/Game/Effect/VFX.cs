@@ -8,7 +8,10 @@ using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
-    public class RigibodyMovement : MonoBehaviour
+    public class VFX
     {
+        protected ParticleSystem _particleSys;
+
+        public ParticleSystem particleSystem => _particleSys;
     }
 }

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using UnityEngine;
+
 namespace UnityMiniGameFramework
 {
-    class Map
+    public class RigibodyMoveComponent : MonoBehaviour
     {
     }
 }
