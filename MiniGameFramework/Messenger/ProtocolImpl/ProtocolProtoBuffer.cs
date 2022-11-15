@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Google.Protobuf;
 
-namespace UnityMiniGameFramework
+namespace MiniGameFramework
 {
     class ProtocolProtoBuffer : IProtocol
     {

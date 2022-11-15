@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using Ionic.Zlib;
 
-namespace UnityMiniGameFramework
+namespace MiniGameFramework
 {
     class ConnectorWebSocket : IConnector
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf;
-using UnityMiniGameFramework;
+using MiniGameFramework;
 
 namespace ConsoleApp1
 {
@@ -34,7 +34,7 @@ namespace ConsoleApp1
             Console.WriteLine(errMsg);
         }
 
-        public void onReceive(UnityMiniGameFramework.IMessage msg)
+        public void onReceive(MiniGameFramework.IMessage msg)
         {
             if(msg == null)
             {
@@ -45,12 +45,12 @@ namespace ConsoleApp1
             Console.WriteLine($"data:{msg.data}");
         }
 
-        public void onSended(UnityMiniGameFramework.IMessage msg)
+        public void onSended(MiniGameFramework.IMessage msg)
         {
             Console.WriteLine($"on session command {msg.iCommand} sended");
         }
 
-        public void onSending(UnityMiniGameFramework.IMessage msg)
+        public void onSending(MiniGameFramework.IMessage msg)
         {
             Console.WriteLine($"on session command {msg.iCommand} sending...");
         }
@@ -68,12 +68,13 @@ namespace ConsoleApp1
 
             Console.WriteLine("Init network...");
             Debug.Init(dbgOutput);
+            GameApp.Init();
 
-            IConnector conn = Network.CreateConnector("websock", 512 * 1024);
-            IProtocol proto = Network.CreateProtocol("protoBuff");
+            IConnector conn = GameApp.Network.CreateConnector("websock", 512 * 1024);
+            IProtocol proto = GameApp.Network.CreateProtocol("protoBuff");
 
             SessionClientHandler handler = new SessionClientHandler();
-            SessionClient client = Network.CreateSessionClient(conn, proto, handler);
+            SessionClient client = GameApp.Network.CreateSessionClient(conn, proto, handler);
 
             Console.WriteLine("register command...");
             client.protocol.regCommand(1101, typeof(Server.LoginData));
@@ -179,12 +180,12 @@ namespace ConsoleApp1
                     //    int i = 0;
                     //}
 
-                    UnityMiniGameFramework.IMessage msg = client.protocol.encode(11201, new Common.Empty());
+                    MiniGameFramework.IMessage msg = client.protocol.encode(11201, new Common.Empty());
                     client.Send(msg);
                 }
                 else if (cmd == "randName")
                 {
-                    UnityMiniGameFramework.IMessage msg = client.protocol.encode(11211, new Common.Empty());
+                    MiniGameFramework.IMessage msg = client.protocol.encode(11211, new Common.Empty());
                     client.Send(msg);
                 }
                 else if (cmd == "build")
@@ -200,7 +201,7 @@ namespace ConsoleApp1
                         },
                         Orientation = 1
                     };
-                    UnityMiniGameFramework.IMessage msg = client.protocol.encode(11301, par);
+                    MiniGameFramework.IMessage msg = client.protocol.encode(11301, par);
                     client.Send(msg);
                 }
             }

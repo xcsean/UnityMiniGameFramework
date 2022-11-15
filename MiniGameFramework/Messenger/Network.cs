@@ -2,32 +2,32 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UnityMiniGameFramework
+namespace MiniGameFramework
 {
-    public class Network
+    class Network : INetwork
     {
-        public static IConnector CreateConnector(string connType, uint bufferSize)
+        public IConnector CreateConnector(string connType, uint bufferSize)
         {
             return ConnectorImpls.CreateConnector(connType, bufferSize);
         }
 
-        public static IListener CreateListener(string connType)
+        public IListener CreateListener(string connType)
         {
             return ListenerImpls.CreateListener(connType);
         }
 
-        public static IProtocol CreateProtocol(string protoType)
+        public IProtocol CreateProtocol(string protoType)
         {
             return ProtocolImpls.CreateProtocol(protoType);
         }
 
-        public static SessionClient CreateSessionClient(IConnector conn, IProtocol proto, ISessionClientHandler handler)
+        public SessionClient CreateSessionClient(IConnector conn, IProtocol proto, ISessionClientHandler handler)
         {
             SessionClient s = new SessionClient(conn, proto, handler);
             
             return s;
         }
-        public static SessionServer CreateSessionServer(IListener lis, IProtocol proto)
+        public SessionServer CreateSessionServer(IListener lis, IProtocol proto)
         {
             SessionServer s = new SessionServer(lis, proto);
 

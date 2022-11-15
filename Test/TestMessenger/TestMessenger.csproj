@@ -127,11 +127,10 @@
     <None Include="Proto\packages\train.server.worker.proto" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\UnityMiniGameFramework\UnityMiniGameFramework.csproj">
-      <Project>{38696ffd-a74a-4b69-a44b-79e528b660ad}</Project>
-      <Name>UnityMiniGameFramework</Name>
+    <ProjectReference Include="..\..\MiniGameFramework\MiniGameFramework.csproj">
+      <Project>{7b1cef1e-f39a-4e1d-a7a3-0e9e8d83a24a}</Project>
+      <Name>MiniGameFramework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

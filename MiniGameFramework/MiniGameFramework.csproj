@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{38696FFD-A74A-4B69-A44B-79E528B660AD}</ProjectGuid>
+    <ProjectGuid>{7B1CEF1E-F39A-4E1D-A7A3-0E9E8D83A24A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnityMiniGameFramework</RootNamespace>
-    <AssemblyName>UnityMiniGameFramework</AssemblyName>
+    <RootNamespace>MiniGameFramework</RootNamespace>
+    <AssemblyName>MiniGameFramework</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Google.Protobuf, Version=3.21.9.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.21.9\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.7.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -53,6 +55,9 @@
     <Reference Include="System.Text.Encodings.Web, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.7.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
+    <Reference Include="System.Text.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.7.0.0\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -65,24 +70,40 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\Program Files\Unity\Hub\Editor\2019.4.40f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Debug.cs" />
+    <Compile Include="GameApp.cs" />
+    <Compile Include="Interfaces\Network\INetwork.cs" />
+    <Compile Include="Messenger\ConnectorImpl\ConnectorImpls.cs" />
+    <Compile Include="Messenger\ConnectorImpl\ConnectorSocket.cs" />
+    <Compile Include="Messenger\ConnectorImpl\ConnectorWebSocket.cs" />
+    <Compile Include="Interfaces\Network\IConnector.cs" />
+    <Compile Include="Interfaces\Network\IConnectorHandler.cs" />
+    <Compile Include="Interfaces\Network\IListener.cs" />
+    <Compile Include="Interfaces\Network\IMessage.cs" />
+    <Compile Include="Interfaces\Network\IProtocol.cs" />
+    <Compile Include="Interfaces\Network\ISessionClientHandler.cs" />
+    <Compile Include="Messenger\ListenerImpl\ListenerImpls.cs" />
+    <Compile Include="Messenger\Network.cs" />
+    <Compile Include="Messenger\ProtocolImpl\MessageJson.cs" />
+    <Compile Include="Messenger\ProtocolImpl\MessageProtoBuffer.cs" />
+    <Compile Include="Messenger\ProtocolImpl\ProtocolImpls.cs" />
+    <Compile Include="Messenger\ProtocolImpl\ProtocolJson.cs" />
+    <Compile Include="Messenger\ProtocolImpl\ProtocolProtoBuffer.cs" />
+    <Compile Include="Messenger\SessionClient.cs" />
+    <Compile Include="Messenger\SessionServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MiniGameFramework\MiniGameFramework.csproj">
-      <Project>{7b1cef1e-f39a-4e1d-a7a3-0e9e8d83a24a}</Project>
-      <Name>MiniGameFramework</Name>
-    </ProjectReference>
+    <Folder Include="Interfaces\Game\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

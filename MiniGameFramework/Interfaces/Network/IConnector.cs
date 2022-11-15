@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace UnityMiniGameFramework
+namespace MiniGameFramework
 {
     public interface IConnector
     {
