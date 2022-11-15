@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.2092
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityMiniGameFramework", "UnityMiniGameFramework\UnityMiniGameFramework.csproj", "{38696FFD-A74A-4B69-A44B-79E528B660AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{876CC9A9-B761-41AE-B703-3FE3DB4A3B77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMessenger", "Test\TestMessenger\TestMessenger.csproj", "{9A274703-9046-4438-94AA-260D7E0C5C1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38696FFD-A74A-4B69-A44B-79E528B660AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38696FFD-A74A-4B69-A44B-79E528B660AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38696FFD-A74A-4B69-A44B-79E528B660AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38696FFD-A74A-4B69-A44B-79E528B660AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A274703-9046-4438-94AA-260D7E0C5C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A274703-9046-4438-94AA-260D7E0C5C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A274703-9046-4438-94AA-260D7E0C5C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A274703-9046-4438-94AA-260D7E0C5C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A274703-9046-4438-94AA-260D7E0C5C1A} = {876CC9A9-B761-41AE-B703-3FE3DB4A3B77}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {457D0AD9-510E-40D2-AF5A-DCA1EF723887}
+	EndGlobalSection
+EndGlobal
