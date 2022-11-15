@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MiniGameFramework;
 using UnityEngine;
 
 namespace UnityMiniGameFramework
@@ -45,13 +46,13 @@ namespace UnityMiniGameFramework
         // Update is called once per frame
         void Update()
         {
+            _pickNextPos();
+
+            _updateMove();
         }
 
         void FixedUpdate()
         {
-            _pickNextPos();
-
-            _updateMove();
         }
 
         void _pickNextPos()
@@ -93,6 +94,9 @@ namespace UnityMiniGameFramework
                 _curTargetPos = null; // reach target pos, stop
             }
             this.transform.position = this.transform.position + movVec;
+            //this.transform.Translate(movVec);
+
+            //MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{Time.deltaTime} {movVec.magnitude}");
             
             if (_heightMap != null)
             {

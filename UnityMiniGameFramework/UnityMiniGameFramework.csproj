@@ -70,7 +70,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\Animation\Animation.cs" />
+    <Compile Include="Game\Character\Attribute.cs" />
+    <Compile Include="Game\Character\Avatar.cs" />
+    <Compile Include="Game\Character\AvatarParts.cs" />
+    <Compile Include="Game\Character\Character.cs" />
+    <Compile Include="Game\Map\Map.cs" />
+    <Compile Include="Game\Map\MapItem.cs" />
+    <Compile Include="Game\Map\MapMonster.cs" />
     <Compile Include="Game\Movement\MoveComponent.cs" />
+    <Compile Include="Game\Movement\RigibodyMovement.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -86,5 +95,6 @@
       <Name>MiniGameFramework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
