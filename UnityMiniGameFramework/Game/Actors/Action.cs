@@ -6,15 +6,29 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 
-namespace UnityMiniGameFramework.Game.Character
+namespace UnityMiniGameFramework
 {
-    public class Action
+    abstract public class Act
     {
-        protected ActorComponent _actor;
+        protected ActorObject _actor;
+        public ActorObject actor => _actor;
 
-        public ActorComponent actor => _actor;
+        protected bool _actived = false;
 
-        public bool isFinished
+        public Act(ActorObject actor)
+        {
+            _actor = actor;
+        }
+
+        public bool isActive
+        {
+            get
+            {
+                return _actived;
+            }
+        }
+
+        virtual public bool isFinished
         {
             get
             {
@@ -22,7 +36,38 @@ namespace UnityMiniGameFramework.Game.Character
             }
         }
 
-        public void Update()
+        virtual public bool discardWhenFinish
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        virtual public bool queueWhenNotStartable
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        virtual public bool checkStartCondition()
+        {
+            return true;
+        }
+
+        virtual public void Start()
+        {
+            _actived = true;
+        }
+
+        virtual public void Update(uint timeElasped)
+        {
+
+        }
+
+        virtual public void PostUpdate(uint timeElasped)
         {
 
         }

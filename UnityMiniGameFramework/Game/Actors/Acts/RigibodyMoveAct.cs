@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-    public class AvatarPartConfig
-    {
-        string name { get; set; }
-        string slotName { get; set; }
-    }
-
-    public class AvatarParts
+    class RigibodyMoveAct
     {
     }
 }

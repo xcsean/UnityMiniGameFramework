@@ -68,13 +68,14 @@ namespace ConsoleApp1
 
             Console.WriteLine("Init network...");
             Debug.Init(dbgOutput);
-            GameApp.Init();
+            GameApp.setInst(new GameApp());
+            GameApp.Inst.Init("");
 
-            IConnector conn = GameApp.Network.CreateConnector("websock", 512 * 1024);
-            IProtocol proto = GameApp.Network.CreateProtocol("protoBuff");
+            IConnector conn = GameApp.Inst.Network.CreateConnector("websock", 512 * 1024);
+            IProtocol proto = GameApp.Inst.Network.CreateProtocol("protoBuff");
 
             SessionClientHandler handler = new SessionClientHandler();
-            SessionClient client = GameApp.Network.CreateSessionClient(conn, proto, handler);
+            SessionClient client = GameApp.Inst.Network.CreateSessionClient(conn, proto, handler);
 
             Console.WriteLine("register command...");
             client.protocol.regCommand(1101, typeof(Server.LoginData));

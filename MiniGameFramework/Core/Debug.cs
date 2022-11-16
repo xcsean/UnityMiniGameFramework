@@ -18,6 +18,7 @@ namespace MiniGameFramework
     public class Debug
     {
         protected static Action<string> _dbgOutput;
+        protected static Action<string> _dbgError;
         protected static DebugTraceType _traceType;
 
         public static void DebugOutput(DebugTraceType traceType, string msg)
@@ -32,12 +33,20 @@ namespace MiniGameFramework
                 return;
             }
 
-            _dbgOutput($"[{traceType.ToString()}]:{msg}");
+            if(_dbgError != null && traceType == DebugTraceType.DTT_Error)
+            {
+                _dbgError($"[{traceType.ToString()}]:{msg}");
+            }
+            else
+            {
+                _dbgOutput($"[{traceType.ToString()}]:{msg}");
+            }
         }
         
-        public static void Init(Action<string> dbgOutput, DebugTraceType traceType = DebugTraceType.DTT_Detail)
+        public static void Init(Action<string> dbgOutput, Action<string> dbgError = null, DebugTraceType traceType = DebugTraceType.DTT_Detail)
         {
             _dbgOutput = dbgOutput;
+            _dbgError = dbgError;
             _traceType = traceType;
         }
     }

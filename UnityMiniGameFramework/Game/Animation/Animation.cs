@@ -11,8 +11,7 @@ namespace UnityMiniGameFramework
     public class Animation
     {
         protected AnimationClip _aniClip;
-
-
+        
         public AnimationClip aniClip => _aniClip;
 
         public string aniSlotName => "";

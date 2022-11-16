@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-    public class AvatarPartConfig
+    public class CharacterManagerConf
     {
-        string name { get; set; }
-        string slotName { get; set; }
+
     }
 
-    public class AvatarParts
+    public class CharacterManager
     {
+        public void Init(CharacterManagerConf conf)
+        {
+
+        }
+        
     }
 }

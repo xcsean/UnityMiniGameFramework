@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-    public class AvatarPartConfig
+    public static class ActStates
     {
-        string name { get; set; }
-        string slotName { get; set; }
-    }
-
-    public class AvatarParts
-    {
+        public static int STATE_KEY_NO_MOVE = 1;
     }
 }

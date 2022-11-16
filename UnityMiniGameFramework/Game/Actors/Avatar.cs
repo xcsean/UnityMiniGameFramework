@@ -8,6 +8,12 @@ using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
+    public class AvatarConfig
+    {
+        public Dictionary<string, string> AvatarSlots;
+        public Dictionary<string, string> AttachPoints;
+    }
+
     public class Avatar
     {
         protected Dictionary<string, AvatarParts> _parts;
