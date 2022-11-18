@@ -23,9 +23,18 @@ namespace MiniGameFramework
             _file = filename;
 
             Debug.DebugOutput(DebugTraceType.DTT_System, $"Init JsonConfig {n} from ({filename})");
-            string confStr = GameApp.Inst.file.readStringFrom(filename);
 
-            _conf = _JsonDeserialize(confStr);
+            try
+            {
+                string confStr = GameApp.Inst.File.readStringFrom(filename);
+
+                _conf = _JsonDeserialize(confStr);
+            }
+            catch(Exception e)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init JsonConfig {n} from ({filename}) error msg: {e.Message}");
+                Debug.DebugOutput(DebugTraceType.DTT_Error, e.StackTrace);
+            }
         }
 
         virtual protected object _JsonDeserialize(string confStr)

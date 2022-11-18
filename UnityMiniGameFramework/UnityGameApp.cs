@@ -11,7 +11,7 @@ namespace UnityMiniGameFramework
 {
     public class UnityGameAppBehaviour : MonoBehaviour
     {
-        public string appConfigFileName;
+        public GameAPPInitParameter InitParameter;
 
         static void dbgOutput(string msg)
         {
@@ -28,7 +28,7 @@ namespace UnityMiniGameFramework
 
             GameApp.setInst(new UnityGameApp());
 
-            GameApp.Inst.Init(appConfigFileName);
+            GameApp.Inst.Init(InitParameter);
         }
 
         protected virtual void Start()
@@ -70,32 +70,25 @@ namespace UnityMiniGameFramework
         protected CharacterConfigs _charConf;
         public CharacterConfigs CharacterConfs => _charConf;
 
-        override public bool Init(string appConfigFileName)
+        override public bool Init(GameAPPInitParameter par)
         {
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"UnityGameApp start initializing...");
-
-            base.Init(appConfigFileName);
-
+            
             // os implement assignment
             _file = new UnityProjFileSystem();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"OS implement initialized.");
 
-            // reg config create
-            _conf.regConfigCreator("CharacterConfigs", CharacterConfigs.create);
-            _conf.regConfigCreator("NetWorkConfig", NetWorkConfig.create);
+            base.Init(par);
 
-            // reg component
-            GameObjectManager.registerGameObjectComponentCreator("ActionComponent",     ActionComponent.create);
-            GameObjectManager.registerGameObjectComponentCreator("AnimatorComponent",   AnimatorComponent.create);
-            GameObjectManager.registerGameObjectComponentCreator("AudioComponent",      AudioComponent.create);
-            GameObjectManager.registerGameObjectComponentCreator("VFXComponent",        VFXComponent.create);
+            _initNetwork();
 
-            // reg object
-            GameObjectManager.registerGameObjectCreator("ActorObject", ActorObject.create);
-            GameObjectManager.registerGameObjectCreator("CharacterObject", CharacterObject.create);
-            
-            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
+            return true;
+        }
+
+        override protected void _createManagers()
+        {
+            base._createManagers();
 
             // new managers
             _aniManager = new AnimationManager();
@@ -103,14 +96,70 @@ namespace UnityMiniGameFramework
             _vfxManager = new VFXManager();
             _chaManager = new CharacterManager();
 
+            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app managers created.");
+        }
+
+        override protected void _regClasses()
+        {
+            base._regClasses();
+            
+            // reg config create
+            _conf.regConfigCreator("CharacterConfigs", CharacterConfigs.create);
+            _conf.regConfigCreator("NetWorkConfig", NetWorkConfig.create);
+
+            // reg component
+            GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
+            GameObjectManager.registerGameObjectComponentCreator("AnimatorComponent", AnimatorComponent.create);
+            GameObjectManager.registerGameObjectComponentCreator("AudioComponent", AudioComponent.create);
+            GameObjectManager.registerGameObjectComponentCreator("VFXComponent", VFXComponent.create);
+
+            // reg object
+            GameObjectManager.registerGameObjectCreator("ActorObject", ActorObject.create);
+            GameObjectManager.registerGameObjectCreator("CharacterObject", CharacterObject.create);
+
+
+            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
+        }
+
+        override protected void _initPreloaderUI(string preloaderUIConfName)
+        {
+            base._initPreloaderUI(preloaderUIConfName);
+
+            if (_ui.preloaderPanel != null)
+            {
+                _ui.preloaderPanel.AddInitStep("initNetwork");
+            }
+        }
+
+        override protected void _initConfigs(string appConfigFileName)
+        {
             // init config
-            _initConfigs(appConfigFileName);
+            base._initConfigs(appConfigFileName);
+
+            _charConf = (CharacterConfigs)_conf.getConfig("characters");
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app config initialized.");
+        }
+
+        override protected void _initUI(string uiConfigName)
+        {
+            base._initUI(uiConfigName);
+
+            // reg ui panel creator
+            _ui.regUIPanelCreator("preloader", UIPreloaderPanel.create);
+            _ui.regUIPanelCreator("main", UIMainPanel.create);
+        }
+
+        protected void _initNetwork()
+        {
+            if (_ui.preloaderPanel != null)
+            {
+                _ui.preloaderPanel.OnInitStep("initNetwork");
+            }
 
             // network client
             NetWorkConfig conf = (NetWorkConfig)_conf.getConfig("network"); // get network config
-            if(conf != null)
+            if (conf != null)
             {
                 _netClient = new UnityNetworkClient();
                 _netClient.Init(conf.netConf);
@@ -121,16 +170,6 @@ namespace UnityMiniGameFramework
             {
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"no network.");
             }
-
-            return true;
-        }
-
-        protected void _initConfigs(string appConfigFileName)
-        {
-            // init config
-            _conf.InitAppConfig(appConfigFileName);
-
-            _charConf = (CharacterConfigs)_conf.getConfig("characters");
         }
     }
 }

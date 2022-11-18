@@ -92,13 +92,23 @@
     <Compile Include="Game\GameObject.cs" />
     <Compile Include="Game\GameObjectComponent.cs" />
     <Compile Include="Game\GameObjectManager.cs" />
+    <Compile Include="Game\SceneManager.cs" />
     <Compile Include="Game\StateComponent.cs" />
     <Compile Include="Interfaces\Config\IConfig.cs" />
     <Compile Include="Interfaces\Game\IAttribute.cs" />
     <Compile Include="Interfaces\Game\IGameObject.cs" />
     <Compile Include="Interfaces\Game\IGameObjectComponent.cs" />
+    <Compile Include="Interfaces\Game\IScene.cs" />
     <Compile Include="Interfaces\Network\INetwork.cs" />
     <Compile Include="Interfaces\OS\IFileSystem.cs" />
+    <Compile Include="Interfaces\UI\Controls\IUIButtonControl.cs" />
+    <Compile Include="Interfaces\UI\Controls\IUIControl.cs" />
+    <Compile Include="Interfaces\UI\Controls\IUIImageControl.cs" />
+    <Compile Include="Interfaces\UI\Controls\IUITextControl.cs" />
+    <Compile Include="Interfaces\UI\IUIObject.cs" />
+    <Compile Include="Interfaces\UI\IUIPanel.cs" />
+    <Compile Include="Interfaces\UI\Panels\IUIPreloaderPanel.cs" />
+    <Compile Include="Interfaces\UI\UIEvent.cs" />
     <Compile Include="Messenger\ConnectorImpl\ConnectorImpls.cs" />
     <Compile Include="Messenger\ConnectorImpl\ConnectorSocket.cs" />
     <Compile Include="Messenger\ConnectorImpl\ConnectorWebSocket.cs" />
@@ -118,6 +128,9 @@
     <Compile Include="Messenger\SessionClient.cs" />
     <Compile Include="Messenger\SessionServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Config\UIConfig.cs" />
+    <Compile Include="UI\UIManager.cs" />
+    <Compile Include="UI\Config\UIPanelConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

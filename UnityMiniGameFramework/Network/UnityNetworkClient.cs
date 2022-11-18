@@ -43,20 +43,20 @@ namespace UnityMiniGameFramework
             _uri = conf.webSockConn.addr.uri;
             _port = conf.webSockConn.addr.port;
 
-            IConnector conn = GameApp.Inst.Network.CreateConnector(conf.webSockConn.connectorType, buffSize);
+            IConnector conn = GameApp.Inst.Net.CreateConnector(conf.webSockConn.connectorType, buffSize);
             if(conn == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init Network connector ({conf.webSockConn.connectorType}) create failed");
                 return;
             }
-            IProtocol proto = GameApp.Inst.Network.CreateProtocol(conf.webSockConn.protocolType);
+            IProtocol proto = GameApp.Inst.Net.CreateProtocol(conf.webSockConn.protocolType);
             if (proto == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init Network protocol ({conf.webSockConn.protocolType}) create failed");
                 return;
             }
 
-            _sessionClient = GameApp.Inst.Network.CreateSessionClient(conn, proto, this);
+            _sessionClient = GameApp.Inst.Net.CreateSessionClient(conn, proto, this);
             
             Debug.DebugOutput(DebugTraceType.DTT_System, "register protocols");
 
