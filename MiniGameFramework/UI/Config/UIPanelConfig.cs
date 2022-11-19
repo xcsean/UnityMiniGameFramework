@@ -12,7 +12,7 @@ namespace MiniGameFramework
         public string name { get; set; }
         public string type { get; set; }
 
-        public List<UIControlConf> subControls;
+        public List<UIControlConf> subControls { get; set; }
 
 
         // TO DO : add configs;
@@ -23,7 +23,9 @@ namespace MiniGameFramework
         public string name { get; set; }
         public string type { get; set; }
 
-        public List<UIControlConf> controls;
+        public string uiFile { get; set; }
+
+        public List<UIControlConf> controls { get; set; }
 
 
         // TO DO : add configs;

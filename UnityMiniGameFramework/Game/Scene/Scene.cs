@@ -132,7 +132,7 @@ namespace UnityMiniGameFramework
         {
             // TO DO : on unloaded
 
-            UnityGameApp.Inst.SceneManager.onDisposeScene(this);
+            UnityGameApp.Inst.SceneManager.OnDisposeScene(this);
         }
 
         public void OnHide()

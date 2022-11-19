@@ -18,19 +18,42 @@ namespace UnityMiniGameFramework
         protected UnityEngine.GameObject _unityGameObject;
         public UnityEngine.GameObject unityGameObject => _unityGameObject;
 
-        virtual public void bindEventAction(uint eventCode, Action<object> eventAction)
-        {
-            throw new NotImplementedException();
-        }
+        protected Dictionary<string, UIObject> _uiObjects;
 
-        virtual public void bindEventAction<T>(uint eventCode, Action<T> eventAction)
+        public UIPanel()
         {
-            throw new NotImplementedException();
+            _uiObjects = new Dictionary<string, UIObject>();
         }
 
         virtual public void Init(UIPanelConf conf)
         {
             _name = conf.name;
+            _unityGameObject = UnityGameApp.Inst.UnityResource.CreateUnityPrefabObject(conf.uiFile);
+            if(_unityGameObject == null)
+            {
+                return;
+            }
+
+            foreach(var ctrlConf in conf.controls)
+            {
+                var tr = _unityGameObject.transform.Find(ctrlConf.name);
+                if(tr == null)
+                {
+                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name} control [{ctrlConf.name}] not exist");
+                    continue;
+                }
+
+                UIObject uiObj = (UIObject)UnityGameApp.Inst.UI.createUIObject(ctrlConf.type);
+                if(uiObj == null)
+                {
+                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name} control {ctrlConf.name} type [{ctrlConf.type}] not exist");
+                    continue;
+                }
+
+                uiObj.onInit(ctrlConf, tr.gameObject);
+
+                _uiObjects[ctrlConf.name] = uiObj;
+            }
             // TO DO : 
         }
 
@@ -41,17 +64,22 @@ namespace UnityMiniGameFramework
 
         virtual public IUIObject getUIObject(string name)
         {
-            throw new NotImplementedException();
+            if (!_uiObjects.ContainsKey(name))
+            {
+                return null;
+            }
+
+            return _uiObjects[name];
         }
 
         virtual public void hideUI()
         {
-            throw new NotImplementedException();
+            _unityGameObject.SetActive(false);
         }
 
         virtual public void showUI()
         {
-            throw new NotImplementedException();
+            _unityGameObject.SetActive(true);
         }
     }
 }

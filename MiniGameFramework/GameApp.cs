@@ -47,6 +47,9 @@ namespace MiniGameFramework
         protected SceneManager _sceneManager;
         public SceneManager SceneManager => _sceneManager;
 
+        protected ResourceManager _resManager;
+        public ResourceManager Resource => _resManager;
+
         protected GameAppInitStep _initStep;
         public GameAppInitStep currInitStep => _initStep;
 
@@ -101,16 +104,9 @@ namespace MiniGameFramework
                     _initStep = GameAppInitStep.EnterStartScene;
                     _sceneManager.changeScene(_startScene);
                 }
-                else
-                {
-                    _startScene.OnUpdate(); // for progress loading
-                }
             }
 
-            if (_sceneManager.currentScene != null)
-            {
-                _sceneManager.currentScene.OnUpdate();
-            }
+            _sceneManager.OnUpdate();
         }
 
         virtual protected void _createManagers()

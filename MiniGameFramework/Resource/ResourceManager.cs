@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniGameFramework.Resource
+namespace MiniGameFramework
 {
-    class ResourceManager
+    public class ResourceManager
     {
+        virtual public void Init()
+        {
+
+        }
     }
 }

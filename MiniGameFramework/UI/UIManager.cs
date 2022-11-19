@@ -8,6 +8,7 @@ namespace MiniGameFramework
 {
     public class UIManager
     {
+        protected Dictionary<string, Func<IUIObject>> _uiObjectCreators;
         protected Dictionary<string, Func<IUIPanel>> _uiPanelCreators;
         protected Dictionary<string, IUIPanel> _uiPanels;
 
@@ -18,6 +19,7 @@ namespace MiniGameFramework
 
         public UIManager()
         {
+            _uiObjectCreators = new Dictionary<string, Func<IUIObject>>();
             _uiPanelCreators = new Dictionary<string, Func<IUIPanel>>();
             _uiPanels = new Dictionary<string, IUIPanel>();
         }
@@ -26,6 +28,28 @@ namespace MiniGameFramework
         {
             _uiConf = new UIConfig();
             _uiConf.Init(uiConfName, "uiconf");
+        }
+
+        public void regUIObjectCreator(string objectType, Func<IUIObject> creator)
+        {
+            if (_uiObjectCreators.ContainsKey(objectType))
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"regUIObjectCreator ({objectType}) already exist");
+                return;
+            }
+            _uiObjectCreators[objectType] = creator;
+        }
+
+        public IUIObject createUIObject(string objectType)
+        {
+            if (_uiObjectCreators.ContainsKey(objectType))
+            {
+                return _uiObjectCreators[objectType]();
+            }
+
+            Debug.DebugOutput(DebugTraceType.DTT_Error, $"createUIObject ({objectType}) not exist");
+
+            return null;
         }
 
         public void regUIPanelCreator(string panelType, Func<IUIPanel> creator)

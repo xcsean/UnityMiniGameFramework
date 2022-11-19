@@ -8,36 +8,39 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    class UIObject : IUIObject
+    public class UIObject : IUIObject
     {
+        virtual public string type => "UIObject";
+        public static UIObject create()
+        {
+            return new UIObject();
+        }
+
         protected string _name;
         public string name => _name;
 
-        virtual public string type => "UIObject";
+        protected UnityEngine.GameObject _unityGameObject;
+        public UnityEngine.GameObject unityGameObject => _unityGameObject;
 
-        virtual public void bindEventAction(uint eventCode, Action<object> eventAction)
+        public UIObject()
         {
-            throw new NotImplementedException();
-        }
 
-        virtual public void bindEventAction<T>(uint eventCode, Action<T> eventAction)
-        {
-            throw new NotImplementedException();
         }
 
         virtual public void hideUI()
         {
-            throw new NotImplementedException();
+            _unityGameObject.SetActive(false);
         }
 
         virtual public void showUI()
         {
-            throw new NotImplementedException();
+            _unityGameObject.SetActive(true);
         }
 
-        virtual public void onInit(UIControlConf c)
+        virtual public void onInit(UIControlConf c, UnityEngine.GameObject o)
         {
             _name = c.name;
+            _unityGameObject = o;
             // TO DO : 
         }
     }

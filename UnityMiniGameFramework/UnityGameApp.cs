@@ -60,6 +60,8 @@ namespace UnityMiniGameFramework
     public class UnityGameApp : GameApp
     {
         new public static UnityGameApp Inst => (UnityGameApp)_inst;
+        
+        public UnityResourceManager UnityResource => (UnityResourceManager)_resManager;
 
         protected AnimationManager _aniManager;
         public AnimationManager AniManager => _aniManager;
@@ -104,6 +106,7 @@ namespace UnityMiniGameFramework
             _vfxManager = new VFXManager();
             _chaManager = new CharacterManager();
             _sceneManager = new UnitySceneManager();
+            _resManager = new UnityResourceManager();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app managers created.");
         }
@@ -159,6 +162,7 @@ namespace UnityMiniGameFramework
             //_aniManager.Init();
             _chaManager.Init();
             _sceneManager.Init();
+            _resManager.Init();
         }
 
         override protected void _initUI(string uiConfigName)
@@ -168,6 +172,10 @@ namespace UnityMiniGameFramework
             // reg ui panel creator
             _ui.regUIPanelCreator("preloader", UIPreloaderPanel.create);
             _ui.regUIPanelCreator("main", UIMainPanel.create);
+            _ui.regUIPanelCreator("UIPanelStartMain", UIPanelStartMain.create);
+
+            // reg ui control creator
+            _ui.regUIObjectCreator("UIObject", UIObject.create);
         }
 
         protected void _initNetwork()

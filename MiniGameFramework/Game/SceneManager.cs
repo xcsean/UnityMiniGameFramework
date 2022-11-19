@@ -30,6 +30,22 @@ namespace MiniGameFramework
             }
         }
 
+        virtual public void OnUpdate()
+        {
+            foreach(var pair in _scenes)
+            {
+                if(pair.Value.loadStatus.progressing)
+                {
+                    pair.Value.OnUpdate(); // for progress loading
+                }
+            }
+
+            if(_currentScene != null)
+            {
+                _currentScene.OnUpdate();
+            }
+        }
+
         virtual public IScene getScene(string sceneName)
         {
             if(_scenes.ContainsKey(sceneName))
@@ -86,7 +102,7 @@ namespace MiniGameFramework
             _currentScene.OnShow();
         }
 
-        virtual public void onDisposeScene(IScene scene)
+        virtual public void OnDisposeScene(IScene scene)
         {
             if(_scenes.ContainsKey(scene.name))
             {

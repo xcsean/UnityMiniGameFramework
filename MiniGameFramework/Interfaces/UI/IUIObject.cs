@@ -11,11 +11,9 @@ namespace MiniGameFramework
         string name { get; }
         string type { get; }
 
-        void bindEventAction(uint eventCode, Action<object> eventAction);
-        void bindEventAction<T>(uint eventCode, Action<T> eventAction);
-
         void showUI();
         void hideUI();
+
         // TO DO : add interfaces
     }
 }
