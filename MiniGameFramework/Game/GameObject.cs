@@ -82,5 +82,13 @@ namespace MiniGameFramework
                 }
             }
         }
+
+        virtual public void Hide()
+        {
+        }
+
+        virtual public void Show()
+        {
+        }
     }
 }

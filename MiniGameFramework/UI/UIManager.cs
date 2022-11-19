@@ -97,7 +97,10 @@ namespace MiniGameFramework
 
         public void DisposeUIPanel(IUIPanel p)
         {
-            _uiPanels.Remove(p.name);
+            if(_uiPanels.ContainsKey(p.name))
+            {
+                _uiPanels.Remove(p.name);
+            }
             p.Dispose();
         }
 

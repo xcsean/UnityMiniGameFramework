@@ -15,6 +15,9 @@ namespace UnityMiniGameFramework
 
         virtual public string type => "UIPanel";
 
+        protected UnityEngine.GameObject _unityGameObject;
+        public UnityEngine.GameObject unityGameObject => _unityGameObject;
+
         virtual public void bindEventAction(uint eventCode, Action<object> eventAction)
         {
             throw new NotImplementedException();
@@ -23,6 +26,12 @@ namespace UnityMiniGameFramework
         virtual public void bindEventAction<T>(uint eventCode, Action<T> eventAction)
         {
             throw new NotImplementedException();
+        }
+
+        virtual public void Init(UIPanelConf conf)
+        {
+            _name = conf.name;
+            // TO DO : 
         }
 
         virtual public void Dispose()
@@ -38,12 +47,6 @@ namespace UnityMiniGameFramework
         virtual public void hideUI()
         {
             throw new NotImplementedException();
-        }
-
-        virtual public void Init(UIPanelConf conf)
-        {
-            _name = conf.name;
-            // TO DO : 
         }
 
         virtual public void showUI()

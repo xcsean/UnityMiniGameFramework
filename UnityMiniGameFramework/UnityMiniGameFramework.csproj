@@ -112,6 +112,8 @@
     <Compile Include="Game\Map\MapComponent.cs" />
     <Compile Include="Game\Map\MapItem.cs" />
     <Compile Include="Game\Map\MapMonster.cs" />
+    <Compile Include="Game\Scene\Scene.cs" />
+    <Compile Include="Game\Scene\UnitySceneManager.cs" />
     <Compile Include="Game\UnityGameObject.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />
     <Compile Include="Network\UnityNetworkClient.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="UI\UIObject.cs" />
     <Compile Include="UI\UIPanel.cs" />
     <Compile Include="UI\UIPanels\UIMainPanel.cs" />
+    <Compile Include="UI\UIPanels\UIPanelStartMain.cs" />
     <Compile Include="UI\UIPanels\UIPreloaderPanel.cs" />
     <Compile Include="UnityGameApp.cs" />
     <Compile Include="Utility\TransformHelper.cs" />
@@ -136,8 +139,6 @@
       <Name>MiniGameFramework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Scene\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

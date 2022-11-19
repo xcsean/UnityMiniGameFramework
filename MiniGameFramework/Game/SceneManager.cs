@@ -6,52 +6,97 @@ using System.Threading.Tasks;
 
 namespace MiniGameFramework
 {
-    public class SceneManager
+    abstract public class SceneManager
     {
         protected IScene _currentScene;
         public IScene currentScene => _currentScene;
 
-        public void Init()
-        {
+        protected SceneManagerConfig _conf;
+        public SceneManagerConfig config => _conf;
 
+        protected Dictionary<string, IScene> _scenes;
+
+        public SceneManager()
+        {
+            _scenes = new Dictionary<string, IScene>();
         }
 
-        public IScene getScene(string sceneName)
+        virtual public void Init()
         {
+            _conf = (SceneManagerConfig)GameApp.Inst.Conf.getConfig("scenes");
+            if(_conf == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"SceneManager init without scenes config");
+            }
+        }
+
+        virtual public IScene getScene(string sceneName)
+        {
+            if(_scenes.ContainsKey(sceneName))
+            {
+                return _scenes[sceneName];
+            }
+
             return null;
         }
 
-        public IScene createScene(string sceneName)
+        virtual public IScene createScene(string sceneName)
         {
-            return null;
+            var sceneConf = _conf.getSceneConf(sceneName);
+            if (sceneConf == null)
+            {
+                return null;
+            }
+
+            IScene newScene = _createScene(sceneConf);
+
+            _scenes[newScene.name] = newScene;
+
+            return newScene;
         }
 
-        public void changeScene(IScene s)
+        virtual public IScene createStartScene()
         {
+            var startSceneConf = _conf.getStartSceneConf();
+            if (startSceneConf == null)
+            {
+                return null;
+            }
 
+            IScene newScene = _createScene(startSceneConf);
+
+            _scenes[newScene.name] = newScene;
+
+            return newScene;
         }
 
-        public void disposeScene(IScene scene)
+        virtual protected IScene _createScene(SceneConf conf)
         {
-
+            throw new NotImplementedException();
         }
 
-        public List<string> gatherSceneDependFiles(string sceneName)
+        virtual public void changeScene(IScene s)
         {
-            //if (!_uiConf.uiConf.UIPanels.ContainsKey(panelName))
-            //{
-            //    Debug.DebugOutput(DebugTraceType.DTT_Error, $"gatherUIPanelDependFiles ({panelName}) config not exist");
-            //    return null;
-            //}
+            if(_currentScene != null)
+            {
+                _currentScene.OnHide();
+            }
 
-            //List<string> listFiles = new List<string>();
-            //listFiles.Add(_uiConf.uiConf.UIPanels[panelName]); // panel config file
+            _currentScene = s;
+            _currentScene.OnShow();
+        }
 
-            // TO DO : add other files, textures, etc.
+        virtual public void onDisposeScene(IScene scene)
+        {
+            if(_scenes.ContainsKey(scene.name))
+            {
+                _scenes.Remove(scene.name);
+            }
+        }
 
-            //return listFiles;
-
-            return null;
+        virtual public List<string> gatherSceneDependFiles(string sceneName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

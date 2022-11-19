@@ -10,8 +10,20 @@ namespace MiniGameFramework
     {
         string name { get; }
 
-        void Init();
-        void Dispose();
+        IGameObject sceneRootObj { get; }
+        IGameObject uiRootObject { get; }
 
+        ICamera camera { get; }
+
+        AsyncOpStatus loadStatus { get; }
+        AsyncOpStatus unloadStatus { get; }
+
+        void LoadAsync();
+        void UnloadAsync();
+
+        void OnShow();
+        void OnHide();
+
+        void OnUpdate();
     }
 }

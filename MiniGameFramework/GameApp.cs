@@ -13,6 +13,15 @@ namespace MiniGameFramework
         public string preloaderUIConfName;
     }
 
+    public enum GameAppInitStep
+    {
+        InitConfig = 1,
+        InitManager,
+        InitUI,
+        LoadStartScene,
+        EnterStartScene,
+    }
+
     public class GameApp
     {
         protected static GameApp _inst;
@@ -35,11 +44,20 @@ namespace MiniGameFramework
         protected UIManager _ui;
         public UIManager UI => _ui;
 
-        protected SceneManager _scene;
-        public SceneManager Scene => _scene;
+        protected SceneManager _sceneManager;
+        public SceneManager SceneManager => _sceneManager;
+
+        protected GameAppInitStep _initStep;
+        public GameAppInitStep currInitStep => _initStep;
+
+        protected IScene _startScene;
 
         virtual public bool Init(GameAPPInitParameter par)
         {
+            // TO DO : change init step to async
+
+            _initStep = GameAppInitStep.InitConfig;
+
             _createManagers();
 
             _regClasses();
@@ -55,6 +73,13 @@ namespace MiniGameFramework
                 _initConfigs(par.appConfigFileName);
             }
 
+            _initStep = GameAppInitStep.InitManager;
+
+            _initManagers();
+
+
+            _initStep = GameAppInitStep.InitUI;
+
             if (par.uiConfigName == "" || par.uiConfigName == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_System, "App init without ui config");
@@ -67,6 +92,27 @@ namespace MiniGameFramework
             return true;
         }
 
+        virtual public void OnUpdate()
+        {
+            if(_initStep == GameAppInitStep.LoadStartScene)
+            {
+                if(_startScene.loadStatus.done)
+                {
+                    _initStep = GameAppInitStep.EnterStartScene;
+                    _sceneManager.changeScene(_startScene);
+                }
+                else
+                {
+                    _startScene.OnUpdate(); // for progress loading
+                }
+            }
+
+            if (_sceneManager.currentScene != null)
+            {
+                _sceneManager.currentScene.OnUpdate();
+            }
+        }
+
         virtual protected void _createManagers()
         {
             _net = new Network();
@@ -76,6 +122,8 @@ namespace MiniGameFramework
 
         virtual protected void _regClasses()
         {
+            _conf.regConfigCreator("SceneManagerConfig", SceneManagerConfig.create);
+
             GameObjectManager.registerGameObjectComponentCreator("StateComponent", StateComponent.create);
 
         }
@@ -96,7 +144,9 @@ namespace MiniGameFramework
             if (_ui.preloaderPanel != null)
             {
                 _ui.preloaderPanel.AddInitStep("initConfig");
+                _ui.preloaderPanel.AddInitStep("initManager");
                 _ui.preloaderPanel.AddInitStep("initUI");
+                _ui.preloaderPanel.AddInitStep("loadStartScene");
             }
         }
 
@@ -110,6 +160,14 @@ namespace MiniGameFramework
             _conf.InitAppConfig(appConfigFileName);
         }
 
+        virtual protected void _initManagers()
+        {
+            if (_ui.preloaderPanel != null)
+            {
+                _ui.preloaderPanel.OnInitStep("initManager");
+            }
+        }
+
         virtual protected void _initUI(string uiConfigName)
         {
             if (_ui.preloaderPanel != null)
@@ -118,6 +176,25 @@ namespace MiniGameFramework
             }
 
             _ui.Init(uiConfigName);
+        }
+
+        virtual protected void _loadStartScene()
+        {
+            _initStep = GameAppInitStep.LoadStartScene;
+
+            if (_ui.preloaderPanel != null)
+            {
+                _ui.preloaderPanel.OnInitStep("loadStartScene");
+            }
+
+            if (_sceneManager == null)
+            {
+                _initStep = GameAppInitStep.EnterStartScene;
+                return;
+            }
+
+            _startScene = _sceneManager.createStartScene();
+            _startScene.LoadAsync();
         }
     }
 }

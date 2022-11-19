@@ -21,5 +21,8 @@ namespace MiniGameFramework
 
         void OnUpdate(uint timeElasped);
         void OnPostUpdate(uint timeElasped);
+
+        void Hide();
+        void Show();
     }
 }

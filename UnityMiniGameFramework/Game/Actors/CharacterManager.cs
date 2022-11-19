@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-    public class CharacterManagerConf
-    {
-
-    }
-
     public class CharacterManager
     {
-        public void Init(CharacterManagerConf conf)
-        {
 
+        protected CharacterConfigs _charConf;
+        public CharacterConfigs CharacterConfs => _charConf;
+
+        public void Init()
+        {
+            _charConf = (CharacterConfigs)UnityGameApp.Inst.Conf.getConfig("characters");
         }
         
     }

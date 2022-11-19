@@ -13,7 +13,7 @@ namespace UnityMiniGameFramework
     {
         protected MGGameObject _mgGameObject;
 
-        public string mgGameObjectType;
+        public string mgGameObjectType = "MGGameObject";
         public string mgGameObjectConfigName;
 
         public MGGameObject mgGameObject => _mgGameObject;
@@ -51,6 +51,10 @@ namespace UnityMiniGameFramework
     public class MGGameObject : MiniGameFramework.GameObject
     {
         override public string type => "MGGameObject";
+        public static MGGameObject create()
+        {
+            return new MGGameObject();
+        }
 
         protected UnityEngine.GameObject _unityGameObject;
 

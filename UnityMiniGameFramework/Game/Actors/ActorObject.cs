@@ -12,7 +12,7 @@ namespace UnityMiniGameFramework
     public class ActorObject : MGGameObject
     {
         override public string type => "ActorObject";
-        public static ActorObject create()
+        new public static ActorObject create()
         {
             return new ActorObject();
         }
@@ -28,11 +28,11 @@ namespace UnityMiniGameFramework
 
         virtual protected ActorObjectConfig _getActorConf(string confname)
         {
-            if(UnityGameApp.Inst.CharacterConfs == null)
+            if(UnityGameApp.Inst.CharacterManager.CharacterConfs == null)
             {
                 return null;
             }
-            return UnityGameApp.Inst.CharacterConfs.getActorConf(confname);
+            return UnityGameApp.Inst.CharacterManager.CharacterConfs.getActorConf(confname);
         }
 
         override public void Init(string confname)

@@ -11,7 +11,9 @@ namespace UnityMiniGameFramework
 {
     public class UnityGameAppBehaviour : MonoBehaviour
     {
-        public GameAPPInitParameter InitParameter;
+        public string appConfigFileName;
+        public string uiConfigName;
+        public string preloaderUIConfName;
 
         static void dbgOutput(string msg)
         {
@@ -28,6 +30,12 @@ namespace UnityMiniGameFramework
 
             GameApp.setInst(new UnityGameApp());
 
+            GameAPPInitParameter InitParameter = new GameAPPInitParameter
+            {
+                appConfigFileName = appConfigFileName,
+                uiConfigName = uiConfigName,
+                preloaderUIConfName = preloaderUIConfName
+            };
             GameApp.Inst.Init(InitParameter);
         }
 
@@ -37,6 +45,7 @@ namespace UnityMiniGameFramework
 
         protected virtual void Update()
         {
+            GameApp.Inst.OnUpdate();
         }
 
         protected virtual void FixedUpdate()
@@ -67,9 +76,6 @@ namespace UnityMiniGameFramework
         protected UnityNetworkClient _netClient;
         public UnityNetworkClient NetClient => _netClient;
 
-        protected CharacterConfigs _charConf;
-        public CharacterConfigs CharacterConfs => _charConf;
-
         override public bool Init(GameAPPInitParameter par)
         {
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"UnityGameApp start initializing...");
@@ -83,6 +89,8 @@ namespace UnityMiniGameFramework
 
             _initNetwork();
 
+            _loadStartScene();
+
             return true;
         }
 
@@ -95,6 +103,7 @@ namespace UnityMiniGameFramework
             _audManager = new AudioManager();
             _vfxManager = new VFXManager();
             _chaManager = new CharacterManager();
+            _sceneManager = new UnitySceneManager();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app managers created.");
         }
@@ -114,8 +123,12 @@ namespace UnityMiniGameFramework
             GameObjectManager.registerGameObjectComponentCreator("VFXComponent", VFXComponent.create);
 
             // reg object
+            GameObjectManager.registerGameObjectCreator("MGGameObject", MGGameObject.create);
             GameObjectManager.registerGameObjectCreator("ActorObject", ActorObject.create);
             GameObjectManager.registerGameObjectCreator("CharacterObject", CharacterObject.create);
+
+            // reg ui class
+            _ui.regUIPanelCreator("UIPanelStartMain", UIPanelStartMain.create);
 
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
@@ -136,9 +149,16 @@ namespace UnityMiniGameFramework
             // init config
             base._initConfigs(appConfigFileName);
 
-            _charConf = (CharacterConfigs)_conf.getConfig("characters");
-
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app config initialized.");
+        }
+
+        override protected void _initManagers()
+        {
+            base._initManagers();
+
+            //_aniManager.Init();
+            _chaManager.Init();
+            _sceneManager.Init();
         }
 
         override protected void _initUI(string uiConfigName)
