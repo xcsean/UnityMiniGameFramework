@@ -131,10 +131,6 @@ namespace UnityMiniGameFramework
             GameObjectManager.registerGameObjectCreator("ActorObject", ActorObject.create);
             GameObjectManager.registerGameObjectCreator("CharacterObject", CharacterObject.create);
 
-            // reg ui class
-            _ui.regUIPanelCreator("UIPanelStartMain", UIPanelStartMain.create);
-
-
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
         }
 

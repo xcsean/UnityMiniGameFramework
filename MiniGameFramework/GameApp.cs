@@ -20,6 +20,8 @@ namespace MiniGameFramework
         InitUI,
         LoadStartScene,
         EnterStartScene,
+        LoadMainScene,
+        EnterMainScene
     }
 
     public class GameApp
@@ -54,6 +56,7 @@ namespace MiniGameFramework
         public GameAppInitStep currInitStep => _initStep;
 
         protected IScene _startScene;
+        protected IScene _mainScene;
 
         virtual public bool Init(GameAPPInitParameter par)
         {
@@ -97,7 +100,9 @@ namespace MiniGameFramework
 
         virtual public void OnUpdate()
         {
-            if(_initStep == GameAppInitStep.LoadStartScene)
+            _sceneManager.OnUpdate();
+
+            if (_initStep == GameAppInitStep.LoadStartScene)
             {
                 if(_startScene.loadStatus.done)
                 {
@@ -105,8 +110,17 @@ namespace MiniGameFramework
                     //_sceneManager.changeScene(_startScene); // auto change
                 }
             }
+            if (_initStep == GameAppInitStep.LoadMainScene)
+            {
+                if (_mainScene.loadStatus.done)
+                {
+                    _initStep = GameAppInitStep.EnterMainScene;
+                    //_sceneManager.changeScene(_mainScene); // auto change
 
-            _sceneManager.OnUpdate();
+                    // unload start scene
+                    _startScene.UnloadAsync();
+                }
+            }
         }
 
         virtual protected void _createManagers()
@@ -191,6 +205,20 @@ namespace MiniGameFramework
 
             _startScene = _sceneManager.createStartScene();
             _startScene.LoadAsync();
+        }
+
+        virtual public void LoadMainScene()
+        {
+            _initStep = GameAppInitStep.LoadMainScene;
+
+            if (_sceneManager == null)
+            {
+                _initStep = GameAppInitStep.EnterMainScene;
+                return;
+            }
+
+            _mainScene = _sceneManager.createMainScene();
+            _mainScene.LoadAsync();
         }
     }
 }

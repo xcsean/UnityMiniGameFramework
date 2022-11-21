@@ -26,6 +26,7 @@ namespace MiniGameFramework
         public Dictionary<string, SceneConf> sceneConfs { get; set; }
 
         public string startScene { get; set; }
+        public string mainScene { get; set; }
     }
 
     public class SceneManagerConfig : JsonConfig
@@ -53,6 +54,21 @@ namespace MiniGameFramework
             if(sceneManagerConf.sceneConfs.ContainsKey(sceneManagerConf.startScene))
             {
                 return sceneManagerConf.sceneConfs[sceneManagerConf.startScene];
+            }
+
+            return null;
+        }
+
+        public SceneConf getMainSceneConf()
+        {
+            if (sceneManagerConf == null)
+            {
+                return null;
+            }
+
+            if (sceneManagerConf.sceneConfs.ContainsKey(sceneManagerConf.mainScene))
+            {
+                return sceneManagerConf.sceneConfs[sceneManagerConf.mainScene];
             }
 
             return null;

@@ -34,7 +34,7 @@ namespace MiniGameFramework
         {
             foreach(var pair in _scenes)
             {
-                if(pair.Value.loadStatus.progressing)
+                if(pair.Value.loadStatus.progressing || pair.Value.unloadStatus.progressing)
                 {
                     pair.Value.OnUpdate(); // for progress loading
                 }
@@ -80,6 +80,21 @@ namespace MiniGameFramework
             }
 
             IScene newScene = _createScene(startSceneConf);
+
+            _scenes[newScene.name] = newScene;
+
+            return newScene;
+        }
+
+        virtual public IScene createMainScene()
+        {
+            var mainSceneConf = _conf.getMainSceneConf();
+            if (mainSceneConf == null)
+            {
+                return null;
+            }
+
+            IScene newScene = _createScene(mainSceneConf);
 
             _scenes[newScene.name] = newScene;
 

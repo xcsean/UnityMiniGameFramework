@@ -31,8 +31,7 @@ namespace UnityMiniGameFramework
 
         public void onEnterGameClick()
         {
-            IScene mainScene = UnityGameApp.Inst.SceneManager.createScene("MainScene");
-            mainScene.LoadAsync();
+            UnityGameApp.Inst.LoadMainScene();
         }
     }
 }
