@@ -70,25 +70,31 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>..\UnityLibs\2019.4.15f1c1\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>..\UnityLibs\2019.4.15f1c1\UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\UnityLibs\2019.4.15f1c1\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>..\UnityLibs\2019.4.15f1c1\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\UnityLibs\2019.4.15f1c1\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\UnityLibs\2019.4.15f1c1\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>..\UnityLibs\2019.4.15f1c1\UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

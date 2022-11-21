@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
@@ -17,6 +18,9 @@ namespace UnityMiniGameFramework
 
         protected UnityEngine.GameObject _unityGameObject;
         public UnityEngine.GameObject unityGameObject => _unityGameObject;
+
+        protected UIDocument _unityUIDocument;
+        public UIDocument unityUIDocument => _unityUIDocument;
 
         protected Dictionary<string, UIObject> _uiObjects;
 
@@ -34,9 +38,12 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            foreach(var ctrlConf in conf.controls)
+            // The UXML is already instantiated by the UIDocument component
+            _unityUIDocument = _unityGameObject.GetComponent<UIDocument>();
+
+            foreach (var ctrlConf in conf.controls)
             {
-                var tr = _unityGameObject.transform.Find(ctrlConf.name);
+                var tr = _unityUIDocument.rootVisualElement.Q(ctrlConf.name);
                 if(tr == null)
                 {
                     Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name} control [{ctrlConf.name}] not exist");
@@ -50,7 +57,7 @@ namespace UnityMiniGameFramework
                     continue;
                 }
 
-                uiObj.onInit(ctrlConf, tr.gameObject);
+                uiObj.onInit(ctrlConf, tr);
 
                 _uiObjects[ctrlConf.name] = uiObj;
             }

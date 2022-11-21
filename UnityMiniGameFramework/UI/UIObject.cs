@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
@@ -19,8 +20,8 @@ namespace UnityMiniGameFramework
         protected string _name;
         public string name => _name;
 
-        protected UnityEngine.GameObject _unityGameObject;
-        public UnityEngine.GameObject unityGameObject => _unityGameObject;
+        protected VisualElement _unityVE;
+        public VisualElement unityVisualElement => _unityVE;
 
         public UIObject()
         {
@@ -29,18 +30,18 @@ namespace UnityMiniGameFramework
 
         virtual public void hideUI()
         {
-            _unityGameObject.SetActive(false);
+            _unityVE.visible = false;
         }
 
         virtual public void showUI()
         {
-            _unityGameObject.SetActive(true);
+            _unityVE.visible = true;
         }
 
-        virtual public void onInit(UIControlConf c, UnityEngine.GameObject o)
+        virtual public void onInit(UIControlConf c, VisualElement o)
         {
             _name = c.name;
-            _unityGameObject = o;
+            _unityVE = o;
             // TO DO : 
         }
     }

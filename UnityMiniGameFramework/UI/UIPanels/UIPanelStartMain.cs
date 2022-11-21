@@ -23,9 +23,10 @@ namespace UnityMiniGameFramework
 
             var ctrl = this._uiObjects["enterGameButton"];
 
-            var btnComp = ctrl.unityGameObject.GetComponent<Button>();
+            var btn = ctrl.unityVisualElement as Button;
 
-            btnComp.clicked += onEnterGameClick;
+            // TO DO : unregister message
+            btn.clicked += onEnterGameClick;
         }
 
         public void onEnterGameClick()
