@@ -102,7 +102,7 @@ namespace MiniGameFramework
                 if(_startScene.loadStatus.done)
                 {
                     _initStep = GameAppInitStep.EnterStartScene;
-                    _sceneManager.changeScene(_startScene);
+                    //_sceneManager.changeScene(_startScene); // auto change
                 }
             }
 

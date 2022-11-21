@@ -8,7 +8,7 @@ namespace UnityMiniGameFramework
 {
     public class UIMainPanel : UIPanel
     {
-        override public string type => "UIPanel";
+        override public string type => "UIMainPanel";
         public static UIMainPanel create()
         {
             return new UIMainPanel();

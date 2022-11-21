@@ -118,6 +118,7 @@
     <Compile Include="Game\Audio\AudioComponent.cs" />
     <Compile Include="Game\Audio\AudioManager.cs" />
     <Compile Include="Game\Camera\followCamera.cs" />
+    <Compile Include="Game\Camera\UnityGameCamera.cs" />
     <Compile Include="Game\Effect\VFX.cs" />
     <Compile Include="Game\Effect\VFXComponent.cs" />
     <Compile Include="Game\Effect\VFXManager.cs" />

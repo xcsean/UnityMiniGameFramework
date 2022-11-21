@@ -21,7 +21,7 @@ namespace UnityMiniGameFramework
         protected MGGameObject _uiRootObj;
         public IGameObject uiRootObject => _uiRootObj;
 
-        protected ICamera _mainCamera;
+        protected UnityGameCamera _mainCamera;
         public ICamera camera => _mainCamera;
 
         protected AsyncOpStatus _loadStatus;
@@ -120,7 +120,22 @@ namespace UnityMiniGameFramework
                 else if(objs[i].name == mainCameraName)
                 {
                     // TO DO : camera
+
+                    var mgObjComp = objs[i].GetComponent<UnityGameObjectBehaviour>();
+                    if (mgObjComp == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Load Scene {_name} ui rootobj {uiRootName} without UnityGameObjectBehaviour");
+                    }
+                    else
+                    {
+                        _mainCamera = mgObjComp.mgGameObject as UnityGameCamera;
+                    }
                 }
+            }
+
+            if(_conf.changeOnLoaded.HasValue && _conf.changeOnLoaded.Value)
+            {
+                UnityGameApp.Inst.SceneManager.changeScene(this);
             }
 
             // load scene main ui panel
@@ -141,6 +156,7 @@ namespace UnityMiniGameFramework
 
             _rootObj.Hide();
             _uiRootObj.Hide();
+            _mainCamera.Hide();
         }
 
         public void OnShow()
@@ -149,6 +165,7 @@ namespace UnityMiniGameFramework
 
             _rootObj.Show();
             _uiRootObj.Show();
+            _mainCamera.Show();
         }
 
         public void OnUpdate()

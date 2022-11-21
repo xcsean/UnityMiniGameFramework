@@ -127,6 +127,7 @@ namespace UnityMiniGameFramework
 
             // reg object
             GameObjectManager.registerGameObjectCreator("MGGameObject", MGGameObject.create);
+            GameObjectManager.registerGameObjectCreator("UnityGameCamera", UnityGameCamera.create);
             GameObjectManager.registerGameObjectCreator("ActorObject", ActorObject.create);
             GameObjectManager.registerGameObjectCreator("CharacterObject", CharacterObject.create);
 
@@ -171,7 +172,7 @@ namespace UnityMiniGameFramework
 
             // reg ui panel creator
             _ui.regUIPanelCreator("preloader", UIPreloaderPanel.create);
-            _ui.regUIPanelCreator("main", UIMainPanel.create);
+            _ui.regUIPanelCreator("UIMainPanel", UIMainPanel.create);
             _ui.regUIPanelCreator("UIPanelStartMain", UIPanelStartMain.create);
 
             // reg ui control creator

@@ -17,6 +17,8 @@ namespace MiniGameFramework
         public string rootObjectName { get; set; }
         public string mainCameraName { get; set; }
         public string uiRootName { get; set; }
+
+        public bool? changeOnLoaded { get; set; }
     }
 
     public class SceneManagerConf

@@ -64,5 +64,16 @@ namespace UnityMiniGameFramework
         {
             _unityGameObject = o;
         }
+
+
+        override public void Hide()
+        {
+            _unityGameObject.SetActive(false);
+        }
+
+        override public void Show()
+        {
+            _unityGameObject.SetActive(true);
+        }
     }
 }
