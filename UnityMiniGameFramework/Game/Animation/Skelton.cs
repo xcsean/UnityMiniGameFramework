@@ -16,6 +16,11 @@ namespace UnityMiniGameFramework
 
         public GameObject root => _skel;
 
+        public Skelton(GameObject o)
+        {
+            _skel = o;
+        }
+
         public GameObject getBone(string bonePathName)
         {
             Transform trans = _skel.transform.Find(bonePathName);

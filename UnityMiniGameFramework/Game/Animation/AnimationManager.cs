@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-    public class AnimationManagerConf
-    {
-
-    }
 
     public class AnimationManager
     {
-        public void Init(AnimationManagerConf conf)
-        {
 
+        protected AnimationConfig _aniConf;
+        public AnimationConfig AnimationConfs => _aniConf;
+
+        public void Init()
+        {
+            _aniConf = (AnimationConfig)UnityGameApp.Inst.Conf.getConfig("animations");
         }
+
 
 
     }

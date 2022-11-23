@@ -13,10 +13,12 @@ namespace MiniGameFramework
 
         public string sceneFileName { get; set; }
         public string mainUIPanelName { get; set; }
+        public string mapName { get; set; }
 
         public string rootObjectName { get; set; }
         public string mainCameraName { get; set; }
         public string uiRootName { get; set; }
+        public string mapRootName { get; set; }
 
         public bool? changeOnLoaded { get; set; }
     }

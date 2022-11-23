@@ -99,7 +99,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configs\CharacterConfig.cs" />
+    <Compile Include="Configs\MapActorObjectConfigs.cs" />
+    <Compile Include="Configs\MapConfig.cs" />
     <Compile Include="Configs\NetWorkConfig.cs" />
+    <Compile Include="Data\LocalStorageProvider.cs" />
+    <Compile Include="Data\NetSessionDataProvider.cs" />
     <Compile Include="Game\Actors\Action.cs" />
     <Compile Include="Game\Actors\ActionComponent.cs" />
     <Compile Include="Game\Actors\ActorObject.cs" />
@@ -109,6 +113,7 @@
     <Compile Include="Game\Actors\CharacterManager.cs" />
     <Compile Include="Game\Animation\Animation.cs" />
     <Compile Include="Game\Animation\AnimationManager.cs" />
+    <Compile Include="Configs\AnimationConfig.cs" />
     <Compile Include="Game\Animation\AnimatorComponent.cs" />
     <Compile Include="Game\Animation\Skelton.cs" />
     <Compile Include="Game\Actors\Avatar.cs" />
@@ -119,17 +124,29 @@
     <Compile Include="Game\Audio\AudioManager.cs" />
     <Compile Include="Game\Camera\followCamera.cs" />
     <Compile Include="Game\Camera\UnityGameCamera.cs" />
+    <Compile Include="Game\Controller\ActorControllerComponent.cs" />
+    <Compile Include="Game\Controller\InputActorControllerComp.cs" />
+    <Compile Include="Game\Controller\AIActorControllerComp.cs" />
+    <Compile Include="Game\Controller\NetworkActorControllerComp.cs" />
     <Compile Include="Game\Effect\VFX.cs" />
     <Compile Include="Game\Effect\VFXComponent.cs" />
     <Compile Include="Game\Effect\VFXManager.cs" />
-    <Compile Include="Game\Map\MapComponent.cs" />
-    <Compile Include="Game\Map\MapItem.cs" />
-    <Compile Include="Game\Map\MapMonster.cs" />
+    <Compile Include="Game\Map\MapActorObject.cs" />
+    <Compile Include="Game\Map\MapBuildingObject.cs" />
+    <Compile Include="Game\Map\MapHeroObject.cs" />
+    <Compile Include="Game\Map\MapManager.cs" />
+    <Compile Include="Game\Map\MapNPCObject.cs" />
+    <Compile Include="Game\Map\Map.cs" />
+    <Compile Include="Game\Map\MapItemComponent.cs" />
+    <Compile Include="Game\Map\MapMonsterObject.cs" />
+    <Compile Include="Game\Map\MapVehicleObject.cs" />
     <Compile Include="Game\Scene\Scene.cs" />
     <Compile Include="Game\Scene\UnitySceneManager.cs" />
+    <Compile Include="Game\SelfControl.cs" />
     <Compile Include="Game\UnityGameObject.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />
     <Compile Include="Network\UnityNetworkClient.cs" />
+    <Compile Include="OS\Randomness.cs" />
     <Compile Include="OS\UnityProjFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\UnityResourceManager.cs" />

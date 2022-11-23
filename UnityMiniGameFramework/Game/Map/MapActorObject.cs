@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniGameFramework
+namespace UnityMiniGameFramework
 {
-    public interface ICamera
+    abstract public class MapActorObject : ActorObject
     {
-        void follow(IGameObject obj);
+
     }
 }

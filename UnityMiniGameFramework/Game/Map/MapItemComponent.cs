@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
-{ 
-    class MapMonster
+{
+    class MapItemComponent
     {
     }
 }

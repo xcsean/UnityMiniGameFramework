@@ -69,6 +69,7 @@ namespace UnityMiniGameFramework
         public PanelSettings unityUIPanelSettings;
 
         public UnityResourceManager UnityResource => (UnityResourceManager)_resManager;
+        public Scene MainScene => (Scene)_mainScene;
 
         protected AnimationManager _aniManager;
         public AnimationManager AniManager => _aniManager;
@@ -82,8 +83,14 @@ namespace UnityMiniGameFramework
         protected CharacterManager _chaManager;
         public CharacterManager CharacterManager => _chaManager;
 
+        protected MapManager _mapManager;
+        public MapManager MapManager => _mapManager;
+
         protected UnityNetworkClient _netClient;
         public UnityNetworkClient NetClient => _netClient;
+
+        protected SelfControl _self;
+        public SelfControl Self => _self;
 
         override public bool Init(GameAPPInitParameter par)
         {
@@ -91,6 +98,7 @@ namespace UnityMiniGameFramework
             
             // os implement assignment
             _file = new UnityProjFileSystem();
+            _rand = new Randomness();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"OS implement initialized.");
 
@@ -101,6 +109,18 @@ namespace UnityMiniGameFramework
             _loadStartScene();
 
             return true;
+        }
+        override public void OnUpdate()
+        {
+            base.OnUpdate();
+
+            _self.OnUpdate();
+        }
+        override protected void _onMainSceneLoaded()
+        {
+            base._onMainSceneLoaded();
+
+            _initSelfControl();
         }
 
         override protected void _createManagers()
@@ -114,6 +134,9 @@ namespace UnityMiniGameFramework
             _chaManager = new CharacterManager();
             _sceneManager = new UnitySceneManager();
             _resManager = new UnityResourceManager();
+            _mapManager = new MapManager();
+
+            _self = new SelfControl();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app managers created.");
         }
@@ -121,11 +144,13 @@ namespace UnityMiniGameFramework
         override protected void _regClasses()
         {
             base._regClasses();
-            
-            // reg config create
-            _conf.regConfigCreator("CharacterConfigs", CharacterConfigs.create);
-            _conf.regConfigCreator("NetWorkConfig", NetWorkConfig.create);
 
+            // reg config create
+            _conf.regConfigCreator("AnimationConfig", AnimationConfig.create);
+            _conf.regConfigCreator("CharacterConfigs", CharacterConfigs.create);
+            _conf.regConfigCreator("MapConfig", MapConfig.create);
+            _conf.regConfigCreator("NetWorkConfig", NetWorkConfig.create);
+            
             // reg component
             GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
             GameObjectManager.registerGameObjectComponentCreator("AnimatorComponent", AnimatorComponent.create);
@@ -136,7 +161,12 @@ namespace UnityMiniGameFramework
             GameObjectManager.registerGameObjectCreator("MGGameObject", MGGameObject.create);
             GameObjectManager.registerGameObjectCreator("UnityGameCamera", UnityGameCamera.create);
             GameObjectManager.registerGameObjectCreator("ActorObject", ActorObject.create);
-            GameObjectManager.registerGameObjectCreator("CharacterObject", CharacterObject.create);
+            GameObjectManager.registerGameObjectCreator("Map", Map.create);
+            GameObjectManager.registerGameObjectCreator("MapNPCObject", MapNPCObject.create);
+            GameObjectManager.registerGameObjectCreator("MapHeroObject", MapHeroObject.create);
+            GameObjectManager.registerGameObjectCreator("MapMonsterObject", MapMonsterObject.create);
+            GameObjectManager.registerGameObjectCreator("MapBuildingObject", MapBuildingObject.create);
+            GameObjectManager.registerGameObjectCreator("MapVehicleObject", MapVehicleObject.create);
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
         }
@@ -163,10 +193,11 @@ namespace UnityMiniGameFramework
         {
             base._initManagers();
 
-            //_aniManager.Init();
+            _aniManager.Init();
             _chaManager.Init();
             _sceneManager.Init();
             _resManager.Init();
+            _mapManager.Init();
         }
 
         override protected void _initUI(string uiConfigName)
@@ -202,6 +233,12 @@ namespace UnityMiniGameFramework
             {
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"no network.");
             }
+        }
+
+        protected void _initSelfControl()
+        {
+            _self.Init();
+
         }
     }
 }

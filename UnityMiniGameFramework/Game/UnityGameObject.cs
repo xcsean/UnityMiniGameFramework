@@ -24,13 +24,13 @@ namespace UnityMiniGameFramework
 
         protected virtual void Awake()
         {
+            _mgGameObject = (MGGameObject)GameObjectManager.createGameObject(mgGameObjectType);
+            _mgGameObject.setUnityGameObject(this.gameObject);
+            _mgGameObject.Init(mgGameObjectConfigName);
         }
         
         protected virtual void Start()
         {
-            _mgGameObject = (MGGameObject)GameObjectManager.createGameObject(mgGameObjectType);
-            _mgGameObject.setUnityGameObject(this.gameObject);
-            _mgGameObject.Init(mgGameObjectConfigName);
         }
 
         protected virtual void Update()

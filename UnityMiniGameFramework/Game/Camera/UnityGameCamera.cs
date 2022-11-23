@@ -17,6 +17,9 @@ namespace UnityMiniGameFramework
             return new UnityGameCamera();
         }
 
+        protected Vector3 _distance;
+        protected UnityEngine.GameObject _followObject;
+
         protected Camera _unityCamera;
         public Camera unityCamera => _unityCamera;
 
@@ -25,6 +28,22 @@ namespace UnityMiniGameFramework
             _unityCamera = _unityGameObject.GetComponent<Camera>();
 
             // TO DO : init
+        }
+
+        public void follow(IGameObject obj)
+        {
+            _followObject = (obj as MGGameObject).unityGameObject;
+            _distance = _unityGameObject.transform.position - _followObject.transform.position;
+        }
+
+        override public void OnPostUpdate(uint timeElasped)
+        {
+            base.OnPostUpdate(timeElasped);
+
+            if (_followObject != null)
+            {
+                _unityGameObject.transform.position = _followObject.transform.position + _distance;
+            }
         }
     }
 }

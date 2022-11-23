@@ -19,12 +19,18 @@ namespace UnityMiniGameFramework
 
         protected ActionComponent _actionComponent;
         public ActionComponent actionComponent => _actionComponent;
+
         protected AnimatorComponent _animatorComponent;
         public AnimatorComponent animatorComponent => _animatorComponent;
+
         protected AudioComponent _audioComponent;
         public AudioComponent audioComponent => _audioComponent;
+
         protected VFXComponent _vfxComponent;
         public VFXComponent vfxComponent => _vfxComponent;
+
+        protected ActorControllerComponent _ctrlComponent;
+        public ActorControllerComponent controllerComponent => _ctrlComponent;
 
         virtual protected ActorObjectConfig _getActorConf(string confname)
         {
@@ -48,27 +54,36 @@ namespace UnityMiniGameFramework
             _name = conf.name;
 
             _actionComponent = (ActionComponent)GameObjectManager.createGameObjectComponent(conf.ActionConf.componentType);
-            _actionComponent.Init(conf.ActionConf);
             this.AddComponent(_actionComponent);
+            _actionComponent.Init(conf.ActionConf);
 
-            _animatorComponent = (AnimatorComponent)GameObjectManager.createGameObjectComponent("AnimatorComponent");
-            _animatorComponent.Init(conf.AnimatorConf);
+            _animatorComponent = (AnimatorComponent)GameObjectManager.createGameObjectComponent(conf.AnimatorConf.componentType);
             this.AddComponent(_animatorComponent);
+            _animatorComponent.Init(conf.AnimatorConf);
 
             if (conf.AudioConf != null)
             {
                 _audioComponent = (AudioComponent)GameObjectManager.createGameObjectComponent("AudioComponent");
-                _audioComponent.Init(conf.AudioConf);
                 this.AddComponent(_audioComponent);
+                _audioComponent.Init(conf.AudioConf);
             }
 
             if(conf.VFXConf != null)
             {
                 _vfxComponent = (VFXComponent)GameObjectManager.createGameObjectComponent(conf.VFXConf.componentType);
-                _vfxComponent.Init(conf.VFXConf);
                 this.AddComponent(_vfxComponent);
+                _vfxComponent.Init(conf.VFXConf);
             }
         }
+
+        override protected void _onAddComponent(IGameObjectComponent comp)
+        {
+            if(comp.GetType().IsSubclassOf(typeof(ActorControllerComponent)))
+            {
+                _ctrlComponent = comp as ActorControllerComponent;
+            }
+        }
+
         override public void Dispose()
         {
             base.Dispose();

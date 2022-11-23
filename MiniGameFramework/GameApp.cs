@@ -40,6 +40,9 @@ namespace MiniGameFramework
         protected IFileSystem _file;
         public IFileSystem File => _file;
 
+        protected IRandom _rand;
+        public IRandom Rand => _rand;
+
         protected ConfigManager _conf;
         public ConfigManager Conf => _conf;
 
@@ -106,14 +109,18 @@ namespace MiniGameFramework
             {
                 if(_startScene.loadStatus.done)
                 {
+                    _onStartSceneLoaded();
+
                     _initStep = GameAppInitStep.EnterStartScene;
                     //_sceneManager.changeScene(_startScene); // auto change
                 }
             }
-            if (_initStep == GameAppInitStep.LoadMainScene)
+            else if (_initStep == GameAppInitStep.LoadMainScene)
             {
                 if (_mainScene.loadStatus.done)
                 {
+                    _onMainSceneLoaded();
+
                     _initStep = GameAppInitStep.EnterMainScene;
                     //_sceneManager.changeScene(_mainScene); // auto change
 
@@ -121,6 +128,15 @@ namespace MiniGameFramework
                     _startScene.UnloadAsync();
                 }
             }
+        }
+
+        virtual protected void _onStartSceneLoaded()
+        {
+
+        }
+        virtual protected void _onMainSceneLoaded()
+        {
+
         }
 
         virtual protected void _createManagers()

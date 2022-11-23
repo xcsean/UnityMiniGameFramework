@@ -15,6 +15,8 @@ namespace MiniGameFramework
 
         ICamera camera { get; }
 
+        IMap map { get; }
+
         AsyncOpStatus loadStatus { get; }
         AsyncOpStatus unloadStatus { get; }
 
@@ -25,5 +27,7 @@ namespace MiniGameFramework
         void OnHide();
 
         void OnUpdate();
+
+        void changeMap(string newMapName);
     }
 }

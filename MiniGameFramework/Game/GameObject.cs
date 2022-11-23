@@ -59,7 +59,13 @@ namespace MiniGameFramework
             comp.OnAddToGameObject(this);
             _components[comp.type] = comp;
 
+            _onAddComponent(comp);
+
             return true;
+        }
+        virtual protected void _onAddComponent(IGameObjectComponent comp)
+        {
+
         }
 
         virtual public void OnUpdate(uint timeElasped)
@@ -90,5 +96,6 @@ namespace MiniGameFramework
         virtual public void Show()
         {
         }
+
     }
 }

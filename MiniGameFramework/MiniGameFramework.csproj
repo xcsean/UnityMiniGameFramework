@@ -79,6 +79,7 @@
     <Compile Include="Core\AsyncOp.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Config\JsonConfig.cs" />
+    <Compile Include="Core\Config\JsonConfigBasicStructs.cs" />
     <Compile Include="Core\Debug.cs" />
     <Compile Include="Core\Math\Mat44.cs" />
     <Compile Include="Core\Math\Mathfloat.cs" />
@@ -97,13 +98,16 @@
     <Compile Include="Game\SceneManager.cs" />
     <Compile Include="Game\StateComponent.cs" />
     <Compile Include="Interfaces\Config\IConfig.cs" />
+    <Compile Include="Interfaces\Data\IPersistDataProvider.cs" />
     <Compile Include="Interfaces\Game\IAttribute.cs" />
     <Compile Include="Interfaces\Game\ICamera.cs" />
     <Compile Include="Interfaces\Game\IGameObject.cs" />
     <Compile Include="Interfaces\Game\IGameObjectComponent.cs" />
+    <Compile Include="Interfaces\Game\IMap.cs" />
     <Compile Include="Interfaces\Game\IScene.cs" />
     <Compile Include="Interfaces\Network\INetwork.cs" />
     <Compile Include="Interfaces\OS\IFileSystem.cs" />
+    <Compile Include="Interfaces\OS\IRandom.cs" />
     <Compile Include="Interfaces\Resource\IResource.cs" />
     <Compile Include="Interfaces\Resource\IResourceLoader.cs" />
     <Compile Include="Interfaces\UI\Controls\IUIButtonControl.cs" />

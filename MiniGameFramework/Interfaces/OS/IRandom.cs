@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MiniGameFramework
 {
-    public interface ICamera
+    public interface IRandom
     {
-        void follow(IGameObject obj);
+        int RandomBetween(int begin, int end);
     }
 }

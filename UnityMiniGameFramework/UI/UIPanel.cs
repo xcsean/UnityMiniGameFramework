@@ -48,7 +48,7 @@ namespace UnityMiniGameFramework
             _unityUIDocument = _unityGameObject.AddComponent<UIDocument>();
 
             //var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/MyCustomEditor.uxml");
-            var visualTree = Resources.Load<VisualTreeAsset>(conf.uiFile);
+            var visualTree = Resources.Load<VisualTreeAsset>(conf.uiFile); // TO DO : use resource manager
             _unityUIDocument.visualTreeAsset = visualTree;
             _unityUIDocument.panelSettings = UnityGameApp.Inst.unityUIPanelSettings;
 
