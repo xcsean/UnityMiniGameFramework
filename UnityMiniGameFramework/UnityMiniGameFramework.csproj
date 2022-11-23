@@ -155,4 +155,8 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\UnityMiniGame\Assets\Libs\Plugin\MiniGameFramework
+copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\UnityMiniGame\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
+  </PropertyGroup>
 </Project>

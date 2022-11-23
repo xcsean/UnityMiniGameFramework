@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using MiniGameFramework;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
@@ -14,6 +15,8 @@ namespace UnityMiniGameFramework
         public string appConfigFileName;
         public string uiConfigName;
         public string preloaderUIConfName;
+
+        public PanelSettings unityUIPanelSettings;
 
         static void dbgOutput(string msg)
         {
@@ -28,7 +31,9 @@ namespace UnityMiniGameFramework
         {
             MiniGameFramework.Debug.Init(dbgOutput, dbgError);
 
-            GameApp.setInst(new UnityGameApp());
+            UnityGameApp.setInst(new UnityGameApp());
+
+            UnityGameApp.Inst.unityUIPanelSettings = unityUIPanelSettings;
 
             GameAPPInitParameter InitParameter = new GameAPPInitParameter
             {
@@ -36,7 +41,7 @@ namespace UnityMiniGameFramework
                 uiConfigName = uiConfigName,
                 preloaderUIConfName = preloaderUIConfName
             };
-            GameApp.Inst.Init(InitParameter);
+            UnityGameApp.Inst.Init(InitParameter);
         }
 
         protected virtual void Start()
@@ -60,7 +65,9 @@ namespace UnityMiniGameFramework
     public class UnityGameApp : GameApp
     {
         new public static UnityGameApp Inst => (UnityGameApp)_inst;
-        
+
+        public PanelSettings unityUIPanelSettings;
+
         public UnityResourceManager UnityResource => (UnityResourceManager)_resManager;
 
         protected AnimationManager _aniManager;

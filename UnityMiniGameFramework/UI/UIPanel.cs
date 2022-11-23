@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using MiniGameFramework;
 using UnityEngine.UIElements;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -31,29 +32,39 @@ namespace UnityMiniGameFramework
 
         virtual public void Init(UIPanelConf conf)
         {
-            _name = conf.name;
-            _unityGameObject = UnityGameApp.Inst.UnityResource.CreateUnityPrefabObject(conf.uiFile);
-            if(_unityGameObject == null)
-            {
-                return;
-            }
+            //_name = conf.name;
+            //_unityGameObject = UnityGameApp.Inst.UnityResource.CreateUnityPrefabObject(conf.uiFile);
+            //if(_unityGameObject == null)
+            //{
+            //    return;
+            //}
 
-            // The UXML is already instantiated by the UIDocument component
-            _unityUIDocument = _unityGameObject.GetComponent<UIDocument>();
+            //// The UXML is already instantiated by the UIDocument component
+            //_unityUIDocument = _unityGameObject.GetComponent<UIDocument>();
+            // TO DO : 
+
+            _name = conf.name;
+            _unityGameObject = new UnityEngine.GameObject($"UIPanel_{_name}");
+            _unityUIDocument = _unityGameObject.AddComponent<UIDocument>();
+
+            //var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/MyCustomEditor.uxml");
+            var visualTree = Resources.Load<VisualTreeAsset>(conf.uiFile);
+            _unityUIDocument.visualTreeAsset = visualTree;
+            _unityUIDocument.panelSettings = UnityGameApp.Inst.unityUIPanelSettings;
 
             foreach (var ctrlConf in conf.controls)
             {
                 var tr = _unityUIDocument.rootVisualElement.Q(ctrlConf.name);
-                if(tr == null)
+                if (tr == null)
                 {
-                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name} control [{ctrlConf.name}] not exist");
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name} control [{ctrlConf.name}] not exist");
                     continue;
                 }
 
                 UIObject uiObj = (UIObject)UnityGameApp.Inst.UI.createUIObject(ctrlConf.type);
-                if(uiObj == null)
+                if (uiObj == null)
                 {
-                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name} control {ctrlConf.name} type [{ctrlConf.type}] not exist");
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name} control {ctrlConf.name} type [{ctrlConf.type}] not exist");
                     continue;
                 }
 
@@ -61,7 +72,7 @@ namespace UnityMiniGameFramework
 
                 _uiObjects[ctrlConf.name] = uiObj;
             }
-            // TO DO : 
+
         }
 
         virtual public void Dispose()
