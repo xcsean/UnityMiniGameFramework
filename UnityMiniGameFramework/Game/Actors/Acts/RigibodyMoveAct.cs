@@ -10,7 +10,9 @@ namespace UnityMiniGameFramework
     {
         public float TurnSpeed = 180.0f;
         public float AccSpeed = 1.0f;
-        public float MaxSpeed = 2.0f;
+        public float DecSpeed = 6.0f;
+        public float MaxSpeed = 3.0f;
+
         public float curSpeed => _curSpeed;
 
         protected float _curSpeed;
@@ -24,6 +26,8 @@ namespace UnityMiniGameFramework
             actor.animatorComponent.playAnimation("Idle");
         }
 
+        bool _isStopping;
+        public bool isStopping => _isStopping;
         public bool isMoving => (_movVec != null);
         override public bool isFinished => false;
         override public bool discardWhenFinish => false;
@@ -36,6 +40,7 @@ namespace UnityMiniGameFramework
         public void stop()
         {
             _movVec = null;
+            _isStopping = this._curSpeed > 0;
         }
 
         override public void Start()
@@ -54,6 +59,8 @@ namespace UnityMiniGameFramework
 
             _updateMove();
 
+            _updateStoping();
+
         }
 
         void _onStop()
@@ -62,6 +69,18 @@ namespace UnityMiniGameFramework
             {
                 actor.animatorComponent.playAnimation("Idle");
             }
+        }
+
+        void _updateStoping()
+        {
+            if(!_isStopping || _curSpeed <= 0)
+            {
+                return;
+            }
+
+            _decSpeed();
+
+            _rigiBody.MovePosition(_rigiBody.position + _rigiBody.transform.forward * _curSpeed * UnityEngine.Time.deltaTime);
         }
 
         void _updateMove()
@@ -105,6 +124,25 @@ namespace UnityMiniGameFramework
             //    //_rigiBody.MoveRotation(UnityEngine.Quaternion.Euler(0, _rigiBody.transform.rotation.y - TurnSpeed * UnityEngine.Time.deltaTime, 0));
             //    _rigiBody.gameObject.transform.rotation = UnityEngine.Quaternion.Euler(_rigiBody.transform.rotation.x, _rigiBody.transform.rotation.y - TurnSpeed * UnityEngine.Time.deltaTime, _rigiBody.transform.rotation.y);
             //}    
+        }
+
+        void _decSpeed()
+        {
+            if (DecSpeed <= 0)
+            {
+                _curSpeed = 0;
+                _isStopping = false;
+            }
+            else if (_curSpeed > 0)
+            {
+                _curSpeed -= DecSpeed * UnityEngine.Time.deltaTime;
+                if (_curSpeed < 0)
+                {
+                    _curSpeed = 0;
+                    _isStopping = false;
+                }
+            }
+
         }
 
         void _updateSpeed()

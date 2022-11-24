@@ -33,6 +33,8 @@ namespace UnityMiniGameFramework
 
         public int height => (int)_unityUIDocument.rootVisualElement.layout.height;
 
+        public bool isShow => _unityUIDocument.rootVisualElement.visible;
+
         public UIPanel()
         {
             _uiObjects = new Dictionary<string, UIObject>();
@@ -100,12 +102,14 @@ namespace UnityMiniGameFramework
 
         virtual public void hideUI()
         {
-            _unityGameObject.SetActive(false);
+            //_unityGameObject.SetActive(false);
+            _unityUIDocument.rootVisualElement.visible = false;
         }
 
         virtual public void showUI()
         {
-            _unityGameObject.SetActive(true);
+            //_unityGameObject.SetActive(true);
+            _unityUIDocument.rootVisualElement.visible = true;
         }
         public void setPoisition(int x, int y)
         {

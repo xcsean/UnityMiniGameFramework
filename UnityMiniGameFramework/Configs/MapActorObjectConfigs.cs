@@ -12,4 +12,13 @@ namespace UnityMiniGameFramework
 
         public string prefabName { get; set; }
     }
+
+    public class MapBuildObjectConf
+    {
+        public string actorConfName { get; set; }
+
+        public string uiPanelName { get; set; }
+
+        public string triggerObjectName { get; set; }
+    }
 }

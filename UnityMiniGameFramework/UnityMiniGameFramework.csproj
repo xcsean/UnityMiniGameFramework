@@ -156,6 +156,8 @@
     <Compile Include="UI\UIPanels\UIMainPanel.cs" />
     <Compile Include="UI\UIPanels\UIPanelStartMain.cs" />
     <Compile Include="UI\UIPanels\UIPreloaderPanel.cs" />
+    <Compile Include="UI\UIPanels\UIUpgradePanel.cs" />
+    <Compile Include="UI\UITemplatePanels\UIPopupPanel.cs" />
     <Compile Include="UnityGameApp.cs" />
     <Compile Include="Utility\TransformHelper.cs" />
   </ItemGroup>

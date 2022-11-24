@@ -74,7 +74,7 @@ namespace UnityMiniGameFramework
         protected virtual void FixedUpdate()
         {
         }
-
+        
         protected virtual void LateUpdate()
         {
             UnityGameApp.Inst.OnPostUpdate();
@@ -244,6 +244,7 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("preloader", UIPreloaderPanel.create);
             _ui.regUIPanelCreator("UIMainPanel", UIMainPanel.create);
             _ui.regUIPanelCreator("UIPanelStartMain", UIPanelStartMain.create);
+            _ui.regUIPanelCreator("UIUpgradePanel", UIUpgradePanel.create);
 
             // reg ui control creator
             _ui.regUIObjectCreator("UIObject", UIObject.create);

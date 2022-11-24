@@ -38,6 +38,7 @@ namespace UnityMiniGameFramework
 
         public Dictionary<string, MapHeroObjectConf> mapHeros { get; set; }
 
+        public Dictionary<string, MapBuildObjectConf> mapBuildings { get; set; }
     }
 
     public class MapConfig : JsonConfig
@@ -70,6 +71,14 @@ namespace UnityMiniGameFramework
                 return null;
             }
             return mapConf.mapHeros[mapHeroName];
+        }
+        public MapBuildObjectConf getMapBuildingConf(string mapBuildingName)
+        {
+            if (mapConf.mapBuildings == null || !mapConf.mapBuildings.ContainsKey(mapBuildingName))
+            {
+                return null;
+            }
+            return mapConf.mapBuildings[mapBuildingName];
         }
     }
 }

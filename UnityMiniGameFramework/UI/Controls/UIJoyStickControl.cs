@@ -82,6 +82,8 @@ namespace UnityMiniGameFramework
             this._click = true;
             this._moving = false;
 
+            _btn.style.unityBackgroundImageTintColor = new StyleColor(new UnityEngine.Color(1, 1, 1, 1));
+
             _unityVE.CaptureMouse();
         }
         public void OnMouseMove(MouseMoveEvent e)
@@ -122,6 +124,8 @@ namespace UnityMiniGameFramework
 
             this._click = false;
             this._moving = false;
+
+            _btn.style.unityBackgroundImageTintColor = new StyleColor(new UnityEngine.Color(1, 1, 1, 0.4f));
 
             _unityVE.ReleaseMouse();
         }

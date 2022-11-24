@@ -57,9 +57,12 @@ namespace UnityMiniGameFramework
             this.AddComponent(_actionComponent);
             _actionComponent.Init(conf.ActionConf);
 
-            _animatorComponent = (AnimatorComponent)GameObjectManager.createGameObjectComponent(conf.AnimatorConf.componentType);
-            this.AddComponent(_animatorComponent);
-            _animatorComponent.Init(conf.AnimatorConf);
+            if(conf.AnimatorConf != null)
+            {
+                _animatorComponent = (AnimatorComponent)GameObjectManager.createGameObjectComponent(conf.AnimatorConf.componentType);
+                this.AddComponent(_animatorComponent);
+                _animatorComponent.Init(conf.AnimatorConf);
+            }
 
             if (conf.AudioConf != null)
             {
