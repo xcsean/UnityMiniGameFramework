@@ -144,6 +144,24 @@ namespace UnityMiniGameFramework
             return sp.spawnCenter + new UnityEngine.Vector3(xf, yf, zf);
         }
 
+        public UnityEngine.Vector3 getNamedBornPos(string name)
+        {
+            if (!_namedBornPos.ContainsKey(name))
+            {
+                return new UnityEngine.Vector3(0, 0, 0);
+            }
+
+            SpawnPos sp = _namedBornPos[name];
+            int x = (int)(sp.spawnHalfSize.x * 1000);
+            float xf = (float)UnityGameApp.Inst.Rand.RandomBetween(-x, x) / 1000.0f;
+            int y = (int)(sp.spawnHalfSize.y * 1000);
+            float yf = (float)UnityGameApp.Inst.Rand.RandomBetween(-y, y) / 1000.0f;
+            int z = (int)(sp.spawnHalfSize.z * 1000);
+            float zf = (float)UnityGameApp.Inst.Rand.RandomBetween(-z, z) / 1000.0f;
+
+            return sp.spawnCenter + new UnityEngine.Vector3(xf, yf, zf);
+        }
+
         override protected void _onAddComponent(IGameObjectComponent comp)
         {
         }

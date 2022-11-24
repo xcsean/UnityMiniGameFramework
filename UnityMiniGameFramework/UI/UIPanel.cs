@@ -25,6 +25,14 @@ namespace UnityMiniGameFramework
 
         protected Dictionary<string, UIObject> _uiObjects;
 
+        public int x => (int)_unityUIDocument.rootVisualElement.transform.position.x;
+
+        public int y => (int)_unityUIDocument.rootVisualElement.transform.position.y;
+
+        public int width => (int)_unityUIDocument.rootVisualElement.layout.width;
+
+        public int height => (int)_unityUIDocument.rootVisualElement.layout.height;
+
         public UIPanel()
         {
             _uiObjects = new Dictionary<string, UIObject>();
@@ -98,6 +106,10 @@ namespace UnityMiniGameFramework
         virtual public void showUI()
         {
             _unityGameObject.SetActive(true);
+        }
+        public void setPoisition(int x, int y)
+        {
+            _unityUIDocument.rootVisualElement.transform.position = new UnityEngine.Vector2(x, y);
         }
     }
 }

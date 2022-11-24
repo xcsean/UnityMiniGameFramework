@@ -22,6 +22,8 @@ namespace UnityMiniGameFramework
 
         MapHeroObject _selfMapHeroObj;
         InputActorControllerComp _inputControl;
+        UIMainPanel _uiMainPanel;
+        RigibodyMoveAct _movAct;
 
         public SelfLocalStorageData selfLocalData => _selfLocalData;
         public MapHeroObject selfMapHero => _selfMapHeroObj;
@@ -45,6 +47,8 @@ namespace UnityMiniGameFramework
             //_selfLocalData = _localStorage.getUserData<SelfLocalStorageData>();
             _selfLocalData = new SelfLocalStorageData();
             _selfLocalData.mapHeroConfName = "testHero"; // for Debug ...
+
+            _uiMainPanel = UnityGameApp.Inst.UI.getUIPanel("MainUI") as UIMainPanel;
 
             _initSelfMapHero();
         }
@@ -72,19 +76,25 @@ namespace UnityMiniGameFramework
             _selfMapHeroObj.AddComponent(_inputControl);
             _inputControl.Init(null); // TO DO : add config
 
+            _movAct = new RigibodyMoveAct(_selfMapHeroObj);
+            _selfMapHeroObj.actionComponent.AddAction(_movAct);
+
             // add to scene
             unityHeroObj.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
 
             if(_selfLocalData.position == null)
-            {
+            {                
                 // set born position
-                unityHeroObj.transform.position = UnityGameApp.Inst.MainScene.implMap.getRandomBornPos();
+                //unityHeroObj.transform.position = UnityGameApp.Inst.MainScene.implMap.getRandomBornPos();
+                unityHeroObj.transform.position = UnityGameApp.Inst.MainScene.implMap.getNamedBornPos("b1");
             }
             else
             {
                 // restore position
                 unityHeroObj.transform.position = new UnityEngine.Vector3(_selfLocalData.position.x, _selfLocalData.position.y, _selfLocalData.position.z);
             }
+
+            UnityGameApp.Inst.MainScene.camera.follow(_selfMapHeroObj);
 
             _isInited = true;
         }
@@ -96,7 +106,16 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-
+            if(_uiMainPanel.Joystick.isMoving)
+            {
+                // TO DO : use rigibody mov
+                //_movAct.moveTo(_selfMapHeroObj.unityGameObject.transform.position + _uiMainPanel.Joystick.movVector3 * 10.0f);
+                _movAct.moveToward(_uiMainPanel.Joystick.movVector3);
+            }
+            else if(_movAct.isMoving)
+            {
+                _movAct.stop();
+            }
         }
     }
 }

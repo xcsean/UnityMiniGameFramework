@@ -73,7 +73,7 @@ namespace UnityMiniGameFramework
                 _currAnis.Remove(ani.aniSlotName);
             }
 
-            _unityAnimator.Play(ani.aniClipName, ani.slotIndex);
+            _unityAnimator.Play(ani.aniClipName);
 
             _currAnis[ani.aniSlotName] = ani;
 

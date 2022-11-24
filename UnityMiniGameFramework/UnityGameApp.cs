@@ -10,6 +10,24 @@ using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
+    public class UnityGameAppUpdateBehaviour : MonoBehaviour
+    {
+
+        protected virtual void Update()
+        {
+            GameApp.Inst.OnUpdate();
+        }
+
+        protected virtual void FixedUpdate()
+        {
+        }
+
+        protected virtual void LateUpdate()
+        {
+            UnityGameApp.Inst.OnPostUpdate();
+        }
+    }
+
     public class UnityGameAppBehaviour : MonoBehaviour
     {
         public string appConfigFileName;
@@ -59,6 +77,7 @@ namespace UnityMiniGameFramework
 
         protected virtual void LateUpdate()
         {
+            UnityGameApp.Inst.OnPostUpdate();
         }
     }
 
@@ -92,10 +111,27 @@ namespace UnityMiniGameFramework
         protected SelfControl _self;
         public SelfControl Self => _self;
 
+        protected Queue<Action> _nextFramePostUpdateCall;
+
+        public void regNextFramePostUpdateCall(Action a)
+        {
+            _nextFramePostUpdateCall.Enqueue(a);
+        }
+        public void OnPostUpdate()
+        {
+            while(_nextFramePostUpdateCall.Count > 0)
+            {
+                Action a = _nextFramePostUpdateCall.Dequeue();
+                a.Invoke();
+            }
+        }
+
         override public bool Init(GameAPPInitParameter par)
         {
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"UnityGameApp start initializing...");
-            
+
+            _nextFramePostUpdateCall = new Queue<Action>();
+
             // os implement assignment
             _file = new UnityProjFileSystem();
             _rand = new Randomness();
@@ -211,6 +247,7 @@ namespace UnityMiniGameFramework
 
             // reg ui control creator
             _ui.regUIObjectCreator("UIObject", UIObject.create);
+            _ui.regUIObjectCreator("UIJoyStickControl", UIJoyStickControl.create);
         }
 
         protected void _initNetwork()

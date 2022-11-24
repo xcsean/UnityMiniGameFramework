@@ -152,6 +152,7 @@
     <Compile Include="Resource\UnityResourceManager.cs" />
     <Compile Include="UI\UIObject.cs" />
     <Compile Include="UI\UIPanel.cs" />
+    <Compile Include="UI\Controls\UIJoyStickControl.cs" />
     <Compile Include="UI\UIPanels\UIMainPanel.cs" />
     <Compile Include="UI\UIPanels\UIPanelStartMain.cs" />
     <Compile Include="UI\UIPanels\UIPreloaderPanel.cs" />

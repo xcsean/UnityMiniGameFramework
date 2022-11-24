@@ -14,6 +14,11 @@ namespace UnityMiniGameFramework
             return new InputActorControllerComp();
         }
 
+        override public void Init(object config)
+        {
+            base.Init(config);
 
+
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace UnityMiniGameFramework
 
         protected UnityGameCamera _mainCamera;
         public ICamera camera => _mainCamera;
+        public Camera unityCamera => _mainCamera.unityCamera;
 
         protected UnityEngine.GameObject _mapRoot;
         public UnityEngine.GameObject mapRoot => _mapRoot;
@@ -42,11 +43,14 @@ namespace UnityMiniGameFramework
         protected AsyncOperation _unitySceneLoadStatus;
         protected AsyncOperation _unitySceneUnLoadStatus;
 
+        public bool isAdditive => (_conf.isAdditive.HasValue && _conf.isAdditive.Value);
+
         public Scene(SceneConf conf)
         {
             _conf = conf;
             _name = conf.name;
         }
+
 
         public void UnloadAsync()
         {
@@ -55,7 +59,19 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            _unitySceneUnLoadStatus = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(_unityScene);
+            if(isAdditive)
+            {
+                _unitySceneUnLoadStatus = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(_unityScene);
+                _unloadStatus.progressing = true;
+            }
+            else
+            {
+
+                _unloadStatus.progressing = false;
+                _unloadStatus.done = true;
+
+                _onUnloaded();
+            }
         }
 
         public void LoadAsync()
@@ -69,7 +85,14 @@ namespace UnityMiniGameFramework
             if(!_unityScene.isLoaded)
             {
                 _loadStatus.progressing = true;
-                _unitySceneLoadStatus = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_conf.name, LoadSceneMode.Additive);
+                if(isAdditive)
+                {
+                    _unitySceneLoadStatus = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_conf.name, LoadSceneMode.Additive);
+                }
+                else
+                {
+                    _unitySceneLoadStatus = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_conf.name);
+                }
                 //_unitySceneLoadStatus.allowSceneActivation = true;
             }
         }
@@ -176,6 +199,7 @@ namespace UnityMiniGameFramework
                 UnityGameApp.Inst.SceneManager.changeScene(this);
             }
 
+            // TO DO : manager ui in scene
             // load scene main ui panel
             UIPanel mainUIPanel = (UIPanel)UnityGameApp.Inst.UI.createUIPanel(_conf.mainUIPanelName);
             mainUIPanel.unityGameObject.transform.SetParent(_uiRootObj.unityGameObject.transform);
@@ -190,6 +214,11 @@ namespace UnityMiniGameFramework
 
         public void OnHide()
         {
+            if(!isAdditive)
+            {
+                return;
+            }
+
             UnityEngine.SceneManagement.SceneManager.SetActiveScene(((UnitySceneManager)UnityGameApp.Inst.SceneManager).unityBaseScene);
 
             _rootObj.Hide();

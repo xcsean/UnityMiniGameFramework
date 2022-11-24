@@ -21,6 +21,8 @@ namespace MiniGameFramework
         public string mapRootName { get; set; }
 
         public bool? changeOnLoaded { get; set; }
+
+        public bool? isAdditive { get; set; }
     }
 
     public class SceneManagerConf

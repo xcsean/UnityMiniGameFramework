@@ -11,6 +11,14 @@ namespace MiniGameFramework
         string name { get; }
         string type { get; }
 
+        int x { get; }
+        int y { get; }
+
+        int width { get; }
+        int height { get; }
+
+        void setPoisition(int x, int y);
+
         void showUI();
         void hideUI();
 
