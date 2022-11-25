@@ -154,6 +154,7 @@ namespace UnityMiniGameFramework
             base.OnUpdate();
 
             _vfxManager.OnUpdate(UnityEngine.Time.deltaTime);
+            _weaponManager.OnUpdate(UnityEngine.Time.deltaTime);
 
             _self.OnUpdate();
         }

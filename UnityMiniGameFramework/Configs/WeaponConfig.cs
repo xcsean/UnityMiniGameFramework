@@ -9,6 +9,15 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
+    public class ExplosiveConf
+    {
+        public string explosiveVFX { get; set; }
+        public string hitVFX { get; set; }
+
+        public float? startTime { get; set; }
+        public float? keepTime { get; set; }
+    }
+
     public class GunFireConf
     {
         public string shootVFX { get; set; }
@@ -26,7 +35,7 @@ namespace UnityMiniGameFramework
 
         public float? maxRayLength { get; set; } // only in fireType=ray case
 
-        public string collideExplosiveEffect { get; set; }
+        public ExplosiveConf collideExplosive { get; set; }
 
         public string collideBuf { get; set; } // give dot or other buf to target
     }

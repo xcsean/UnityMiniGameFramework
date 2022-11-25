@@ -147,6 +147,7 @@
     <Compile Include="Game\Scene\UnitySceneManager.cs" />
     <Compile Include="Game\SelfControl.cs" />
     <Compile Include="Game\UnityGameObject.cs" />
+    <Compile Include="Game\Weapon\ExplosiveObject.cs" />
     <Compile Include="Game\Weapon\Gun\GunObject.cs" />
     <Compile Include="Game\Weapon\WeaponManager.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />

@@ -242,12 +242,15 @@ namespace UnityMiniGameFramework
         {
             var contact = collision.GetContact(0);
 
-            var hitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.hitVFX);
-            if (hitVfx != null)
+            if(_conf.FireConf.hitVFX != null)
             {
-                hitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                hitVfx.unityGameObject.transform.position = contact.point;
-                hitVfx.unityGameObject.transform.forward = contact.normal;
+                var hitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.hitVFX);
+                if (hitVfx != null)
+                {
+                    hitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                    hitVfx.unityGameObject.transform.position = contact.point;
+                    hitVfx.unityGameObject.transform.forward = contact.normal;
+                }
             }
 
             // TO DO : do hit result
@@ -258,8 +261,18 @@ namespace UnityMiniGameFramework
             }
 
             UnityGameApp.Inst.VFXManager.onVFXDestory(projectileObject.projVfxObj);
-
             _currentProjectiles.Remove(projectileObject.projVfxObj);
+
+            if(_conf.FireConf.collideExplosive != null)
+            {
+                var explosiveObj = UnityGameApp.Inst.WeaponManager.CreateExplosiveObject(_conf.FireConf.collideExplosive);
+                if(explosiveObj.explosiveVFX != null)
+                {
+                    explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                    explosiveObj.explosiveVFX.unityGameObject.transform.position = contact.point;
+                    explosiveObj.explosiveVFX.unityGameObject.transform.forward = contact.normal;
+                }
+            }
         }
 
         virtual public void onEmmiterHitEnter(UnityEngine.Collider other)

@@ -30,6 +30,8 @@ namespace UnityMiniGameFramework
 
         public UnityEngine.ParticleSystem particleSystem => _particleSys;
 
+        public Action onDestoryCallback;
+
         public VFXObjectBase()
         {
         }
@@ -64,8 +66,12 @@ namespace UnityMiniGameFramework
                 {
                     // finish play
 
-                    _unityGameObject.SetActive(false);
+                    if(onDestoryCallback != null)
+                    {
+                        onDestoryCallback();
+                    }
 
+                    _unityGameObject.SetActive(false);
                     UnityGameApp.Inst.VFXManager.onVFXDestory(this);
                 }
             }
