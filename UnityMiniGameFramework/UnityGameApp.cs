@@ -60,6 +60,7 @@ namespace UnityMiniGameFramework
                 preloaderUIConfName = preloaderUIConfName
             };
             UnityGameApp.Inst.Init(InitParameter);
+            Application.targetFrameRate = 60;
         }
 
         protected virtual void Start()
