@@ -42,15 +42,6 @@ namespace UnityMiniGameFramework
 
         virtual public void Init(UIPanelConf conf)
         {
-            //_name = conf.name;
-            //_unityGameObject = UnityGameApp.Inst.UnityResource.CreateUnityPrefabObject(conf.uiFile);
-            //if(_unityGameObject == null)
-            //{
-            //    return;
-            //}
-
-            //// The UXML is already instantiated by the UIDocument component
-            //_unityUIDocument = _unityGameObject.GetComponent<UIDocument>();
             // TO DO : 
 
             _name = conf.name;

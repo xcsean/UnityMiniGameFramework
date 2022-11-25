@@ -176,7 +176,7 @@ namespace UnityMiniGameFramework
             base.Dispose();
         }
         
-        override public void OnUpdate(uint timeElasped)
+        override public void OnUpdate(float timeElasped)
         {
             List<string> toRemoveCurrAnis = new List<string>();
             foreach(var pair in _currAnis)
@@ -197,7 +197,7 @@ namespace UnityMiniGameFramework
                 _currAnis.Remove(key);
             }
         }
-        override public void OnPostUpdate(uint timeElasped)
+        override public void OnPostUpdate(float timeElasped)
         {
 
         }

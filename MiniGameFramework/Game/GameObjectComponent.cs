@@ -26,11 +26,11 @@ namespace MiniGameFramework
             _gameObject = obj;
         }
 
-        virtual public void OnUpdate(uint timeElasped)
+        virtual public void OnUpdate(float timeElasped)
         {
 
         }
-        virtual public void OnPostUpdate(uint timeElasped)
+        virtual public void OnPostUpdate(float timeElasped)
         {
 
         }

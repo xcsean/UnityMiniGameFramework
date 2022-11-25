@@ -57,7 +57,8 @@ namespace UnityMiniGameFramework
         {
             var heroConf = UnityGameApp.Inst.MapManager.MapConf.getMapHeroConf(_selfLocalData.mapHeroConfName);
 
-            var unityHeroObj = UnityGameApp.Inst.UnityResource.CreateUnityPrefabObject(heroConf.prefabName);
+            var unityHeroObj = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject(heroConf.prefabName);
+            unityHeroObj = UnityEngine.GameObject.Instantiate(unityHeroObj);
             var mgObj = unityHeroObj.GetComponent<UnityGameObjectBehaviour>();
             if(mgObj == null)
             {

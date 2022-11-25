@@ -35,7 +35,7 @@ namespace UnityMiniGameFramework
 
         protected virtual void Update()
         {
-            _mgGameObject.OnUpdate((uint)(Time.deltaTime*1000));
+            _mgGameObject.OnUpdate(Time.deltaTime);
         }
 
         protected virtual void FixedUpdate()
@@ -44,7 +44,7 @@ namespace UnityMiniGameFramework
 
         protected virtual void LateUpdate()
         {
-            _mgGameObject.OnPostUpdate((uint)(Time.deltaTime * 1000));
+            _mgGameObject.OnPostUpdate(Time.deltaTime);
         }
     }
 

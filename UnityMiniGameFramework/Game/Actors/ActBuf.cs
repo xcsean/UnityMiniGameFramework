@@ -4,14 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using UnityEngine;
-
 namespace UnityMiniGameFramework
 {
-    public class VFX
+    public class ActBuf
     {
-        protected ParticleSystem _particleSys;
-
-        public ParticleSystem particleSystem => _particleSys;
+        // TO DO : implement ActBuf
     }
 }

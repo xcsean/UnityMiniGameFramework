@@ -35,6 +35,16 @@ namespace UnityMiniGameFramework
             _currActivateActions = new HashSet<Act>();
         }
 
+        public void AddBuf(ActBuf buf)
+        {
+            // TO DO : 
+        }
+
+        public void OnBufRemove(ActBuf buf)
+        {
+            // TO DO : 
+        }
+
         public void AddAction(Act act)
         {
             if(act.checkStartCondition())
@@ -62,7 +72,7 @@ namespace UnityMiniGameFramework
             _penddingActions = null;
         }
 
-        override public void OnUpdate(uint timeElasped)
+        override public void OnUpdate(float timeElasped)
         {
             if(_currActivateActions != null)
             {
@@ -91,7 +101,7 @@ namespace UnityMiniGameFramework
                 }
             }
         }
-        override public void OnPostUpdate(uint timeElasped)
+        override public void OnPostUpdate(float timeElasped)
         {
             if (_currActivateActions != null)
             {

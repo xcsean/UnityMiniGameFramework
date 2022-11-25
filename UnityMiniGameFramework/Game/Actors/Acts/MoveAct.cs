@@ -56,7 +56,7 @@ namespace UnityMiniGameFramework
             base.Start();
         }
 
-        override public void Update(uint timeElasped)
+        override public void Update(float timeElasped)
         {
             if(_actor.actionComponent.hasState(ActStates.STATE_KEY_NO_MOVE))
             {

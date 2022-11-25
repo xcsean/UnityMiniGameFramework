@@ -72,7 +72,7 @@ namespace UnityMiniGameFramework
         {
 
             var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
-            if(comp.mgGameObject.type == "MapHeroObject")
+            if(comp != null && comp.mgGameObject.type == "MapHeroObject")
             {
                 // player
 
@@ -94,7 +94,7 @@ namespace UnityMiniGameFramework
         public void OnTriggerExit(UnityEngine.Collider other)
         {
             var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
-            if (comp.mgGameObject.type == "MapHeroObject")
+            if (comp != null && comp.mgGameObject.type == "MapHeroObject")
             {
                 // player
 

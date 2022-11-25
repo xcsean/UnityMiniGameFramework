@@ -62,12 +62,12 @@ namespace UnityMiniGameFramework
             _actived = true;
         }
 
-        virtual public void Update(uint timeElasped)
+        virtual public void Update(float timeElasped)
         {
 
         }
 
-        virtual public void PostUpdate(uint timeElasped)
+        virtual public void PostUpdate(float timeElasped)
         {
 
         }

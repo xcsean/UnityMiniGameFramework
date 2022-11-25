@@ -18,16 +18,20 @@ namespace UnityMiniGameFramework
         }
 
 
-        public UnityEngine.GameObject CreateUnityPrefabObject(string prefabName)
+        public UnityEngine.GameObject LoadUnityPrefabObject(string prefabName)
         {
             var obj = Resources.Load(prefabName) as UnityEngine.GameObject;
             if(obj == null)
             {
-                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"CreateUnityPrefabObject {prefabName} not exist");
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadUnityPrefabObject {prefabName} not exist");
                 return null;
             }
-            return UnityEngine.GameObject.Instantiate(obj);
+            return obj;
         }
 
+        public void ReleaseUnityPrefabObject(UnityEngine.GameObject o)
+        {
+            Resources.UnloadAsset(o);
+        }
     }
 }

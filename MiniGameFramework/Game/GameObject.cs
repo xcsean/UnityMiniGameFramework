@@ -68,7 +68,7 @@ namespace MiniGameFramework
 
         }
 
-        virtual public void OnUpdate(uint timeElasped)
+        virtual public void OnUpdate(float timeElasped)
         {
             if(_components != null)
             {
@@ -78,7 +78,7 @@ namespace MiniGameFramework
                 }
             }
         }
-        virtual public void OnPostUpdate(uint timeElasped)
+        virtual public void OnPostUpdate(float timeElasped)
         {
             if (_components != null)
             {

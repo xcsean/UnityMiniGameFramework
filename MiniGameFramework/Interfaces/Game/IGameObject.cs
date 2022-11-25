@@ -19,8 +19,8 @@ namespace MiniGameFramework
         void Dispose();
         bool AddComponent(IGameObjectComponent comp);
 
-        void OnUpdate(uint timeElasped);
-        void OnPostUpdate(uint timeElasped);
+        void OnUpdate(float timeElasped);
+        void OnPostUpdate(float timeElasped);
 
         void Hide();
         void Show();

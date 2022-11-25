@@ -6,6 +6,50 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
+    public class FootPrintComponent : UnityEngine.MonoBehaviour
+    {
+        public UnityEngine.GameObject ActorObject;
+        public string RunDustVFX = "runDust";
+        public string FootPrintVFX = "footPrint";
+
+        private void Start()
+        {
+            //var comp = this.gameObject.transform.parent.gameObject.GetComponent<UnityGameObjectBehaviour>();
+
+            //_mapBuilding = comp.mgGameObject as MapBuildingObject;
+        }
+
+        private void OnTriggerEnter(UnityEngine.Collider other)
+        {
+            if(other.gameObject.layer != UnityEngine.LayerMask.NameToLayer("Ground"))
+            {
+                return;
+            }
+
+            // create dust
+            var dust = UnityGameApp.Inst.VFXManager.createVFXObject(RunDustVFX);
+            if(dust != null)
+            {
+                dust.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                dust.unityGameObject.transform.position = this.gameObject.transform.position;
+                dust.unityGameObject.transform.forward = ActorObject.transform.forward;
+            }
+
+            // create foot print
+            var footPrint = UnityGameApp.Inst.VFXManager.createVFXObject(FootPrintVFX);
+            if(footPrint != null)
+            {
+                footPrint.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                footPrint.unityGameObject.transform.position = this.gameObject.transform.position;
+                footPrint.unityGameObject.transform.forward = ActorObject.transform.forward;
+            }
+        }
+        //private void OnTriggerExit(UnityEngine.Collider other)
+        //{
+        //    _mapBuilding.OnTriggerExit(other);
+        //}
+    }
+
     public class RigibodyMoveAct : Act
     {
         public float TurnSpeed = 180.0f;
@@ -13,15 +57,38 @@ namespace UnityMiniGameFramework
         public float DecSpeed = 6.0f;
         public float MaxSpeed = 3.0f;
 
+        public string RunAni = "Run";
+        public string IdleAni = "Idle";
+
         public float curSpeed => _curSpeed;
 
         protected float _curSpeed;
         protected UnityEngine.Vector3? _movVec;
         protected UnityEngine.Rigidbody _rigiBody;
 
+
+        // for Debug ...
+        public GunObject Gun;
+
         public RigibodyMoveAct(ActorObject actor) : base(actor)
         {
             _rigiBody = actor.unityGameObject.GetComponent<UnityEngine.Rigidbody>();
+
+            // for Debug ...
+            UnityEngine.GameObject gunUnityObj = null;
+            var gunTr = actor.unityGameObject.transform.FirstChildOrDefault((UnityEngine.Transform tr) =>
+            {
+                if(tr.gameObject.name == "MiniGunDefault")
+                {
+                    gunUnityObj = tr.gameObject;
+                    return true;
+                }
+                return false;
+            });
+            if(gunUnityObj != null)
+            {
+                Gun = gunUnityObj.GetComponent<UnityGameObjectBehaviour>().mgGameObject as GunObject;
+            }
 
             actor.animatorComponent.playAnimation("Idle");
         }
@@ -36,11 +103,17 @@ namespace UnityMiniGameFramework
         public void moveToward(UnityEngine.Vector3 to)
         {
             _movVec = to;
+
+            // for Debug ...
+            Gun.Fire();
         }
         public void stop()
         {
             _movVec = null;
             _isStopping = this._curSpeed > 0;
+
+            // for Debug ...
+            Gun.StopFire();
         }
 
         override public void Start()
@@ -48,7 +121,7 @@ namespace UnityMiniGameFramework
             base.Start();
         }
 
-        override public void Update(uint timeElasped)
+        override public void Update(float timeElasped)
         {
             if (_actor.actionComponent.hasState(ActStates.STATE_KEY_NO_MOVE))
             {
@@ -65,9 +138,9 @@ namespace UnityMiniGameFramework
 
         void _onStop()
         {
-            if (actor.animatorComponent.currBaseAnimation.aniName == "Run")
+            if (actor.animatorComponent.currBaseAnimation.aniName == RunAni)
             {
-                actor.animatorComponent.playAnimation("Idle");
+                actor.animatorComponent.playAnimation(IdleAni);
             }
         }
 
@@ -91,9 +164,9 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            if(actor.animatorComponent.currBaseAnimation.aniName != "Run")
+            if(actor.animatorComponent.currBaseAnimation.aniName != RunAni)
             {
-                actor.animatorComponent.playAnimation("Run");
+                actor.animatorComponent.playAnimation(RunAni);
             }
 
             _updateSpeed();

@@ -171,13 +171,13 @@ namespace UnityMiniGameFramework
             base.Dispose();
         }
 
-        override public void OnUpdate(uint timeElasped)
+        override public void OnUpdate(float timeElasped)
         {
             base.OnUpdate(timeElasped);
 
 
         }
-        override public void OnPostUpdate(uint timeElasped)
+        override public void OnPostUpdate(float timeElasped)
         {
 
 

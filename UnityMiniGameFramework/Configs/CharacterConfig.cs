@@ -14,8 +14,6 @@ namespace UnityMiniGameFramework
         public string name { get; set; }
         public ActionComponentConfig ActionConf { get; set; }
         public AnimatorComponentConfig AnimatorConf { get; set; }
-        public AudioComponentConfig AudioConf { get; set; }
-        public VFXComponentConfig VFXConf { get; set; }
     }
 
     public class CharacterObjectConfig : ActorObjectConfig

@@ -17,7 +17,7 @@ namespace MiniGameFramework
 
         void OnAddToGameObject(IGameObject obj);
 
-        void OnUpdate(uint timeElasped);
-        void OnPostUpdate(uint timeElasped);
+        void OnUpdate(float timeElasped);
+        void OnPostUpdate(float timeElasped);
     }
 }

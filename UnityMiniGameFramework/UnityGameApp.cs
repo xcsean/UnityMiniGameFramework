@@ -105,6 +105,9 @@ namespace UnityMiniGameFramework
         protected MapManager _mapManager;
         public MapManager MapManager => _mapManager;
 
+        protected WeaponManager _weaponManager;
+        public WeaponManager WeaponManager => _weaponManager;
+
         protected UnityNetworkClient _netClient;
         public UnityNetworkClient NetClient => _netClient;
 
@@ -150,6 +153,8 @@ namespace UnityMiniGameFramework
         {
             base.OnUpdate();
 
+            _vfxManager.OnUpdate(UnityEngine.Time.deltaTime);
+
             _self.OnUpdate();
         }
         override protected void _onMainSceneLoaded()
@@ -171,6 +176,7 @@ namespace UnityMiniGameFramework
             _sceneManager = new UnitySceneManager();
             _resManager = new UnityResourceManager();
             _mapManager = new MapManager();
+            _weaponManager = new WeaponManager();
 
             _self = new SelfControl();
 
@@ -186,12 +192,12 @@ namespace UnityMiniGameFramework
             _conf.regConfigCreator("CharacterConfigs", CharacterConfigs.create);
             _conf.regConfigCreator("MapConfig", MapConfig.create);
             _conf.regConfigCreator("NetWorkConfig", NetWorkConfig.create);
-            
+            _conf.regConfigCreator("VFXConfig", VFXConfig.create);
+            _conf.regConfigCreator("WeaponConfig", WeaponConfig.create);
+
             // reg component
             GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
             GameObjectManager.registerGameObjectComponentCreator("AnimatorComponent", AnimatorComponent.create);
-            GameObjectManager.registerGameObjectComponentCreator("AudioComponent", AudioComponent.create);
-            GameObjectManager.registerGameObjectComponentCreator("VFXComponent", VFXComponent.create);
 
             // reg object
             GameObjectManager.registerGameObjectCreator("MGGameObject", MGGameObject.create);
@@ -203,6 +209,12 @@ namespace UnityMiniGameFramework
             GameObjectManager.registerGameObjectCreator("MapMonsterObject", MapMonsterObject.create);
             GameObjectManager.registerGameObjectCreator("MapBuildingObject", MapBuildingObject.create);
             GameObjectManager.registerGameObjectCreator("MapVehicleObject", MapVehicleObject.create);
+            GameObjectManager.registerGameObjectCreator("GunObject", GunObject.create);
+
+            // reg vfx objects
+            _vfxManager.registerVfxObjectCreator("VFXObjectBase", VFXObjectBase.create);
+            _vfxManager.registerVfxObjectCreator("VFXFootprintObject", VFXFootprintObject.create);
+            _vfxManager.registerVfxObjectCreator("VFXLinerObject", VFXLinerObject.create);
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
         }
@@ -234,6 +246,8 @@ namespace UnityMiniGameFramework
             _sceneManager.Init();
             _resManager.Init();
             _mapManager.Init();
+            _vfxManager.Init();
+            _weaponManager.Init();
         }
 
         override protected void _initUI(string uiConfigName)

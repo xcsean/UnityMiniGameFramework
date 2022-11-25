@@ -102,8 +102,11 @@
     <Compile Include="Configs\MapActorObjectConfigs.cs" />
     <Compile Include="Configs\MapConfig.cs" />
     <Compile Include="Configs\NetWorkConfig.cs" />
+    <Compile Include="Configs\VFXConfig.cs" />
+    <Compile Include="Configs\WeaponConfig.cs" />
     <Compile Include="Data\LocalStorageProvider.cs" />
     <Compile Include="Data\NetSessionDataProvider.cs" />
+    <Compile Include="Game\Actors\ActBuf.cs" />
     <Compile Include="Game\Actors\Action.cs" />
     <Compile Include="Game\Actors\ActionComponent.cs" />
     <Compile Include="Game\Actors\ActorObject.cs" />
@@ -120,7 +123,6 @@
     <Compile Include="Game\Actors\AvatarParts.cs" />
     <Compile Include="Game\Actors\CharacterObject.cs" />
     <Compile Include="Game\Audio\Audio.cs" />
-    <Compile Include="Game\Audio\AudioComponent.cs" />
     <Compile Include="Game\Audio\AudioManager.cs" />
     <Compile Include="Game\Camera\followCamera.cs" />
     <Compile Include="Game\Camera\UnityGameCamera.cs" />
@@ -128,9 +130,10 @@
     <Compile Include="Game\Controller\InputActorControllerComp.cs" />
     <Compile Include="Game\Controller\AIActorControllerComp.cs" />
     <Compile Include="Game\Controller\NetworkActorControllerComp.cs" />
-    <Compile Include="Game\Effect\VFX.cs" />
-    <Compile Include="Game\Effect\VFXComponent.cs" />
     <Compile Include="Game\Effect\VFXManager.cs" />
+    <Compile Include="Game\Effect\VFXObjects\VFXFootprintObject.cs" />
+    <Compile Include="Game\Effect\VFXObjects\VFXLinerObject.cs" />
+    <Compile Include="Game\Effect\VFXObjects\VFXObjectBase.cs" />
     <Compile Include="Game\Map\MapActorObject.cs" />
     <Compile Include="Game\Map\MapBuildingObject.cs" />
     <Compile Include="Game\Map\MapHeroObject.cs" />
@@ -144,6 +147,8 @@
     <Compile Include="Game\Scene\UnitySceneManager.cs" />
     <Compile Include="Game\SelfControl.cs" />
     <Compile Include="Game\UnityGameObject.cs" />
+    <Compile Include="Game\Weapon\Gun\GunObject.cs" />
+    <Compile Include="Game\Weapon\WeaponManager.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />
     <Compile Include="Network\UnityNetworkClient.cs" />
     <Compile Include="OS\Randomness.cs" />
@@ -173,7 +178,9 @@
       <Name>MiniGameFramework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Game\Projectile\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\UnityMiniGame\Assets\Libs\Plugin\MiniGameFramework

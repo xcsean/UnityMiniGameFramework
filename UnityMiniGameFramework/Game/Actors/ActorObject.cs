@@ -23,12 +23,6 @@ namespace UnityMiniGameFramework
         protected AnimatorComponent _animatorComponent;
         public AnimatorComponent animatorComponent => _animatorComponent;
 
-        protected AudioComponent _audioComponent;
-        public AudioComponent audioComponent => _audioComponent;
-
-        protected VFXComponent _vfxComponent;
-        public VFXComponent vfxComponent => _vfxComponent;
-
         protected ActorControllerComponent _ctrlComponent;
         public ActorControllerComponent controllerComponent => _ctrlComponent;
 
@@ -63,20 +57,6 @@ namespace UnityMiniGameFramework
                 this.AddComponent(_animatorComponent);
                 _animatorComponent.Init(conf.AnimatorConf);
             }
-
-            if (conf.AudioConf != null)
-            {
-                _audioComponent = (AudioComponent)GameObjectManager.createGameObjectComponent("AudioComponent");
-                this.AddComponent(_audioComponent);
-                _audioComponent.Init(conf.AudioConf);
-            }
-
-            if(conf.VFXConf != null)
-            {
-                _vfxComponent = (VFXComponent)GameObjectManager.createGameObjectComponent(conf.VFXConf.componentType);
-                this.AddComponent(_vfxComponent);
-                _vfxComponent.Init(conf.VFXConf);
-            }
         }
 
         override protected void _onAddComponent(IGameObjectComponent comp)
@@ -92,13 +72,13 @@ namespace UnityMiniGameFramework
             base.Dispose();
         }
 
-        override public void OnUpdate(uint timeElasped)
+        override public void OnUpdate(float timeElasped)
         {
             base.OnUpdate(timeElasped);
 
 
         }
-        override public void OnPostUpdate(uint timeElasped)
+        override public void OnPostUpdate(float timeElasped)
         {
 
 

@@ -36,7 +36,7 @@ namespace UnityMiniGameFramework
             _distance = _unityGameObject.transform.position - _followObject.transform.position;
         }
 
-        override public void OnPostUpdate(uint timeElasped)
+        override public void OnPostUpdate(float timeElasped)
         {
             base.OnPostUpdate(timeElasped);
 

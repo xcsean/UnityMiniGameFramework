@@ -105,6 +105,7 @@
     <Compile Include="Interfaces\Game\IGameObjectComponent.cs" />
     <Compile Include="Interfaces\Game\IMap.cs" />
     <Compile Include="Interfaces\Game\IScene.cs" />
+    <Compile Include="Interfaces\Game\IVFXObject.cs" />
     <Compile Include="Interfaces\Network\INetwork.cs" />
     <Compile Include="Interfaces\OS\IFileSystem.cs" />
     <Compile Include="Interfaces\OS\IRandom.cs" />

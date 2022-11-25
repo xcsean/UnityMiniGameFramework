@@ -21,6 +21,10 @@ namespace UnityMiniGameFramework
         protected MGGameObject _uiRootObj;
         public IGameObject uiRootObject => _uiRootObj;
 
+        // unity cached objects root
+        protected UnityEngine.GameObject _cachedRootObj;
+        public UnityEngine.GameObject cachedRootObj => _cachedRootObj;
+
         protected UnityGameCamera _mainCamera;
         public ICamera camera => _mainCamera;
         public Camera unityCamera => _mainCamera.unityCamera;
@@ -125,6 +129,8 @@ namespace UnityMiniGameFramework
                 mapRootName = _conf.mapRootName;
             }
 
+            string cachedRootName = "CachedRoot";
+
 
             // fetch objects
             UnityEngine.GameObject[] objs = _unityScene.GetRootGameObjects();
@@ -191,6 +197,10 @@ namespace UnityMiniGameFramework
                             _map = mgObjComp.mgGameObject as Map;
                         }
                     }
+                }
+                else if(objs[i].name == cachedRootName)
+                {
+                    _cachedRootObj = objs[i];
                 }
             }
 
@@ -263,6 +273,18 @@ namespace UnityMiniGameFramework
 
                     _onUnloaded();
                 }
+            }
+        }
+
+        public void cacheUnityObject(UnityEngine.GameObject o)
+        {
+            if(_cachedRootObj != null)
+            {
+                o.transform.SetParent(_cachedRootObj.transform);
+            }
+            else
+            {
+                o.transform.SetParent(null);
             }
         }
 
