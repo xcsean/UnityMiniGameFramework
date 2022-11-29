@@ -16,5 +16,7 @@ namespace MiniGameFramework
 
         SessionClient CreateSessionClient(IConnector conn, IProtocol proto, ISessionClientHandler handler);
         SessionServer CreateSessionServer(IListener lis, IProtocol proto);
+
+        IHttpClient CreateHttpClient();
     }
 }

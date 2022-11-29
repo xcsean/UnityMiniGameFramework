@@ -33,5 +33,12 @@ namespace MiniGameFramework
 
             return s;
         }
+
+        public IHttpClient CreateHttpClient()
+        {
+            MGHttpClient client = new MGHttpClient();
+
+            return client;
+        }
     }
 }

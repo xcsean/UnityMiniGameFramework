@@ -23,9 +23,16 @@ namespace UnityMiniGameFramework
         public string connectorType { get; set; }
     }
 
+    public class RESTFulAPIConf
+    {
+        public string url { get; set; }
+    }
+
     public class NetConfig
     {
         public ConnectorConf webSockConn { get; set; }
+
+        public RESTFulAPIConf restfulConf { get; set; }
     }
 
     public class NetWorkConfig : JsonConfig

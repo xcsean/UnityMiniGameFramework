@@ -89,6 +89,8 @@
     <Compile Include="Core\Math\Vec2.cs" />
     <Compile Include="Core\Math\Vec3.cs" />
     <Compile Include="Core\Math\Vec4.cs" />
+    <Compile Include="Data\Data.cs" />
+    <Compile Include="Data\DataProvider.cs" />
     <Compile Include="GameApp.cs" />
     <Compile Include="Game\Attribute.cs" />
     <Compile Include="Game\Config\SceneConfig.cs" />
@@ -98,7 +100,8 @@
     <Compile Include="Game\SceneManager.cs" />
     <Compile Include="Game\StateComponent.cs" />
     <Compile Include="Interfaces\Config\IConfig.cs" />
-    <Compile Include="Interfaces\Data\IPersistDataProvider.cs" />
+    <Compile Include="Interfaces\Data\IData.cs" />
+    <Compile Include="Interfaces\Data\IDataProvider.cs" />
     <Compile Include="Interfaces\Game\IAttribute.cs" />
     <Compile Include="Interfaces\Game\ICamera.cs" />
     <Compile Include="Interfaces\Game\IGameObject.cs" />
@@ -106,6 +109,8 @@
     <Compile Include="Interfaces\Game\IMap.cs" />
     <Compile Include="Interfaces\Game\IScene.cs" />
     <Compile Include="Interfaces\Game\IVFXObject.cs" />
+    <Compile Include="Interfaces\Network\IHttpClient.cs" />
+    <Compile Include="Interfaces\Network\INetData.cs" />
     <Compile Include="Interfaces\Network\INetwork.cs" />
     <Compile Include="Interfaces\OS\IFileSystem.cs" />
     <Compile Include="Interfaces\OS\IRandom.cs" />
@@ -128,6 +133,7 @@
     <Compile Include="Interfaces\Network\IMessage.cs" />
     <Compile Include="Interfaces\Network\IProtocol.cs" />
     <Compile Include="Interfaces\Network\ISessionClientHandler.cs" />
+    <Compile Include="Messenger\HttpClient.cs" />
     <Compile Include="Messenger\ListenerImpl\ListenerImpls.cs" />
     <Compile Include="Messenger\Network.cs" />
     <Compile Include="Messenger\ProtocolImpl\MessageJson.cs" />
@@ -135,6 +141,7 @@
     <Compile Include="Messenger\ProtocolImpl\ProtocolImpls.cs" />
     <Compile Include="Messenger\ProtocolImpl\ProtocolJson.cs" />
     <Compile Include="Messenger\ProtocolImpl\ProtocolProtoBuffer.cs" />
+    <Compile Include="Messenger\RESTFulClient.cs" />
     <Compile Include="Messenger\SessionClient.cs" />
     <Compile Include="Messenger\SessionServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

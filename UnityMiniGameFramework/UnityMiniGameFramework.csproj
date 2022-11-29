@@ -104,8 +104,12 @@
     <Compile Include="Configs\NetWorkConfig.cs" />
     <Compile Include="Configs\VFXConfig.cs" />
     <Compile Include="Configs\WeaponConfig.cs" />
-    <Compile Include="Data\LocalStorageProvider.cs" />
-    <Compile Include="Data\NetSessionDataProvider.cs" />
+    <Compile Include="Data\DataManager.cs" />
+    <Compile Include="Data\Datas\LocalUserData.cs" />
+    <Compile Include="Data\Datas\NetPackageData.cs" />
+    <Compile Include="Data\Datas\NetUserData.cs" />
+    <Compile Include="Data\Providers\LocalStorageProvider.cs" />
+    <Compile Include="Data\Providers\RESTFulDataProvider.cs" />
     <Compile Include="Game\Actors\ActBuf.cs" />
     <Compile Include="Game\Actors\Action.cs" />
     <Compile Include="Game\Actors\ActionComponent.cs" />
@@ -151,7 +155,9 @@
     <Compile Include="Game\Weapon\Gun\GunObject.cs" />
     <Compile Include="Game\Weapon\WeaponManager.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />
+    <Compile Include="Network\RESTFulAPIStructs.cs" />
     <Compile Include="Network\UnityNetworkClient.cs" />
+    <Compile Include="Network\UnityRESTFulClient.cs" />
     <Compile Include="OS\Randomness.cs" />
     <Compile Include="OS\UnityProjFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -181,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Game\Projectile\" />
+    <Folder Include="Network\NetworkDatas\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

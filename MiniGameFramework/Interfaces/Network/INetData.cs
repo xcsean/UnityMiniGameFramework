@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnityMiniGameFramework.Data
+namespace MiniGameFramework
 {
-    class NetSessionDataProvider
+    public interface INetData
     {
+        object getData();
+
+        void OnUpdate(object data);
     }
 }

@@ -148,13 +148,22 @@ namespace ConsoleApp1
             Console.WriteLine($"connect to {uri}"); 
 
             client.Connect(uri, 0);
-            
-            while(true)
+
+
+            string restfulUrl = "";
+            RESTFulClient restfulClient = new RESTFulClient();
+            restfulClient.Init(restfulUrl);
+
+            while (true)
             {
                 string cmd = Console.ReadLine();
                 if (cmd == "exit" || cmd == "quit")
                 {
                     break;
+                }
+                else if(cmd=="postData")
+                {
+                    //restfulClient.DoAction<>();
                 }
                 else if(cmd== "getAllRes")
                 {

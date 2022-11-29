@@ -112,6 +112,9 @@ namespace UnityMiniGameFramework
         protected UnityNetworkClient _netClient;
         public UnityNetworkClient NetClient => _netClient;
 
+        protected UnityRESTFulClient _restfulClient;
+        public UnityRESTFulClient RESTFulClient => _restfulClient;
+        
         protected SelfControl _self;
         public SelfControl Self => _self;
 
@@ -281,12 +284,19 @@ namespace UnityMiniGameFramework
                 _netClient = new UnityNetworkClient();
                 _netClient.Init(conf.netConf);
 
+                if (conf.netConf.restfulConf != null)
+                {
+                    _restfulClient = new UnityRESTFulClient();
+                    _restfulClient.Init(conf.netConf.restfulConf.url);
+                }
+
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"network initialized.");
             }
             else
             {
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"no network.");
             }
+
         }
 
         protected void _initSelfControl()

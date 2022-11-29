@@ -31,7 +31,20 @@ namespace UnityMiniGameFramework
 
         public void onEnterGameClick()
         {
-            UnityGameApp.Inst.LoadMainScene();
+            // login
+            UnityGameApp.Inst.RESTFulClient.Login(
+                new RESTFulAPI.C2S_LoginParam()
+                {
+                    uid="",
+                    token=""
+                },
+                (RESTFulAPI.S2C_LoginResult res) =>
+                {
+
+                    UnityGameApp.Inst.LoadMainScene();
+                }
+            );
+
         }
     }
 }
