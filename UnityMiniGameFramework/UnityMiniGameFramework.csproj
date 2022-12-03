@@ -98,6 +98,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChickenMaster\Configs\CMGameConfig.cs" />
+    <Compile Include="ChickenMaster\Game\ChickenMasterGame.cs" />
+    <Compile Include="ChickenMaster\Game\CMFactory.cs" />
+    <Compile Include="ChickenMaster\Game\CMCombatComponent.cs" />
+    <Compile Include="ChickenMaster\Game\CMPackage.cs" />
+    <Compile Include="ChickenMaster\Game\CMSelfComponent.cs" />
+    <Compile Include="ChickenMaster\Game\CMTrainStation.cs" />
+    <Compile Include="ChickenMaster\Game\CMWeapon.cs" />
     <Compile Include="Configs\CharacterConfig.cs" />
     <Compile Include="Configs\MapActorObjectConfigs.cs" />
     <Compile Include="Configs\MapConfig.cs" />
@@ -105,9 +113,9 @@
     <Compile Include="Configs\VFXConfig.cs" />
     <Compile Include="Configs\WeaponConfig.cs" />
     <Compile Include="Data\DataManager.cs" />
-    <Compile Include="Data\Datas\LocalUserData.cs" />
-    <Compile Include="Data\Datas\NetPackageData.cs" />
-    <Compile Include="Data\Datas\NetUserData.cs" />
+    <Compile Include="ChickenMaster\Data\LocalUserData.cs" />
+    <Compile Include="ChickenMaster\Data\NetPackageData.cs" />
+    <Compile Include="ChickenMaster\Data\NetUserData.cs" />
     <Compile Include="Data\Providers\LocalStorageProvider.cs" />
     <Compile Include="Data\Providers\RESTFulDataProvider.cs" />
     <Compile Include="Game\Actors\ActBuf.cs" />
@@ -116,7 +124,9 @@
     <Compile Include="Game\Actors\ActorObject.cs" />
     <Compile Include="Game\Actors\Acts\ActStates.cs" />
     <Compile Include="Game\Actors\Acts\MoveAct.cs" />
+    <Compile Include="Game\Actors\Acts\RigibodyDieAct.cs" />
     <Compile Include="Game\Actors\Acts\RigibodyMoveAct.cs" />
+    <Compile Include="Game\Actors\Acts\RigibodyOnHitAct.cs" />
     <Compile Include="Game\Actors\CharacterManager.cs" />
     <Compile Include="Game\Animation\Animation.cs" />
     <Compile Include="Game\Animation\AnimationManager.cs" />
@@ -149,12 +159,15 @@
     <Compile Include="Game\Map\MapVehicleObject.cs" />
     <Compile Include="Game\Scene\Scene.cs" />
     <Compile Include="Game\Scene\UnitySceneManager.cs" />
-    <Compile Include="Game\SelfControl.cs" />
+    <Compile Include="ChickenMaster\Game\SelfControl.cs" />
     <Compile Include="Game\UnityGameObject.cs" />
+    <Compile Include="Game\Weapon\CombatComponent.cs" />
     <Compile Include="Game\Weapon\ExplosiveObject.cs" />
     <Compile Include="Game\Weapon\Gun\GunObject.cs" />
     <Compile Include="Game\Weapon\WeaponManager.cs" />
+    <Compile Include="Game\Weapon\WeaponObject.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />
+    <Compile Include="Network\NetworkDatas\UserDatas.cs" />
     <Compile Include="Network\RESTFulAPIStructs.cs" />
     <Compile Include="Network\UnityNetworkClient.cs" />
     <Compile Include="Network\UnityRESTFulClient.cs" />
@@ -165,10 +178,10 @@
     <Compile Include="UI\UIObject.cs" />
     <Compile Include="UI\UIPanel.cs" />
     <Compile Include="UI\Controls\UIJoyStickControl.cs" />
-    <Compile Include="UI\UIPanels\UIMainPanel.cs" />
-    <Compile Include="UI\UIPanels\UIPanelStartMain.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIMainPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIPanelStartMain.cs" />
     <Compile Include="UI\UIPanels\UIPreloaderPanel.cs" />
-    <Compile Include="UI\UIPanels\UIUpgradePanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIUpgradePanel.cs" />
     <Compile Include="UI\UITemplatePanels\UIPopupPanel.cs" />
     <Compile Include="UnityGameApp.cs" />
     <Compile Include="Utility\TransformHelper.cs" />
@@ -186,8 +199,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Data\Datas\" />
     <Folder Include="Game\Projectile\" />
-    <Folder Include="Network\NetworkDatas\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

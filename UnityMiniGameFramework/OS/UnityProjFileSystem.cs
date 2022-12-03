@@ -32,6 +32,17 @@ namespace UnityMiniGameFramework
             return new StreamWriter(path, true);
         }
 
+        public FileStream getFileReadBinaryStream(string filename)
+        {
+            string path = _getFullPath(filename);
+            return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read);
+        }
+        public FileStream getFileWriteBinaryStream(string filename)
+        {
+            string path = _getFullPath(filename);
+            return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
+        }
+
         public bool isFileExist(string filename)
         {
             string path = _getFullPath(filename);

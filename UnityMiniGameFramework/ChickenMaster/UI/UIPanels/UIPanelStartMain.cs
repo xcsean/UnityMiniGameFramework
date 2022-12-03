@@ -25,12 +25,15 @@ namespace UnityMiniGameFramework
 
             var btn = ctrl.unityVisualElement as Button;
 
+
             // TO DO : unregister message
             btn.clicked += onEnterGameClick;
         }
 
         public void onEnterGameClick()
         {
+            UnityGameApp.Inst.Game.Init();
+
             // login
             UnityGameApp.Inst.RESTFulClient.Login(
                 new RESTFulAPI.C2S_LoginParam()

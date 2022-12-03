@@ -65,31 +65,11 @@ namespace UnityMiniGameFramework
         protected float _curSpeed;
         protected UnityEngine.Vector3? _movVec;
         protected UnityEngine.Rigidbody _rigiBody;
-
-
-        // for Debug ...
-        public GunObject Gun;
-
+        
         public RigibodyMoveAct(ActorObject actor) : base(actor)
         {
             _rigiBody = actor.unityGameObject.GetComponent<UnityEngine.Rigidbody>();
-
-            // for Debug ...
-            UnityEngine.GameObject gunUnityObj = null;
-            var gunTr = actor.unityGameObject.transform.FirstChildOrDefault((UnityEngine.Transform tr) =>
-            {
-                if(tr.gameObject.name == "MiniGunDefault")
-                {
-                    gunUnityObj = tr.gameObject;
-                    return true;
-                }
-                return false;
-            });
-            if(gunUnityObj != null)
-            {
-                Gun = gunUnityObj.GetComponent<UnityGameObjectBehaviour>().mgGameObject as GunObject;
-            }
-
+            
             actor.animatorComponent.playAnimation("Idle");
         }
 
@@ -103,17 +83,11 @@ namespace UnityMiniGameFramework
         public void moveToward(UnityEngine.Vector3 to)
         {
             _movVec = to;
-
-            // for Debug ...
-            Gun.Fire();
         }
         public void stop()
         {
             _movVec = null;
             _isStopping = this._curSpeed > 0;
-
-            // for Debug ...
-            Gun.StopFire();
         }
 
         override public void Start()

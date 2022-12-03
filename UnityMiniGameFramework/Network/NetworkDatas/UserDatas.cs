@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MiniGameFramework;
-
 namespace UnityMiniGameFramework
 {
-    public class LocalUserData : Data
+    public class BaseUserInfo
     {
-        public LocalUserData(string n, LocalStorageProvider p) : base(n, p)
-        {
+        public string uid { get; set; }
 
-        }
+        public byte vipLevel { get; set; }
+        public byte level { get; set; }
     }
 }

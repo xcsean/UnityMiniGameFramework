@@ -21,8 +21,13 @@ namespace UnityMiniGameFramework
 
         public void Init()
         {
-            _localDataProvider = new LocalStorageProvider("");
+            _localDataProvider = new LocalStorageProvider("localStorage");
             _restfulDataProvider = new RESTFulDataProvider(UnityGameApp.Inst.RESTFulClient);
+
+            _localDataProvider.regDataObjectCreator("user", LocalUserData.create);
+
+            _restfulDataProvider.regDataObjectCreator("user", NetUserData.create);
+            _restfulDataProvider.regDataObjectCreator("package", NetPackageData.create);
 
             _localDataProvider.Init();
             _restfulDataProvider.Init();

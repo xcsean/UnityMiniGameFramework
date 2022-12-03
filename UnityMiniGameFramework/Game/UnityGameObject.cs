@@ -11,11 +11,10 @@ namespace UnityMiniGameFramework
 {
     public class UnityGameObjectBehaviour : MonoBehaviour
     {
-        protected MGGameObject _mgGameObject;
-
         public string mgGameObjectType = "MGGameObject";
         public string mgGameObjectConfigName;
 
+        protected MGGameObject _mgGameObject;
         public MGGameObject mgGameObject => _mgGameObject;
 
         public UnityGameObjectBehaviour()

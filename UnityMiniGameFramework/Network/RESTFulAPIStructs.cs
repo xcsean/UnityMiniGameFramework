@@ -13,6 +13,6 @@ namespace UnityMiniGameFramework.RESTFulAPI
     }
     public class S2C_LoginResult
     {
-
+        public BaseUserInfo baseInfo { get; set; }
     }
 }

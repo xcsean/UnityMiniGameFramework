@@ -109,6 +109,9 @@ namespace UnityMiniGameFramework
         protected WeaponManager _weaponManager;
         public WeaponManager WeaponManager => _weaponManager;
 
+        protected DataManager _datamanager;
+        public DataManager Datas => _datamanager;
+
         protected UnityNetworkClient _netClient;
         public UnityNetworkClient NetClient => _netClient;
 
@@ -174,6 +177,7 @@ namespace UnityMiniGameFramework
             base._createManagers();
 
             // new managers
+            _datamanager = new DataManager();
             _aniManager = new AnimationManager();
             _audManager = new AudioManager();
             _vfxManager = new VFXManager();
@@ -199,6 +203,7 @@ namespace UnityMiniGameFramework
             _conf.regConfigCreator("NetWorkConfig", NetWorkConfig.create);
             _conf.regConfigCreator("VFXConfig", VFXConfig.create);
             _conf.regConfigCreator("WeaponConfig", WeaponConfig.create);
+            _conf.regConfigCreator("CMGameConfig", CMGameConfig.create);
 
             // reg component
             GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
@@ -246,6 +251,7 @@ namespace UnityMiniGameFramework
         {
             base._initManagers();
 
+            _datamanager.Init();
             _aniManager.Init();
             _chaManager.Init();
             _sceneManager.Init();

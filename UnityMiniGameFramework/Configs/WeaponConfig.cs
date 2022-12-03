@@ -16,6 +16,8 @@ namespace UnityMiniGameFramework
 
         public float? startTime { get; set; }
         public float? keepTime { get; set; }
+
+        public float? hitForce { get; set; }
     }
 
     public class GunFireConf
@@ -35,6 +37,8 @@ namespace UnityMiniGameFramework
 
         public float? maxRayLength { get; set; } // only in fireType=ray case
 
+        public float? hitForce { get; set; }
+
         public ExplosiveConf collideExplosive { get; set; }
 
         public string collideBuf { get; set; } // give dot or other buf to target
@@ -44,6 +48,8 @@ namespace UnityMiniGameFramework
     {
         public string name { get; set; }
         public string type { get; set; }
+
+        public string attachToBone { get; set; }
 
         public AnimatorComponentConfig AnimatorConf { get; set; }
 

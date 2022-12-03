@@ -26,6 +26,8 @@ namespace MiniGameFramework
 
     public class GameApp
     {
+        public static Func<IGame> CreatGame;
+
         protected static GameApp _inst;
         public static GameApp Inst => _inst;
 
@@ -42,6 +44,9 @@ namespace MiniGameFramework
 
         protected IRandom _rand;
         public IRandom Rand => _rand;
+
+        protected IGame _game;
+        public IGame Game => _game;
 
         protected ConfigManager _conf;
         public ConfigManager Conf => _conf;
@@ -64,6 +69,8 @@ namespace MiniGameFramework
         virtual public bool Init(GameAPPInitParameter par)
         {
             // TO DO : change init step to async
+            
+            _game = CreatGame();
 
             _initStep = GameAppInitStep.InitConfig;
 
@@ -103,6 +110,7 @@ namespace MiniGameFramework
 
         virtual public void OnUpdate()
         {
+            _game.OnUpdate();
             _sceneManager.OnUpdate();
 
             if (_initStep == GameAppInitStep.LoadStartScene)

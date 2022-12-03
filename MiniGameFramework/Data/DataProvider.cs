@@ -48,6 +48,7 @@ namespace MiniGameFramework
                 return null;
             }
 
+            data.setNameAndProvider(dataName, this);
             _datas[dataName] = data;
             return data;
         }

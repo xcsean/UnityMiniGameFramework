@@ -97,6 +97,7 @@
     <Compile Include="Game\GameObject.cs" />
     <Compile Include="Game\GameObjectComponent.cs" />
     <Compile Include="Game\GameObjectManager.cs" />
+    <Compile Include="Interfaces\Game\IGame.cs" />
     <Compile Include="Game\SceneManager.cs" />
     <Compile Include="Game\StateComponent.cs" />
     <Compile Include="Interfaces\Config\IConfig.cs" />

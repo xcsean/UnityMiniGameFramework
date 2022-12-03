@@ -9,7 +9,6 @@ namespace MiniGameFramework
     abstract public class Data : IData
     {
         protected Dictionary<string, object> _datas;
-        protected Dictionary<string, object> _lastWritebackDatas;
 
         protected string _name;
         public string name => _name;
@@ -19,16 +18,21 @@ namespace MiniGameFramework
 
         protected bool _isDirty;
         public bool isDirty => _isDirty;
-        
-        public List<string> initKeys => throw new NotImplementedException();
+        protected Dictionary<string, bool> _dirtyObjs;
 
-        public Data(string n, IDataProvider p)
+        virtual public List<string> initKeys => throw new NotImplementedException();
+
+        public Data()
+        {
+            _datas = new Dictionary<string, object>();
+            _dirtyObjs = new Dictionary<string, bool>();
+            _isDirty = false;
+        }
+
+        public void setNameAndProvider(string n, IDataProvider p)
         {
             _name = n;
             _provider = p;
-            
-            _datas = new Dictionary<string, object>();
-            _isDirty = false;
         }
 
 
@@ -48,7 +52,6 @@ namespace MiniGameFramework
                 object initData = _provider.ReadSingleData(_name, key);
 
                 _datas[key] = initData;
-                _lastWritebackDatas[key] = initData;
             }
         }
         public async Task initFromProviderAsync()
@@ -59,7 +62,6 @@ namespace MiniGameFramework
                 object initData = await _provider.ReadSingleDataAsync(_name, key);
 
                 _datas[key] = initData;
-                _lastWritebackDatas[key] = initData;
             }
         }
 
@@ -67,6 +69,7 @@ namespace MiniGameFramework
         {
             _isDirty = true;
             _datas[key] = newData;
+            _dirtyObjs[key] = true;
         }
 
         protected List<KeyValuePair<string, object>> _getDirtyDatas()
@@ -75,23 +78,28 @@ namespace MiniGameFramework
             
             foreach (var pair in _datas)
             {
-                object lwObj;
-                if (_lastWritebackDatas.TryGetValue(pair.Key, out lwObj))
+                // TO DO : compare current object with last update object
+                //object lwObj;
+                //if (_lastWritebackDatas.TryGetValue(pair.Key, out lwObj))
+                //{
+                //    if (lwObj == pair.Value)
+                //    {
+                //        // same, do not need writeback
+                //        continue;
+                //    }
+                //}
+
+                if(_dirtyObjs.ContainsKey(pair.Key) && _dirtyObjs[pair.Key])
                 {
-                    if (lwObj == pair.Value)
-                    {
-                        // same, do not need writeback
-                        continue;
-                    }
+                    array.Add(pair);
                 }
 
-                array.Add(pair);
             }
 
             return array;
         }
 
-        public void writeBack()
+        virtual public void writeBack()
         {
             if(!_isDirty)
             {
@@ -105,9 +113,12 @@ namespace MiniGameFramework
             {
                 _provider.WriteSingleData(_name, pair.Key, pair.Value);
             }
+
+            _isDirty = false;
+            _dirtyObjs = new Dictionary<string, bool>();
         }
 
-        public async Task writeBackAsync()
+        virtual public async Task writeBackAsync()
         {
             if (!_isDirty)
             {
@@ -121,6 +132,9 @@ namespace MiniGameFramework
             {
                 await _provider.WriteSingleDataAsync(_name, pair.Key, pair.Value);
             }
+
+            _isDirty = false;
+            _dirtyObjs = new Dictionary<string, bool>();
         }
     }
 }

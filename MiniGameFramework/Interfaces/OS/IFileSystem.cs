@@ -15,6 +15,9 @@ namespace MiniGameFramework
         StreamReader getFileReadStream(string filename);
         StreamWriter getFileWriteStream(string filename);
 
+        FileStream getFileReadBinaryStream(string filename);
+        FileStream getFileWriteBinaryStream(string filename);
+
         byte[] readRawDataFrom(string filename);
         string readStringFrom(string filename);
 

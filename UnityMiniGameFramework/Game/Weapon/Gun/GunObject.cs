@@ -42,7 +42,7 @@ namespace UnityMiniGameFramework
         }
     }
 
-    public class GunObject : MGGameObject
+    public class GunObject : WeaponObject
     {
         override public string type => "GunObject";
         new public static GunObject create()
@@ -54,6 +54,7 @@ namespace UnityMiniGameFramework
         public AnimatorComponent animatorComponent => _animatorComponent;
 
         protected GunConf _conf;
+        public GunConf conf => _conf;
 
         protected bool _isOpenFire;
         public bool isOpenFire => _isOpenFire;
@@ -73,6 +74,8 @@ namespace UnityMiniGameFramework
         protected UnityEngine.GameObject _currentRayHitObject;
         protected UnityEngine.Ray _currentRay;
         protected UnityEngine.RaycastHit _currentHitPoint;
+
+        protected float _hitForce;
 
         public GunObject()
         {
@@ -118,6 +121,8 @@ namespace UnityMiniGameFramework
             _maxRayLength = _conf.FireConf.maxRayLength.HasValue ? _conf.FireConf.maxRayLength.Value : 10;
             _gunPos = tr.gameObject;
             _name = _conf.name;
+
+            _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 100;
 
             if (_conf.AnimatorConf != null)
             {
@@ -253,11 +258,21 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            // TO DO : do hit result
+            // do hit result
+            var ugbGameObj = collision.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if(ugbGameObj != null)
+            {
+                var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
+                if(combComp != null)
+                {
+                    combComp.OnHitby(this);
+                }
+            }
+            
             var rigiBody = collision.gameObject.GetComponent<UnityEngine.Rigidbody>();
             if(rigiBody != null)
             {
-                rigiBody.AddForce(collision.impulse.normalized * 100);
+                rigiBody.AddForce(collision.impulse.normalized * _hitForce);
             }
 
             UnityGameApp.Inst.VFXManager.onVFXDestory(projectileObject.projVfxObj);
@@ -297,12 +312,21 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            // TO DO : do hit result
+            // do hit result
+            var ugbGameObj = o.GetComponent<UnityGameObjectBehaviour>();
+            if (ugbGameObj != null)
+            {
+                var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
+                if (combComp != null)
+                {
+                    combComp.OnHitby(this);
+                }
+            }
 
             var rigiBody = o.GetComponent<UnityEngine.Rigidbody>();
             if (rigiBody != null)
             {
-                rigiBody.AddForce((o.transform.position - this.unityGameObject.transform.position).normalized * 100);
+                rigiBody.AddForce((o.transform.position - this.unityGameObject.transform.position).normalized * _hitForce);
             }
         }
 
@@ -311,7 +335,7 @@ namespace UnityMiniGameFramework
             VFXObjectBase[] curProjs = _currentProjectiles.ToArray();
             foreach (var proj in curProjs)
             {
-                if((proj.unityGameObject.transform.position - this.unityGameObject.transform.position).magnitude > 100)
+                if((proj.unityGameObject.transform.position - this.unityGameObject.transform.position).magnitude > 30)
                 {
                     _currentProjectiles.Remove(proj);
                     UnityGameApp.Inst.VFXManager.onVFXDestory(proj);
@@ -438,12 +462,21 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            // TO DO : do hit result
+            // do hit result
+            var ugbGameObj = _currentRayHitObject.GetComponent<UnityGameObjectBehaviour>();
+            if (ugbGameObj != null)
+            {
+                var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
+                if (combComp != null)
+                {
+                    combComp.OnHitby(this);
+                }
+            }
 
             var rigiBody = _currentRayHitObject.GetComponent<UnityEngine.Rigidbody>();
             if (rigiBody != null)
             {
-                rigiBody.AddForce(_currentRay.direction.normalized * 100);
+                rigiBody.AddForce(_currentRay.direction.normalized * _hitForce);
             }
 
             return true;
