@@ -8,7 +8,7 @@ namespace MiniGameFramework
 {
     abstract public class Data : IData
     {
-        protected Dictionary<string, object> _datas;
+        protected Dictionary<string, DataObject> _datas;
 
         protected string _name;
         public string name => _name;
@@ -16,17 +16,12 @@ namespace MiniGameFramework
         protected IDataProvider _provider;
         public IDataProvider provider => _provider;
 
-        protected bool _isDirty;
-        public bool isDirty => _isDirty;
-        protected Dictionary<string, bool> _dirtyObjs;
 
         virtual public List<string> initKeys => throw new NotImplementedException();
 
         public Data()
         {
-            _datas = new Dictionary<string, object>();
-            _dirtyObjs = new Dictionary<string, bool>();
-            _isDirty = false;
+            _datas = new Dictionary<string, DataObject>();
         }
 
         public void setNameAndProvider(string n, IDataProvider p)
@@ -36,22 +31,36 @@ namespace MiniGameFramework
         }
 
 
-        public object getData(string key)
+        public IDataObject getData(string key)
         {
-            object d = null;
+            DataObject d = null;
             _datas.TryGetValue(key, out d);
 
             return d;
         }
-        
+        public void addNewData(string key, IDataObject newData)
+        {
+            if(newData == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Data [{_name}] add new data key[{key}] with null object");
+                return;
+            }
+
+            _datas[key] = newData as DataObject;
+        }
+
         public void initFromProvider()
         {
             // TO DO : combine batch read ops
             foreach (var key in initKeys)
             {
                 object initData = _provider.ReadSingleData(_name, key);
+                if (initData == null)
+                {
+                    continue;
+                }
 
-                _datas[key] = initData;
+                _datas[key] = new DataObject(initData);
             }
         }
         public async Task initFromProviderAsync()
@@ -60,21 +69,18 @@ namespace MiniGameFramework
             foreach (var key in initKeys)
             {
                 object initData = await _provider.ReadSingleDataAsync(_name, key);
+                if(initData == null)
+                {
+                    continue;
+                }
 
-                _datas[key] = initData;
+                _datas[key] = new DataObject(initData);
             }
         }
 
-        public void modifyData(string key, object newData)
+        protected List<KeyValuePair<string, DataObject>> _getDirtyDatas()
         {
-            _isDirty = true;
-            _datas[key] = newData;
-            _dirtyObjs[key] = true;
-        }
-
-        protected List<KeyValuePair<string, object>> _getDirtyDatas()
-        {
-            List<KeyValuePair<string, object>> array = new List<KeyValuePair<string, object>>();
+            List<KeyValuePair<string, DataObject>> array = new List<KeyValuePair<string, DataObject>>();
             
             foreach (var pair in _datas)
             {
@@ -89,7 +95,7 @@ namespace MiniGameFramework
                 //    }
                 //}
 
-                if(_dirtyObjs.ContainsKey(pair.Key) && _dirtyObjs[pair.Key])
+                if(pair.Value.isDirty)
                 {
                     array.Add(pair);
                 }
@@ -101,40 +107,32 @@ namespace MiniGameFramework
 
         virtual public void writeBack()
         {
-            if(!_isDirty)
+            var dirtyArray = _getDirtyDatas();
+            if(dirtyArray.Count <= 0)
             {
                 return;
             }
-
-            var dirtyArray = _getDirtyDatas();
 
             // TO DO : combine batch write ops
             foreach(var pair in dirtyArray)
             {
-                _provider.WriteSingleData(_name, pair.Key, pair.Value);
+                _provider.WriteSingleData(_name, pair.Key, pair.Value.getData());
             }
-
-            _isDirty = false;
-            _dirtyObjs = new Dictionary<string, bool>();
         }
 
         virtual public async Task writeBackAsync()
         {
-            if (!_isDirty)
+            var dirtyArray = _getDirtyDatas();
+            if (dirtyArray.Count <= 0)
             {
                 return;
             }
 
-            var dirtyArray = _getDirtyDatas();
-
             // TO DO : combine batch write ops
             foreach (var pair in dirtyArray)
             {
-                await _provider.WriteSingleDataAsync(_name, pair.Key, pair.Value);
+                await _provider.WriteSingleDataAsync(_name, pair.Key, pair.Value.getData());
             }
-
-            _isDirty = false;
-            _dirtyObjs = new Dictionary<string, bool>();
         }
     }
 }

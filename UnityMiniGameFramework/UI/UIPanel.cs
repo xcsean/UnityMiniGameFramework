@@ -93,14 +93,14 @@ namespace UnityMiniGameFramework
 
         virtual public void hideUI()
         {
+            _unityUIDocument.rootVisualElement.style.visibility = Visibility.Hidden;
             //_unityGameObject.SetActive(false);
-            _unityUIDocument.rootVisualElement.visible = false;
         }
 
         virtual public void showUI()
         {
             //_unityGameObject.SetActive(true);
-            _unityUIDocument.rootVisualElement.visible = true;
+            _unityUIDocument.rootVisualElement.style.visibility = Visibility.Visible;
         }
         public void setPoisition(int x, int y)
         {

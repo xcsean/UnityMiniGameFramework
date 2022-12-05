@@ -16,10 +16,12 @@ namespace UnityMiniGameFramework
         InputActorControllerComp _inputControl;
         CMSelfComponent _selfCombatComp;
         UIMainPanel _uiMainPanel;
-        RigibodyMoveAct _movAct;
 
         GunObject _gun;
-        
+
+        LocalBaseInfo _baseInfo;
+        ChickenMasterGame _cmGame;
+
         public MapHeroObject selfMapHero => _selfMapHeroObj;
 
         public SelfControl()
@@ -30,14 +32,15 @@ namespace UnityMiniGameFramework
         public void Init()
         {
             _uiMainPanel = UnityGameApp.Inst.UI.getUIPanel("MainUI") as UIMainPanel;
+            _cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
 
             _initSelfMapHero();
         }
 
         protected void _initSelfMapHero()
         {
-            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
-            var heroConf = UnityGameApp.Inst.MapManager.MapConf.getMapHeroConf(cmGame.baseInfo.hero.mapHeroName);
+            _baseInfo = _cmGame.baseInfo.getData() as LocalBaseInfo;
+            var heroConf = UnityGameApp.Inst.MapManager.MapConf.getMapHeroConf(_baseInfo.hero.mapHeroName);
 
             // create hero
             var unityHeroObj = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject(heroConf.prefabName);
@@ -62,51 +65,52 @@ namespace UnityMiniGameFramework
 
             _selfCombatComp = new CMSelfComponent();
             _selfMapHeroObj.AddComponent(_selfCombatComp);
-            _selfCombatComp.Init(null); // TO DO : add config
+            _selfCombatComp.Init((UnityGameApp.Inst.Game as ChickenMasterGame).gameConf.gameConfs.selfCombatConf);
 
-            _movAct = new RigibodyMoveAct(_selfMapHeroObj);
-            _selfMapHeroObj.actionComponent.AddAction(_movAct);
+            //_movAct = new RigibodyMoveAct(_selfMapHeroObj);
+            //_selfMapHeroObj.actionComponent.AddAction(_movAct);
 
             // add to scene
             unityHeroObj.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
 
-            if(cmGame.baseInfo.hero.position == null)
+            if(_baseInfo.hero.position == null)
             {                
                 // set born position
                 //unityHeroObj.transform.position = UnityGameApp.Inst.MainScene.implMap.getRandomBornPos();
                 unityHeroObj.transform.position = UnityGameApp.Inst.MainScene.implMap.getNamedBornPos("b1");
+                _baseInfo.hero.position = new JsonConfVector3()
+                {
+                    x = unityHeroObj.transform.position.x,
+                    y = unityHeroObj.transform.position.y,
+                    z = unityHeroObj.transform.position.z,
+                };
             }
             else
             {
                 // restore position
-                unityHeroObj.transform.position = new UnityEngine.Vector3(cmGame.baseInfo.hero.position.x, unityHeroObj.transform.position.y, cmGame.baseInfo.hero.position.z);
+                unityHeroObj.transform.position = new UnityEngine.Vector3(_baseInfo.hero.position.x, unityHeroObj.transform.position.y, _baseInfo.hero.position.z);
             }
 
             UnityGameApp.Inst.MainScene.camera.follow(_selfMapHeroObj);
 
             // create weapon
-            LocalWeaponInfo weaponInfo;
-            if (cmGame.baseInfo.hero.holdWeapon != null)
+            if (_baseInfo.hero.holdWeapon == null)
             {
-                weaponInfo = cmGame.baseInfo.hero.holdWeapon;
-            }
-            else
-            {
-                weaponInfo = new LocalWeaponInfo()
+                var weaponInfo = new LocalWeaponInfo()
                 {
                     id = 1,
                     level = 1
                 };
 
-                cmGame.baseInfo.hero.holdWeapon = weaponInfo;
+                _baseInfo.hero.holdWeapon = weaponInfo;
             }
 
-            _onChangeGun();
+            onChangeGun();
 
             _isInited = true;
         }
 
-        protected void _onChangeGun()
+        public void onChangeGun()
         {
             if(_gun != null)
             {
@@ -116,10 +120,10 @@ namespace UnityMiniGameFramework
             }
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
-            var cmGunConf = cmGame.gameConf.getCMGunConf(cmGame.baseInfo.hero.holdWeapon.id);
+            var cmGunConf = cmGame.gameConf.getCMGunConf(_baseInfo.hero.holdWeapon.id);
             if(cmGunConf == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"init self gun id[{cmGame.baseInfo.hero.holdWeapon.id}] not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"init self gun id[{_baseInfo.hero.holdWeapon.id}] not exist");
                 return;
             }
 
@@ -165,10 +169,28 @@ namespace UnityMiniGameFramework
                 return;
             }
             _gun.unityGameObject.transform.SetParent(trAttachTo);
-            _gun.unityGameObject.transform.forward = trAttachTo.forward;
-            _gun.unityGameObject.transform.localPosition = UnityEngine.Vector3.zero;
+            _gun.unityGameObject.transform.localScale = UnityEngine.Vector3.one;
+
+            if (_gun.conf.attachPos != null)
+            {
+                _gun.unityGameObject.transform.localPosition = new UnityEngine.Vector3(_gun.conf.attachPos.x, _gun.conf.attachPos.y, _gun.conf.attachPos.z);
+            }
+            else
+            {
+                _gun.unityGameObject.transform.localPosition = UnityEngine.Vector3.zero;
+            }
+
+            if (_gun.conf.attachRot != null)
+            {
+                _gun.unityGameObject.transform.localRotation = UnityEngine.Quaternion.Euler(_gun.conf.attachRot.x, _gun.conf.attachRot.y, _gun.conf.attachRot.z);
+            }
+            else
+            {
+                _gun.unityGameObject.transform.forward = trAttachTo.forward;
+            }
 
             // TO DO : init gun combat attribute
+            _gun.initAttack(cmGunConf.attack, _baseInfo.hero.holdWeapon.level);
         }
 
         public void OnUpdate()
@@ -182,17 +204,23 @@ namespace UnityMiniGameFramework
             {
                 // TO DO : use rigibody mov
                 //_movAct.moveTo(_selfMapHeroObj.unityGameObject.transform.position + _uiMainPanel.Joystick.movVector3 * 10.0f);
-                _movAct.moveToward(_uiMainPanel.Joystick.movVector3);
+                _selfMapHeroObj.moveAct.moveToward(_uiMainPanel.Joystick.movVector3);
+
+                _baseInfo.hero.position.x = _selfMapHeroObj.unityGameObject.transform.position.x;
+                _baseInfo.hero.position.y = _selfMapHeroObj.unityGameObject.transform.position.y;
+                _baseInfo.hero.position.z = _selfMapHeroObj.unityGameObject.transform.position.z;
+
+                _cmGame.baseInfo.markDirty();
 
                 // for Debug ...
-                if(_gun != null)
+                if (_gun != null)
                 {
                     _gun.Fire();
                 }
             }
-            else if(_movAct.isMoving)
+            else if(_selfMapHeroObj.moveAct.isMoving)
             {
-                _movAct.stop();
+                _selfMapHeroObj.moveAct.stop();
 
                 // for Debug ...
                 if (_gun != null)

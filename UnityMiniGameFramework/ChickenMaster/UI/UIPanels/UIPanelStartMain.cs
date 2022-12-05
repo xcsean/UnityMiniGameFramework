@@ -30,24 +30,25 @@ namespace UnityMiniGameFramework
             btn.clicked += onEnterGameClick;
         }
 
-        public void onEnterGameClick()
+        public async void onEnterGameClick()
         {
-            UnityGameApp.Inst.Game.Init();
+            await UnityGameApp.Inst.Game.InitAsync();
 
             // login
-            UnityGameApp.Inst.RESTFulClient.Login(
-                new RESTFulAPI.C2S_LoginParam()
-                {
-                    uid="",
-                    token=""
-                },
-                (RESTFulAPI.S2C_LoginResult res) =>
-                {
+            //UnityGameApp.Inst.RESTFulClient.Login(
+            //    new RESTFulAPI.C2S_LoginParam()
+            //    {
+            //        uid="",
+            //        token=""
+            //    },
+            //    (RESTFulAPI.S2C_LoginResult res) =>
+            //    {
 
-                    UnityGameApp.Inst.LoadMainScene();
-                }
-            );
+            //        UnityGameApp.Inst.LoadMainScene();
+            //    }
+            //);
 
+            UnityGameApp.Inst.LoadMainScene();
         }
     }
 }

@@ -9,14 +9,24 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
+
     public class MonsterSpawnConf
     {
         public string spawnObjectName { get; set; }
         public uint maxCount { get; set; }
+        public uint maxTotalCount { get; set; }
 
-        public uint respawnTime { get; set; }
+        public float spawnInterval { get; set; }
+
+        public uint perSpawnCount { get; set; }
 
         public string monsterConfName { get; set; }
+    }
+
+    public class MapZoneConf
+    {
+        public string zoneName { get; set; }
+
     }
 
     public class MapConf
@@ -28,8 +38,25 @@ namespace UnityMiniGameFramework
         public List<string> randomBornObjectList { get; set; }
         public Dictionary<string, string> namedBornObjects { get; set; }
 
-        public List<MonsterSpawnConf> monsterSpwanList { get; set; }
+        public List<MapZoneConf> zones { get; set; }
 
+        public Dictionary<string, MonsterSpawnConf> monsterSpawns { get; set; }
+    }
+
+    public class MapLevelSpawn
+    {
+        public string mapMonsterSpawnName { get; set; }
+        public float startTime { get; set; }
+    }
+
+    public class MapLevelConf
+    {
+        public List<MapLevelSpawn> monsterSpawns { get; set; }
+
+        public float levelTime { get; set; }
+
+        public string levelType { get; set; }
+        // TO DO : add win condition
     }
 
     public class MapConfs
@@ -39,6 +66,10 @@ namespace UnityMiniGameFramework
         public Dictionary<string, MapHeroObjectConf> mapHeros { get; set; }
 
         public Dictionary<string, MapBuildObjectConf> mapBuildings { get; set; }
+
+        public Dictionary<string, MapMonsterObjectConf> mapMonsters { get; set; }
+
+        public Dictionary<string, MapLevelConf> mapLevels { get; set; }
     }
 
     public class MapConfig : JsonConfig
@@ -79,6 +110,22 @@ namespace UnityMiniGameFramework
                 return null;
             }
             return mapConf.mapBuildings[mapBuildingName];
+        }
+        public MapMonsterObjectConf getMapMonsterConf(string mapMonstername)
+        {
+            if (mapConf.mapMonsters == null || !mapConf.mapMonsters.ContainsKey(mapMonstername))
+            {
+                return null;
+            }
+            return mapConf.mapMonsters[mapMonstername];
+        }
+        public MapLevelConf getMapLevelConf(string mapLevelName)
+        {
+            if (mapConf.mapLevels == null || !mapConf.mapLevels.ContainsKey(mapLevelName))
+            {
+                return null;
+            }
+            return mapConf.mapLevels[mapLevelName];
         }
     }
 }

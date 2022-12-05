@@ -59,6 +59,12 @@ namespace UnityMiniGameFramework
             }
         }
 
+        public void ClearActions()
+        {
+            _currActivateActions.Clear();
+            _penddingActions.Clear();
+        }
+
         override public void Init(object config)
         {
             base.Init(config);

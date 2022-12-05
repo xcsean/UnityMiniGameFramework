@@ -51,6 +51,9 @@ namespace UnityMiniGameFramework
 
         public string attachToBone { get; set; }
 
+        public JsonConfVector3 attachPos { get; set; }
+        public JsonConfVector3 attachRot { get; set; }
+
         public AnimatorComponentConfig AnimatorConf { get; set; }
 
         public GunFireConf FireConf { get; set; }

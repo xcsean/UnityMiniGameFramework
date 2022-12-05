@@ -11,14 +11,12 @@ namespace MiniGameFramework
         string name { get; }
         IDataProvider provider { get; }
 
-        bool isDirty { get; }
-
         List<string> initKeys { get; }
         void initFromProvider();
         Task initFromProviderAsync();
 
-        object getData(string key);
-        void modifyData(string key, object newData);
+        IDataObject getData(string key);
+        void addNewData(string key, IDataObject newData);
 
         void writeBack();
         Task writeBackAsync();

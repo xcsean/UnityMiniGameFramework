@@ -42,6 +42,8 @@ namespace UnityMiniGameFramework
         public IMap map => _map;
         public Map implMap => _map;
 
+        protected Dictionary<string, Map> _maps;
+
         protected SceneConf _conf;
         protected UnityEngine.SceneManagement.Scene _unityScene;
         protected AsyncOperation _unitySceneLoadStatus;
@@ -179,6 +181,7 @@ namespace UnityMiniGameFramework
                 {
                     // TO DO : map
                     _mapRoot = objs[i];
+                    _maps = new Dictionary<string, Map>();
 
                     var tr = _mapRoot.transform.Find(_conf.mapName);
                     if (tr == null)
@@ -195,6 +198,33 @@ namespace UnityMiniGameFramework
                         else
                         {
                             _map = mgObjComp.mgGameObject as Map;
+                            _maps[_conf.mapName] = _map;
+                        }
+                    }
+
+                    if (_conf.mapNames != null)
+                    {
+                        foreach(var mapName in _conf.mapNames)
+                        {
+                            tr = _mapRoot.transform.Find(mapName);
+                            if (tr == null)
+                            {
+                                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Load Scene {_name} maplist object {mapName} not exist");
+                                continue;
+                            }
+                            else
+                            {
+                                var mgObjComp = tr.gameObject.GetComponent<UnityGameObjectBehaviour>();
+                                if (mgObjComp == null)
+                                {
+                                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Load Scene {_name} maplist {mapName} without UnityGameObjectBehaviour");
+                                    continue;
+                                }
+                                else
+                                {
+                                    _maps[mapName] = mgObjComp.mgGameObject as Map;
+                                }
+                            }
                         }
                     }
                 }
@@ -291,7 +321,20 @@ namespace UnityMiniGameFramework
         public void changeMap(string newMapName)
         {
             // TO DO : implement change map
-            throw new NotImplementedException();
+
+            Map map;
+            if(!_maps.TryGetValue(newMapName, out map))
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Scene [{_name}] change map [{newMapName}] not exist");
+
+                return;
+            }
+
+            _map.OnLeave();
+
+            _map = map;
+
+            _map.OnEnter();
         }
     }
 }

@@ -10,58 +10,100 @@ namespace UnityMiniGameFramework
 {
     public class ChickenMasterGame : IGame
     {
-        protected LocalUserInfo _userInfo;
-        public LocalUserInfo userInfo => _userInfo;
+        public static IGame create()
+        {
+            return new ChickenMasterGame();
+        }
 
-        protected LocalBaseInfo _baseInfo;
-        public LocalBaseInfo baseInfo => _baseInfo;
+        protected IDataObject _userInfo;
+        public IDataObject userInfo => _userInfo;
+
+        protected IDataObject _baseInfo;
+        public IDataObject baseInfo => _baseInfo;
 
         protected CMGameConfig _gameConf;
         public CMGameConfig gameConf => _gameConf;
 
-        public async void Init()
+        protected SelfControl _self;
+        public SelfControl Self => _self;
+
+        public ChickenMasterGame()
+        {
+            _self = new SelfControl();
+        }
+
+        public async Task InitAsync()
         {
             _gameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
 
             await UnityGameApp.Inst.Datas.CreateLocalUserDataAsync();
 
-            _userInfo = UnityGameApp.Inst.Datas.localUserData.getData("userInfo") as LocalUserInfo;
+            bool newDataAdded = false;
+            _userInfo = UnityGameApp.Inst.Datas.localUserData.getData("userInfo");
             if (_userInfo == null)
             {
                 // new user info
-                _userInfo = new LocalUserInfo()
+                var userInfo = new LocalUserInfo()
                 {
-
+                    uid = "test",
+                    uuid = "test",
+                    lastLoginTime = (int)(DateTime.Now.Ticks / 1000)
                 };
+                _userInfo = new DataObject(userInfo);
+                _userInfo.markDirty();
 
-                UnityGameApp.Inst.Datas.localUserData.modifyData("userInfo", _userInfo);
+                UnityGameApp.Inst.Datas.localUserData.addNewData("userInfo", _userInfo);
+                newDataAdded = true;
             }
 
-            _baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo") as LocalBaseInfo;
+            _baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo");
             if (_baseInfo == null)
             {
                 // new base info
-                _baseInfo = new LocalBaseInfo()
+                var baseInfo = new LocalBaseInfo()
                 {
-
+                    gold = 100,
+                    level = 1,
+                    exp = 0,
+                    hero = new LocalHeroInfo()
+                    {
+                        mapHeroName = "testHero",
+                        holdWeapon = new LocalWeaponInfo()
+                        {
+                            id = 1,
+                            level = 1,
+                        }
+                    },
+                    buildings = new List<LocalBuildingInfo>(),
+                    weapons = new List<LocalWeaponInfo>(),
+                    backPackItems = new List<LocalPackItemInfo>()
                 };
+                _baseInfo = new DataObject(baseInfo);
+                _baseInfo.markDirty();
 
-                UnityGameApp.Inst.Datas.localUserData.modifyData("baseInfo", _baseInfo);
+                UnityGameApp.Inst.Datas.localUserData.addNewData("baseInfo", _baseInfo);
+                newDataAdded = true;
             }
 
-            if(UnityGameApp.Inst.Datas.localUserData.isDirty)
+            if(newDataAdded)
             {
                 // write back
                 await UnityGameApp.Inst.Datas.localUserData.writeBackAsync();
             }
+        }
 
+        public void OnStartSceneLoaded()
+        {
+        }
 
-
+        public void OnMainSceneLoaded()
+        {
+            _self.Init();
         }
 
         public void OnUpdate()
         {
-            
+            _self.OnUpdate();
         }
     }
 }

@@ -14,19 +14,16 @@ namespace UnityMiniGameFramework
         public UnityEngine.Vector3 spawnHalfSize;
     }
 
-    public class MonsterSpawn
-    {
-        protected SpawnPos spawnPos;
-
-        public bool Init(MonsterSpawnConf conf)
-        {
-            return true;
-        }
-    }
-
     public class Map : MGGameObject, IMap
     {
         override public string type => "MapObject";
+
+        protected MapLevel _mapLevel;
+        public IMapLevel currentLevel => _mapLevel;
+
+        protected MapConf _conf;
+        public MapConf mapConf => _conf;
+
         new public static Map create()
         {
             return new Map();
@@ -35,14 +32,15 @@ namespace UnityMiniGameFramework
         protected List<SpawnPos> _randBornPos;
         protected Dictionary<string, SpawnPos> _namedBornPos;
 
-        protected List<MonsterSpawn> _monsterSpawns;
+        protected Dictionary<string, MapMonsterSpawn> _monsterSpawns;
+
 
         public Map()
         {
             _randBornPos = new List<SpawnPos>();
             _namedBornPos = new Dictionary<string, SpawnPos>();
 
-            _monsterSpawns = new List<MonsterSpawn>();
+            _monsterSpawns = new Dictionary<string, MapMonsterSpawn>();
         }
 
 
@@ -59,30 +57,32 @@ namespace UnityMiniGameFramework
         {
             base.Init(confname);
 
-            MapConf conf = _getMapConf(confname);
-            if (conf == null)
+            _conf = _getMapConf(confname);
+            if (_conf == null)
             {
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({confname}) not exist.");
                 return;
             }
-            _name = conf.name;
+            _name = _conf.name;
 
             // init born pos
-            foreach(var b in conf.randomBornObjectList)
+            foreach(var b in _conf.randomBornObjectList)
             {
                 SpawnPos sp = _getSpawnPosByObjectName(b);
                 if(sp == null)
                 {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({confname}) spawn pos ({b}) not exist.");
                     continue;
                 }
 
                 _randBornPos.Add(sp);
             }
-            foreach(var pair in conf.namedBornObjects)
+            foreach(var pair in _conf.namedBornObjects)
             {
                 SpawnPos sp = _getSpawnPosByObjectName(pair.Value);
                 if(sp == null)
                 {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({confname}) spawn pos ({pair.Value}) not exist.");
                     continue;
                 }
 
@@ -90,15 +90,43 @@ namespace UnityMiniGameFramework
             }
 
             // init monster spawn
-            foreach(var m in conf.monsterSpwanList)
+            foreach(var pair in _conf.monsterSpawns)
             {
-                MonsterSpawn ms = new MonsterSpawn();
-                if(!ms.Init(m))
+                SpawnPos sp = _getSpawnPosByObjectName(pair.Value.spawnObjectName);
+                if (sp == null)
+                {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({confname}) spawn pos ({pair.Value.spawnObjectName}) not exist.");
+                    continue;
+                }
+
+                MapMonsterSpawn ms = new MapMonsterSpawn(this, sp);
+                if(!ms.Init(pair.Value))
                 {
                     continue;
                 }
-                _monsterSpawns.Add(ms);
+                _monsterSpawns[pair.Key] = ms;
             }
+        }
+
+        public MapMonsterSpawn getMonsterSpawn(string name)
+        {
+            MapMonsterSpawn ms;
+            if (_monsterSpawns.TryGetValue(name, out ms))
+            {
+                return ms;
+            }
+
+            return null;
+        }
+
+        virtual public void OnLeave()
+        {
+            this.unityGameObject.SetActive(false);
+        }
+
+        virtual public void OnEnter()
+        {
+            this.unityGameObject.SetActive(true);
         }
 
         protected SpawnPos _getSpawnPosByObjectName(string objName)
@@ -125,15 +153,8 @@ namespace UnityMiniGameFramework
             return pos;
         }
 
-        public UnityEngine.Vector3 getRandomBornPos()
+        public UnityEngine.Vector3 getBornPos(SpawnPos sp)
         {
-            if(_randBornPos.Count <= 0)
-            {
-                return new UnityEngine.Vector3(0, 0, 0);
-            }
-
-            int i = UnityGameApp.Inst.Rand.RandomBetween(0, _randBornPos.Count);
-            SpawnPos sp = _randBornPos[i];
             int x = (int)(sp.spawnHalfSize.x * 1000);
             float xf = (float)UnityGameApp.Inst.Rand.RandomBetween(-x, x) / 1000.0f;
             int y = (int)(sp.spawnHalfSize.y * 1000);
@@ -144,6 +165,18 @@ namespace UnityMiniGameFramework
             return sp.spawnCenter + new UnityEngine.Vector3(xf, yf, zf);
         }
 
+        public UnityEngine.Vector3 getRandomBornPos()
+        {
+            if(_randBornPos.Count <= 0)
+            {
+                return new UnityEngine.Vector3(0, 0, 0);
+            }
+
+            int i = UnityGameApp.Inst.Rand.RandomBetween(0, _randBornPos.Count);
+            SpawnPos sp = _randBornPos[i];
+            return getBornPos(sp);
+        }
+
         public UnityEngine.Vector3 getNamedBornPos(string name)
         {
             if (!_namedBornPos.ContainsKey(name))
@@ -152,14 +185,7 @@ namespace UnityMiniGameFramework
             }
 
             SpawnPos sp = _namedBornPos[name];
-            int x = (int)(sp.spawnHalfSize.x * 1000);
-            float xf = (float)UnityGameApp.Inst.Rand.RandomBetween(-x, x) / 1000.0f;
-            int y = (int)(sp.spawnHalfSize.y * 1000);
-            float yf = (float)UnityGameApp.Inst.Rand.RandomBetween(-y, y) / 1000.0f;
-            int z = (int)(sp.spawnHalfSize.z * 1000);
-            float zf = (float)UnityGameApp.Inst.Rand.RandomBetween(-z, z) / 1000.0f;
-
-            return sp.spawnCenter + new UnityEngine.Vector3(xf, yf, zf);
+            return getBornPos(sp);
         }
 
         override protected void _onAddComponent(IGameObjectComponent comp)
@@ -175,13 +201,50 @@ namespace UnityMiniGameFramework
         {
             base.OnUpdate(timeElasped);
 
+            foreach (var ms in _monsterSpawns)
+            {
+                ms.Value.OnUpdate();
+            }
 
+            if(_mapLevel != null)
+            {
+                _mapLevel.OnUpdate(timeElasped);
+            }
         }
         override public void OnPostUpdate(float timeElasped)
         {
-
-
             base.OnPostUpdate(timeElasped);
+
+            if(_mapLevel != null)
+            {
+                _mapLevel.OnPostUpdate(timeElasped);
+            }
+        }
+
+        public IMapLevel CreateLevel(string levelName)
+        {
+            var levelConf = UnityGameApp.Inst.MapManager.MapConf.getMapLevelConf(levelName);
+            if(levelConf == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] create level [{levelName}] config not exist");
+                return null;
+            }
+
+            _mapLevel = UnityGameApp.Inst.MapManager.createMapLevel(levelConf.levelType) as MapLevel;
+            if(_mapLevel == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] create level [{levelName}] type [{levelConf.levelType}] not exist");
+                return null;
+            }
+            _mapLevel.setMap(this);
+
+            if (!_mapLevel.Init(levelName))
+            {
+                _mapLevel = null;
+                return null;
+            }
+
+            return _mapLevel;
         }
     }
 }

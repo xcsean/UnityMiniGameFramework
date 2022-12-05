@@ -106,6 +106,9 @@
     <Compile Include="ChickenMaster\Game\CMSelfComponent.cs" />
     <Compile Include="ChickenMaster\Game\CMTrainStation.cs" />
     <Compile Include="ChickenMaster\Game\CMWeapon.cs" />
+    <Compile Include="ChickenMaster\Levels\CMShootingLevel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UILevelEntryPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIControls\UILevelStateControl.cs" />
     <Compile Include="Configs\CharacterConfig.cs" />
     <Compile Include="Configs\MapActorObjectConfigs.cs" />
     <Compile Include="Configs\MapConfig.cs" />
@@ -122,7 +125,9 @@
     <Compile Include="Game\Actors\Action.cs" />
     <Compile Include="Game\Actors\ActionComponent.cs" />
     <Compile Include="Game\Actors\ActorObject.cs" />
+    <Compile Include="Game\Actors\Acts\ActAnis.cs" />
     <Compile Include="Game\Actors\Acts\ActStates.cs" />
+    <Compile Include="Game\Actors\Acts\AttackAct.cs" />
     <Compile Include="Game\Actors\Acts\MoveAct.cs" />
     <Compile Include="Game\Actors\Acts\RigibodyDieAct.cs" />
     <Compile Include="Game\Actors\Acts\RigibodyMoveAct.cs" />
@@ -138,9 +143,11 @@
     <Compile Include="Game\Actors\CharacterObject.cs" />
     <Compile Include="Game\Audio\Audio.cs" />
     <Compile Include="Game\Audio\AudioManager.cs" />
-    <Compile Include="Game\Camera\followCamera.cs" />
     <Compile Include="Game\Camera\UnityGameCamera.cs" />
     <Compile Include="Game\Controller\ActorControllerComponent.cs" />
+    <Compile Include="Game\Controller\AIState\AIState.cs" />
+    <Compile Include="Game\Controller\AIState\AITrace.cs" />
+    <Compile Include="Game\Controller\AIState\AITryAttack.cs" />
     <Compile Include="Game\Controller\InputActorControllerComp.cs" />
     <Compile Include="Game\Controller\AIActorControllerComp.cs" />
     <Compile Include="Game\Controller\NetworkActorControllerComp.cs" />
@@ -151,11 +158,14 @@
     <Compile Include="Game\Map\MapActorObject.cs" />
     <Compile Include="Game\Map\MapBuildingObject.cs" />
     <Compile Include="Game\Map\MapHeroObject.cs" />
+    <Compile Include="Game\Map\MapLevel.cs" />
     <Compile Include="Game\Map\MapManager.cs" />
+    <Compile Include="Game\Map\MapMonsterSpawn.cs" />
     <Compile Include="Game\Map\MapNPCObject.cs" />
     <Compile Include="Game\Map\Map.cs" />
     <Compile Include="Game\Map\MapItemComponent.cs" />
     <Compile Include="Game\Map\MapMonsterObject.cs" />
+    <Compile Include="Game\Map\MapRoleObject.cs" />
     <Compile Include="Game\Map\MapVehicleObject.cs" />
     <Compile Include="Game\Scene\Scene.cs" />
     <Compile Include="Game\Scene\UnitySceneManager.cs" />

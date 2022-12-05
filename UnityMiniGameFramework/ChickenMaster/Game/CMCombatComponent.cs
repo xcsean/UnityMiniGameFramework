@@ -12,13 +12,33 @@ namespace UnityMiniGameFramework
     {
         override public string type => "CombatComponent";
 
-        protected int _HP;
-        protected int _maxHP;
+        protected ActorObject _actor;
+        protected RigibodyDieAct _dieAct;
+        protected RigibodyOnHitAct _onHitAct;
 
-
-        override public void OnHitby(WeaponObject weapon)
+        public override void Init(object config)
         {
+            base.Init(config);
 
+
+            _actor = this.gameObject as ActorObject;
+
+            _dieAct = new RigibodyDieAct(_actor);
+        }
+
+        override protected void _onHitMissed(WeaponObject weapon)
+        {
+            // TO DO : show missing text
+        }
+        override protected void _onDamage(WeaponObject weapon, int dmg, bool critical)
+        {
+            // TO DO : show damage text
+
+            // perform onhit act
+        }
+        override protected void _onDie(WeaponObject weapon)
+        {
+            _actor.actionComponent.AddAction(_dieAct);
         }
     }
 }

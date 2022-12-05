@@ -26,6 +26,23 @@ namespace UnityMiniGameFramework
         {
             UnityGameApp.Inst.OnPostUpdate();
         }
+
+        void OnApplicationFocus(bool hasFocus)
+        {
+            //isPaused = !hasFocus;
+        }
+
+        void OnApplicationPause(bool pauseStatus)
+        {
+            if(pauseStatus)
+            {
+                UnityGameApp.Inst.OnAppSuspended();
+            }
+            else
+            {
+                UnityGameApp.Inst.OnAppResume();
+            }
+        }
     }
 
     public class UnityGameAppBehaviour : MonoBehaviour
@@ -61,6 +78,8 @@ namespace UnityMiniGameFramework
             };
             UnityGameApp.Inst.Init(InitParameter);
             Application.targetFrameRate = 60;
+
+            Application.quitting += UnityGameApp.Inst.OnAppExit;
         }
 
         protected virtual void Start()
@@ -79,6 +98,23 @@ namespace UnityMiniGameFramework
         protected virtual void LateUpdate()
         {
             UnityGameApp.Inst.OnPostUpdate();
+        }
+
+        void OnApplicationFocus(bool hasFocus)
+        {
+            //isPaused = !hasFocus;
+        }
+
+        void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                UnityGameApp.Inst.OnAppSuspended();
+            }
+            else
+            {
+                UnityGameApp.Inst.OnAppResume();
+            }
         }
     }
 
@@ -117,9 +153,6 @@ namespace UnityMiniGameFramework
 
         protected UnityRESTFulClient _restfulClient;
         public UnityRESTFulClient RESTFulClient => _restfulClient;
-        
-        protected SelfControl _self;
-        public SelfControl Self => _self;
 
         protected Queue<Action> _nextFramePostUpdateCall;
 
@@ -139,6 +172,8 @@ namespace UnityMiniGameFramework
         override public bool Init(GameAPPInitParameter par)
         {
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"UnityGameApp start initializing...");
+
+            GameApp.CreatGame = ChickenMasterGame.create;
 
             _nextFramePostUpdateCall = new Queue<Action>();
 
@@ -162,14 +197,29 @@ namespace UnityMiniGameFramework
 
             _vfxManager.OnUpdate(UnityEngine.Time.deltaTime);
             _weaponManager.OnUpdate(UnityEngine.Time.deltaTime);
-
-            _self.OnUpdate();
         }
-        override protected void _onMainSceneLoaded()
-        {
-            base._onMainSceneLoaded();
 
-            _initSelfControl();
+
+        override public void OnAppSuspended()
+        {
+            if(_datamanager != null)
+            {
+                _datamanager.localUserData.writeBack();
+            }
+        }
+
+        override public void OnAppResume()
+        {
+
+        }
+
+        override public void OnAppExit()
+        {
+            if (_datamanager != null)
+            {
+                _datamanager.localUserData.writeBack();
+            }
+
         }
 
         override protected void _createManagers()
@@ -186,8 +236,6 @@ namespace UnityMiniGameFramework
             _resManager = new UnityResourceManager();
             _mapManager = new MapManager();
             _weaponManager = new WeaponManager();
-
-            _self = new SelfControl();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app managers created.");
         }
@@ -208,6 +256,7 @@ namespace UnityMiniGameFramework
             // reg component
             GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
             GameObjectManager.registerGameObjectComponentCreator("AnimatorComponent", AnimatorComponent.create);
+            GameObjectManager.registerGameObjectComponentCreator("AIActorControllerComp", AIActorControllerComp.create);
 
             // reg object
             GameObjectManager.registerGameObjectCreator("MGGameObject", MGGameObject.create);
@@ -225,6 +274,9 @@ namespace UnityMiniGameFramework
             _vfxManager.registerVfxObjectCreator("VFXObjectBase", VFXObjectBase.create);
             _vfxManager.registerVfxObjectCreator("VFXFootprintObject", VFXFootprintObject.create);
             _vfxManager.registerVfxObjectCreator("VFXLinerObject", VFXLinerObject.create);
+
+            // reg levels
+            _mapManager.registerMapLevelCreator("CMShootingLevel", CMShootingLevel.create);
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
         }
@@ -270,10 +322,12 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UIMainPanel", UIMainPanel.create);
             _ui.regUIPanelCreator("UIPanelStartMain", UIPanelStartMain.create);
             _ui.regUIPanelCreator("UIUpgradePanel", UIUpgradePanel.create);
+            _ui.regUIPanelCreator("UILevelEntryPanel", UILevelEntryPanel.create);
 
             // reg ui control creator
             _ui.regUIObjectCreator("UIObject", UIObject.create);
             _ui.regUIObjectCreator("UIJoyStickControl", UIJoyStickControl.create);
+            _ui.regUIObjectCreator("UILevelStateControl", UILevelStateControl.create);
         }
 
         protected void _initNetwork()
@@ -302,12 +356,6 @@ namespace UnityMiniGameFramework
             {
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"no network.");
             }
-
-        }
-
-        protected void _initSelfControl()
-        {
-            _self.Init();
 
         }
     }

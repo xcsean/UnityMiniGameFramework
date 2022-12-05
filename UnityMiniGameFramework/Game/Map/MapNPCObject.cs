@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-    public class MapNPCObject : MapActorObject
+    public class MapNPCObject : MapRoleObject
     {
         override public string type => "MapNPCObject";
         new public static MapNPCObject create()

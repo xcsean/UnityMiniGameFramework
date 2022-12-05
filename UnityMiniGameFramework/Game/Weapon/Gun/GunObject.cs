@@ -122,7 +122,7 @@ namespace UnityMiniGameFramework
             _gunPos = tr.gameObject;
             _name = _conf.name;
 
-            _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 100;
+            _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 10;
 
             if (_conf.AnimatorConf != null)
             {
@@ -272,7 +272,8 @@ namespace UnityMiniGameFramework
             var rigiBody = collision.gameObject.GetComponent<UnityEngine.Rigidbody>();
             if(rigiBody != null)
             {
-                rigiBody.AddForce(collision.impulse.normalized * _hitForce);
+                //rigiBody.AddForce(collision.impulse.normalized * _hitForce);
+                rigiBody.AddForce(projectileObject.gameObject.transform.forward * _hitForce);
             }
 
             UnityGameApp.Inst.VFXManager.onVFXDestory(projectileObject.projVfxObj);
@@ -290,14 +291,41 @@ namespace UnityMiniGameFramework
             }
         }
 
+
+        private void Actor_OnDispose(GameObject obj)
+        {
+            _emmiterHitObjectsTime.Remove((obj as ActorObject).unityGameObject);
+        }
+
         virtual public void onEmmiterHitEnter(UnityEngine.Collider other)
         {
             _emmiterHitObjectsTime[other.gameObject] = UnityEngine.Time.time;
             _onEmmiterHit(other.gameObject);
+
+            var ugo = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if(ugo != null)
+            {
+                var actor = ugo.mgGameObject as ActorObject;
+                if(actor != null)
+                {
+                    actor.OnDispose += Actor_OnDispose;
+                }
+            }
         }
+
         virtual public void onEmmiterHitExit(UnityEngine.Collider other)
         {
             _emmiterHitObjectsTime.Remove(other.gameObject);
+
+            var ugo = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if (ugo != null)
+            {
+                var actor = ugo.mgGameObject as ActorObject;
+                if (actor != null)
+                {
+                    actor.OnDispose -= Actor_OnDispose;
+                }
+            }
         }
 
         virtual protected void _onEmmiterHit(UnityEngine.GameObject o)
@@ -567,6 +595,18 @@ namespace UnityMiniGameFramework
             UnityGameApp.Inst.VFXManager.onVFXDestory(_throwEmmiter);
             _throwEmmiter = null;
 
+            foreach (var pair in _emmiterHitObjectsTime)
+            {
+                var ugo = pair.Key.GetComponent<UnityGameObjectBehaviour>();
+                if (ugo != null)
+                {
+                    var actor = ugo.mgGameObject as ActorObject;
+                    if (actor != null)
+                    {
+                        actor.OnDispose -= Actor_OnDispose;
+                    }
+                }
+            }
             _emmiterHitObjectsTime = null;
         }
     }

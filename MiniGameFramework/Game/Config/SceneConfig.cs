@@ -15,6 +15,8 @@ namespace MiniGameFramework
         public string mainUIPanelName { get; set; }
         public string mapName { get; set; }
 
+        public List<string> mapNames { get; set; }
+
         public string rootObjectName { get; set; }
         public string mainCameraName { get; set; }
         public string uiRootName { get; set; }

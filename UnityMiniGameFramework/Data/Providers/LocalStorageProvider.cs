@@ -167,7 +167,7 @@ namespace UnityMiniGameFramework
                 foreach (var objPair in fw.objects)
                 {
                     writer.Write(objPair.Key);
-                    writer.Write(objPair.Value.GetType().Name);
+                    writer.Write(objPair.Value.GetType().FullName);
                     var jsonStr = JsonSerializer.Serialize(objPair.Value, objPair.Value.GetType());
 
                     writer.Write(jsonStr);

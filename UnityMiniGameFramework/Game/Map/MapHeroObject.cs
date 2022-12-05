@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-    public class MapHeroObject : MapActorObject
+    public class MapHeroObject : MapRoleObject
     {
         protected MapHeroObjectConf _mapHeroConf;
 

@@ -23,6 +23,7 @@ namespace UnityMiniGameFramework
         }
 
         protected UnityEngine.Animator _unityAnimator;
+        public UnityEngine.Animator unityAnimator => _unityAnimator;
 
         protected Skelton _skel;
         protected Dictionary<string, Animation> _anis; // ani name => animation
@@ -47,6 +48,12 @@ namespace UnityMiniGameFramework
                 return null;
             }
         }
+
+        public bool isCurrBaseAnimation(string aniName)
+        {
+            return currBaseAnimation?.aniName == aniName;
+        }
+
         public Animation getCurrentAnimation(string aniSlotName)
         {
             if (_currAnis.ContainsKey(aniSlotName))

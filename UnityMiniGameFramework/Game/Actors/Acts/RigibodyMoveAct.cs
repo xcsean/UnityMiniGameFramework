@@ -57,9 +57,6 @@ namespace UnityMiniGameFramework
         public float DecSpeed = 6.0f;
         public float MaxSpeed = 3.0f;
 
-        public string RunAni = "Run";
-        public string IdleAni = "Idle";
-
         public float curSpeed => _curSpeed;
 
         protected float _curSpeed;
@@ -82,7 +79,7 @@ namespace UnityMiniGameFramework
 
         public void moveToward(UnityEngine.Vector3 to)
         {
-            _movVec = to;
+            _movVec = to.normalized;
         }
         public void stop()
         {
@@ -112,9 +109,9 @@ namespace UnityMiniGameFramework
 
         void _onStop()
         {
-            if (actor.animatorComponent.currBaseAnimation.aniName == RunAni)
+            if (actor.animatorComponent.isCurrBaseAnimation(ActAnis.RunAni))
             {
-                actor.animatorComponent.playAnimation(IdleAni);
+                actor.animatorComponent.playAnimation(ActAnis.IdleAni);
             }
         }
 
@@ -138,26 +135,26 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            if(actor.animatorComponent.currBaseAnimation.aniName != RunAni)
+            if(!actor.animatorComponent.isCurrBaseAnimation(ActAnis.RunAni))
             {
-                actor.animatorComponent.playAnimation(RunAni);
+                actor.animatorComponent.playAnimation(ActAnis.RunAni);
             }
 
             _updateSpeed();
 
             //_rigiBody.velocity = _movVec.Value.normalized * _curSpeed;
 
-            _rigiBody.MovePosition(_rigiBody.position + _movVec.Value.normalized * _curSpeed * UnityEngine.Time.deltaTime);
-            //_rigiBody.transform.forward = _rigiBody.transform.forward + (_movVec.Value.normalized - _rigiBody.transform.forward).normalized * TurnSpeed * UnityEngine.Time.deltaTime;
+            _rigiBody.MovePosition(_rigiBody.position + _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime);
+            //_rigiBody.transform.forward = _rigiBody.transform.forward + (_movVec.Value - _rigiBody.transform.forward).normalized * TurnSpeed * UnityEngine.Time.deltaTime;
 
-            _rigiBody.transform.forward = _movVec.Value.normalized;
+            _rigiBody.transform.forward = _movVec.Value;
 
             //var yAxis = new UnityEngine.Vector3(0, 1, 0);
             //var forward = new UnityEngine.Vector3(_rigiBody.transform.forward.x, 0, _rigiBody.transform.forward.z);
-            //var vec = new UnityEngine.Vector3(_movVec.Value.normalized.x, 0, _movVec.Value.normalized.z);
+            //var vec = new UnityEngine.Vector3(_movVec.Value.x, 0, _movVec.Value.z);
             //float deg = UnityEngine.Vector3.Dot(forward, vec);
 
-            //float dist = (_movVec.Value.normalized - _rigiBody.transform.forward).magnitude;
+            //float dist = (_movVec.Value - _rigiBody.transform.forward).magnitude;
 
             //if (dist > 0.05f)
             //{

@@ -69,7 +69,6 @@ namespace MiniGameFramework
         virtual public bool Init(GameAPPInitParameter par)
         {
             // TO DO : change init step to async
-            
             _game = CreatGame();
 
             _initStep = GameAppInitStep.InitConfig;
@@ -118,6 +117,7 @@ namespace MiniGameFramework
                 if(_startScene.loadStatus.done)
                 {
                     _onStartSceneLoaded();
+                    _game.OnStartSceneLoaded();
 
                     _initStep = GameAppInitStep.EnterStartScene;
                     //_sceneManager.changeScene(_startScene); // auto change
@@ -128,6 +128,7 @@ namespace MiniGameFramework
                 if (_mainScene.loadStatus.done)
                 {
                     _onMainSceneLoaded();
+                    _game.OnMainSceneLoaded();
 
                     _initStep = GameAppInitStep.EnterMainScene;
                     //_sceneManager.changeScene(_mainScene); // auto change
@@ -243,6 +244,21 @@ namespace MiniGameFramework
 
             _mainScene = _sceneManager.createMainScene();
             _mainScene.LoadAsync();
+        }
+
+        virtual public void OnAppSuspended()
+        {
+
+        }
+
+        virtual public void OnAppResume()
+        {
+
+        }
+
+        virtual public void OnAppExit()
+        {
+
         }
     }
 }

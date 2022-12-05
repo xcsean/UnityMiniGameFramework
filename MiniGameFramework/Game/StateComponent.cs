@@ -20,6 +20,10 @@ namespace MiniGameFramework
         {
             _states[stateKey] = stateValue;
         }
+        public void unsetState(int stateKey)
+        {
+            _states.Remove(stateKey);
+        }
         public int getState(int stateKey)
         {
             if (_states.ContainsKey(stateKey))

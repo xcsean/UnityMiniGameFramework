@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnityMiniGameFramework.Game.Actors.Acts
+namespace UnityMiniGameFramework
 {
-    class RigibodyOnHitAct
+    public class RigibodyOnHitAct
     {
     }
 }

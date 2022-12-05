@@ -17,6 +17,8 @@ namespace MiniGameFramework
 
         public IAttribute attribute => _attribute;
 
+        public event Action<GameObject> OnDispose;
+
         public GameObject()
         {
             _components = new Dictionary<string, IGameObjectComponent>();
@@ -27,6 +29,12 @@ namespace MiniGameFramework
         }
         virtual public void Dispose()
         {
+            if(OnDispose != null)
+            {
+                OnDispose(this);
+                OnDispose = null;
+            }
+
             if(_components != null)
             {
                 foreach (var pair in _components)

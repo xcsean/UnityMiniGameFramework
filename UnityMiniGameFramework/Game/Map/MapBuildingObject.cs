@@ -70,7 +70,6 @@ namespace UnityMiniGameFramework
 
         public void OnTriggerEnter(UnityEngine.Collider other)
         {
-
             var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
             if(comp != null && comp.mgGameObject.type == "MapHeroObject")
             {

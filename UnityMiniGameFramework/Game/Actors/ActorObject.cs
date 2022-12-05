@@ -26,6 +26,13 @@ namespace UnityMiniGameFramework
         protected ActorControllerComponent _ctrlComponent;
         public ActorControllerComponent controllerComponent => _ctrlComponent;
 
+        protected bool _needDestroy;
+        public bool needDestroy => _needDestroy;
+        virtual public void markNeedDestroy()
+        {
+            _needDestroy = true;
+        }
+
         virtual protected ActorObjectConfig _getActorConf(string confname)
         {
             if(UnityGameApp.Inst.CharacterManager.CharacterConfs == null)
@@ -57,6 +64,8 @@ namespace UnityMiniGameFramework
                 this.AddComponent(_animatorComponent);
                 _animatorComponent.Init(conf.AnimatorConf);
             }
+
+            _needDestroy = false;
         }
 
         override protected void _onAddComponent(IGameObjectComponent comp)
@@ -80,9 +89,13 @@ namespace UnityMiniGameFramework
         }
         override public void OnPostUpdate(float timeElasped)
         {
-
-
             base.OnPostUpdate(timeElasped);
+
+            if(_needDestroy)
+            {
+                this.Dispose();
+                UnityEngine.GameObject.Destroy(_unityGameObject);
+            }
         }
     }
 }

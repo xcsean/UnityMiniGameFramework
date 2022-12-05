@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace MiniGameFramework
 {
-    public interface IGame
+    public interface IDataObject
     {
-        Task InitAsync();
+        bool isDirty { get; }
 
-        void OnStartSceneLoaded();
+        object getData();
+        void modifyData(object newData);
 
-        void OnMainSceneLoaded();
-
-        void OnUpdate();
+        void markDirty();
     }
 }
