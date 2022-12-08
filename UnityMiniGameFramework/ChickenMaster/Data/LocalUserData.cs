@@ -42,7 +42,9 @@ namespace UnityMiniGameFramework
         public int level { get; set; }
         public int exp { get; set; }
 
-        public LocalHeroInfo hero { get; set; }
+        public LocalHeroInfo selfHero { get; set; }
+
+        public List<LocalHeroInfo> defenseHeros { get; set; }
 
         public List<LocalBuildingInfo> buildings { get; set; }
         public List<LocalWeaponInfo> weapons { get; set; }

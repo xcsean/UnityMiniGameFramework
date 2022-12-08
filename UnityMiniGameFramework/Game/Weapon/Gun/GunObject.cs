@@ -68,7 +68,6 @@ namespace UnityMiniGameFramework
         protected VFXObjectBase _throwEmmiter;
         protected Dictionary<UnityEngine.GameObject, float> _emmiterHitObjectsTime;
 
-        protected float _maxRayLength;
         protected VFXLinerObject _rayVFX;
         protected VFXObjectBase _rayImpactVFX;
         protected UnityEngine.GameObject _currentRayHitObject;
@@ -76,6 +75,11 @@ namespace UnityMiniGameFramework
         protected UnityEngine.RaycastHit _currentHitPoint;
 
         protected float _hitForce;
+
+        protected float _attackRange;
+        public float attackRange => _attackRange;
+
+        static string[] _layers = new string[] { "Hitable", "Default", "Ground" };
 
         public GunObject()
         {
@@ -118,11 +122,11 @@ namespace UnityMiniGameFramework
             }
             
             _projectFlySpeed = _conf.FireConf.projectileFlySpeed.HasValue ? _conf.FireConf.projectileFlySpeed.Value : 10;
-            _maxRayLength = _conf.FireConf.maxRayLength.HasValue ? _conf.FireConf.maxRayLength.Value : 10;
             _gunPos = tr.gameObject;
             _name = _conf.name;
 
             _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 10;
+            _attackRange = _conf.FireConf.attackRange.HasValue ? _conf.FireConf.attackRange.Value : 5;
 
             if (_conf.AnimatorConf != null)
             {
@@ -363,10 +367,13 @@ namespace UnityMiniGameFramework
             VFXObjectBase[] curProjs = _currentProjectiles.ToArray();
             foreach (var proj in curProjs)
             {
-                if((proj.unityGameObject.transform.position - this.unityGameObject.transform.position).magnitude > 30)
+                if((proj.unityGameObject.transform.position - this.unityGameObject.transform.position).magnitude > _attackRange)
                 {
                     _currentProjectiles.Remove(proj);
                     UnityGameApp.Inst.VFXManager.onVFXDestory(proj);
+
+                    // TO DO : try explosive
+
                     continue;
                 }
                 proj.unityGameObject.transform.position = proj.unityGameObject.transform.position + proj.unityGameObject.transform.forward * _projectFlySpeed * UnityEngine.Time.deltaTime;  
@@ -375,7 +382,7 @@ namespace UnityMiniGameFramework
 
         virtual protected void _updatefireRay()
         {
-            if(_rayVFX == null)
+            if (_rayVFX == null)
             {
                 return;
             }
@@ -383,8 +390,8 @@ namespace UnityMiniGameFramework
             _currentRay.direction = _gunPos.transform.forward;
             _currentRay.origin = _gunPos.transform.position;
 
-            var rayLength = _maxRayLength;
-            if (UnityEngine.Physics.Raycast(_currentRay, out _currentHitPoint, _maxRayLength))
+            var rayLength = _attackRange;
+            if (UnityEngine.Physics.Raycast(_currentRay, out _currentHitPoint, _attackRange, UnityEngine.LayerMask.GetMask(_layers)))
             {
                 rayLength = UnityEngine.Vector3.Distance(_gunPos.transform.position, _currentHitPoint.point);
 
@@ -414,6 +421,11 @@ namespace UnityMiniGameFramework
             UnityEngine.GameObject[] keys = _emmiterHitObjectsTime.Keys.ToArray();
             foreach (var key in keys)
             {
+                if(key == null)
+                {
+                    continue;
+                }
+
                 var value = _emmiterHitObjectsTime[key];
                 if (UnityEngine.Time.time - value < _conf.FireConf.fireCdTime)
                 {

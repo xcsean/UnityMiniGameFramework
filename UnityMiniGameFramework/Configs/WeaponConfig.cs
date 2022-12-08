@@ -33,9 +33,9 @@ namespace UnityMiniGameFramework
 
         public float fireCdTime { get; set; }
 
-        public float? projectileFlySpeed { get; set; } // only in fireType=projectile case
+        public float? attackRange { get; set; }
 
-        public float? maxRayLength { get; set; } // only in fireType=ray case
+        public float? projectileFlySpeed { get; set; } // only in fireType=projectile case
 
         public float? hitForce { get; set; }
 

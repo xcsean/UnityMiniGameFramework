@@ -8,7 +8,7 @@ namespace UnityMiniGameFramework
 {
     public class CMShootingLevel : MapLevel
     {
-        UILevelEntryPanel _levelUI;
+        UILevelMainPanel _levelUI;
 
         public static CMShootingLevel create()
         {
@@ -19,7 +19,7 @@ namespace UnityMiniGameFramework
         {
             bool ret = base.Init(confName);
 
-            _levelUI = UnityGameApp.Inst.UI.getUIPanel("LevelEntryUI") as UILevelEntryPanel;
+            _levelUI = UnityGameApp.Inst.UI.getUIPanel("LevelMainUI") as UILevelMainPanel;
 
             return ret;
         }

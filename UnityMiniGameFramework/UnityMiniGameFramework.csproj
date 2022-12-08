@@ -102,13 +102,15 @@
     <Compile Include="ChickenMaster\Game\ChickenMasterGame.cs" />
     <Compile Include="ChickenMaster\Game\CMFactory.cs" />
     <Compile Include="ChickenMaster\Game\CMCombatComponent.cs" />
+    <Compile Include="ChickenMaster\Game\CMHeros.cs" />
+    <Compile Include="ChickenMaster\Game\CMNPCHeros.cs" />
     <Compile Include="ChickenMaster\Game\CMPackage.cs" />
-    <Compile Include="ChickenMaster\Game\CMSelfComponent.cs" />
     <Compile Include="ChickenMaster\Game\CMTrainStation.cs" />
     <Compile Include="ChickenMaster\Game\CMWeapon.cs" />
     <Compile Include="ChickenMaster\Levels\CMShootingLevel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UILevelEntryPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIControls\UILevelStateControl.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UILevelMainPanel.cs" />
     <Compile Include="Configs\CharacterConfig.cs" />
     <Compile Include="Configs\MapActorObjectConfigs.cs" />
     <Compile Include="Configs\MapConfig.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Game\Audio\AudioManager.cs" />
     <Compile Include="Game\Camera\UnityGameCamera.cs" />
     <Compile Include="Game\Controller\ActorControllerComponent.cs" />
+    <Compile Include="Game\Controller\AIState\AIGunFireTarget.cs" />
     <Compile Include="Game\Controller\AIState\AIState.cs" />
     <Compile Include="Game\Controller\AIState\AITrace.cs" />
     <Compile Include="Game\Controller\AIState\AITryAttack.cs" />
@@ -214,7 +217,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\UnityMiniGame\Assets\Libs\Plugin\MiniGameFramework
-copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\UnityMiniGame\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
+copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
   </PropertyGroup>
 </Project>

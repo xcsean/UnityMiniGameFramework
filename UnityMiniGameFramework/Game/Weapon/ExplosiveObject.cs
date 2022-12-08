@@ -65,6 +65,20 @@ namespace UnityMiniGameFramework
         private void onVFXDestory()
         {
             UnityGameApp.Inst.WeaponManager.onExplosiveDestory(this);
+
+            foreach (var obj in _hitedObjects)
+            {
+                var ugo = obj.GetComponent<UnityGameObjectBehaviour>();
+                if (ugo != null)
+                {
+                    var actor = ugo.mgGameObject as ActorObject;
+                    if (actor != null)
+                    {
+                        actor.OnDispose -= Actor_OnDispose;
+                    }
+                }
+            }
+            _hitedObjects = null;
         }
 
         public void onHitEnter(UnityEngine.Collider other)
@@ -76,10 +90,35 @@ namespace UnityMiniGameFramework
             }
 
             _hitedObjects.Add(other.gameObject);
+
+            var ugo = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if (ugo != null)
+            {
+                var actor = ugo.mgGameObject as ActorObject;
+                if (actor != null)
+                {
+                    actor.OnDispose += Actor_OnDispose; ;
+                }
+            }
         }
+
         public void onHitExit(UnityEngine.Collider other)
         {
             _hitedObjects.Remove(other.gameObject);
+
+            var ugo = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if (ugo != null)
+            {
+                var actor = ugo.mgGameObject as ActorObject;
+                if (actor != null)
+                {
+                    actor.OnDispose -= Actor_OnDispose;
+                }
+            }
+        }
+        private void Actor_OnDispose(GameObject obj)
+        {
+            _hitedObjects.Remove((obj as ActorObject).unityGameObject);
         }
 
         public void OnUpdate()
@@ -91,15 +130,20 @@ namespace UnityMiniGameFramework
 
             foreach(var obj in _hitedObjects)
             {
+                if (obj == null)
+                {
+                    continue;
+                }
+
                 var rigibody = obj.GetComponent<UnityEngine.Rigidbody>();
                 if (rigibody == null)
                 {
                     continue;
                 }
 
-                var vec = (obj.transform.position - _explosiveVFX.unityGameObject.transform.position).normalized;
-                vec.y += 0.3f;
-                rigibody.AddForce(vec.normalized * 100);
+                //var vec = (obj.transform.position - _explosiveVFX.unityGameObject.transform.position).normalized;
+                //vec.y += 0.3f;
+                //rigibody.AddForce(vec.normalized * 100);
             }
         }
     }

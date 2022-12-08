@@ -27,9 +27,23 @@ namespace UnityMiniGameFramework
         protected SelfControl _self;
         public SelfControl Self => _self;
 
+        protected Dictionary<string, CMNPCHeros> _cmNPCHeros;
+        public Dictionary<string, CMNPCHeros> cmNPCHeros => _cmNPCHeros;
+
+        protected IGameObject _levelCenterObject;
+        public IGameObject levelCenterObject => _levelCenterObject;
+
+        UIMainPanel _uiMainPanel;
+        public UIMainPanel uiMainPanel => _uiMainPanel;
+
+        UILevelMainPanel _uiLevelMainPanel;
+        public UILevelMainPanel uiLevelMainPanel => _uiLevelMainPanel;
+
+
         public ChickenMasterGame()
         {
             _self = new SelfControl();
+            _cmNPCHeros = new Dictionary<string, CMNPCHeros>();
         }
 
         public async Task InitAsync()
@@ -65,7 +79,7 @@ namespace UnityMiniGameFramework
                     gold = 100,
                     level = 1,
                     exp = 0,
-                    hero = new LocalHeroInfo()
+                    selfHero = new LocalHeroInfo()
                     {
                         mapHeroName = "testHero",
                         holdWeapon = new LocalWeaponInfo()
@@ -74,6 +88,7 @@ namespace UnityMiniGameFramework
                             level = 1,
                         }
                     },
+                    defenseHeros = new List<LocalHeroInfo>(),
                     buildings = new List<LocalBuildingInfo>(),
                     weapons = new List<LocalWeaponInfo>(),
                     backPackItems = new List<LocalPackItemInfo>()
@@ -98,12 +113,85 @@ namespace UnityMiniGameFramework
 
         public void OnMainSceneLoaded()
         {
+            // init self
             _self.Init();
+
+            // init npc heros
+            var bi = _baseInfo.getData() as LocalBaseInfo;
+            for (int i = 0; i < bi.defenseHeros.Count; ++i)
+            {
+                var cmHero = new CMNPCHeros();
+                cmHero.Init(bi.defenseHeros[i]);
+
+                _cmNPCHeros[cmHero.heroInfo.mapHeroName] = cmHero;
+            }
+
+            // init ui
+            _uiMainPanel = UnityGameApp.Inst.UI.getUIPanel("MainUI") as UIMainPanel;
+
+            var tr = UnityGameApp.Inst.MainScene.mapRoot.transform.Find(_gameConf.gameConfs.levelCenterObjectName);
+            if(tr == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Main Scene [{UnityGameApp.Inst.MainScene.name}] map root without level center object [{_gameConf.gameConfs.levelCenterObjectName}]");
+            }
+            else
+            {
+                var comp = tr.gameObject.GetComponent<UnityGameObjectBehaviour>();
+                if(comp == null)
+                {
+                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"Main Scene [{UnityGameApp.Inst.MainScene.name}] level center object [{_gameConf.gameConfs.levelCenterObjectName}] without UnityGameObjectBehaviour ");
+                }
+                else
+                {
+                    _levelCenterObject = comp.mgGameObject;
+                }
+            }
         }
 
         public void OnUpdate()
         {
             _self.OnUpdate();
+        }
+
+        public void InitUILevelMainPanel(string pannelName)
+        {
+            if (_uiLevelMainPanel == null)
+            {
+                // create level main UI
+                _uiLevelMainPanel = UnityGameApp.Inst.UI.createUIPanel(pannelName) as UILevelMainPanel;
+                if (_uiLevelMainPanel == null)
+                {
+                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"LevelMainUI panel config not exist");
+                    return;
+                }
+                _uiLevelMainPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            }
+        }
+
+        public void AddDefenseHero(string mapHeroName)
+        {
+            var heroConf = _gameConf.getCMHeroConf(mapHeroName);
+            if(heroConf == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"AddDefenseHero [{mapHeroName}] config not exist");
+                return;
+            }
+
+            LocalHeroInfo heroInfo = new LocalHeroInfo()
+            {
+                mapHeroName = mapHeroName,
+                position = null,
+                holdWeapon = null,
+            };
+
+            var cmHero = new CMNPCHeros();
+            cmHero.Init(heroInfo);
+
+            _cmNPCHeros[cmHero.heroInfo.mapHeroName] = cmHero;
+
+            // modify data
+            (_baseInfo.getData() as LocalBaseInfo).defenseHeros.Add(cmHero.heroInfo);
+            _baseInfo.markDirty();
         }
     }
 }

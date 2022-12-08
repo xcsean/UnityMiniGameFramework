@@ -33,6 +33,7 @@ namespace UnityMiniGameFramework
         protected Dictionary<string, SpawnPos> _namedBornPos;
 
         protected Dictionary<string, MapMonsterSpawn> _monsterSpawns;
+        public Dictionary<string, MapMonsterSpawn> monsterSpawns => _monsterSpawns;
 
 
         public Map()
@@ -169,6 +170,7 @@ namespace UnityMiniGameFramework
         {
             if(_randBornPos.Count <= 0)
             {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] random pos count <= 0");
                 return new UnityEngine.Vector3(0, 0, 0);
             }
 
@@ -181,6 +183,7 @@ namespace UnityMiniGameFramework
         {
             if (!_namedBornPos.ContainsKey(name))
             {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] named born pos [{name}] not exist");
                 return new UnityEngine.Vector3(0, 0, 0);
             }
 

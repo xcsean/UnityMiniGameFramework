@@ -18,9 +18,24 @@ namespace UnityMiniGameFramework
         public AttackConf attack { get; set; }
     }
 
+    public class CMHeroConf
+    {
+        public string mapHeroName { get; set; }
+        public int initGunId { get; set; }
+        public int initGunLevel { get; set; }
+        public string initSpawnPosName { get; set; }
+        public CombatConf combatConf { get; set; }
+
+        public MapMonsterAIConf ai { get; set; }
+    }
+
     public class CMGameConf
     {
+        public string levelCenterObjectName { get; set; }
+
         public Dictionary<int, CMGunConf> gunConfs { get; set; }
+
+        public Dictionary<string, CMHeroConf> heros { get; set; }
 
         public CombatConf selfCombatConf { get; set; }
     }
@@ -47,6 +62,15 @@ namespace UnityMiniGameFramework
                 return null;
             }
             return gameConfs.gunConfs[cmGunID];
+        }
+
+        public CMHeroConf getCMHeroConf(string mapHeroName)
+        {
+            if (gameConfs.heros == null || !gameConfs.heros.ContainsKey(mapHeroName))
+            {
+                return null;
+            }
+            return gameConfs.heros[mapHeroName];
         }
     }
 }

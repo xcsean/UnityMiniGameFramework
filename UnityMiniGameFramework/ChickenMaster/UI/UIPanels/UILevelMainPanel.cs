@@ -1,0 +1,63 @@
+﻿using MiniGameFramework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine.UIElements;
+
+namespace UnityMiniGameFramework
+{
+    public class UILevelMainPanel : UIPanel
+    {
+        override public string type => "UILevelMainPanel";
+        public static UILevelMainPanel create()
+        {
+            return new UILevelMainPanel();
+        }
+
+        protected Button _nextLevelBtn;
+
+        protected UILevelStateControl _levelStateControl;
+        public UILevelStateControl levelStateControl => _levelStateControl;
+
+        override public void Init(UIPanelConf conf)
+        {
+            base.Init(conf);
+
+            _nextLevelBtn = this._uiObjects["NextLevelBtn"].unityVisualElement as Button;
+            _nextLevelBtn.RegisterCallback<MouseUpEvent>(onNextLevelClick);
+
+            _nextLevelBtn = this._uiObjects["QuitBtn"].unityVisualElement as Button;
+            _nextLevelBtn.RegisterCallback<MouseUpEvent>(onQuitLevelClick);
+
+            _levelStateControl = this._uiObjects["LevelStates"] as UILevelStateControl;
+        }
+
+        public void onNextLevelClick(MouseUpEvent e)
+        {
+            if (UnityGameApp.Inst.MainScene.map.currentLevel == null)
+            {
+                var level = UnityGameApp.Inst.MainScene.map.CreateLevel("testLevel");
+                if (level != null)
+                {
+                    level.Start();
+                }
+            }
+            else if (!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
+            {
+                UnityGameApp.Inst.MainScene.map.currentLevel.Start();
+            }
+        }
+        public void onQuitLevelClick(MouseUpEvent e)
+        {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+
+            cmGame.uiLevelMainPanel.hideUI();
+            cmGame.uiMainPanel.showUI();
+
+            UnityGameApp.Inst.MainScene.camera.follow(cmGame.Self.mapHero);
+        }
+
+    }
+}

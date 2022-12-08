@@ -46,6 +46,10 @@ namespace UnityMiniGameFramework
                 return null;
             }
             _mapBuildingConf = UnityGameApp.Inst.MapManager.MapConf.getMapBuildingConf(confname);
+            if(_mapBuildingConf == null)
+            {
+                return null;
+            }
 
             if (UnityGameApp.Inst.CharacterManager.CharacterConfs == null)
             {

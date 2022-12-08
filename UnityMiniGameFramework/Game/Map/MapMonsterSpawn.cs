@@ -17,6 +17,7 @@ namespace UnityMiniGameFramework
         public bool isSpawning => _isSpawning;
 
         protected List<MapMonsterObject> _monsters;
+        public List<MapMonsterObject> monsters => _monsters;
 
         protected MonsterSpawnConf _conf;
         protected MapMonsterObjectConf _monConf;

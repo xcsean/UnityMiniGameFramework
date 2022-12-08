@@ -18,58 +18,47 @@ namespace UnityMiniGameFramework
 
         protected Button _startLevelBtn;
 
-        protected UILevelStateControl _levelStateControl;
-        public UILevelStateControl levelStateControl => _levelStateControl;
-
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
 
             _startLevelBtn = this._uiObjects["StartLevel"].unityVisualElement as Button;
             _startLevelBtn.RegisterCallback<MouseUpEvent>(onStartLevelClick);
-
-            _levelStateControl = this._uiObjects["LevelStates"] as UILevelStateControl;
         }
 
 
         public void onStartLevelClick(MouseUpEvent e)
         {
-            if(UnityGameApp.Inst.MainScene.map.currentLevel == null)
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            if(cmGame.uiLevelMainPanel == null)
             {
-                var level = UnityGameApp.Inst.MainScene.map.CreateLevel("testLevel");
-                if(level != null)
-                {
-                    level.Start();
-                    _showInLevelStatus(true);
-                }
-            }
-            else if(!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
-            {
-                UnityGameApp.Inst.MainScene.map.currentLevel.Start();
-                _showInLevelStatus(true);
+                cmGame.InitUILevelMainPanel("LevelMainUI");
             }
 
+            cmGame.uiMainPanel.hideUI();
+            this.hideUI();
+            cmGame.uiLevelMainPanel.showUI();
+
+            if(cmGame.levelCenterObject != null)
+            {
+                UnityGameApp.Inst.MainScene.camera.follow(cmGame.levelCenterObject);
+            }
+
+            _initCMNPCHeros();
         }
 
-        protected void _showInLevelStatus(bool bshow)
+        protected void _initCMNPCHeros()
         {
-            if(bshow)
+            // for Debug ...
+            // give 4 hero
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            if (cmGame.cmNPCHeros.Count <= 0)
             {
-                _levelStateControl.unityVisualElement.style.visibility = Visibility.Visible;
-                _startLevelBtn.style.visibility = Visibility.Hidden;
+                cmGame.AddDefenseHero("Alice");
+                cmGame.AddDefenseHero("Bob");
+                cmGame.AddDefenseHero("Charlie");
+                cmGame.AddDefenseHero("Don");
             }
-            else
-            {
-                _levelStateControl.unityVisualElement.style.visibility = Visibility.Hidden;
-                _startLevelBtn.style.visibility = Visibility.Visible;
-            }
-        }
-
-        public override void showUI()
-        {
-            base.showUI();
-
-            _showInLevelStatus(UnityGameApp.Inst.MainScene.map.currentLevel != null && UnityGameApp.Inst.MainScene.map.currentLevel.isStarted);
         }
     }
 }
