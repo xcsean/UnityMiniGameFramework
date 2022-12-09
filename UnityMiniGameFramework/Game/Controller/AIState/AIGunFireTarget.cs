@@ -75,8 +75,12 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
+            if (_actor.actionComponent.hasState(ActStates.STATE_KEY_NO_ATK))
+            {
+                return;
+            }
 
-            if(_currentTargetMon == null)
+            if (_currentTargetMon == null)
             {
                 // try seek monster
                 _seekTargetMonster();

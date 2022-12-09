@@ -21,12 +21,53 @@ namespace UnityMiniGameFramework
     public class CMHeroConf
     {
         public string mapHeroName { get; set; }
+        public int userLevelRequire { get; set; }
         public int initGunId { get; set; }
         public int initGunLevel { get; set; }
         public string initSpawnPosName { get; set; }
         public CombatConf combatConf { get; set; }
 
         public MapMonsterAIConf ai { get; set; }
+    }
+
+    public class CMProductMakerConf
+    {
+        public int factoryLevelRequire { get; set; }
+        public string inputProductName { get; set; }
+        public string outputProductName { get; set; }
+
+        public int costInputCount { get; set; }
+        public int produceOutputCount { get; set; }
+
+
+        public int costInputCountAddPerLevel { get; set; }
+        public int produceOutputCountAddPerLevel { get; set; }
+    }
+
+    public class CMFactoryConf
+    {
+        public string mapBuildName { get; set; }
+        public int userLevelRequire { get; set; }
+
+        public int maxInputProductStore { get; set; }
+        public int maxOutputProductStore { get; set; }
+        public float produceCD { get; set; }
+
+        public int maxInputProductStoreAddPerLevel { get; set; }
+        public int maxOutputProductStoreAddPerLevel { get; set; }
+
+        public float produceCDAddPerLevel { get; set; }
+
+
+        public List<CMProductMakerConf> productMaker { get; set; }
+    }
+
+    public class CMProductConf
+    {
+        public string productName { get; set; }
+
+        public int price { get; set; } 
+
     }
 
     public class CMGameConf
@@ -37,7 +78,13 @@ namespace UnityMiniGameFramework
 
         public Dictionary<string, CMHeroConf> heros { get; set; }
 
+        public Dictionary<string, CMFactoryConf> factories { get; set; }
+
+        public Dictionary<string, CMProductConf> products { get; set; }
+
         public CombatConf selfCombatConf { get; set; }
+
+
     }
 
     public class CMGameConfig : JsonConfig
@@ -71,6 +118,22 @@ namespace UnityMiniGameFramework
                 return null;
             }
             return gameConfs.heros[mapHeroName];
+        }
+        public CMFactoryConf getCMFactoryConf(string mapBuildingName)
+        {
+            if (gameConfs.factories == null || !gameConfs.factories.ContainsKey(mapBuildingName))
+            {
+                return null;
+            }
+            return gameConfs.factories[mapBuildingName];
+        }
+        public CMProductConf getCMProductConf(string productName)
+        {
+            if (gameConfs.products == null || !gameConfs.products.ContainsKey(productName))
+            {
+                return null;
+            }
+            return gameConfs.products[productName];
         }
     }
 }

@@ -8,19 +8,19 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    public class LocalPackItemInfo
+    public class LocalPackProductInfo
     {
-        public int itemId { get; set; }
+        public string productName { get; set; }
         public int count { get; set; }
     }
 
-    public class LocalBuildingInfo
+    public class LocalFactoryInfo
     {
-        public int id { get; set; }
+        public string mapBuildName { get; set; }
         public int level { get; set; }
 
-        public List<LocalPackItemInfo> buildingInputItems { get; set; }
-        public List<LocalPackItemInfo> buildingOutputItems { get; set; }
+        public List<LocalPackProductInfo> buildingInputProducts { get; set; }
+        public List<LocalPackProductInfo> buildingOutputProducts { get; set; }
     }
 
     public class LocalWeaponInfo
@@ -46,10 +46,10 @@ namespace UnityMiniGameFramework
 
         public List<LocalHeroInfo> defenseHeros { get; set; }
 
-        public List<LocalBuildingInfo> buildings { get; set; }
         public List<LocalWeaponInfo> weapons { get; set; }
 
-        public List<LocalPackItemInfo> backPackItems { get; set; }
+        public List<LocalFactoryInfo> factories { get; set; }
+        public List<LocalPackProductInfo> backPackItems { get; set; }
     }
 
     public class LocalUserInfo

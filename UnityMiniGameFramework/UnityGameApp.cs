@@ -156,6 +156,8 @@ namespace UnityMiniGameFramework
 
         protected Queue<Action> _nextFramePostUpdateCall;
 
+        protected HashSet<Action> _updateCall;
+
         public void regNextFramePostUpdateCall(Action a)
         {
             _nextFramePostUpdateCall.Enqueue(a);
@@ -168,6 +170,14 @@ namespace UnityMiniGameFramework
                 a.Invoke();
             }
         }
+        public void addUpdateCall(Action a)
+        {
+            _updateCall.Add(a);
+        }
+        public void removeUpdateCall(Action a)
+        {
+            _updateCall.Remove(a);
+        }
 
         override public bool Init(GameAPPInitParameter par)
         {
@@ -176,6 +186,7 @@ namespace UnityMiniGameFramework
             GameApp.CreatGame = ChickenMasterGame.create;
 
             _nextFramePostUpdateCall = new Queue<Action>();
+            _updateCall = new HashSet<Action>();
 
             // os implement assignment
             _file = new UnityProjFileSystem();
@@ -197,6 +208,11 @@ namespace UnityMiniGameFramework
 
             _vfxManager.OnUpdate(UnityEngine.Time.deltaTime);
             _weaponManager.OnUpdate(UnityEngine.Time.deltaTime);
+
+            foreach(var a in _updateCall)
+            {
+                a();
+            }
         }
 
 
@@ -324,11 +340,14 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UIUpgradePanel", UIUpgradePanel.create);
             _ui.regUIPanelCreator("UILevelEntryPanel", UILevelEntryPanel.create);
             _ui.regUIPanelCreator("UILevelMainPanel", UILevelMainPanel.create);
+            _ui.regUIPanelCreator("UIFactory1Panel", UIFactory1Panel.create);
+            _ui.regUIPanelCreator("UIFactory2Panel", UIFactory2Panel.create);
 
             // reg ui control creator
             _ui.regUIObjectCreator("UIObject", UIObject.create);
             _ui.regUIObjectCreator("UIJoyStickControl", UIJoyStickControl.create);
             _ui.regUIObjectCreator("UILevelStateControl", UILevelStateControl.create);
+            _ui.regUIObjectCreator("UIFactoryControl", UIFactoryControl.create);
         }
 
         protected void _initNetwork()

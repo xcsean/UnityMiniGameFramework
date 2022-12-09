@@ -21,11 +21,16 @@ namespace UnityMiniGameFramework
         protected UIJoyStickControl _joystick;
         public UIJoyStickControl Joystick => _joystick;
 
+        protected Label _meatNum;
+        public Label meatNum => _meatNum;
+
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
 
             _joystick = this._uiObjects["JoyStick"] as UIJoyStickControl;
+            _meatNum = this._uiObjects["MeatNum"].unityVisualElement as Label;
+            
         }
     }
 }

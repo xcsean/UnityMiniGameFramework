@@ -104,6 +104,11 @@ namespace UnityMiniGameFramework
             return false;
         }
 
+        virtual public void OnMonsterDie(MapMonsterObject mon)
+        {
+
+        }
+
         virtual public void OnUpdate(float timeElasped)
         {
             if(!_isStarted)

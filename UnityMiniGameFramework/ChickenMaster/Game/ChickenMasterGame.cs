@@ -89,9 +89,9 @@ namespace UnityMiniGameFramework
                         }
                     },
                     defenseHeros = new List<LocalHeroInfo>(),
-                    buildings = new List<LocalBuildingInfo>(),
                     weapons = new List<LocalWeaponInfo>(),
-                    backPackItems = new List<LocalPackItemInfo>()
+                    factories = new List<LocalFactoryInfo>(),
+                    backPackItems = new List<LocalPackProductInfo>()
                 };
                 _baseInfo = new DataObject(baseInfo);
                 _baseInfo.markDirty();
@@ -192,6 +192,31 @@ namespace UnityMiniGameFramework
             // modify data
             (_baseInfo.getData() as LocalBaseInfo).defenseHeros.Add(cmHero.heroInfo);
             _baseInfo.markDirty();
+        }
+
+        public LocalFactoryInfo GetLocalFactoryInfo(string factoryName)
+        {
+            var baseInfo = _baseInfo.getData() as LocalBaseInfo;
+            for (int i=0; i< baseInfo.factories.Count; ++i)
+            {
+                var fac = baseInfo.factories[i];
+                if(fac.mapBuildName == factoryName)
+                {
+                    return fac;
+                }
+            }
+
+            return null;
+        }
+
+        public LocalFactoryInfo AddLocalFactoryInfo(LocalFactoryInfo fac)
+        {
+            var baseInfo = _baseInfo.getData() as LocalBaseInfo;
+            baseInfo.factories.Add(fac);
+
+            _baseInfo.markDirty();
+
+            return fac;
         }
     }
 }

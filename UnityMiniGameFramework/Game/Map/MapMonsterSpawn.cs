@@ -135,6 +135,7 @@ namespace UnityMiniGameFramework
             var combatComp = new CMCombatComponent();
             mapMonsterObj.AddComponent(combatComp);
             combatComp.Init(_monConf.combat);
+            combatComp.OnDie = MapMonsterObj_OnDie;
 
             // for Debug ...
             // trace and attack
@@ -156,6 +157,14 @@ namespace UnityMiniGameFramework
             _monsters.Add(mapMonsterObj);
 
             ++_totalSpawned;
+        }
+
+        private void MapMonsterObj_OnDie(ActorObject mon)
+        {
+            if(_map.currentLevel != null)
+            {
+                (_map.currentLevel as MapLevel).OnMonsterDie(mon as MapMonsterObject);
+            }
         }
 
         private void MapMonsterObj_OnDispose(GameObject obj)

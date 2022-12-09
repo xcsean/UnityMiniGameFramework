@@ -48,6 +48,8 @@ namespace UnityMiniGameFramework
 
         protected int _Def;
 
+        public Action<ActorObject> OnDie;
+
         public override void Init(object config)
         {
             base.Init(config);
@@ -129,6 +131,11 @@ namespace UnityMiniGameFramework
             if (_HP <= 0)
             {
                 _onDie(weapon);
+
+                if (OnDie != null)
+                {
+                    OnDie(_gameObject as ActorObject);
+                }
             }
         }
 

@@ -30,6 +30,10 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
+            if (_actor.actionComponent.hasState(ActStates.STATE_KEY_NO_ATK))
+            {
+                return;
+            }
 
             var dist = _traceTarget.transform.position - _actor.unityGameObject.transform.position;
             if(dist.magnitude < _attackRange)

@@ -30,5 +30,14 @@ namespace UnityMiniGameFramework
 
             _levelUI.levelStateControl.timeLeftText.text = this.timeLeft.ToString();
         }
+
+
+        override public void OnMonsterDie(MapMonsterObject mon)
+        {
+            // TO DO : read drop from config and do drop
+
+            // for Debug ...
+            (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackProduct("meat", 10);
+        }
     }
 }

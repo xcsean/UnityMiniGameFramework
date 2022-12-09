@@ -251,22 +251,102 @@ namespace UnityMiniGameFramework
 
                 _cmGame.baseInfo.markDirty();
 
-                // for Debug ...
-                if (_gun != null)
-                {
-                    _gun.Fire();
-                }
+                //// for Debug ...
+                //if (_gun != null)
+                //{
+                //    _gun.Fire();
+                //}
             }
             else if(_mapHeroObj.moveAct.isMoving)
             {
                 _mapHeroObj.moveAct.stop();
 
-                // for Debug ...
-                if (_gun != null)
+                //// for Debug ...
+                //if (_gun != null)
+                //{
+                //    _gun.StopFire();
+                //}
+            }
+
+            var meatInfo = GetBackpackProductInfo("meat");
+            if(meatInfo != null)
+            {
+                _cmGame.uiMainPanel.meatNum.text = $"Meat: {meatInfo.count}";
+            }
+        }
+
+        public void AddBackpackProduct(string name, int count)
+        {
+            LocalPackProductInfo toAddItem = null;
+            for(int i=0; i< _baseInfo.backPackItems.Count; ++i)
+            {
+                var item = _baseInfo.backPackItems[i];
+                if (item.productName == name)
                 {
-                    _gun.StopFire();
+                    toAddItem = item;
+                    break;
                 }
             }
+
+            if(toAddItem != null)
+            {
+                toAddItem.count += count;
+            }
+            else
+            {
+                _baseInfo.backPackItems.Add(new LocalPackProductInfo()
+                {
+                    productName = name,
+                    count = count
+                }); 
+            }
+
+            _cmGame.baseInfo.markDirty();
+        }
+
+        public int SubBackpackProduct(string name, int count)
+        {
+            LocalPackProductInfo toSubItem = null;
+            for (int i = 0; i < _baseInfo.backPackItems.Count; ++i)
+            {
+                var item = _baseInfo.backPackItems[i];
+                if (item.productName == name)
+                {
+                    toSubItem = item;
+                    break;
+                }
+            }
+
+            if(toSubItem == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"SubBackpackProduct [{name}] not exist");
+                return 0;
+            }
+
+            _cmGame.baseInfo.markDirty();
+
+            if (toSubItem.count >= count)
+            {
+                toSubItem.count -= count;
+                return count;
+            }
+
+            toSubItem.count = 0;
+            return toSubItem.count;
+        }
+
+        public LocalPackProductInfo GetBackpackProductInfo(string name)
+        {
+            for (int i = 0; i < _baseInfo.backPackItems.Count; ++i)
+            {
+                var item = _baseInfo.backPackItems[i];
+                if (item.productName == name)
+                {
+                    return item;
+                }
+            }
+
+            return null;
         }
     }
 }
