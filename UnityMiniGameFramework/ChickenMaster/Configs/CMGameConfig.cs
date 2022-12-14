@@ -25,9 +25,13 @@ namespace UnityMiniGameFramework
         public int initGunId { get; set; }
         public int initGunLevel { get; set; }
         public string initSpawnPosName { get; set; }
+
+        public int activateGoldCost { get; set; }
+        public Dictionary<int, int> upgradeGoldCostPerLevel { get; set; }
+
         public CombatConf combatConf { get; set; }
 
-        public MapMonsterAIConf ai { get; set; }
+        public List<MapConfAIState> aiStates { get; set; }
     }
 
     public class CMProductMakerConf
@@ -58,6 +62,8 @@ namespace UnityMiniGameFramework
 
         public float produceCDAddPerLevel { get; set; }
 
+        public int activateGoldCost { get; set; }
+        public Dictionary<int, int> upgradeGoldCostPerLevel { get; set; }
 
         public List<CMProductMakerConf> productMaker { get; set; }
     }
@@ -84,7 +90,7 @@ namespace UnityMiniGameFramework
 
         public CombatConf selfCombatConf { get; set; }
 
-
+        public Dictionary<int, int> levelUpExpRequire { get; set; }
     }
 
     public class CMGameConfig : JsonConfig
@@ -134,6 +140,14 @@ namespace UnityMiniGameFramework
                 return null;
             }
             return gameConfs.products[productName];
+        }
+        public int getLevelUpExpRequire(int currentLevel)
+        {
+            if (gameConfs.levelUpExpRequire == null || !gameConfs.levelUpExpRequire.ContainsKey(currentLevel))
+            {
+                return 0;
+            }
+            return gameConfs.levelUpExpRequire[currentLevel];
         }
     }
 }

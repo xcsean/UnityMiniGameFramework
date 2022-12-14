@@ -129,23 +129,22 @@ namespace UnityMiniGameFramework
 
             var aiControlComp = new AIActorControllerComp();
             mapMonsterObj.AddComponent(aiControlComp);
-            aiControlComp.Init(_monConf.ai); // TO DO : add config
-
+            aiControlComp.Init(_monConf.aiStates); // TO DO : add config
 
             var combatComp = new CMCombatComponent();
             mapMonsterObj.AddComponent(combatComp);
             combatComp.Init(_monConf.combat);
             combatComp.OnDie = MapMonsterObj_OnDie;
 
-            // for Debug ...
-            // trace and attack
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            var traceAi = new AITrace(mapMonsterObj);
-            traceAi.setTraceTarget(cmGame.Self.selfMapHero.unityGameObject);
-            aiControlComp.AddAIState(traceAi);
-            var tryAttackAi = new AITryAttack(mapMonsterObj);
-            tryAttackAi.setTraceTarget(cmGame.Self.selfMapHero.unityGameObject);
-            aiControlComp.AddAIState(tryAttackAi);
+            //// for Debug ...
+            //// trace and attack
+            //var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            //var traceAi = new AITrace(mapMonsterObj);
+            //traceAi.setTraceTarget(cmGame.Self.selfMapHero.unityGameObject);
+            //aiControlComp.AddAIState(traceAi);
+            //var tryAttackAi = new AITryAttack(mapMonsterObj);
+            //tryAttackAi.setTraceTarget(cmGame.Self.selfMapHero.unityGameObject);
+            //aiControlComp.AddAIState(tryAttackAi);
 
             // add to scene
             unityMonsterObj.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);

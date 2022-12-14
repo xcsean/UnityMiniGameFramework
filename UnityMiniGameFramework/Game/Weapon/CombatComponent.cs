@@ -50,6 +50,8 @@ namespace UnityMiniGameFramework
 
         public Action<ActorObject> OnDie;
 
+        protected bool _isDie;
+
         public override void Init(object config)
         {
             base.Init(config);
@@ -67,6 +69,7 @@ namespace UnityMiniGameFramework
             _hpBar = new HealthBar();
             _hpBar.Init();
 
+            _isDie = false;
             // TO DO : init hp bar from config
 
         }
@@ -95,6 +98,11 @@ namespace UnityMiniGameFramework
 
         virtual public void OnHitby(WeaponObject weapon)
         {
+            if(_isDie)
+            {
+                return;
+            }
+
             // check missing
             var missed = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
             if(missed < weapon.attackInfo.missingRate * 10000)
@@ -130,6 +138,8 @@ namespace UnityMiniGameFramework
 
             if (_HP <= 0)
             {
+                _isDie = true;
+
                 _onDie(weapon);
 
                 if (OnDie != null)

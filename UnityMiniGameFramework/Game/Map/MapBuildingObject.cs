@@ -21,15 +21,25 @@ namespace UnityMiniGameFramework
 
         private void OnTriggerEnter(UnityEngine.Collider other)
         {
-            _mapBuilding.OnTriggerEnter(other);
+            if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+            {
+                return;
+            }
+
+            _mapBuilding.OnTriggerEnter(this.gameObject.name, other);
         }
         private void OnTriggerExit(UnityEngine.Collider other)
         {
-            _mapBuilding.OnTriggerExit(other);
+            if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+            {
+                return;
+            }
+
+            _mapBuilding.OnTriggerExit(this.gameObject.name, other);
         }
     }
 
-    class MapBuildingObject : MapActorObject
+    public class MapBuildingObject : MapActorObject
     {
         protected MapBuildObjectConf _mapBuildingConf;
         protected UIPanel _buildingUIPanel;
@@ -72,37 +82,46 @@ namespace UnityMiniGameFramework
             }
         }
 
-        public void OnTriggerEnter(UnityEngine.Collider other)
+        public void OnTriggerEnter(string triggerObjectName, UnityEngine.Collider other)
         {
             var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
             if(comp != null && comp.mgGameObject.type == "MapHeroObject")
             {
                 // player
-
-                if (_buildingUIPanel == null)
+                if(_mapBuildingConf.uiPanelName != null)
                 {
-                    // create UI
-                    _buildingUIPanel = UnityGameApp.Inst.UI.createUIPanel(_mapBuildingConf.uiPanelName) as UIPanel;
                     if (_buildingUIPanel == null)
                     {
-                        Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map Building [{_name}] without ui panel [{_mapBuildingConf.uiPanelName}]");
-                        return;
+                        // create UI
+                        _buildingUIPanel = UnityGameApp.Inst.UI.createUIPanel(_mapBuildingConf.uiPanelName) as UIPanel;
+                        if (_buildingUIPanel == null)
+                        {
+                            Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map Building [{_name}] without ui panel [{_mapBuildingConf.uiPanelName}]");
+                            return;
+                        }
+                        _buildingUIPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
                     }
-                    _buildingUIPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+
+                    _buildingUIPanel.showUI();
                 }
-
-                _buildingUIPanel.showUI();
             }
+
+            (UnityGameApp.Inst.MainScene.map as Map).OnMapBuildingTriggerEnter(triggerObjectName, this, other);
         }
-        public void OnTriggerExit(UnityEngine.Collider other)
+        public void OnTriggerExit(string triggerObjectName, UnityEngine.Collider other)
         {
-            var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
-            if (comp != null && comp.mgGameObject.type == "MapHeroObject")
+            if(_buildingUIPanel != null)
             {
-                // player
+                var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+                if (comp != null && comp.mgGameObject.type == "MapHeroObject")
+                {
+                    // player
 
-                _buildingUIPanel.hideUI();
+                    _buildingUIPanel.hideUI();
+                }
             }
+
+            (UnityGameApp.Inst.MainScene.map as Map).OnMapBuildingTriggerExit(triggerObjectName, this, other);
         }
     }
 }

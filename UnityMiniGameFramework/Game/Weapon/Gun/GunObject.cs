@@ -125,7 +125,7 @@ namespace UnityMiniGameFramework
             _gunPos = tr.gameObject;
             _name = _conf.name;
 
-            _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 10;
+            _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 0;
             _attackRange = _conf.FireConf.attackRange.HasValue ? _conf.FireConf.attackRange.Value : 5;
 
             if (_conf.AnimatorConf != null)
@@ -288,6 +288,7 @@ namespace UnityMiniGameFramework
                 var explosiveObj = UnityGameApp.Inst.WeaponManager.CreateExplosiveObject(_conf.FireConf.collideExplosive);
                 if(explosiveObj.explosiveVFX != null)
                 {
+                    explosiveObj.setGunObject(this);
                     explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                     explosiveObj.explosiveVFX.unityGameObject.transform.position = contact.point;
                     explosiveObj.explosiveVFX.unityGameObject.transform.forward = contact.normal;

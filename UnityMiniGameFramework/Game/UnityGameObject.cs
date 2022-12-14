@@ -17,6 +17,7 @@ namespace UnityMiniGameFramework
         protected MGGameObject _mgGameObject;
         public MGGameObject mgGameObject => _mgGameObject;
 
+
         public UnityGameObjectBehaviour()
         {
         }
@@ -30,6 +31,7 @@ namespace UnityMiniGameFramework
         
         protected virtual void Start()
         {
+            _mgGameObject.PostInit();
         }
 
         protected virtual void Update()

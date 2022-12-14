@@ -18,7 +18,7 @@ namespace UnityMiniGameFramework
 
         public RigibodyDieAct(ActorObject actor) : base(actor)
         {
-            _dieTime = 3.0f; // for Debug ...
+            _dieTime = 0.5f; // for Debug ...
         }
         override public bool checkStartCondition()
         {
@@ -55,6 +55,20 @@ namespace UnityMiniGameFramework
                 _dieTime -= UnityEngine.Time.deltaTime;
                 if(_dieTime <= 0)
                 {
+                    // remove colliders
+                    var collider = _actor.unityGameObject.GetComponent<UnityEngine.Collider>();
+                    if (collider != null)
+                    {
+                        UnityEngine.GameObject.Destroy(collider);
+                    }
+
+                    // remove rigibody
+                    var rigiBody = _actor.unityGameObject.GetComponent<UnityEngine.Rigidbody>();
+                    if (rigiBody != null)
+                    {
+                        UnityEngine.GameObject.Destroy(rigiBody);
+                    }
+
                     _isFinished = true;
                     _actor.markNeedDestroy();
                 }

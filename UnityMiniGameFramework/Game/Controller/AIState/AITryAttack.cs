@@ -8,6 +8,11 @@ namespace UnityMiniGameFramework
 {
     public class AITryAttack : AIState
     {
+        public static AITryAttack create(ActorObject actor)
+        {
+            return new AITryAttack(actor);
+        }
+
         protected UnityEngine.GameObject _traceTarget;
         protected AttackAct _attackAct;
 
@@ -16,7 +21,24 @@ namespace UnityMiniGameFramework
         public AITryAttack(ActorObject actor) : base(actor)
         {
             _attackAct = new AttackAct(actor);
-            _attackRange = 1.0f; // TO DO : read from config
+            _attackRange = 1.0f; // TO DO : use actor attack range config
+        }
+
+        public override void Init(MapConfAIState conf)
+        {
+            base.Init(conf);
+
+            if (conf.targetName == null)
+            {
+                // trace self
+                // TO DO : remove cmGame, use UnityGameApp.Inst.Game
+                var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                setTraceTarget(cmGame.Self.selfMapHero.unityGameObject);
+            }
+            else
+            {
+                // TO DO: trace target name object
+            }
         }
 
         public void setTraceTarget(UnityEngine.GameObject unityGameObj)

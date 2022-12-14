@@ -35,11 +35,18 @@ namespace UnityMiniGameFramework
 
         protected float _startTime;
         protected float _endTime;
+
+        protected GunObject _gunObjFrom;
         // TO DO : 
 
         public ExplosiveObject()
         {
             _hitedObjects = new HashSet<UnityEngine.GameObject>();
+        }
+
+        public void setGunObject(GunObject obj)
+        {
+            _gunObjFrom = obj;
         }
 
         public bool Init(ExplosiveConf conf)
@@ -94,6 +101,12 @@ namespace UnityMiniGameFramework
             var ugo = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
             if (ugo != null)
             {
+                var combComp = ugo.mgGameObject.getComponent("CombatComponent") as CombatComponent;
+                if (combComp != null)
+                {
+                    combComp.OnHitby(_gunObjFrom);
+                }
+
                 var actor = ugo.mgGameObject as ActorObject;
                 if (actor != null)
                 {

@@ -16,6 +16,8 @@ namespace UnityMiniGameFramework
 
         public MapHeroObject selfMapHero => _mapHeroObj;
 
+        public int userLevel => _baseInfo.level;
+
         public SelfControl()
         {
             _isInited = false;
@@ -267,12 +269,6 @@ namespace UnityMiniGameFramework
                 //    _gun.StopFire();
                 //}
             }
-
-            var meatInfo = GetBackpackProductInfo("meat");
-            if(meatInfo != null)
-            {
-                _cmGame.uiMainPanel.meatNum.text = $"Meat: {meatInfo.count}";
-            }
         }
 
         public void AddBackpackProduct(string name, int count)
@@ -302,6 +298,8 @@ namespace UnityMiniGameFramework
             }
 
             _cmGame.baseInfo.markDirty();
+
+            _cmGame.uiMainPanel.refreshMeat();
         }
 
         public int SubBackpackProduct(string name, int count)
@@ -332,6 +330,9 @@ namespace UnityMiniGameFramework
             }
 
             toSubItem.count = 0;
+
+            _cmGame.uiMainPanel.refreshMeat();
+
             return toSubItem.count;
         }
 
@@ -347,6 +348,73 @@ namespace UnityMiniGameFramework
             }
 
             return null;
+        }
+
+        public bool TrySubGold(int gold)
+        {
+            if(gold<=0)
+            {
+                return false;
+            }
+
+            if(_baseInfo.gold < gold)
+            {
+                return false;
+            }
+
+            _baseInfo.gold -= gold;
+
+            _cmGame.baseInfo.markDirty();
+
+            _cmGame.uiMainPanel.refreshGold(_baseInfo.gold);
+
+            return true;
+        }
+        public void AddGold(int gold)
+        {
+            if(gold <= 0)
+            {
+                return;
+            }
+
+            _baseInfo.gold += gold;
+            _cmGame.baseInfo.markDirty();
+
+            _cmGame.uiMainPanel.refreshGold(_baseInfo.gold);
+        }
+
+        public void AddExp(int exp)
+        {
+            if (exp <= 0)
+            {
+                return;
+            }
+
+            _baseInfo.exp += exp;
+
+            int levelUpExp = _cmGame.gameConf.getLevelUpExpRequire(_baseInfo.level);
+            if(levelUpExp > 0)
+            {
+                if(_baseInfo.exp >= levelUpExp)
+                {
+                    // level up
+                    _baseInfo.exp = _baseInfo.exp - levelUpExp;
+                    _baseInfo.level = _baseInfo.level + 1;
+
+                    _OnLevelUp();
+                }
+            }
+
+            _cmGame.baseInfo.markDirty();
+
+            _cmGame.uiMainPanel.refreshExp(_baseInfo.exp, levelUpExp);
+        }
+
+        protected void _OnLevelUp()
+        {
+            _cmGame.uiMainPanel.refreshLevel(_baseInfo.level);
+
+            // TO DO : Level up
         }
     }
 }

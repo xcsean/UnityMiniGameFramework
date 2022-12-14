@@ -22,6 +22,11 @@ namespace UnityMiniGameFramework
             _gunObj = g;
         }
 
+        public void clearTarget()
+        {
+            _currentTargetMon = null;
+        }
+
         virtual protected bool _checkMonsterAttackable(MapMonsterObject m)
         {
             if (m.actionComponent.hasState(ActStates.STATE_KEY_DIE))
@@ -99,6 +104,11 @@ namespace UnityMiniGameFramework
                 // try seek monster
                 _seekTargetMonster();
             }
+            else if (_currentTargetMon.unityGameObject == null)
+            {
+                _currentTargetMon = null;
+            }
+
 
             if (_currentTargetMon != null)
             {

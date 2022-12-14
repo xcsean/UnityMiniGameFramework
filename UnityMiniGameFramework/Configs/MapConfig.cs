@@ -29,6 +29,12 @@ namespace UnityMiniGameFramework
 
     }
 
+    public class PathConf
+    {
+        public string pathNode { get; set; }
+        public int pathNodeCount { get; set; }
+    }
+
     public class MapConf
     {
         public string name { get; set; }
@@ -40,7 +46,11 @@ namespace UnityMiniGameFramework
 
         public List<MapZoneConf> zones { get; set; }
 
+        public List<string> npcs { get; set; }
+
         public Dictionary<string, MonsterSpawnConf> monsterSpawns { get; set; }
+
+        public Dictionary<string, PathConf> paths { get; set; }
     }
 
     public class MapLevelSpawn
@@ -68,6 +78,8 @@ namespace UnityMiniGameFramework
         public Dictionary<string, MapBuildObjectConf> mapBuildings { get; set; }
 
         public Dictionary<string, MapMonsterObjectConf> mapMonsters { get; set; }
+
+        public Dictionary<string, MapNPCObjectConf> mapNpcs { get; set; }
 
         public Dictionary<string, MapLevelConf> mapLevels { get; set; }
     }
@@ -118,6 +130,14 @@ namespace UnityMiniGameFramework
                 return null;
             }
             return mapConf.mapMonsters[mapMonstername];
+        }
+        public MapNPCObjectConf getMapNPCConf(string maNPCname)
+        {
+            if (mapConf.mapNpcs == null || !mapConf.mapNpcs.ContainsKey(maNPCname))
+            {
+                return null;
+            }
+            return mapConf.mapNpcs[maNPCname];
         }
         public MapLevelConf getMapLevelConf(string mapLevelName)
         {

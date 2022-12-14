@@ -34,6 +34,13 @@ namespace UnityMiniGameFramework
         protected ProgressBar _ProduceProgeress;
         public ProgressBar ProduceProgeress => _ProduceProgeress;
 
+        protected Label _Info;
+        public Label Info => _Info;
+
+        protected Button _ActBtn;
+        public Button ActBtn => _ActBtn;
+
+
         override public void onInit(UIControlConf c, VisualElement o)
         {
             base.onInit(c, o);
@@ -43,6 +50,8 @@ namespace UnityMiniGameFramework
             _outputNumber = this._subControls["outputNumber"].unityVisualElement as Label;
             _Level = this._subControls["Level"].unityVisualElement as Label;
             _CD = this._subControls["CD"].unityVisualElement as Label;
+            _Info = this._subControls["Info"].unityVisualElement as Label;
+            _ActBtn = this._subControls["ActBtn"].unityVisualElement as Button;
 
             _ProduceProgeress = this._subControls["ProduceProgress"].unityVisualElement as ProgressBar;
         }

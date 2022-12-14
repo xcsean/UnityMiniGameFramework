@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MiniGameFramework;
+
 namespace UnityMiniGameFramework
 {
     public class AIActorControllerComp : ActorControllerComponent
@@ -25,7 +27,19 @@ namespace UnityMiniGameFramework
         {
             base.Init(config);
 
+            var aiStatesConf = config as List<MapConfAIState>;
+            foreach(var aic in aiStatesConf)
+            {
+                var state = UnityGameApp.Inst.AIStates.createAIStateObject(aic.aiType, _gameObject as ActorObject);
+                if(state == null)
+                {
+                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"AI State type [{aic.aiType}] not exist");
+                    continue;
+                }
 
+                state.Init(aic);
+                AddAIState(state);
+            }
         }
 
         public void AddAIState(AIState aiState)
@@ -36,6 +50,19 @@ namespace UnityMiniGameFramework
         public void RemoveAIState(AIState aiState)
         {
             _aiStates.Remove(aiState);
+        }
+
+        public T GetAIState<T>() where T:AIState
+        {
+            foreach(var aiS in _aiStates)
+            {
+                if(aiS.GetType().IsSubclassOf(typeof(T)))
+                {
+                    return (T)aiS;
+                }
+            }
+
+            return null;
         }
 
         override public void OnUpdate(float timeElasped)

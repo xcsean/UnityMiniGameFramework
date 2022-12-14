@@ -27,6 +27,12 @@ namespace MiniGameFramework
         virtual public void Init(string confname)
         {
         }
+
+        virtual public void PostInit()
+        {
+
+        }
+
         virtual public void Dispose()
         {
             if(OnDispose != null)
@@ -52,6 +58,17 @@ namespace MiniGameFramework
                 return _components[compName];
             }
 
+            return null;
+        }
+        public T getComponent<T>() where T : class, IGameObjectComponent
+        {
+            foreach (var aiS in _components)
+            {
+                if (aiS.Value.GetType().IsSubclassOf(typeof(T)))
+                {
+                    return (T)aiS.Value;
+                }
+            }
             return null;
         }
 

@@ -32,6 +32,7 @@ namespace UnityMiniGameFramework
     public class LocalHeroInfo
     {
         public string mapHeroName { get; set; }
+        public int level { get; set; }
         public JsonConfVector3 position { get; set; }
         public LocalWeaponInfo holdWeapon { get; set; }
     }

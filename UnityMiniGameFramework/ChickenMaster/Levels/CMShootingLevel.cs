@@ -38,6 +38,7 @@ namespace UnityMiniGameFramework
 
             // for Debug ...
             (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackProduct("meat", 10);
+            (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddExp(10);
         }
     }
 }

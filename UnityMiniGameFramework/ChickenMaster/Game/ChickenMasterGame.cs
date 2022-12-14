@@ -30,6 +30,8 @@ namespace UnityMiniGameFramework
         protected Dictionary<string, CMNPCHeros> _cmNPCHeros;
         public Dictionary<string, CMNPCHeros> cmNPCHeros => _cmNPCHeros;
 
+        protected Dictionary<string, CMFactory> _cmFactories;
+
         protected IGameObject _levelCenterObject;
         public IGameObject levelCenterObject => _levelCenterObject;
 
@@ -44,6 +46,7 @@ namespace UnityMiniGameFramework
         {
             _self = new SelfControl();
             _cmNPCHeros = new Dictionary<string, CMNPCHeros>();
+            _cmFactories = new Dictionary<string, CMFactory>();
         }
 
         public async Task InitAsync()
@@ -113,6 +116,9 @@ namespace UnityMiniGameFramework
 
         public void OnMainSceneLoaded()
         {
+            // init ui
+            _uiMainPanel = UnityGameApp.Inst.UI.getUIPanel("MainUI") as UIMainPanel;
+
             // init self
             _self.Init();
 
@@ -120,14 +126,32 @@ namespace UnityMiniGameFramework
             var bi = _baseInfo.getData() as LocalBaseInfo;
             for (int i = 0; i < bi.defenseHeros.Count; ++i)
             {
+                if(bi.defenseHeros[i] == null)
+                {
+                    continue;
+                }
+
+                // create hero
                 var cmHero = new CMNPCHeros();
                 cmHero.Init(bi.defenseHeros[i]);
 
                 _cmNPCHeros[cmHero.heroInfo.mapHeroName] = cmHero;
             }
 
-            // init ui
-            _uiMainPanel = UnityGameApp.Inst.UI.getUIPanel("MainUI") as UIMainPanel;
+            for(int i=0;i< bi.factories.Count; ++i)
+            {
+                if (bi.factories[i] == null)
+                {
+                    continue;
+                }
+
+                // create factory
+                CMFactory fac = new CMFactory();
+                if(fac.Init(bi.factories[i]))
+                {
+                    _cmFactories[fac.factoryName] = fac;
+                }
+            }
 
             var tr = UnityGameApp.Inst.MainScene.mapRoot.transform.Find(_gameConf.gameConfs.levelCenterObjectName);
             if(tr == null)
@@ -146,11 +170,19 @@ namespace UnityMiniGameFramework
                     _levelCenterObject = comp.mgGameObject;
                 }
             }
+
+            // refresh main ui Info
+            _uiMainPanel.refreshAll();
         }
 
         public void OnUpdate()
         {
             _self.OnUpdate();
+
+            foreach(var fac in _cmFactories)
+            {
+                fac.Value.OnUpdate();
+            }
         }
 
         public void InitUILevelMainPanel(string pannelName)
@@ -168,18 +200,19 @@ namespace UnityMiniGameFramework
             }
         }
 
-        public void AddDefenseHero(string mapHeroName)
+        public CMNPCHeros AddDefenseHero(string mapHeroName)
         {
             var heroConf = _gameConf.getCMHeroConf(mapHeroName);
             if(heroConf == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"AddDefenseHero [{mapHeroName}] config not exist");
-                return;
+                return null;
             }
 
             LocalHeroInfo heroInfo = new LocalHeroInfo()
             {
                 mapHeroName = mapHeroName,
+                level = 1,
                 position = null,
                 holdWeapon = null,
             };
@@ -192,28 +225,39 @@ namespace UnityMiniGameFramework
             // modify data
             (_baseInfo.getData() as LocalBaseInfo).defenseHeros.Add(cmHero.heroInfo);
             _baseInfo.markDirty();
+
+            return cmHero;
         }
 
-        public LocalFactoryInfo GetLocalFactoryInfo(string factoryName)
+        public CMFactory GetFactory(string factoryName)
         {
-            var baseInfo = _baseInfo.getData() as LocalBaseInfo;
-            for (int i=0; i< baseInfo.factories.Count; ++i)
+            CMFactory fac = null;
+            _cmFactories.TryGetValue(factoryName, out fac);
+            return fac;
+        }
+
+        public CMFactory AddFactory(string factoryName)
+        {
+            CMFactory fac = new CMFactory();
+
+            // new Factory
+            var localFacInfo = new LocalFactoryInfo()
             {
-                var fac = baseInfo.factories[i];
-                if(fac.mapBuildName == factoryName)
-                {
-                    return fac;
-                }
+                mapBuildName = factoryName,
+                level = 1,
+                buildingInputProducts = new List<LocalPackProductInfo>(),
+                buildingOutputProducts = new List<LocalPackProductInfo>()
+            };
+
+            if (!fac.Init(localFacInfo))
+            {
+                return null;
             }
 
-            return null;
-        }
+            _cmFactories[factoryName] = fac;
 
-        public LocalFactoryInfo AddLocalFactoryInfo(LocalFactoryInfo fac)
-        {
-            var baseInfo = _baseInfo.getData() as LocalBaseInfo;
-            baseInfo.factories.Add(fac);
-
+            // modify data
+            (_baseInfo.getData() as LocalBaseInfo).factories.Add(fac.localFacInfo);
             _baseInfo.markDirty();
 
             return fac;

@@ -148,6 +148,9 @@ namespace UnityMiniGameFramework
         protected DataManager _datamanager;
         public DataManager Datas => _datamanager;
 
+        protected AIStateManager _aiStateManager;
+        public AIStateManager AIStates => _aiStateManager;
+
         protected UnityNetworkClient _netClient;
         public UnityNetworkClient NetClient => _netClient;
 
@@ -252,6 +255,7 @@ namespace UnityMiniGameFramework
             _resManager = new UnityResourceManager();
             _mapManager = new MapManager();
             _weaponManager = new WeaponManager();
+            _aiStateManager = new AIStateManager();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app managers created.");
         }
@@ -294,6 +298,12 @@ namespace UnityMiniGameFramework
             // reg levels
             _mapManager.registerMapLevelCreator("CMShootingLevel", CMShootingLevel.create);
 
+            // reg ai states
+            _aiStateManager.registerAIStateObjectCreator("AITrace", AITrace.create);
+            _aiStateManager.registerAIStateObjectCreator("AITryAttack", AITryAttack.create);
+            _aiStateManager.registerAIStateObjectCreator("AIMoveOnPath", AIMoveOnPath.create);
+            _aiStateManager.registerAIStateObjectCreator("AIMoveProduct", AIMoveProduct.create);
+            
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
         }
 
@@ -348,6 +358,7 @@ namespace UnityMiniGameFramework
             _ui.regUIObjectCreator("UIJoyStickControl", UIJoyStickControl.create);
             _ui.regUIObjectCreator("UILevelStateControl", UILevelStateControl.create);
             _ui.regUIObjectCreator("UIFactoryControl", UIFactoryControl.create);
+            _ui.regUIObjectCreator("UIHeroControl", UIHeroControl.create);
         }
 
         protected void _initNetwork()

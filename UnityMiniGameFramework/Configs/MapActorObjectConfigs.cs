@@ -13,6 +13,18 @@ namespace UnityMiniGameFramework
         public string prefabName { get; set; }
     }
 
+    public class MapNPCObjectConf
+    {
+        public string actorConfName { get; set; }
+
+        public string prefabName { get; set; }
+
+        public string defaultAniName { get; set; }
+
+        public List<MapConfAIState> aiStates { get; set; }
+
+    }
+
     public class MapBuildObjectConf
     {
         public string actorConfName { get; set; }
@@ -22,9 +34,13 @@ namespace UnityMiniGameFramework
         public string triggerObjectName { get; set; }
     }
 
-    public class MapMonsterAIConf
+    public class MapConfAIState
     {
+        public string aiType { get; set; }
 
+        public string targetName { get; set; }
+
+        public string aiStateConfName { get; set; }
     }
 
     public class CombatConf
@@ -54,7 +70,7 @@ namespace UnityMiniGameFramework
 
         public string prefabName { get; set; }
 
-        public MapMonsterAIConf ai { get; set; }
+        public List<MapConfAIState> aiStates { get; set; }
 
         public CombatConf combat { get; set; }
     }

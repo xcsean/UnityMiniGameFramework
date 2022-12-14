@@ -6,69 +6,33 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-    public class FootPrintComponent : UnityEngine.MonoBehaviour
-    {
-        public UnityEngine.GameObject ActorObject;
-        public string RunDustVFX = "runDust";
-        public string FootPrintVFX = "footPrint";
-
-        private void Start()
-        {
-            //var comp = this.gameObject.transform.parent.gameObject.GetComponent<UnityGameObjectBehaviour>();
-
-            //_mapBuilding = comp.mgGameObject as MapBuildingObject;
-        }
-
-        private void OnTriggerEnter(UnityEngine.Collider other)
-        {
-            if(other.gameObject.layer != UnityEngine.LayerMask.NameToLayer("Ground"))
-            {
-                return;
-            }
-
-            // create dust
-            var dust = UnityGameApp.Inst.VFXManager.createVFXObject(RunDustVFX);
-            if(dust != null)
-            {
-                dust.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                dust.unityGameObject.transform.position = this.gameObject.transform.position;
-                dust.unityGameObject.transform.forward = ActorObject.transform.forward;
-            }
-
-            // create foot print
-            var footPrint = UnityGameApp.Inst.VFXManager.createVFXObject(FootPrintVFX);
-            if(footPrint != null)
-            {
-                footPrint.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                footPrint.unityGameObject.transform.position = this.gameObject.transform.position;
-                footPrint.unityGameObject.transform.forward = ActorObject.transform.forward;
-            }
-        }
-        //private void OnTriggerExit(UnityEngine.Collider other)
-        //{
-        //    _mapBuilding.OnTriggerExit(other);
-        //}
-    }
-
     public class RigibodyMoveAct : Act
     {
         public float TurnSpeed = 180.0f;
+        public float TurnDecSpeed = 3.0f;
         public float AccSpeed = 1.0f;
-        public float DecSpeed = 6.0f;
+        public float DecSpeed = 8.0f;
         public float MaxSpeed = 3.0f;
+        public float MinSpeed = 1.0f;
 
         public float curSpeed => _curSpeed;
 
         protected float _curSpeed;
         protected UnityEngine.Vector3? _movVec;
         protected UnityEngine.Rigidbody _rigiBody;
+
+        protected string _defaultAniName;
         
         public RigibodyMoveAct(ActorObject actor) : base(actor)
         {
             _rigiBody = actor.unityGameObject.GetComponent<UnityEngine.Rigidbody>();
-            
-            actor.animatorComponent.playAnimation("Idle");
+
+            _defaultAniName = ActAnis.IdleAni;
+            actor.animatorComponent.playAnimation(_defaultAniName);
         }
+
+        bool _isTurning;
+        public bool isTurning => _isTurning;
 
         bool _isStopping;
         public bool isStopping => _isStopping;
@@ -77,14 +41,41 @@ namespace UnityMiniGameFramework
         override public bool discardWhenFinish => false;
         override public bool queueWhenNotStartable => true;
 
+        protected List<UnityEngine.Vector3> _movePath;
+        protected float _movePathNodeRadius;
+        protected int _curPathTargetIndex;
+        protected UnityEngine.Vector3? _curTargetPos;
+
         public void moveToward(UnityEngine.Vector3 to)
         {
             _movVec = to.normalized;
         }
+        public void moveOn(List<UnityEngine.Vector3> path, float nodeRadius)
+        {
+            if(path.Count <= 0)
+            {
+                return;
+            }
+
+            _movePath = path;
+            _movePathNodeRadius = nodeRadius;
+            _curPathTargetIndex = 0;
+            _curTargetPos = _movePath[_curPathTargetIndex];
+
+            _curSpeed = MinSpeed;
+        }
         public void stop()
         {
             _movVec = null;
+            _movePath = null;
+            _curTargetPos = null;
             _isStopping = this._curSpeed > 0;
+        }
+
+        public void setDefaultAni(string _defAni)
+        {
+            _defaultAniName = _defAni;
+            actor.animatorComponent.playAnimation(_defaultAniName);
         }
 
         override public void Start()
@@ -101,17 +92,63 @@ namespace UnityMiniGameFramework
                 return;
             }
 
+            _updatePath();
+
             _updateMove();
 
             _updateStoping();
 
         }
 
+        bool _pickNextPathNode()
+        {
+            ++_curPathTargetIndex;
+            if (_curPathTargetIndex >= _movePath.Count)
+            {
+                return false;
+            }
+
+            _curTargetPos = _movePath[_curPathTargetIndex];
+            return true;
+        }
+
+        void _updatePath()
+        {
+            if(_movePath == null)
+            {
+                return;
+            }
+
+            if(_curTargetPos == null)
+            {
+                return;
+            }
+
+            var vec = _curTargetPos - _rigiBody.transform.position;
+            if (vec.Value.magnitude <= _movePathNodeRadius)
+            {
+                // reach current path node
+                if(_pickNextPathNode())
+                {
+                    // recalc vec
+                    vec = _curTargetPos - _rigiBody.transform.position;
+                }
+                else
+                {
+                    // reach path end
+                    stop();
+                    return;
+                }
+            }
+
+            _movVec = vec.Value.normalized;
+        }
+
         void _onStop()
         {
             if (actor.animatorComponent.isCurrBaseAnimation(ActAnis.RunAni))
             {
-                actor.animatorComponent.playAnimation(ActAnis.IdleAni);
+                actor.animatorComponent.playAnimation(_defaultAniName);
             }
         }
 
@@ -140,34 +177,58 @@ namespace UnityMiniGameFramework
                 actor.animatorComponent.playAnimation(ActAnis.RunAni);
             }
 
-            _updateSpeed();
+            var rot = UnityEngine.Quaternion.FromToRotation(_rigiBody.transform.forward, _movVec.Value);
+            if(rot.eulerAngles.y < 1 && rot.eulerAngles.y > -1)
+            {
+                _isTurning = false;
+                _updateSpeed();
+            }
+            else
+            {
+                // update turning
+                _isTurning = true;
+                _updateTurning(rot.eulerAngles.y);
+            }
 
-            //_rigiBody.velocity = _movVec.Value.normalized * _curSpeed;
+            _rigiBody.MovePosition(_rigiBody.position + _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime); 
+        }
 
-            _rigiBody.MovePosition(_rigiBody.position + _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime);
-            //_rigiBody.transform.forward = _rigiBody.transform.forward + (_movVec.Value - _rigiBody.transform.forward).normalized * TurnSpeed * UnityEngine.Time.deltaTime;
+        void _updateTurning(float yRot)
+        {
+            if(yRot > 180)
+            {
+                yRot -= 360;
+            }
 
-            _rigiBody.transform.forward = _movVec.Value;
+            float deg = TurnSpeed * UnityEngine.Time.deltaTime;
 
-            //var yAxis = new UnityEngine.Vector3(0, 1, 0);
-            //var forward = new UnityEngine.Vector3(_rigiBody.transform.forward.x, 0, _rigiBody.transform.forward.z);
-            //var vec = new UnityEngine.Vector3(_movVec.Value.x, 0, _movVec.Value.z);
-            //float deg = UnityEngine.Vector3.Dot(forward, vec);
+            if(yRot > 0)
+            {
+                if(deg < yRot)
+                {
+                    yRot = deg;
+                }
+            }
+            else
+            {
+                if(deg < -yRot)
+                {
+                    yRot = -deg;
+                }
+            }
 
-            //float dist = (_movVec.Value - _rigiBody.transform.forward).magnitude;
+            // rotate
+            _rigiBody.transform.Rotate(new UnityEngine.Vector3(0,yRot,0));
 
-            //if (dist > 0.05f)
-            //{
-            //    //_rigiBody.MoveRotation(UnityEngine.Quaternion.AngleAxis(TurnSpeed * UnityEngine.Time.deltaTime, yAxis));
-            //    //_rigiBody.MoveRotation(UnityEngine.Quaternion.Euler(0, _rigiBody.transform.rotation.y + TurnSpeed * UnityEngine.Time.deltaTime, 0));
-            //    _rigiBody.gameObject.transform.rotation = UnityEngine.Quaternion.Euler(_rigiBody.transform.rotation.x, _rigiBody.transform.rotation.y + TurnSpeed * UnityEngine.Time.deltaTime, _rigiBody.transform.rotation.y);
-            //}
-            //else if(dist < -0.05f)
-            //{
-            //    //_rigiBody.MoveRotation(UnityEngine.Quaternion.AngleAxis(-TurnSpeed * UnityEngine.Time.deltaTime, yAxis));
-            //    //_rigiBody.MoveRotation(UnityEngine.Quaternion.Euler(0, _rigiBody.transform.rotation.y - TurnSpeed * UnityEngine.Time.deltaTime, 0));
-            //    _rigiBody.gameObject.transform.rotation = UnityEngine.Quaternion.Euler(_rigiBody.transform.rotation.x, _rigiBody.transform.rotation.y - TurnSpeed * UnityEngine.Time.deltaTime, _rigiBody.transform.rotation.y);
-            //}    
+            // dec moving speed
+            if (TurnDecSpeed > 0)
+            {
+                _curSpeed -= TurnDecSpeed * UnityEngine.Time.deltaTime;
+                if (_curSpeed < MinSpeed)
+                {
+                    _curSpeed = MinSpeed;
+                }
+            }
         }
 
         void _decSpeed()
@@ -186,7 +247,6 @@ namespace UnityMiniGameFramework
                     _isStopping = false;
                 }
             }
-
         }
 
         void _updateSpeed()

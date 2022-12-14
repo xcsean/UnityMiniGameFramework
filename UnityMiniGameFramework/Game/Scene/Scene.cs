@@ -199,6 +199,11 @@ namespace UnityMiniGameFramework
                         {
                             _map = mgObjComp.mgGameObject as Map;
                             _maps[_conf.mapName] = _map;
+
+                            while(MapActorObject.waitMapInitActors.Count > 0)
+                            {
+                                _map.OnAddMapActor(MapActorObject.waitMapInitActors.Dequeue());
+                            }
                         }
                     }
 

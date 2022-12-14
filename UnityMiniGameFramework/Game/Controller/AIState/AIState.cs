@@ -15,9 +15,15 @@ namespace UnityMiniGameFramework
             _actor = actor;
         }
 
+        virtual public void Init(MapConfAIState conf)
+        {
+
+        }
+
         virtual public void OnUpdate()
         {
 
         }
+
     }
 }

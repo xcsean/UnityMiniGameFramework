@@ -63,7 +63,7 @@ namespace UnityMiniGameFramework
                     mapMonSpawn = sp,
                     levelSpawnConf = levelSpawn,
                     startTimeLeft = levelSpawn.startTime
-                });; 
+                });
             }
 
             _isStarted = false;
@@ -84,12 +84,21 @@ namespace UnityMiniGameFramework
 
         virtual public void Finish()
         {
+            _map.OnMapLevelFinish();
+
             foreach (var sp in _monSpawns)
             {
                 sp.mapMonSpawn.StopSpawn();
                 sp.mapMonSpawn.ClearAllMonsters();
             }
             _isStarted = false;
+        }
+
+        public virtual void OnMapBuildingTriggerEnter(string tirggerObjName, MapBuildingObject buildingObj, UnityEngine.Collider other)
+        {
+        }
+        public virtual void OnMapBuildingTriggerExit(string tirggerObjName, MapBuildingObject buildingObj, UnityEngine.Collider other)
+        {
         }
 
         protected bool _checkFinish()

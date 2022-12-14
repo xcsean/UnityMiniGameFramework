@@ -13,5 +13,51 @@ namespace UnityMiniGameFramework
         {
             return new MapNPCObject();
         }
+
+        protected MapNPCObjectConf _mapNpcConf;
+
+        override protected ActorObjectConfig _getActorConf(string confname)
+        {
+            if (UnityGameApp.Inst.MapManager.MapConf == null)
+            {
+                return null;
+            }
+            _mapNpcConf = UnityGameApp.Inst.MapManager.MapConf.getMapNPCConf(confname);
+
+            if (UnityGameApp.Inst.CharacterManager.CharacterConfs == null)
+            {
+                return null;
+            }
+            return UnityGameApp.Inst.CharacterManager.CharacterConfs.getActorConf(_mapNpcConf.actorConfName);
+        }
+
+        override public void Init(string confname)
+        {
+            base.Init(confname);
+
+            this._name = this._unityGameObject.name;
+
+            // TO DO : init map NPC 
+
+            if(_mapNpcConf.aiStates != null && _mapNpcConf.aiStates.Count > 0)
+            {
+                // init ai
+                var aiControlComp = new AIActorControllerComp();
+                this.AddComponent(aiControlComp);
+                aiControlComp.Init(_mapNpcConf.aiStates);
+            }
+
+            if(_mapNpcConf.defaultAniName != null)
+            {
+                _rigiMovAct.setDefaultAni(_mapNpcConf.defaultAniName);
+            }
+        }
+
+        public override void PostInit()
+        {
+            base.PostInit();
+
+
+        }
     }
 }

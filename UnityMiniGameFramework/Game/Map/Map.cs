@@ -35,6 +35,10 @@ namespace UnityMiniGameFramework
         protected Dictionary<string, MapMonsterSpawn> _monsterSpawns;
         public Dictionary<string, MapMonsterSpawn> monsterSpawns => _monsterSpawns;
 
+        protected Dictionary<string, MapNPCObject> _npcs;
+        protected Dictionary<string, List<UnityEngine.Vector3>> _paths;
+
+        protected HashSet<MapActorObject> _mapActors;
 
         public Map()
         {
@@ -42,8 +46,12 @@ namespace UnityMiniGameFramework
             _namedBornPos = new Dictionary<string, SpawnPos>();
 
             _monsterSpawns = new Dictionary<string, MapMonsterSpawn>();
-        }
 
+            _npcs = new Dictionary<string, MapNPCObject>();
+            _paths = new Dictionary<string, List<UnityEngine.Vector3>>();
+
+            _mapActors = new HashSet<MapActorObject>();
+        }
 
         virtual protected MapConf _getMapConf(string confname)
         {
@@ -106,6 +114,69 @@ namespace UnityMiniGameFramework
                     continue;
                 }
                 _monsterSpawns[pair.Key] = ms;
+            }
+
+            // init paths
+            if(_conf.paths != null)
+            {
+                foreach(var pathPair in _conf.paths)
+                {
+                    var tr = this._unityGameObject.transform.Find(pathPair.Value.pathNode);
+                    if (tr == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) path ({pathPair.Value.pathNode}) not exist.");
+                        continue;
+                    }
+
+                    var pathList = new List<UnityEngine.Vector3>();
+                    for(int i=1; i<= pathPair.Value.pathNodeCount; ++i)
+                    {
+                        var trn = tr.Find((i).ToString());
+                        if (trn == null)
+                        {
+                            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) path node({i}) not exist.");
+                            continue;
+                        }
+
+                        pathList.Add(trn.position);
+                    }
+                    _paths[pathPair.Key] = pathList;
+                }
+            }
+        }
+
+        public override void PostInit()
+        {
+            base.PostInit();
+
+            // init npc
+            if (_conf.npcs != null)
+            {
+                foreach (var npcObjName in _conf.npcs)
+                {
+                    var tr = this._unityGameObject.transform.Find(npcObjName);
+                    if (tr == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) npc ({npcObjName}) not exist.");
+                        continue;
+                    }
+
+                    var ugo = tr.gameObject.GetComponent<UnityGameObjectBehaviour>();
+                    if (ugo == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) npc ({npcObjName}) no UnityGameObjectBehaviour.");
+                        continue;
+                    }
+
+                    var npcObj = ugo.mgGameObject as MapNPCObject;
+                    if (npcObj == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) npc ({npcObjName}) not MapNPCObject.");
+                        continue;
+                    }
+
+                    this._npcs[npcObj.name] = npcObj;
+                }
             }
         }
 
@@ -189,6 +260,52 @@ namespace UnityMiniGameFramework
 
             SpawnPos sp = _namedBornPos[name];
             return getBornPos(sp);
+        }
+
+        public MapNPCObject getNPC(string npcName)
+        {
+            MapNPCObject n = null;
+            _npcs.TryGetValue(npcName, out n);
+            return n;
+        }
+
+        public List<UnityEngine.Vector3> getPath(string pathName)
+        {
+            List<UnityEngine.Vector3> n = null;
+            _paths.TryGetValue(pathName, out n);
+            return n;
+        }
+
+        public virtual void OnMapBuildingTriggerEnter(string tirggerObjName, MapBuildingObject buildingObj, UnityEngine.Collider other)
+        {
+            if(_mapLevel != null)
+            {
+                _mapLevel.OnMapBuildingTriggerEnter(tirggerObjName, buildingObj, other);
+            }
+        }
+        public virtual void OnMapBuildingTriggerExit(string tirggerObjName, MapBuildingObject buildingObj, UnityEngine.Collider other)
+        {
+            if (_mapLevel != null)
+            {
+                _mapLevel.OnMapBuildingTriggerExit(tirggerObjName, buildingObj, other);
+            }
+        }
+        public virtual void OnMapLevelFinish()
+        {
+            foreach(var mapActor in _mapActors)
+            {
+                mapActor.DispatchMapLevelFinish();
+            }
+            _mapActors.Clear();
+        }
+
+        public virtual void OnAddMapActor(MapActorObject mapActor)
+        {
+            _mapActors.Add(mapActor);
+        }
+        public virtual void OnRemoveMapActor(MapActorObject mapActor)
+        {
+            _mapActors.Remove(mapActor);
         }
 
         override protected void _onAddComponent(IGameObjectComponent comp)
