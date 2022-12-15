@@ -96,11 +96,16 @@ namespace UnityMiniGameFramework
                 _gun = null;
             }
 
+            if(_heroInfo.holdWeaponId == 0)
+            {
+                return;
+            }
+
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
-            var cmGunConf = cmGame.gameConf.getCMGunConf(_heroInfo.holdWeapon.id);
+            var cmGunConf = cmGame.gameConf.getCMGunConf(_heroInfo.holdWeaponId);
             if (cmGunConf == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMHeros init gun id[{_heroInfo.holdWeapon.id}] not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMHeros init gun id[{_heroInfo.holdWeaponId}] not exist");
                 return;
             }
 
@@ -166,8 +171,31 @@ namespace UnityMiniGameFramework
                 _gun.unityGameObject.transform.forward = trAttachTo.forward;
             }
 
-            // TO DO : init gun combat attribute
-            _gun.initAttack(cmGunConf.attack, _heroInfo.holdWeapon.level);
+            // init gun level
+            _recalcAttack();
+        }
+
+        protected virtual void _recalcAttack()
+        {
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var cmGunConf = cmGame.gameConf.getCMGunConf(_heroInfo.holdWeaponId);
+
+            var weaponInfo = cmGame.GetWeaponInfo(_heroInfo.holdWeaponId);
+
+            CMGunLevelConf gunLevelConf = null;
+            if (cmGunConf.gunLevelConf.TryGetValue(weaponInfo.level, out gunLevelConf))
+            {
+                _gun.initAttack(gunLevelConf.attack);
+                if (gunLevelConf.rangeAdd > 0)
+                {
+                    _gun.AddAttackRange(gunLevelConf.rangeAdd);
+                }
+            }
+            else
+            {
+                // no gun level config
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"gun id[{_heroInfo.holdWeaponId}] level [{weaponInfo.level}] config not exist");
+            }
         }
 
     }

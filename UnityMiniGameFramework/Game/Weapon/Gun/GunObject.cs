@@ -88,6 +88,11 @@ namespace UnityMiniGameFramework
             _currentHitPoint = new UnityEngine.RaycastHit();
         }
 
+        public void AddAttackRange(float rangeAdd)
+        {
+            _attackRange += rangeAdd;
+        }
+
         virtual protected GunConf _getGunConf(string confname)
         {
             if (UnityGameApp.Inst.CharacterManager.CharacterConfs == null)

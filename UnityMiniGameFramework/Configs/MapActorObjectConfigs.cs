@@ -48,20 +48,22 @@ namespace UnityMiniGameFramework
         public int hpMax { get; set; }
         public int def { get; set; }
 
-        public int hpAddPerLevel { get; set; }
-        public int defAddPerLevel { get; set; }
+        public int attackBase { get; set; }
     }
 
     public class AttackConf
     {
         public int attackMin { get; set; }
         public int attackMax { get; set; }
-        public int attackMinAddPerLevel { get; set; }
-        public int attackMaxAddPerLevel { get; set; }
 
         public int? missingRate { get; set; }
         public int? criticalHitRate { get; set; }
-        public int? criticalHitPer { get; set; }
+        public float? criticalHitPer { get; set; }
+    }
+
+    public class MapMonsterCombatLevelConf
+    {
+        public Dictionary<int,CombatConf> levelCombatConf { get; set; }
     }
 
     public class MapMonsterObjectConf
@@ -72,6 +74,6 @@ namespace UnityMiniGameFramework
 
         public List<MapConfAIState> aiStates { get; set; }
 
-        public CombatConf combat { get; set; }
+        public string combatLevelConfName { get; set; }
     }
 }

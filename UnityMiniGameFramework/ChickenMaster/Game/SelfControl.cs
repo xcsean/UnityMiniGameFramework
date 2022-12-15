@@ -221,17 +221,17 @@ namespace UnityMiniGameFramework
 
         protected override void _initWeapon(LocalHeroInfo heroInfo)
         {
-            // create weapon
-            if (heroInfo.holdWeapon == null)
-            {
-                var weaponInfo = new LocalWeaponInfo()
-                {
-                    id = 1,
-                    level = 1
-                };
+            //// create weapon
+            //if (heroInfo.holdWeapon == null)
+            //{
+            //    var weaponInfo = new LocalWeaponInfo()
+            //    {
+            //        id = 1,
+            //        level = 1
+            //    };
 
-                heroInfo.holdWeapon = weaponInfo;
-            }
+            //    heroInfo.holdWeapon = weaponInfo;
+            //}
         }
 
         public void OnUpdate()

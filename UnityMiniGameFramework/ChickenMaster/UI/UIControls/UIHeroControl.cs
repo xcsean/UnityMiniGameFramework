@@ -53,7 +53,11 @@ namespace UnityMiniGameFramework
             {
                 // not activate
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-                if (cmGame.Self.TrySubGold(_heroConf.activateGoldCost))
+                if (_heroConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).level < _heroConf.userLevelRequire)
+                {
+                    // TO DO : level require
+                }
+                else if (cmGame.Self.TrySubGold(_heroConf.activateGoldCost))
                 {
                     // active defense hero
                     _hero = cmGame.AddDefenseHero(_heroConf.mapHeroName);

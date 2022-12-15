@@ -15,6 +15,10 @@ namespace UnityMiniGameFramework
         }
 
         protected MapMonsterObjectConf _mapMonConf;
+        public MapMonsterObjectConf mapMonConf => _mapMonConf;
+
+        protected int _level;
+        public int level => _level;
 
         override protected ActorObjectConfig _getActorConf(string confname)
         {
@@ -35,7 +39,13 @@ namespace UnityMiniGameFramework
         {
             base.Init(confname);
 
+            _name = confname;
             // TO DO : init map hero 
+        }
+
+        public void setLevel(int level)
+        {
+            _level = level;
         }
     }
 }

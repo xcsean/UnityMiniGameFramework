@@ -9,13 +9,31 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
+    public class CMGunLevelConf
+    {
+        public int upgrageCostItemCost { get; set; }
+
+        public AttackConf attack { get; set; }
+
+        public float rangeAdd { get; set; }
+    }
 
     public class CMGunConf
     {
         public int id { get; set; }
         public string prefabName { get; set; }
 
-        public AttackConf attack { get; set; }
+        public string upgradeItemName { get; set; }
+        public int activateItemCost { get; set; }
+
+        public Dictionary<int, CMGunLevelConf> gunLevelConf { get; set; }
+    }
+
+    public class CMHeroLevelConf
+    {
+        public CombatConf combatConf { get; set; }
+
+        public int upgradeGoldCost { get; set; }
     }
 
     public class CMHeroConf
@@ -27,9 +45,9 @@ namespace UnityMiniGameFramework
         public string initSpawnPosName { get; set; }
 
         public int activateGoldCost { get; set; }
-        public Dictionary<int, int> upgradeGoldCostPerLevel { get; set; }
+        public Dictionary<int, CMHeroLevelConf> levelConf { get; set; }
 
-        public CombatConf combatConf { get; set; }
+        public List<int> guns { get; set; }
 
         public List<MapConfAIState> aiStates { get; set; }
     }
@@ -76,6 +94,54 @@ namespace UnityMiniGameFramework
 
     }
 
+    public class CMDefenseLevelMonsterLvRange
+    {
+        public int levelRangeMin { get; set; }
+        public int levelRangeMax { get; set; }
+    }
+
+    public class CMDefenseLevelConf
+    {
+        public int levelRangeMin { get; set; }
+        public int levelRangeMax { get; set; }
+
+        public Dictionary<string, CMDefenseLevelMonsterLvRange> monsterLvRanges { get; set; }
+
+        public string mapLevelName { get; set; }
+    }
+
+    public class CMDropRoll
+    {
+        public int rate { get; set; }
+
+        public int min { get; set; }
+        public int max { get; set; }
+    }
+
+    public class CMNamedDropSet
+    {
+        public int rate { get; set; }
+        public int min { get; set; }
+        public int max { get; set; }
+
+        public string name { get; set; }
+    }
+
+    public class CMMonsterDropConf
+    {
+        public CMDropRoll exp { get; set; }
+        public CMDropRoll gold { get; set; }
+        public List<CMNamedDropSet> product { get; set; }
+        public List<CMNamedDropSet> item { get; set; }
+    }
+
+    public class CMEggConf
+    {
+        public int maxHp { get; set; }
+        public int recoverTime { get; set; }
+        public int hpIncTime { get; set; }
+    }
+
     public class CMGameConf
     {
         public string levelCenterObjectName { get; set; }
@@ -91,6 +157,12 @@ namespace UnityMiniGameFramework
         public CombatConf selfCombatConf { get; set; }
 
         public Dictionary<int, int> levelUpExpRequire { get; set; }
+
+        public List<CMDefenseLevelConf> defenseLevels { get; set; }
+
+        public Dictionary<string, Dictionary<int, CMMonsterDropConf>> monsterDrops { get; set; }
+
+        public CMEggConf eggConf { get; set; }
     }
 
     public class CMGameConfig : JsonConfig
@@ -148,6 +220,19 @@ namespace UnityMiniGameFramework
                 return 0;
             }
             return gameConfs.levelUpExpRequire[currentLevel];
+        }
+        public CMMonsterDropConf getMonsterDrops(string mapMonsterName, int monLevel)
+        {
+            if (gameConfs.monsterDrops == null || !gameConfs.monsterDrops.ContainsKey(mapMonsterName))
+            {
+                return null;
+            }
+            var drops = gameConfs.monsterDrops[mapMonsterName];
+            if(!drops.ContainsKey(monLevel))
+            {
+                return null;
+            }
+            return drops[monLevel];
         }
     }
 }

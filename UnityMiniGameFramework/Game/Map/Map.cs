@@ -343,6 +343,12 @@ namespace UnityMiniGameFramework
 
         public IMapLevel CreateLevel(string levelName)
         {
+            if(_mapLevel != null)
+            {
+                _mapLevel.Finish();
+                _mapLevel = null;
+            }
+
             var levelConf = UnityGameApp.Inst.MapManager.MapConf.getMapLevelConf(levelName);
             if(levelConf == null)
             {

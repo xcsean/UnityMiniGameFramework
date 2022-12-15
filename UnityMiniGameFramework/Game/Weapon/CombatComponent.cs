@@ -122,7 +122,7 @@ namespace UnityMiniGameFramework
             if(criticalHit < weapon.attackInfo.criticalHitRate * 10000)
             {
                 // critical
-                dmg = dmg * weapon.attackInfo.criticalHitPer;
+                dmg = (int)(dmg * weapon.attackInfo.criticalHitPer);
                 critical = true;
             }
 

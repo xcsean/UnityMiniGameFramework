@@ -101,6 +101,7 @@
     <Compile Include="ChickenMaster\Configs\CMGameConfig.cs" />
     <Compile Include="ChickenMaster\Game\AIState\AIMoveProduct.cs" />
     <Compile Include="ChickenMaster\Game\ChickenMasterGame.cs" />
+    <Compile Include="ChickenMaster\Game\CMEgg.cs" />
     <Compile Include="ChickenMaster\Game\CMFactory.cs" />
     <Compile Include="ChickenMaster\Game\CMCombatComponent.cs" />
     <Compile Include="ChickenMaster\Game\CMHeros.cs" />

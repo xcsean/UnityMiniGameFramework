@@ -27,6 +27,10 @@ namespace UnityMiniGameFramework
         protected SelfControl _self;
         public SelfControl Self => _self;
 
+        protected CMEgg _egg;
+        public CMEgg Egg => _egg;
+
+
         protected Dictionary<string, CMNPCHeros> _cmNPCHeros;
         public Dictionary<string, CMNPCHeros> cmNPCHeros => _cmNPCHeros;
 
@@ -82,17 +86,20 @@ namespace UnityMiniGameFramework
                     gold = 100,
                     level = 1,
                     exp = 0,
+                    currentLevel = 1,
                     selfHero = new LocalHeroInfo()
                     {
                         mapHeroName = "testHero",
-                        holdWeapon = new LocalWeaponInfo()
-                        {
-                            id = 1,
-                            level = 1,
-                        }
+                        holdWeaponId = 0,
+                    },
+                    egg = new LocalEggInfo()
+                    {
+                        hp = _gameConf.gameConfs.eggConf.maxHp,
+                        lastIncHpTime = DateTime.Now.Ticks,
+                        nextRecoverTime = 0
                     },
                     defenseHeros = new List<LocalHeroInfo>(),
-                    weapons = new List<LocalWeaponInfo>(),
+                    weapons = new Dictionary<int, LocalWeaponInfo>(),
                     factories = new List<LocalFactoryInfo>(),
                     backPackItems = new List<LocalPackProductInfo>()
                 };
@@ -138,6 +145,7 @@ namespace UnityMiniGameFramework
                 _cmNPCHeros[cmHero.heroInfo.mapHeroName] = cmHero;
             }
 
+            // init factories
             for(int i=0;i< bi.factories.Count; ++i)
             {
                 if (bi.factories[i] == null)
@@ -152,6 +160,10 @@ namespace UnityMiniGameFramework
                     _cmFactories[fac.factoryName] = fac;
                 }
             }
+
+            // init egg
+            _egg = new CMEgg();
+            _egg.Init(bi.egg);
 
             var tr = UnityGameApp.Inst.MainScene.mapRoot.transform.Find(_gameConf.gameConfs.levelCenterObjectName);
             if(tr == null)
@@ -214,7 +226,7 @@ namespace UnityMiniGameFramework
                 mapHeroName = mapHeroName,
                 level = 1,
                 position = null,
-                holdWeapon = null,
+                holdWeaponId = 0,
             };
 
             var cmHero = new CMNPCHeros();
@@ -227,6 +239,30 @@ namespace UnityMiniGameFramework
             _baseInfo.markDirty();
 
             return cmHero;
+        }
+
+        public LocalWeaponInfo GetWeaponInfo(int weaponId)
+        {
+            LocalWeaponInfo info = null;
+            var bi = (_baseInfo.getData() as LocalBaseInfo);
+            bi.weapons.TryGetValue(weaponId, out info);
+            return info;
+        }
+        public LocalWeaponInfo AddNewWeaponInfo(int weaponId)
+        {
+            var bi = (_baseInfo.getData() as LocalBaseInfo);
+            if (bi.weapons.ContainsKey(weaponId))
+            {
+                return bi.weapons[weaponId];
+            }
+
+            var info = new LocalWeaponInfo()
+            {
+                id = weaponId,
+                level = 1,
+            };
+            bi.weapons[weaponId] = info;
+            return info;
         }
 
         public CMFactory GetFactory(string factoryName)
@@ -261,6 +297,20 @@ namespace UnityMiniGameFramework
             _baseInfo.markDirty();
 
             return fac;
+        }
+
+        public CMDefenseLevelConf GetCurrentDefenseLevelConf()
+        {
+            var bi = (_baseInfo.getData() as LocalBaseInfo);
+            foreach(var lvlConf in _gameConf.gameConfs.defenseLevels)
+            {
+                if (bi.currentLevel >= lvlConf.levelRangeMin && bi.currentLevel <= lvlConf.levelRangeMax)
+                {
+                    return lvlConf;
+                }
+            }
+
+            return null;
         }
     }
 }

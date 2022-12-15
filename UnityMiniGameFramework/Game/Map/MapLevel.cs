@@ -30,8 +30,12 @@ namespace UnityMiniGameFramework
         protected MapLevelConf _conf;
         protected List<LevelSpawn> _monSpawns;
 
+        protected Dictionary<string, int> _kmCount;
+        public Dictionary<string, int> kmCount => _kmCount;
+
         public MapLevel()
         {
+            _kmCount = new Dictionary<string, int>();
         }
 
         public void setMap(Map m)
@@ -77,9 +81,11 @@ namespace UnityMiniGameFramework
             foreach (var sp in _monSpawns)
             {
                 sp.startTimeLeft = sp.levelSpawnConf.startTime;
+                sp.mapMonSpawn.Reset();
             }
 
             _isStarted = true;
+            _kmCount.Clear();
         }
 
         virtual public void Finish()
@@ -101,10 +107,71 @@ namespace UnityMiniGameFramework
         {
         }
 
+        protected virtual void _OnTimeUp()
+        {
+
+        }
+
+        protected virtual void _OnWin()
+        {
+
+        }
+
+        protected virtual void _OnLose()
+        {
+
+        }
+
         protected bool _checkFinish()
         {
             if(_timeLeft <= 0)
             {
+                _OnTimeUp();
+                return true;
+            }
+
+            if(_conf.kmWinCheck != null && _conf.kmWinCheck.Count > 0)
+            {
+                bool win = true;
+                foreach(var km in _conf.kmWinCheck)
+                {
+                    if(_kmCount.ContainsKey(km.mapMonsterName))
+                    {
+                        if(_kmCount[km.mapMonsterName] < km.killCount)
+                        {
+                            win = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        win = false;
+                        break;
+                    }
+                }
+
+                if(win)
+                {
+                    _OnWin();
+                    return true;
+                }
+            }
+
+            int i;
+            for (i = 0; i < _monSpawns.Count; ++i)
+            {
+                var sp = _monSpawns[i];
+                if(!sp.mapMonSpawn.isFinishSpawn || sp.mapMonSpawn.monsters.Count > 0)
+                {
+                    // still spawn or spawn monsters alive
+                    break;
+                }
+            }
+
+            if(i == _monSpawns.Count)
+            {
+                // all monster spawned and cleared
+                _OnLose();
                 return true;
             }
 
@@ -115,7 +182,14 @@ namespace UnityMiniGameFramework
 
         virtual public void OnMonsterDie(MapMonsterObject mon)
         {
-
+            if(_kmCount.ContainsKey(mon.name))
+            {
+                _kmCount[mon.name] += 1;
+            }
+            else
+            {
+                _kmCount[mon.name] = 1;
+            }
         }
 
         virtual public void OnUpdate(float timeElasped)

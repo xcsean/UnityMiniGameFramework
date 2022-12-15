@@ -90,6 +90,10 @@ namespace UnityMiniGameFramework
                 // try seek monster
                 _seekTargetMonster();
             }
+            else if (_currentTargetMon.unityGameObject == null)
+            {
+                _currentTargetMon = null;
+            }
             else if(_currentTargetMon.actionComponent.hasState(ActStates.STATE_KEY_DIE))
             {
                 _currentTargetMon = null;
@@ -103,10 +107,6 @@ namespace UnityMiniGameFramework
 
                 // try seek monster
                 _seekTargetMonster();
-            }
-            else if (_currentTargetMon.unityGameObject == null)
-            {
-                _currentTargetMon = null;
             }
 
 

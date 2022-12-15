@@ -16,15 +16,22 @@ namespace UnityMiniGameFramework
         protected bool _isSpawning;
         public bool isSpawning => _isSpawning;
 
+        protected bool _isFinishSpawn;
+        public bool isFinishSpawn => _isFinishSpawn;
+
         protected List<MapMonsterObject> _monsters;
         public List<MapMonsterObject> monsters => _monsters;
 
         protected MonsterSpawnConf _conf;
+        public MonsterSpawnConf conf => _conf;
+
         protected MapMonsterObjectConf _monConf;
         protected UnityEngine.GameObject _unityMonsterPrefab;
 
         protected float _spawnCD;
         protected uint _totalSpawned;
+
+        protected int _spawnMonsterLevel;
 
         public MapMonsterSpawn(Map map, SpawnPos sp)
         {
@@ -38,6 +45,7 @@ namespace UnityMiniGameFramework
         {
             _conf = conf;
             _isSpawning = false;
+            _isFinishSpawn = false;
             _totalSpawned = 0;
 
             _monConf = UnityGameApp.Inst.MapManager.MapConf.getMapMonsterConf(_conf.monsterConfName);
@@ -57,15 +65,29 @@ namespace UnityMiniGameFramework
             return true;
         }
 
+        public void SetSpawnMonsterLevel(int level)
+        {
+            _spawnMonsterLevel = level;
+        }
+
+        public void Reset()
+        {
+            _isSpawning = false;
+            _isFinishSpawn = false;
+            _totalSpawned = 0;
+        }
+
         public void StartSpawn()
         {
             _isSpawning = true;
+            _isFinishSpawn = false;
             _totalSpawned = 0;
         }
 
         public void StopSpawn()
         {
             _isSpawning = false;
+            _isFinishSpawn = true;
         }
 
         public void ClearAllMonsters()
@@ -82,6 +104,11 @@ namespace UnityMiniGameFramework
         public void OnUpdate()
         {
             if(!_isSpawning)
+            {
+                return;
+            }
+
+            if(_isFinishSpawn)
             {
                 return;
             }
@@ -103,6 +130,7 @@ namespace UnityMiniGameFramework
 
                 if (_totalSpawned >= _conf.maxTotalCount)
                 {
+                    _isFinishSpawn = true;
                     return;
                 }
 
@@ -112,10 +140,18 @@ namespace UnityMiniGameFramework
 
         protected void _spawnSingleMonster()
         {
+            var combatConf = UnityGameApp.Inst.MapManager.MapConf.getMapMonsterCombatLevelConf(_monConf.combatLevelConfName, _spawnMonsterLevel);
+            if (combatConf == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"init monster spawn monster [{_conf.monsterConfName}] combat conf [{_monConf.combatLevelConfName}] level[{_spawnMonsterLevel}] not exist");
+                return;
+            }
+
             var unityMonsterObj = UnityEngine.GameObject.Instantiate(_unityMonsterPrefab);
             var mgObj = unityMonsterObj.GetComponent<UnityGameObjectBehaviour>();
             if (mgObj == null)
             {
+                UnityEngine.GameObject.Destroy(unityMonsterObj);
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"init monster spawn monster [{_conf.monsterConfName}] prefab [{_monConf.prefabName}] without UnityGameObjectBehaviour");
                 return;
             }
@@ -123,28 +159,22 @@ namespace UnityMiniGameFramework
             var mapMonsterObj = mgObj.mgGameObject as MapMonsterObject;
             if (mapMonsterObj == null)
             {
+                mgObj.mgGameObject.Dispose();
+                UnityEngine.GameObject.Destroy(unityMonsterObj);
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"init monster spawn monster [{_conf.monsterConfName}] prefab [{_monConf.prefabName}] not MapMonsterObject");
                 return;
             }
 
-            var aiControlComp = new AIActorControllerComp();
-            mapMonsterObj.AddComponent(aiControlComp);
-            aiControlComp.Init(_monConf.aiStates); // TO DO : add config
+            mapMonsterObj.setLevel(_spawnMonsterLevel);
 
             var combatComp = new CMCombatComponent();
             mapMonsterObj.AddComponent(combatComp);
-            combatComp.Init(_monConf.combat);
+            combatComp.Init(combatConf);
             combatComp.OnDie = MapMonsterObj_OnDie;
 
-            //// for Debug ...
-            //// trace and attack
-            //var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            //var traceAi = new AITrace(mapMonsterObj);
-            //traceAi.setTraceTarget(cmGame.Self.selfMapHero.unityGameObject);
-            //aiControlComp.AddAIState(traceAi);
-            //var tryAttackAi = new AITryAttack(mapMonsterObj);
-            //tryAttackAi.setTraceTarget(cmGame.Self.selfMapHero.unityGameObject);
-            //aiControlComp.AddAIState(tryAttackAi);
+            var aiControlComp = new AIActorControllerComp();
+            mapMonsterObj.AddComponent(aiControlComp);
+            aiControlComp.Init(_monConf.aiStates);
 
             // add to scene
             unityMonsterObj.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);

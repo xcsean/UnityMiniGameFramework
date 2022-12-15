@@ -33,9 +33,12 @@ namespace UnityMiniGameFramework
 
         public int getUpgradeGoldCost()
         {
-            int upgradeGold = 0;
-            _conf.upgradeGoldCostPerLevel.TryGetValue(_heroInfo.level, out upgradeGold);
-            return upgradeGold;
+            CMHeroLevelConf conf;
+            if(_conf.levelConf.TryGetValue(_heroInfo.level, out conf))
+            {
+                return conf.upgradeGoldCost;
+            }
+            return 0;
         }
 
         public bool TryUpgrade()
@@ -58,6 +61,8 @@ namespace UnityMiniGameFramework
             if (cmGame.Self.TrySubGold(upgradeGold))
             {
                 // upgrade 
+                _recalcAttack();
+
                 _heroInfo.level = _heroInfo.level + 1;
                 cmGame.baseInfo.markDirty();
             }
@@ -83,7 +88,31 @@ namespace UnityMiniGameFramework
 
         protected override void _initCombatConfig()
         {
-            _combatComp.Init(_conf.combatConf);
+            CMHeroLevelConf conf;
+            if (_conf.levelConf.TryGetValue(_heroInfo.level, out conf))
+            {
+                _combatComp.Init(conf.combatConf);
+            }
+            else
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMNPCHeros init with [{heroInfo.mapHeroName}] level [{_heroInfo.level}] config not exist");
+            }
+        }
+
+        protected override void _recalcAttack()
+        {
+            base._recalcAttack();
+
+            CMHeroLevelConf conf;
+            if (_conf.levelConf.TryGetValue(_heroInfo.level, out conf))
+            {
+                // attack min/max add with hero base attack
+                _gun.addAttackInfo(new WeaponAttack()
+                {
+                    attackMin = conf.combatConf.attackBase,
+                    attackMax = conf.combatConf.attackBase
+                });
+            }
         }
 
         protected override void _initPosition(UnityEngine.GameObject unityHeroObj, LocalHeroInfo heroInfo)
@@ -122,16 +151,29 @@ namespace UnityMiniGameFramework
         protected override void _initWeapon(LocalHeroInfo heroInfo)
         {
             // create weapon
-            if (heroInfo.holdWeapon == null)
+            if (heroInfo.holdWeaponId == 0)
             {
-                var weaponInfo = new LocalWeaponInfo()
-                {
-                    id = _conf.initGunId,
-                    level = _conf.initGunLevel
-                };
+                heroInfo.holdWeaponId = _conf.initGunId;
 
-                heroInfo.holdWeapon = weaponInfo;
+                var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+                var weaponInfo = cmGame.AddNewWeaponInfo(_heroInfo.holdWeaponId);
+                weaponInfo.level = _conf.initGunLevel;
             }
+        }
+
+        public void ChangeWeapon(int weaponId)
+        {
+
+        }
+
+        public void AddWeapon(int weaponId)
+        {
+
+        }
+
+        public void UpgradeWeapon(int weaponId)
+        {
+
         }
     }
 }

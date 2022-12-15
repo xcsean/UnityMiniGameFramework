@@ -59,6 +59,12 @@ namespace UnityMiniGameFramework
         public float startTime { get; set; }
     }
 
+    public class MapLevelKMWinCheckConf
+    {
+        public string mapMonsterName { get; set; }
+        public int killCount { get; set; }
+    }
+
     public class MapLevelConf
     {
         public List<MapLevelSpawn> monsterSpawns { get; set; }
@@ -66,7 +72,8 @@ namespace UnityMiniGameFramework
         public float levelTime { get; set; }
 
         public string levelType { get; set; }
-        // TO DO : add win condition
+
+        public List<MapLevelKMWinCheckConf> kmWinCheck { get; set; }
     }
 
     public class MapConfs
@@ -82,6 +89,8 @@ namespace UnityMiniGameFramework
         public Dictionary<string, MapNPCObjectConf> mapNpcs { get; set; }
 
         public Dictionary<string, MapLevelConf> mapLevels { get; set; }
+
+        public Dictionary<string, MapMonsterCombatLevelConf> mapMonsterCombatLevelConf { get; set; }
     }
 
     public class MapConfig : JsonConfig
@@ -146,6 +155,21 @@ namespace UnityMiniGameFramework
                 return null;
             }
             return mapConf.mapLevels[mapLevelName];
+        }
+
+        public CombatConf getMapMonsterCombatLevelConf(string n, int level)
+        {
+            if (mapConf.mapMonsterCombatLevelConf == null || !mapConf.mapMonsterCombatLevelConf.ContainsKey(n))
+            {
+                return null;
+            }
+            var mmclConf = mapConf.mapMonsterCombatLevelConf[n];
+            if(!mmclConf.levelCombatConf.ContainsKey(level))
+            {
+                return null;
+            }
+
+            return mmclConf.levelCombatConf[level];
         }
     }
 }

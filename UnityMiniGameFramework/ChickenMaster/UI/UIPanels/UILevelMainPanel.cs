@@ -38,10 +38,17 @@ namespace UnityMiniGameFramework
         {
             if (UnityGameApp.Inst.MainScene.map.currentLevel == null)
             {
-                var level = UnityGameApp.Inst.MainScene.map.CreateLevel("testLevel");
-                if (level != null)
+                var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                var lvlConf = cmGame.GetCurrentDefenseLevelConf();
+                if(lvlConf != null)
                 {
-                    level.Start();
+                    var level = UnityGameApp.Inst.MainScene.map.CreateLevel(lvlConf.mapLevelName);
+                    if (level != null)
+                    {
+                        (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, (cmGame.baseInfo.getData() as LocalBaseInfo).currentLevel);
+
+                        level.Start();
+                    }
                 }
             }
             else if (!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)

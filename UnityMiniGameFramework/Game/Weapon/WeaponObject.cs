@@ -12,7 +12,7 @@ namespace UnityMiniGameFramework
         public int attackMax { get; set; }
         public int missingRate { get; set; }
         public int criticalHitRate { get; set; }
-        public int criticalHitPer { get; set; }
+        public float criticalHitPer { get; set; }
 
     }
 
@@ -24,16 +24,25 @@ namespace UnityMiniGameFramework
         protected WeaponAttack _attackInfo;
         public WeaponAttack attackInfo => _attackInfo;
 
-        public void initAttack(AttackConf conf, int level)
+        public void initAttack(AttackConf conf)
         {
             _attackInfo = new WeaponAttack()
             {
-                attackMin = conf.attackMin + conf.attackMinAddPerLevel * level,
-                attackMax = conf.attackMax + conf.attackMaxAddPerLevel * level,
+                attackMin = conf.attackMin,
+                attackMax = conf.attackMax,
                 missingRate = conf.missingRate.HasValue ? conf.missingRate.Value : 0,
                 criticalHitRate = conf.criticalHitRate.HasValue ? conf.criticalHitRate.Value : 0,
                 criticalHitPer = conf.criticalHitPer.HasValue ? conf.criticalHitPer.Value : 1
             };
+        }
+
+        public void addAttackInfo(WeaponAttack atkAdd)
+        {
+            _attackInfo.attackMin += atkAdd.attackMin;
+            _attackInfo.attackMax += atkAdd.attackMax;
+            _attackInfo.missingRate += atkAdd.missingRate;
+            _attackInfo.criticalHitRate += atkAdd.criticalHitRate;
+            _attackInfo.criticalHitPer += atkAdd.criticalHitPer;
         }
 
         public void setHolder(ActorObject h)

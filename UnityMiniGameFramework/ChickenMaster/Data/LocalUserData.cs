@@ -34,7 +34,15 @@ namespace UnityMiniGameFramework
         public string mapHeroName { get; set; }
         public int level { get; set; }
         public JsonConfVector3 position { get; set; }
-        public LocalWeaponInfo holdWeapon { get; set; }
+        public int holdWeaponId { get; set; }
+    }
+
+    public class LocalEggInfo
+    {
+        public int hp { get; set; }
+
+        public long lastIncHpTime { get; set; }
+        public long nextRecoverTime { get; set; }
     }
 
     public class LocalBaseInfo
@@ -43,11 +51,15 @@ namespace UnityMiniGameFramework
         public int level { get; set; }
         public int exp { get; set; }
 
+        public int currentLevel { get; set; }
+
         public LocalHeroInfo selfHero { get; set; }
+
+        public LocalEggInfo egg { get; set; }
 
         public List<LocalHeroInfo> defenseHeros { get; set; }
 
-        public List<LocalWeaponInfo> weapons { get; set; }
+        public Dictionary<int, LocalWeaponInfo> weapons { get; set; }
 
         public List<LocalFactoryInfo> factories { get; set; }
         public List<LocalPackProductInfo> backPackItems { get; set; }

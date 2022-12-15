@@ -34,7 +34,7 @@ namespace UnityMiniGameFramework
         {
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             var baseInfo = cmGame.baseInfo.getData() as LocalBaseInfo;
-            baseInfo.selfHero.holdWeapon.id = gunID;
+            baseInfo.selfHero.holdWeaponId = gunID;
 
             cmGame.baseInfo.markDirty();
 
