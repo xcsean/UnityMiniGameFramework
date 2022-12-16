@@ -11,6 +11,8 @@ namespace UnityMiniGameFramework
         public string actorConfName { get; set; }
 
         public string prefabName { get; set; }
+
+        public MovingConf movingConf { get; set; }
     }
 
     public class MapNPCObjectConf
@@ -41,6 +43,16 @@ namespace UnityMiniGameFramework
         public string targetName { get; set; }
 
         public string aiStateConfName { get; set; }
+    }
+
+    public class MovingConf
+    {
+        public float TurnSpeed { get; set; }
+        public float TurnDecSpeed { get; set; }
+        public float AccSpeed { get; set; }
+        public float DecSpeed { get; set; }
+        public float MaxSpeed { get; set; }
+        public float MinSpeed { get; set; }
     }
 
     public class CombatConf
@@ -75,5 +87,7 @@ namespace UnityMiniGameFramework
         public List<MapConfAIState> aiStates { get; set; }
 
         public string combatLevelConfName { get; set; }
+
+        public MovingConf movingConf { get; set; }
     }
 }

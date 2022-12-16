@@ -46,6 +46,16 @@ namespace UnityMiniGameFramework
         protected int _curPathTargetIndex;
         protected UnityEngine.Vector3? _curTargetPos;
 
+        public void setMovingConf(MovingConf conf)
+        {
+            TurnSpeed = conf.TurnSpeed;
+            TurnDecSpeed = conf.TurnDecSpeed;
+            AccSpeed = conf.AccSpeed;
+            DecSpeed = conf.DecSpeed;
+            MaxSpeed = conf.MaxSpeed;
+            MinSpeed = conf.MinSpeed;
+        }
+
         public void moveToward(UnityEngine.Vector3 to)
         {
             _movVec = to.normalized;

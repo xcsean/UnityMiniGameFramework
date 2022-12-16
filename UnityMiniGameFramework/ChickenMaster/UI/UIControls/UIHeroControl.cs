@@ -28,11 +28,42 @@ namespace UnityMiniGameFramework
         protected Button _ActBtn;
         public Button ActBtn => _ActBtn;
 
+        protected Label _Gun1;
+        public Label Gun1 => _Gun1;
+
+        protected Label _Gun2;
+        public Label Gun2 => _Gun2;
+
+        protected Label _Gun3;
+        public Label Gun3 => _Gun3;
+
+        protected VisualElement _Gun1Pic;
+        public VisualElement Gun1Pic => _Gun1Pic;
+
+        protected VisualElement _Gun2Pic;
+        public VisualElement Gun2Pic => _Gun2Pic;
+
+        protected VisualElement _Gun3Pic;
+        public VisualElement Gun3Pic => _Gun3Pic;
+
         protected VisualElement _HeadPic;
         public VisualElement HeadPic => _HeadPic;
 
+        protected ProgressBar _Gun1Prog;
+        public ProgressBar Gun1Prog => _Gun1Prog;
+
+        protected ProgressBar _Gun2Prog;
+        public ProgressBar Gun2Prog => _Gun2Prog;
+
+        protected ProgressBar _Gun3Prog;
+        public ProgressBar Gun3Prog => _Gun3Prog;
+
         protected CMNPCHeros _hero;
         protected CMHeroConf _heroConf;
+
+        protected LocalWeaponInfo _gun1Info;
+        protected LocalWeaponInfo _gun2Info;
+        protected LocalWeaponInfo _gun3Info;
 
         override public void onInit(UIControlConf c, VisualElement o)
         {
@@ -44,7 +75,16 @@ namespace UnityMiniGameFramework
             _Level = this._subControls["Level"].unityVisualElement as Label;
             _ActBtn = this._subControls["ActBtn"].unityVisualElement as Button;
 
+            _Gun1 = this._subControls["Gun1Text"].unityVisualElement as Label;
+            _Gun2 = this._subControls["Gun2Text"].unityVisualElement as Label;
+            _Gun3 = this._subControls["Gun3Text"].unityVisualElement as Label;
+            _Gun1Pic = this._subControls["Gun1Pic"].unityVisualElement;
+            _Gun2Pic = this._subControls["Gun2Pic"].unityVisualElement;
+            _Gun3Pic = this._subControls["Gun3Pic"].unityVisualElement;
+
             _ActBtn.RegisterCallback<MouseUpEvent>(onActBtnClick);
+
+            // TO DO : add gun active/upgrade btn
         }
 
         public void onActBtnClick(MouseUpEvent e)
@@ -62,6 +102,10 @@ namespace UnityMiniGameFramework
                     // active defense hero
                     _hero = cmGame.AddDefenseHero(_heroConf.mapHeroName);
                     //cmGame.baseInfo.markDirty();
+
+                    _gun1Info = cmGame.GetWeaponInfo(_heroConf.guns[0]);
+                    _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
+                    _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
 
                     refreshInfo();
                 }
@@ -96,7 +140,14 @@ namespace UnityMiniGameFramework
 
             _HeroName.text = _heroConf.mapHeroName;
 
-            // TO DO : set hero pic
+            if(_hero != null)
+            {
+                _gun1Info = cmGame.GetWeaponInfo(_heroConf.guns[0]);
+                _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
+                _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
+            }
+
+            // TO DO : set hero pic and gun pic
             //_HeadPic.style.backgroundImage = new StyleBackground(texture2d);
 
             refreshInfo();
@@ -113,10 +164,47 @@ namespace UnityMiniGameFramework
             }
             else
             {
+                ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+
+                // get attack info
+                int attack = 0;
+                var conf = _hero.getCurrentHeroLevelConf();
+                if(conf != null)
+                {
+                    attack = conf.combatConf.attackBase;
+                }
+
                 _ActBtn.text = "Upgrade";
                 _Level.text = $"Lv:{_hero.heroInfo.level}";
-                _Info.text = $"Upgrade Gold: {_hero.getUpgradeGoldCost()}";
+                _Info.text = $"Upgrade Gold: {_hero.getUpgradeGoldCost()}\r\nAttack: {attack}";
+
+                // get gun info
+
+                _Gun1.text = $"Gun1 Lv: {_gun1Info.level}";
+
+                if(_gun2Info == null)
+                {
+                    _Gun2.text = "NotActivate";
+                }
+                else
+                {
+                    _Gun2.text = $"Gun2 Lv: {_gun2Info.level}";
+                }
+
+                if (_gun3Info == null)
+                {
+                    _Gun3.text = "NotActivate";
+                }
+                else
+                {
+                    _Gun3.text = $"Gun3 Lv: {_gun3Info.level}";
+                }
             }
+        }
+
+        public void refreshGunUpgradeProgress()
+        {
+            // TO DO : 
         }
     }
 }

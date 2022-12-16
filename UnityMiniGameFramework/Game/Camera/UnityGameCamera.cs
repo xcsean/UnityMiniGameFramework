@@ -39,6 +39,20 @@ namespace UnityMiniGameFramework
             //_distance = _unityGameObject.transform.position - _followObject.transform.position;
         }
 
+        public UnityEngine.Vector2 worldToScreenPos(UnityEngine.Vector3 pos)
+        {
+            var vec = _unityCamera.WorldToScreenPoint(pos);
+            return new UnityEngine.Vector2(vec.x, Screen.height - vec.y);
+        }
+        public UnityEngine.Vector3 screenToWorldPos(UnityEngine.Vector2 screenPos)
+        {
+            return _unityCamera.ScreenToWorldPoint(screenPos);
+        }
+        public UnityEngine.Ray screenToWorldRay(UnityEngine.Vector2 screenPos)
+        {
+            return _unityCamera.ScreenPointToRay(screenPos);
+        }
+
         override public void OnPostUpdate(float timeElasped)
         {
             base.OnPostUpdate(timeElasped);

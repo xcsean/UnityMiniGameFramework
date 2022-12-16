@@ -8,6 +8,37 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
+    class UnityMapLevelColliderTrigger : UnityEngine.MonoBehaviour
+    {
+        private void OnTriggerEnter(UnityEngine.Collider other)
+        {
+            if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+            {
+                return;
+            }
+
+            if(UnityGameApp.Inst.MainScene.map.currentLevel == null)
+            {
+                return;
+            }
+
+            (UnityGameApp.Inst.MainScene.map.currentLevel as MapLevel).OnMapLevelTriggerEnter(this.gameObject.name, other);
+        }
+        private void OnTriggerExit(UnityEngine.Collider other)
+        {
+            if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+            {
+                return;
+            }
+
+            if (UnityGameApp.Inst.MainScene.map.currentLevel == null)
+            {
+                return;
+            }
+
+            (UnityGameApp.Inst.MainScene.map.currentLevel as MapLevel).OnMapLevelTriggerEnter(this.gameObject.name, other);
+        }
+    }
 
     public class MapLevel : IMapLevel
     {
@@ -100,10 +131,36 @@ namespace UnityMiniGameFramework
             _isStarted = false;
         }
 
+        public void Clear()
+        {
+            foreach (var sp in _monSpawns)
+            {
+                sp.mapMonSpawn.StopSpawn();
+                sp.mapMonSpawn.ClearAllMonsters();
+            }
+            _kmCount.Clear();
+        }
+
         public virtual void OnMapBuildingTriggerEnter(string tirggerObjName, MapBuildingObject buildingObj, UnityEngine.Collider other)
         {
         }
         public virtual void OnMapBuildingTriggerExit(string tirggerObjName, MapBuildingObject buildingObj, UnityEngine.Collider other)
+        {
+        }
+
+        public virtual void OnMapLevelTriggerEnter(string triggerObjName, UnityEngine.Collider other)
+        {
+
+        }
+        public virtual void OnMapLevelTriggerExit(string triggerObjName, UnityEngine.Collider other)
+        {
+
+        }
+
+        public virtual void OnMapNPCTriggerEnter(string tirggerObjName, MapNPCObject npcObj, UnityEngine.Collider other)
+        {
+        }
+        public virtual void OnMapNPCTriggerExit(string tirggerObjName, MapNPCObject npcObj, UnityEngine.Collider other)
         {
         }
 
@@ -122,7 +179,7 @@ namespace UnityMiniGameFramework
 
         }
 
-        protected bool _checkFinish()
+        protected virtual bool _checkFinish()
         {
             if(_timeLeft <= 0)
             {

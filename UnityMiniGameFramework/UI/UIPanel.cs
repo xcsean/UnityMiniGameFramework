@@ -47,6 +47,7 @@ namespace UnityMiniGameFramework
             _name = conf.name;
             _unityGameObject = new UnityEngine.GameObject($"UIPanel_{_name}");
             _unityUIDocument = _unityGameObject.AddComponent<UIDocument>();
+            _unityUIDocument.sortingOrder = conf.sortOrder;
 
             //var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/MyCustomEditor.uxml");
             var visualTree = Resources.Load<VisualTreeAsset>(conf.uiFile); // TO DO : use resource manager

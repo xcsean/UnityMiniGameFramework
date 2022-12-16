@@ -75,6 +75,13 @@ namespace UnityMiniGameFramework
             return true;
         }
 
+        public CMHeroLevelConf getCurrentHeroLevelConf()
+        {
+            CMHeroLevelConf conf;
+            _conf.levelConf.TryGetValue(_heroInfo.level, out conf);
+            return conf;
+        }
+
         protected override void _initAdditionalComponent()
         {
             var aiControlComp = new AIActorControllerComp();

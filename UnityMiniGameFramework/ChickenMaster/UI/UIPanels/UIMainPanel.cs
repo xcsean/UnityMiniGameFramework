@@ -33,6 +33,12 @@ namespace UnityMiniGameFramework
         protected Label _exp;
         public Label exp => _exp;
 
+        protected Label _CurrentLevel;
+        public Label CurrentLevel => _CurrentLevel;
+
+        protected Label _LevelInfo;
+        public Label LevelInfo => _LevelInfo;
+
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -42,6 +48,10 @@ namespace UnityMiniGameFramework
             _goldNum = this._uiObjects["GoldNum"].unityVisualElement as Label;
             _level = this._uiObjects["Level"].unityVisualElement as Label;
             _exp = this._uiObjects["Exp"].unityVisualElement as Label;
+            _CurrentLevel = this._uiObjects["CurrentLevel"].unityVisualElement as Label;
+            _LevelInfo = this._uiObjects["LevelInfo"].unityVisualElement as Label;
+
+            _LevelInfo.text = "Not Start";
         }
 
         public void refreshAll()
@@ -51,6 +61,7 @@ namespace UnityMiniGameFramework
             refreshGold(baseInfo.gold);
             refreshLevel(baseInfo.level);
             refreshExp(baseInfo.exp, cmGame.gameConf.getLevelUpExpRequire(baseInfo.level));
+            refreshCurrentLevel(baseInfo.currentLevel);
             refreshMeat();
         }
 
@@ -66,6 +77,23 @@ namespace UnityMiniGameFramework
         {
             _exp.text = $"Exp:{exp}/{nextLevelExp}";
         }
+        public void refreshCurrentLevel(int currentLevel)
+        {
+            _CurrentLevel.text = $"- {currentLevel} -";
+        }
+        public void refreshLevelInfo(CMShootingLevel lvl)
+        {
+            //DateTime t = new DateTime((long)(lvl.timeLeft * 1000));
+            var t = new TimeSpan((long)(lvl.timeLeft * 10000000));
+            string info = $"Time: {t.Minutes}:{t.Seconds}:{t.Milliseconds}";
+            foreach(var kmPair in lvl.kmCount)
+            {
+                info += $"\r\n{kmPair.Key} : {kmPair.Value}";
+            }
+
+            _LevelInfo.text = info;
+        }
+
         public void refreshMeat()
         {
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);

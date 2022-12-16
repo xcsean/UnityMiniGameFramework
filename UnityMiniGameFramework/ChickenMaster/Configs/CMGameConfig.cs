@@ -137,9 +137,12 @@ namespace UnityMiniGameFramework
 
     public class CMEggConf
     {
+        public string EggObjectName { get; set; }
         public int maxHp { get; set; }
         public int recoverTime { get; set; }
         public int hpIncTime { get; set; }
+        public JsonConfVector2 EggUIOffset { get; set; }
+        public float EggUIShowRange { get; set; }
     }
 
     public class CMGameConf
@@ -174,6 +177,24 @@ namespace UnityMiniGameFramework
         } 
         
         public CMGameConf gameConfs => (CMGameConf)_conf;
+
+        protected int _maxDefenseLevelCount;
+        public int maxDefenseLevelCount => _maxDefenseLevelCount;
+
+        public override void Init(string filename, string n)
+        {
+            base.Init(filename, n);
+
+            // format config
+            _maxDefenseLevelCount = 0;
+            for (int i=0; i< gameConfs.defenseLevels.Count; ++i)
+            {
+                if(_maxDefenseLevelCount < gameConfs.defenseLevels[i].levelRangeMax)
+                {
+                    _maxDefenseLevelCount = gameConfs.defenseLevels[i].levelRangeMax;
+                }
+            }
+        }
 
         override protected object _JsonDeserialize(string confStr)
         {

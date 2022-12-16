@@ -6,6 +6,38 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
+    public class UnityMapNPCTrigger : UnityEngine.MonoBehaviour
+    {
+        protected MapNPCObject _mapNpc;
+
+        private void Start()
+        {
+            var comp = this.gameObject.transform.parent.gameObject.GetComponent<UnityGameObjectBehaviour>();
+
+            _mapNpc = comp.mgGameObject as MapNPCObject;
+        }
+
+        private void OnTriggerEnter(UnityEngine.Collider other)
+        {
+            if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+            {
+                return;
+            }
+
+            _mapNpc.OnTriggerEnter(this.gameObject.name, other);
+        }
+        private void OnTriggerExit(UnityEngine.Collider other)
+        {
+            if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+            {
+                return;
+            }
+
+            _mapNpc.OnTriggerExit(this.gameObject.name, other);
+        }
+
+    }
+
     public class MapNPCObject : MapRoleObject
     {
         override public string type => "MapNPCObject";
@@ -15,6 +47,9 @@ namespace UnityMiniGameFramework
         }
 
         protected MapNPCObjectConf _mapNpcConf;
+
+        public event Action<string, MapNPCObject, UnityEngine.Collider> OnMapNPCTriggerEnter;
+        public event Action<string, MapNPCObject, UnityEngine.Collider> OnMapNPCTriggerExit;
 
         override protected ActorObjectConfig _getActorConf(string confname)
         {
@@ -58,6 +93,19 @@ namespace UnityMiniGameFramework
             base.PostInit();
 
 
+        }
+
+        public void OnTriggerEnter(string triggerObjectName, UnityEngine.Collider other)
+        {
+            OnMapNPCTriggerEnter(triggerObjectName, this, other);
+
+            (UnityGameApp.Inst.MainScene.map as Map).OnMapNPCTriggerEnter(triggerObjectName, this, other);
+        }
+        public void OnTriggerExit(string triggerObjectName, UnityEngine.Collider other)
+        {
+            OnMapNPCTriggerExit(triggerObjectName, this, other);
+
+            (UnityGameApp.Inst.MainScene.map as Map).OnMapNPCTriggerExit(triggerObjectName, this, other);
         }
     }
 }

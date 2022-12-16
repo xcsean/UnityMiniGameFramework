@@ -36,6 +36,7 @@ namespace UnityMiniGameFramework
         public Dictionary<string, MapMonsterSpawn> monsterSpawns => _monsterSpawns;
 
         protected Dictionary<string, MapNPCObject> _npcs;
+        public Dictionary<string, MapNPCObject> npcs => _npcs;
         protected Dictionary<string, List<UnityEngine.Vector3>> _paths;
 
         protected HashSet<MapActorObject> _mapActors;
@@ -299,6 +300,21 @@ namespace UnityMiniGameFramework
             _mapActors.Clear();
         }
 
+        public virtual void OnMapNPCTriggerEnter(string tirggerObjName, MapNPCObject npcObj, UnityEngine.Collider other)
+        {
+            if (_mapLevel != null)
+            {
+                _mapLevel.OnMapNPCTriggerEnter(tirggerObjName, npcObj, other);
+            }
+        }
+        public virtual void OnMapNPCTriggerExit(string tirggerObjName, MapNPCObject npcObj, UnityEngine.Collider other)
+        {
+            if (_mapLevel != null)
+            {
+                _mapLevel.OnMapNPCTriggerExit(tirggerObjName, npcObj, other);
+            }
+        }
+
         public virtual void OnAddMapActor(MapActorObject mapActor)
         {
             _mapActors.Add(mapActor);
@@ -345,7 +361,7 @@ namespace UnityMiniGameFramework
         {
             if(_mapLevel != null)
             {
-                _mapLevel.Finish();
+                _mapLevel.Clear();
                 _mapLevel = null;
             }
 

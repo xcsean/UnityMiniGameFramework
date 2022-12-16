@@ -59,6 +59,7 @@ namespace UnityMiniGameFramework
             _combatComp = new CMCombatComponent();
             _mapHeroObj.AddComponent(_combatComp);
             _initCombatConfig();
+            _combatComp.hpBar.hide();
 
             // add to scene
             unityHeroObj.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);

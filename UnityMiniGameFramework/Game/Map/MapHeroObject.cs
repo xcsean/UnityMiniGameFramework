@@ -34,7 +34,12 @@ namespace UnityMiniGameFramework
         override public void Init(string confname)
         {
             base.Init(confname);
+            _name = confname;
 
+            if (_mapHeroConf.movingConf != null)
+            {
+                this._rigiMovAct.setMovingConf(_mapHeroConf.movingConf);
+            }
             // TO DO : init map hero 
         }
     }

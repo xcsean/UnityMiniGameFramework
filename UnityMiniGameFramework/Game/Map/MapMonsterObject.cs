@@ -40,7 +40,11 @@ namespace UnityMiniGameFramework
             base.Init(confname);
 
             _name = confname;
-            // TO DO : init map hero 
+
+            if(_mapMonConf.movingConf != null)
+            {
+                this._rigiMovAct.setMovingConf(_mapMonConf.movingConf);
+            }
         }
 
         public void setLevel(int level)

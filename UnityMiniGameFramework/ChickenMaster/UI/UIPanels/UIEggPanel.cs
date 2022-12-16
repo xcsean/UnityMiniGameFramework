@@ -8,36 +8,44 @@ using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
-    public class UILevelMainPanel : UIPanel
+    public class UIEggPanel : UIPanel
     {
-        override public string type => "UILevelMainPanel";
-        public static UILevelMainPanel create()
+        override public string type => "UIEggPanel";
+        public static UIEggPanel create()
         {
-            return new UILevelMainPanel();
+            return new UIEggPanel();
         }
 
-        protected Button _nextLevelBtn;
+        protected Label _recoveryTime;
+        public Label RecoveryTime => _recoveryTime;
 
-        protected UILevelStateControl _levelStateControl;
-        public UILevelStateControl levelStateControl => _levelStateControl;
+
+        protected Button _startBtn;
 
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
 
-            _nextLevelBtn = this._uiObjects["NextLevelBtn"].unityVisualElement as Button;
-            _nextLevelBtn.RegisterCallback<MouseUpEvent>(onNextLevelClick);
+            //this.unityUIDocument.sortingOrder = -1;
 
-            _nextLevelBtn = this._uiObjects["QuitBtn"].unityVisualElement as Button;
-            _nextLevelBtn.RegisterCallback<MouseUpEvent>(onQuitLevelClick);
+            _recoveryTime = this._uiObjects["RecoverTime"].unityVisualElement as Label;
 
-            _levelStateControl = this._uiObjects["LevelStates"] as UILevelStateControl;
+            _startBtn = this._uiObjects["StartBtn"].unityVisualElement as Button;
+            _startBtn.RegisterCallback<MouseUpEvent>(onStartLevelClick);
+
+            _recoveryTime.text = "ready";
         }
 
-        public void onNextLevelClick(MouseUpEvent e)
+        public void onStartLevelClick(MouseUpEvent e)
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
+
+            if(bi.egg.hp <= 0)
+            {
+                // can't start level
+                return;
+            }
 
             var lvlConf = cmGame.GetCurrentDefenseLevelConf();
             if (lvlConf == null)
@@ -54,6 +62,7 @@ namespace UnityMiniGameFramework
                     (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
 
                     level.Start();
+                    _recoveryTime.text = "";
                 }
             }
             else if (!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
@@ -64,6 +73,7 @@ namespace UnityMiniGameFramework
                     (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
 
                     level.Start();
+                    _recoveryTime.text = "";
                 }
             }
             else
@@ -71,15 +81,22 @@ namespace UnityMiniGameFramework
                 // level is ongoing
             }
         }
-        public void onQuitLevelClick(MouseUpEvent e)
+
+        public void onEggDie()
         {
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-
-            cmGame.uiLevelMainPanel.hideUI();
-            cmGame.uiMainPanel.showUI();
-
-            UnityGameApp.Inst.MainScene.camera.follow(cmGame.Self.mapHero);
+            // TO DO : disable start button, show quick recover button (ad. button)
+        }
+        public void onEggRecover()
+        {
+            _recoveryTime.text = "ready";
+            // TO DO : show start button
         }
 
+        public void refreshRecoveryTime(long time)
+        {
+            var t = new TimeSpan((long)(time * 10000));
+
+            _recoveryTime.text = $"Time: {t.Minutes}:{t.Seconds}";
+        }
     }
 }

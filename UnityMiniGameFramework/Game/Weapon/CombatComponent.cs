@@ -37,11 +37,21 @@ namespace UnityMiniGameFramework
             // TO DO : change shader to quad hp bar shader, set mat value, do batch reandering
             _barObject.transform.localScale = new UnityEngine.Vector3(per * 0.5f, _barObject.transform.localScale.y, _barObject.transform.localScale.z);
         }
+
+        public void show()
+        {
+            _barObject.SetActive(true);
+        }
+        public void hide()
+        {
+            _barObject.SetActive(false);
+        }
     }
 
     abstract public class CombatComponent : GameObjectComponent
     {
         protected HealthBar _hpBar;
+        public HealthBar hpBar => _hpBar;
 
         protected int _HP;
         protected int _maxHP;

@@ -49,6 +49,7 @@ namespace UnityMiniGameFramework
         public ChickenMasterGame()
         {
             _self = new SelfControl();
+            _egg = new CMEgg();
             _cmNPCHeros = new Dictionary<string, CMNPCHeros>();
             _cmFactories = new Dictionary<string, CMFactory>();
         }
@@ -162,7 +163,6 @@ namespace UnityMiniGameFramework
             }
 
             // init egg
-            _egg = new CMEgg();
             _egg.Init(bi.egg);
 
             var tr = UnityGameApp.Inst.MainScene.mapRoot.transform.Find(_gameConf.gameConfs.levelCenterObjectName);
@@ -195,6 +195,8 @@ namespace UnityMiniGameFramework
             {
                 fac.Value.OnUpdate();
             }
+
+            _egg.OnUpdate();
         }
 
         public void InitUILevelMainPanel(string pannelName)

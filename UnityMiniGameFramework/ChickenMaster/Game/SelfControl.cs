@@ -14,18 +14,26 @@ namespace UnityMiniGameFramework
 
         LocalBaseInfo _baseInfo;
 
+        protected CMGameConfig _cmGameConf;
+
         public MapHeroObject selfMapHero => _mapHeroObj;
 
         public int userLevel => _baseInfo.level;
 
+        protected UIHeroPanel _heroUI;
+        public UIHeroPanel heroUI => _heroUI;
+        protected Dictionary<string, int> _heroNearState;
+
         public SelfControl()
         {
             _isInited = false;
+            _heroNearState = new Dictionary<string, int>();
         }
 
         public void Init()
         {
             _cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            _cmGameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
 
             _baseInfo = _cmGame.baseInfo.getData() as LocalBaseInfo;
 
@@ -35,7 +43,67 @@ namespace UnityMiniGameFramework
             UnityGameApp.Inst.MainScene.camera.follow(_mapHeroObj);
 
             _isInited = true;
+
+            // init hero ui
+            _heroUI = UnityGameApp.Inst.UI.createUIPanel("HeroUI") as UIHeroPanel;
+            _heroUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _heroUI.hideUI();
+
+            foreach(var npcPair in (UnityGameApp.Inst.MainScene.map as Map).npcs)
+            {
+                npcPair.Value.OnMapNPCTriggerEnter += _OnMapNPCTriggerEnter;
+                npcPair.Value.OnMapNPCTriggerExit += _OnMapNPCTriggerExit;
+            }
         }
+
+        private void _OnMapNPCTriggerEnter(string triggerObjectName, MapNPCObject npcObj, UnityEngine.Collider other)
+        {
+            var ugObj = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if (ugObj == null)
+            {
+                return;
+            }
+
+            var monObj = ugObj.mgGameObject as MapHeroObject;
+            if (monObj != _mapHeroObj)
+            {
+                // not self
+                return;
+            }
+
+            var heroConf = _cmGameConf.getCMHeroConf(npcObj.name);
+            if (heroConf == null)
+            {
+                return;
+            }
+
+            _heroUI.ShowHero(npcObj.name);
+        }
+
+        private void _OnMapNPCTriggerExit(string triggerObjectName, MapNPCObject npcObj, UnityEngine.Collider other)
+        {
+            var ugObj = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if (ugObj == null)
+            {
+                return;
+            }
+
+            var monObj = ugObj.mgGameObject as MapHeroObject;
+            if (monObj != _mapHeroObj)
+            {
+                // not self
+                return;
+            }
+
+            var heroConf = _cmGameConf.getCMHeroConf(npcObj.name);
+            if (heroConf == null)
+            {
+                return;
+            }
+
+            _heroUI.hideUI();
+        }
+
 
         //protected void _initSelfMapHero()
         //{
@@ -268,6 +336,44 @@ namespace UnityMiniGameFramework
                 //{
                 //    _gun.StopFire();
                 //}
+            }
+
+            foreach (var heroPair in _cmGame.cmNPCHeros)
+            {
+                var vec = (heroPair.Value.mapHero.unityGameObject.transform.position - this.mapHero.unityGameObject.transform.position);
+                if (vec.magnitude > 1.0)
+                {
+                    // not near by
+                    int nearState = 0;
+                    _heroNearState.TryGetValue(heroPair.Key, out nearState);
+                    if (nearState != 0)
+                    {
+                        // last frame is nearby, exit nearby
+                        _heroNearState[heroPair.Key] = 0;
+
+                        if(_heroUI.isShow)
+                        {
+                            _heroUI.hideUI();
+                        }
+                    }
+                }
+                else
+                {
+                    // near by
+                    int nearState = 0;
+                    _heroNearState.TryGetValue(heroPair.Key, out nearState);
+                    if (nearState == 0)
+                    {
+                        // last frame is not nearby, enter nearby
+                        _heroNearState[heroPair.Key] = 1;
+
+                        if (!_heroUI.isShow)
+                        {
+                            _heroUI.ShowHero(heroPair.Value.heroInfo.mapHeroName);
+                            break;
+                        }
+                    }
+                }
             }
         }
 
