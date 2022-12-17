@@ -45,6 +45,12 @@ namespace UnityMiniGameFramework
         public long nextRecoverTime { get; set; }
     }
 
+    public class LocalItemInfo
+    {
+        public string itemName { get; set; }
+        public int count { get; set; }
+    }
+
     public class LocalBaseInfo
     {
         public int gold { get; set; }
@@ -62,7 +68,9 @@ namespace UnityMiniGameFramework
         public Dictionary<int, LocalWeaponInfo> weapons { get; set; }
 
         public List<LocalFactoryInfo> factories { get; set; }
-        public List<LocalPackProductInfo> backPackItems { get; set; }
+        public List<LocalPackProductInfo> backPackProds { get; set; }
+
+        public List<LocalItemInfo> backPackItems { get; set; }
     }
 
     public class LocalUserInfo

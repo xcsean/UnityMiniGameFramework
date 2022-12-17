@@ -78,6 +78,8 @@ namespace UnityMiniGameFramework
 
         override public void Dispose()
         {
+            UnityGameApp.Inst.VFXManager.onGameObjDestroy(this);
+
             base.Dispose();
         }
 

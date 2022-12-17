@@ -248,12 +248,19 @@ namespace UnityMiniGameFramework
             {
                 return null;
             }
-            var drops = gameConfs.monsterDrops[mapMonsterName];
-            if(!drops.ContainsKey(monLevel))
+
+            // TO DO : change config to make it efficient
+            while(monLevel > 0)
             {
-                return null;
+                var drops = gameConfs.monsterDrops[mapMonsterName];
+                if (drops.ContainsKey(monLevel))
+                {
+                    return drops[monLevel];
+                }
+
+                --monLevel;
             }
-            return drops[monLevel];
+            return null;
         }
     }
 }

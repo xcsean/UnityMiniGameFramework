@@ -102,7 +102,8 @@ namespace UnityMiniGameFramework
                     defenseHeros = new List<LocalHeroInfo>(),
                     weapons = new Dictionary<int, LocalWeaponInfo>(),
                     factories = new List<LocalFactoryInfo>(),
-                    backPackItems = new List<LocalPackProductInfo>()
+                    backPackProds = new List<LocalPackProductInfo>(),
+                    backPackItems = new List<LocalItemInfo>()
                 };
                 _baseInfo = new DataObject(baseInfo);
                 _baseInfo.markDirty();
@@ -197,6 +198,11 @@ namespace UnityMiniGameFramework
             }
 
             _egg.OnUpdate();
+
+            if(_uiMainPanel != null)
+            {
+                _uiMainPanel.OnUpdate();
+            }
         }
 
         public void InitUILevelMainPanel(string pannelName)

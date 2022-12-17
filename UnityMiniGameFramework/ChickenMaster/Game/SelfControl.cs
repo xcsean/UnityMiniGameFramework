@@ -380,9 +380,9 @@ namespace UnityMiniGameFramework
         public void AddBackpackProduct(string name, int count)
         {
             LocalPackProductInfo toAddItem = null;
-            for(int i=0; i< _baseInfo.backPackItems.Count; ++i)
+            for(int i=0; i< _baseInfo.backPackProds.Count; ++i)
             {
-                var item = _baseInfo.backPackItems[i];
+                var item = _baseInfo.backPackProds[i];
                 if (item.productName == name)
                 {
                     toAddItem = item;
@@ -396,7 +396,7 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                _baseInfo.backPackItems.Add(new LocalPackProductInfo()
+                _baseInfo.backPackProds.Add(new LocalPackProductInfo()
                 {
                     productName = name,
                     count = count
@@ -411,9 +411,9 @@ namespace UnityMiniGameFramework
         public int SubBackpackProduct(string name, int count)
         {
             LocalPackProductInfo toSubItem = null;
-            for (int i = 0; i < _baseInfo.backPackItems.Count; ++i)
+            for (int i = 0; i < _baseInfo.backPackProds.Count; ++i)
             {
-                var item = _baseInfo.backPackItems[i];
+                var item = _baseInfo.backPackProds[i];
                 if (item.productName == name)
                 {
                     toSubItem = item;
@@ -444,10 +444,86 @@ namespace UnityMiniGameFramework
 
         public LocalPackProductInfo GetBackpackProductInfo(string name)
         {
+            for (int i = 0; i < _baseInfo.backPackProds.Count; ++i)
+            {
+                var item = _baseInfo.backPackProds[i];
+                if (item.productName == name)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
+
+        public void AddBackpackItem(string name, int count)
+        {
+            LocalItemInfo toAddItem = null;
             for (int i = 0; i < _baseInfo.backPackItems.Count; ++i)
             {
                 var item = _baseInfo.backPackItems[i];
-                if (item.productName == name)
+                if (item.itemName == name)
+                {
+                    toAddItem = item;
+                    break;
+                }
+            }
+
+            if (toAddItem != null)
+            {
+                toAddItem.count += count;
+            }
+            else
+            {
+                _baseInfo.backPackItems.Add(new LocalItemInfo()
+                {
+                    itemName = name,
+                    count = count
+                });
+            }
+
+            _cmGame.baseInfo.markDirty();
+        }
+
+        public int SubBackpackItem(string name, int count)
+        {
+            LocalItemInfo toSubItem = null;
+            for (int i = 0; i < _baseInfo.backPackItems.Count; ++i)
+            {
+                var item = _baseInfo.backPackItems[i];
+                if (item.itemName == name)
+                {
+                    toSubItem = item;
+                    break;
+                }
+            }
+
+            if (toSubItem == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"SubBackpackItem [{name}] not exist");
+                return 0;
+            }
+
+            _cmGame.baseInfo.markDirty();
+
+            if (toSubItem.count >= count)
+            {
+                toSubItem.count -= count;
+                return count;
+            }
+
+            toSubItem.count = 0;
+
+            return toSubItem.count;
+        }
+
+        public LocalItemInfo GetBackpackItemInfo(string name)
+        {
+            for (int i = 0; i < _baseInfo.backPackItems.Count; ++i)
+            {
+                var item = _baseInfo.backPackItems[i];
+                if (item.itemName == name)
                 {
                     return item;
                 }

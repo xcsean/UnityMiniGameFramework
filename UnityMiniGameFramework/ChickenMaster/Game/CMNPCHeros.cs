@@ -14,7 +14,8 @@ namespace UnityMiniGameFramework
 
         public void Init(LocalHeroInfo heroInfo)
         {
-            _conf = (UnityGameApp.Inst.Game as ChickenMasterGame).gameConf.getCMHeroConf(heroInfo.mapHeroName);
+            _cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            _conf = _cmGame.gameConf.getCMHeroConf(heroInfo.mapHeroName);
             if(_conf == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMNPCHeros init with [{heroInfo.mapHeroName}] config not exist");
@@ -68,6 +69,9 @@ namespace UnityMiniGameFramework
             }
             else
             {
+                // for Debug ...
+                cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
+
                 // TO DO : not enough gold
                 return false;
             }
@@ -170,17 +174,98 @@ namespace UnityMiniGameFramework
 
         public void ChangeWeapon(int weaponId)
         {
+            var gunInfo = _cmGame.GetWeaponInfo(weaponId);
+            if(gunInfo == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Npc hero [{this._heroInfo.mapHeroName}] change weapon id[{weaponId}] not exist");
+                return;
+            }
 
+            _heroInfo.holdWeaponId = weaponId;
+            this.onChangeGun();
+
+            _fireTargetAI.setGun(_gun);
         }
 
-        public void AddWeapon(int weaponId)
+        public bool TryActiveWeapon(int weaponId)
         {
+            var cmGunConf = _cmGame.gameConf.getCMGunConf(weaponId);
+            var itemInfo = _cmGame.Self.GetBackpackItemInfo(cmGunConf.upgradeItemName);
+            if (itemInfo != null)
+            {
+                // try active
+                if (itemInfo.count >= cmGunConf.activateItemCost)
+                {
+                    if (cmGunConf.activateItemCost == _cmGame.Self.SubBackpackItem(cmGunConf.upgradeItemName, cmGunConf.activateItemCost))
+                    {
+                        // sub success
 
+                        // active
+                        _cmGame.AddNewWeaponInfo(weaponId);
+                        return true;
+                    }
+                }
+                else
+                {
+                    // not enough item
+                    _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for activate");
+                }
+            }
+            else
+            {
+                // not enough item
+
+                // for Debug ...
+                _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for activate");
+            }
+
+            return false;
         }
 
-        public void UpgradeWeapon(int weaponId)
+        public bool TryUpgradeWeapon(int weaponId)
         {
+            var gunInfo = _cmGame.GetWeaponInfo(weaponId);
+            var cmGunConf = _cmGame.gameConf.getCMGunConf(weaponId);
+            var gunLevelConf = cmGunConf.gunLevelConf[gunInfo.level];
 
+            var itemInfo = _cmGame.Self.GetBackpackItemInfo(cmGunConf.upgradeItemName);
+            if (itemInfo != null)
+            {
+                // try upgrade
+                if (itemInfo.count >= gunLevelConf.upgrageCostItemCost)
+                {
+                    if (gunLevelConf.upgrageCostItemCost == _cmGame.Self.SubBackpackItem(cmGunConf.upgradeItemName, gunLevelConf.upgrageCostItemCost))
+                    {
+                        // sub success
+
+                        // upgrade
+                        gunInfo.level++;
+
+                        if(weaponId == _heroInfo.holdWeaponId)
+                        {
+                            _recalcAttack();
+                        }
+
+                        return true;
+                    }
+                }
+                else
+                {
+                    // not enough item
+
+                    // for Debug ...
+                    _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for upgrade");
+                }
+            }
+            else
+            {
+                // not enough item
+
+                // for Debug ...
+                _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for upgrade");
+            }
+
+            return false;
         }
     }
 }

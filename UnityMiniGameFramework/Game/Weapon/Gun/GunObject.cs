@@ -340,9 +340,10 @@ namespace UnityMiniGameFramework
 
         virtual protected void _onEmmiterHit(UnityEngine.GameObject o)
         {
+            VFXObjectBase hitVfx = null;
             if (_conf.FireConf.hitVFX != null)
             {
-                var hitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.hitVFX);
+                hitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.hitVFX);
                 if (hitVfx != null)
                 {
                     hitVfx.unityGameObject.transform.SetParent(o.transform);
@@ -358,6 +359,11 @@ namespace UnityMiniGameFramework
                 if (combComp != null)
                 {
                     combComp.OnHitby(this);
+                }
+
+                if(hitVfx != null)
+                {
+                    UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(hitVfx, ugbGameObj.mgGameObject);
                 }
             }
 
@@ -498,12 +504,13 @@ namespace UnityMiniGameFramework
                 return false;
             }
 
+            VFXObjectBase hitVfx = null;
             if (_conf.FireConf.hitVFX != null)
             {
-                var hitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.hitVFX);
+                hitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.hitVFX);
                 if (hitVfx != null)
                 {
-                    hitVfx.unityGameObject.transform.SetParent(_currentHitPoint.collider.gameObject.transform);
+                    hitVfx.unityGameObject.transform.SetParent(_currentRayHitObject.transform);
                     hitVfx.unityGameObject.transform.localPosition = UnityEngine.Vector3.zero;
                 }
             }
@@ -516,6 +523,12 @@ namespace UnityMiniGameFramework
                 if (combComp != null)
                 {
                     combComp.OnHitby(this);
+                }
+
+
+                if (hitVfx != null)
+                {
+                    UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(hitVfx, ugbGameObj.mgGameObject);
                 }
             }
 

@@ -8,8 +8,10 @@ using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
+
     public class UILevelMainPanel : UIPanel
     {
+
         override public string type => "UILevelMainPanel";
         public static UILevelMainPanel create()
         {

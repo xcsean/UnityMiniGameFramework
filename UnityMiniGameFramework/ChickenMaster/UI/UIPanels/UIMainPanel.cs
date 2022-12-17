@@ -9,8 +9,21 @@ using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
+    public enum CMGNotifyType
+    {
+        CMG_Notify,
+        CMG_ERROR
+    }
+
     public class UIMainPanel : UIPanel
     {
+        protected class NotifyMessage
+        {
+            public CMGNotifyType t;
+            public string msg;
+            public float timeLeft;
+        }
+
         override public string type => "UIMainPanel";
         public static UIMainPanel create()
         {
@@ -39,6 +52,11 @@ namespace UnityMiniGameFramework
         protected Label _LevelInfo;
         public Label LevelInfo => _LevelInfo;
 
+        protected Label _NotifyText;
+        public Label NotifyText => _NotifyText;
+
+        protected List<NotifyMessage> _notifyMessages;
+
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -50,8 +68,12 @@ namespace UnityMiniGameFramework
             _exp = this._uiObjects["Exp"].unityVisualElement as Label;
             _CurrentLevel = this._uiObjects["CurrentLevel"].unityVisualElement as Label;
             _LevelInfo = this._uiObjects["LevelInfo"].unityVisualElement as Label;
+            _NotifyText = this._uiObjects["NotifyText"].unityVisualElement as Label;
 
             _LevelInfo.text = "Not Start";
+            _NotifyText.text = "";
+
+            _notifyMessages = new List<NotifyMessage>();
         }
 
         public void refreshAll()
@@ -101,6 +123,70 @@ namespace UnityMiniGameFramework
             if (meatInfo != null)
             {
                 _meatNum.text = $"Meat: {meatInfo.count}";
+            }
+        }
+
+        public void NofityMessage(CMGNotifyType t, string msg)
+        {
+            var notify = new NotifyMessage()
+            {
+                t = t,
+                msg = msg,
+                timeLeft = 3.0f // 3 seconds
+            };
+
+            _notifyMessages.Add(notify);
+            if(_notifyMessages.Count > 3)
+            {
+                _notifyMessages.RemoveAt(0);
+            }
+
+            _refreshNotifyMessages();
+        }
+
+        protected void _refreshNotifyMessages()
+        {
+            string msg = "";
+            foreach (var n in _notifyMessages)
+            {
+                switch (n.t)
+                {
+                    case CMGNotifyType.CMG_Notify:
+                        msg += $"<color=#ffffffff>{n.msg}</color><br>"; // TO DO : change color
+                        break;
+                    case CMGNotifyType.CMG_ERROR:
+                        msg += $"<color=#ff0000ff>{n.msg}</color><br>"; // TO DO : change color
+                        break;
+                }
+            }
+
+            _NotifyText.text = msg;
+        }
+
+
+        public void OnUpdate()
+        {
+            if(_notifyMessages == null)
+            {
+                return;
+            }
+
+            bool changed = false;
+            for(int i=0; i< _notifyMessages.Count; ++i)
+            {
+                var notify = _notifyMessages[i];
+                notify.timeLeft -= UnityEngine.Time.deltaTime;
+
+                if(notify.timeLeft <= 0)
+                {
+                    _notifyMessages.RemoveAt(i);
+                    changed = true;
+                }
+            }
+
+            if(changed)
+            {
+                _refreshNotifyMessages();
             }
         }
     }

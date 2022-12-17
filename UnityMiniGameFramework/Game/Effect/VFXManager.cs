@@ -20,6 +20,9 @@ namespace UnityMiniGameFramework
         protected Dictionary<string, Queue<VFXObjectBase>> _cachedVfxs; // vfx name => cached vfx list
         protected Dictionary<string, HashSet<VFXObjectBase>> _currentShowVfxs; // vfx name => current show vfx set
 
+        protected Dictionary<MGGameObject, List<VFXObjectBase>> _attachedVfxs;
+        protected Dictionary<VFXObjectBase, MGGameObject> _vfxAttachToObj;
+
         public VFXManager()
         {
             _vfxCacheUnityPrefabObjects = new Dictionary<string, UnityEngine.GameObject>();
@@ -27,6 +30,9 @@ namespace UnityMiniGameFramework
 
             _cachedVfxs = new Dictionary<string, Queue<VFXObjectBase>>();
             _currentShowVfxs = new Dictionary<string, HashSet<VFXObjectBase>>();
+
+            _attachedVfxs = new Dictionary<MGGameObject, List<VFXObjectBase>>();
+            _vfxAttachToObj = new Dictionary<VFXObjectBase, MGGameObject>();
         }
 
         public void registerVfxObjectCreator(string type, Func<VFXObjectBase> creator)
@@ -168,19 +174,64 @@ namespace UnityMiniGameFramework
             _vfxCacheUnityPrefabObjects.Remove(vfxName);
         }
 
+        public void onVFXAttachToGameObj(VFXObjectBase vfx, MGGameObject obj)
+        {
+            List<VFXObjectBase> list = null;
+            if(!_attachedVfxs.ContainsKey(obj))
+            {
+                list = new List<VFXObjectBase>();
+                _attachedVfxs[obj] = list;
+            }
+            else
+            {
+                list = _attachedVfxs[obj];
+            }
 
-        public void onVFXDestory(VFXObjectBase o)
+            list.Add(vfx);
+
+            _vfxAttachToObj[vfx] = obj;
+        }
+
+        public void onGameObjDestroy(MGGameObject obj)
+        {
+            if (!_attachedVfxs.ContainsKey(obj))
+            {
+                return;
+            }
+
+            var list = _attachedVfxs[obj];
+            foreach(var vfx in list)
+            {
+                if(vfx.unityGameObject != null)
+                {
+                    vfx.unityGameObject.transform.SetParent(null); // detach from game object
+                    vfx.particleSystem.Stop();
+                }
+                _vfxAttachToObj.Remove(vfx);
+                _onVFXDestory(vfx);
+            }
+
+            _attachedVfxs.Remove(obj);
+        }
+
+        protected void _onVFXDestory(VFXObjectBase o)
         {
             if (_currentShowVfxs.ContainsKey(o.name))
             {
                 var currShowSet = _currentShowVfxs[o.name];
-                if(currShowSet.Contains(o))
+                if (currShowSet.Contains(o))
                 {
                     currShowSet.Remove(o);
                 }
             }
 
             //UnityEngine.GameObject.Destroy(o.unityGameObject);
+
+            if (o.unityGameObject == null)
+            {
+                // already destroy, don't cache
+                return;
+            }
 
             if (o.maxCacheCount > 0)
             {
@@ -207,6 +258,24 @@ namespace UnityMiniGameFramework
                 // TO DO : clear vfx object
                 UnityEngine.GameObject.Destroy(o.unityGameObject);
             }
+        }
+
+        public void onVFXDestory(VFXObjectBase o)
+        {
+            if(_vfxAttachToObj.ContainsKey(o))
+            {
+                // clear attached vfx
+                List<VFXObjectBase> list = null;
+                _attachedVfxs.TryGetValue(_vfxAttachToObj[o], out list);
+                if(list != null)
+                {
+                    list.Remove(o);
+                }
+
+                _vfxAttachToObj.Remove(o);
+            }
+
+            _onVFXDestory(o);
         }
 
         public void OnUpdate(float deltaTime)

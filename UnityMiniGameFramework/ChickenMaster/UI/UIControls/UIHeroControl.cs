@@ -82,7 +82,15 @@ namespace UnityMiniGameFramework
             _Gun2Pic = this._subControls["Gun2Pic"].unityVisualElement;
             _Gun3Pic = this._subControls["Gun3Pic"].unityVisualElement;
 
+            _Gun1Prog = this._subControls["Gun1Prog"].unityVisualElement as ProgressBar;
+            _Gun2Prog = this._subControls["Gun2Prog"].unityVisualElement as ProgressBar;
+            _Gun3Prog = this._subControls["Gun3Prog"].unityVisualElement as ProgressBar;
+
             _ActBtn.RegisterCallback<MouseUpEvent>(onActBtnClick);
+
+            _Gun1Pic.RegisterCallback<MouseUpEvent>(onGun1Click);
+            _Gun2Pic.RegisterCallback<MouseUpEvent>(onGun2Click);
+            _Gun3Pic.RegisterCallback<MouseUpEvent>(onGun3Click);
 
             // TO DO : add gun active/upgrade btn
         }
@@ -96,6 +104,9 @@ namespace UnityMiniGameFramework
                 if (_heroConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).level < _heroConf.userLevelRequire)
                 {
                     // TO DO : level require
+
+                    // for Debug ...
+                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "User Level not reach !");
                 }
                 else if (cmGame.Self.TrySubGold(_heroConf.activateGoldCost))
                 {
@@ -112,6 +123,9 @@ namespace UnityMiniGameFramework
                 else
                 {
                     // TO DO : not enough gold
+
+                    // for Debug ...
+                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 }
             }
             else
@@ -151,6 +165,8 @@ namespace UnityMiniGameFramework
             //_HeadPic.style.backgroundImage = new StyleBackground(texture2d);
 
             refreshInfo();
+
+            refreshGunUpgradeProgress();
         }
 
         public void refreshInfo()
@@ -202,9 +218,149 @@ namespace UnityMiniGameFramework
             }
         }
 
+        protected void _refreshGunUpgrade(LocalWeaponInfo gunInfo, Label gunText, ProgressBar gunProg)
+        {
+            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var cmGunConf = cmGame.gameConf.getCMGunConf(gunInfo.id);
+            var gunLevelConf = cmGunConf.gunLevelConf[gunInfo.level];
+
+            var itemInfo = cmGame.Self.GetBackpackItemInfo(cmGunConf.upgradeItemName);
+            if(itemInfo == null)
+            {
+                gunProg.value = 0;
+            }
+            else
+            {
+                if(itemInfo.count >= gunLevelConf.upgrageCostItemCost)
+                {
+                    gunProg.value = 100;
+                    gunText.text = "ReadyUpgrade";
+                }
+                else
+                {
+                    gunProg.value = itemInfo.count * 100 / gunLevelConf.upgrageCostItemCost;
+                }
+            }
+        }
+
+        protected void _refreshGunActivate(int gunId, Label gunText, ProgressBar gunProg)
+        {
+            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var cmGunConf = cmGame.gameConf.getCMGunConf(gunId);
+
+            var itemInfo = cmGame.Self.GetBackpackItemInfo(cmGunConf.upgradeItemName);
+            if (itemInfo == null)
+            {
+                gunProg.value = 0;
+            }
+            else
+            {
+                if (itemInfo.count >= cmGunConf.activateItemCost)
+                {
+                    gunProg.value = 100;
+                    gunText.text = "ReadyActivte";
+                }
+                else
+                {
+                    gunProg.value = itemInfo.count * 100 / cmGunConf.activateItemCost;
+                }
+            }
+        }
+
         public void refreshGunUpgradeProgress()
         {
-            // TO DO : 
+            if(_gun1Info != null)
+            {
+                _refreshGunUpgrade(_gun1Info, _Gun1, _Gun1Prog);
+            }
+
+            if (_gun2Info != null)
+            {
+                _refreshGunUpgrade(_gun2Info, _Gun2, _Gun2Prog);
+            }
+            else
+            {
+                _refreshGunActivate(_heroConf.guns[1], _Gun2, _Gun2Prog);
+            }
+
+            if (_gun3Info != null)
+            {
+                _refreshGunUpgrade(_gun3Info, _Gun3, _Gun3Prog);
+            }
+            else
+            {
+                _refreshGunActivate(_heroConf.guns[2], _Gun3, _Gun3Prog);
+            }
+        }
+
+        protected bool _onGunClick(int gunId)
+        {
+            if (_hero == null)
+            {
+                return false;
+            }
+
+            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var gunInfo = cmGame.GetWeaponInfo(gunId);
+
+            if (gunInfo == null)
+            {
+                // not active
+                return _hero.TryActiveWeapon(gunId);
+            }
+            else
+            {
+                // actived
+                if(!_hero.TryUpgradeWeapon(gunId))
+                {
+                    // active failed
+
+                    // TO DO : move change weapon to other button
+                    // for Debug ...
+                    _hero.ChangeWeapon(gunId);
+
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+        }
+
+        public void onGun1Click(MouseUpEvent e)
+        {
+            var changed = _onGunClick(_heroConf.guns[0]);
+            if(changed)
+            {
+                ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                _gun1Info = cmGame.GetWeaponInfo(_heroConf.guns[0]);
+                refreshInfo();
+                refreshGunUpgradeProgress();
+            }
+        }
+        public void onGun2Click(MouseUpEvent e)
+        {
+            var changed = _onGunClick(_heroConf.guns[1]);
+            if (changed)
+            {
+                ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
+                refreshInfo();
+                refreshGunUpgradeProgress();
+            }
+        }
+        public void onGun3Click(MouseUpEvent e)
+        {
+            var changed = _onGunClick(_heroConf.guns[2]);
+            if (changed)
+            {
+                ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
+                refreshInfo();
+                refreshGunUpgradeProgress();
+            }
         }
     }
 }

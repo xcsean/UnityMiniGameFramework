@@ -8,6 +8,12 @@ namespace UnityMiniGameFramework
 {
     public class CMShootingLevel : MapLevel
     {
+        protected class CMNamedDrop
+        {
+            public string name;
+            public int count;
+        }
+
         UILevelMainPanel _levelUI;
         UIMainPanel _mainUI;
 
@@ -59,6 +65,47 @@ namespace UnityMiniGameFramework
             _mainUI.refreshLevelInfo(this);
         }
 
+        protected int _dropRoll(CMDropRoll r)
+        {
+            var j = UnityGameApp.Inst.Rand.RandomBetween(0, 100000000);
+            if(j < r.rate)
+            {
+                return UnityGameApp.Inst.Rand.RandomBetween(r.min, r.max);
+            }
+
+            return 0;
+        }
+
+        protected CMNamedDrop _dropSet(List<CMNamedDropSet> list)
+        {
+            int rateTotal = 0;
+            foreach(var d in list)
+            {
+                rateTotal += d.rate;
+            }
+
+            var j = UnityGameApp.Inst.Rand.RandomBetween(0, rateTotal);
+
+            var curRate = 0;
+            foreach (var d in list)
+            {
+                curRate += d.rate;
+                if(j < curRate)
+                {
+                    return new CMNamedDrop()
+                    {
+                        name = d.name,
+                        count = UnityGameApp.Inst.Rand.RandomBetween(d.min, d.max)
+                    };
+                }
+            }
+
+            return new CMNamedDrop()
+            {
+                name = "null",
+                count = 0
+            };
+        }
 
         override public void OnMonsterDie(MapMonsterObject mon)
         {
@@ -66,13 +113,37 @@ namespace UnityMiniGameFramework
 
             // read drop from config and do drop
             var drop = (UnityGameApp.Inst.Game as ChickenMasterGame).gameConf.getMonsterDrops(mon.name, mon.level);
+            if(drop == null)
+            {
+                return;
+            }
 
-            // TO DO : do drop
+            // do drop
+            int exp = _dropRoll(drop.exp);
+            int gold = _dropRoll(drop.gold);
 
-            // for Debug ...
-            (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackProduct("meat", 10);
-            (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddExp(10);
+            if(gold > 0)
+            {
+                (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddGold(gold);
+            }
+            if(exp > 0)
+            {
+                (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddExp(10);
+            }
+
+            var prodDrop = _dropSet(drop.product);
+            if(prodDrop.count > 0)
+            {
+                (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackProduct(prodDrop.name, prodDrop.count);
+            }
+
+            var itemDrop = _dropSet(drop.item);
+            if(itemDrop.count > 0)
+            {
+                (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackItem(itemDrop.name, itemDrop.count);
+            }
         }
+
         public override void OnMapNPCTriggerEnter(string tirggerObjName, MapNPCObject npcObj, UnityEngine.Collider other)
         {
         }
@@ -130,7 +201,9 @@ namespace UnityMiniGameFramework
 
         protected override void _OnTimeUp()
         {
-
+            // for Debug ...
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level Time up");
         }
 
         protected override void _OnWin()
@@ -150,11 +223,19 @@ namespace UnityMiniGameFramework
             _mainUI.refreshCurrentLevel(bi.currentLevel);
 
             cmGame.baseInfo.markDirty();
+
+            // for Debug ...
+            cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level Win !");
         }
 
         protected override void _OnLose()
         {
+            // TO DO : on level lose
 
+            // for Debug ...
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+
+            cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level lost !");
         }
     }
 }
