@@ -19,8 +19,8 @@ namespace UnityMiniGameFramework
         public string mapBuildName { get; set; }
         public int level { get; set; }
 
-        public List<LocalPackProductInfo> buildingInputProducts { get; set; }
-        public List<LocalPackProductInfo> buildingOutputProducts { get; set; }
+        public LocalPackProductInfo buildingInputProduct { get; set; }
+        public LocalPackProductInfo buildingOutputProduct { get; set; }
     }
 
     public class LocalWeaponInfo

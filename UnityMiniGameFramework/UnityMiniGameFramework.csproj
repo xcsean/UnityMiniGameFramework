@@ -107,6 +107,7 @@
     <Compile Include="ChickenMaster\Game\CMHeros.cs" />
     <Compile Include="ChickenMaster\Game\CMNPCHeros.cs" />
     <Compile Include="ChickenMaster\Game\CMPackage.cs" />
+    <Compile Include="ChickenMaster\Game\CMStoreHouse.cs" />
     <Compile Include="ChickenMaster\Game\CMTrainStation.cs" />
     <Compile Include="ChickenMaster\Game\CMWeapon.cs" />
     <Compile Include="ChickenMaster\Levels\CMShootingLevel.cs" />

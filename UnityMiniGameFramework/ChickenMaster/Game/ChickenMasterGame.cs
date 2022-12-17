@@ -289,8 +289,8 @@ namespace UnityMiniGameFramework
             {
                 mapBuildName = factoryName,
                 level = 1,
-                buildingInputProducts = new List<LocalPackProductInfo>(),
-                buildingOutputProducts = new List<LocalPackProductInfo>()
+                buildingInputProduct = null,
+                buildingOutputProduct = null
             };
 
             if (!fac.Init(localFacInfo))

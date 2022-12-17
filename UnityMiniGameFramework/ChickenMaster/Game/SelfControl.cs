@@ -459,6 +459,13 @@ namespace UnityMiniGameFramework
 
         public void AddBackpackItem(string name, int count)
         {
+            // TO DO : show double award ui
+
+            _RealAddBackpackItem(name, count);
+        }
+
+        public void _RealAddBackpackItem(string name, int count)
+        {
             LocalItemInfo toAddItem = null;
             for (int i = 0; i < _baseInfo.backPackItems.Count; ++i)
             {

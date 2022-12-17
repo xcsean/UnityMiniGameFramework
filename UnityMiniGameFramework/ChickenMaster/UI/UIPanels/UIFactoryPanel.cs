@@ -96,15 +96,14 @@ namespace UnityMiniGameFramework
 
                 _factoryCtrl.Info.text = $"Upgrade Gold: {_factory.getUpgradeGoldCost()}";
 
-                if (_factory.localFacInfo.buildingInputProducts.Count > 0)
+                if (_factory.localFacInfo.buildingInputProduct != null)
                 {
-                    // for Debug ...
-                    _factoryCtrl.inputNumber.text = $"{_factory.localFacInfo.buildingInputProducts[0].productName}: {_factory.localFacInfo.buildingInputProducts[0].count}";
+                    _factoryCtrl.inputNumber.text = $"{_factory.localFacInfo.buildingInputProduct.productName}: {_factory.localFacInfo.buildingInputProduct.count}";
                 }
-                if (_factory.localFacInfo.buildingOutputProducts.Count > 0)
+                if (_factory.localFacInfo.buildingOutputProduct != null)
                 {
                     // for Debug ...
-                    _factoryCtrl.outputNumber.text = $"{_factory.localFacInfo.buildingOutputProducts[0].productName}: {_factory.localFacInfo.buildingOutputProducts[0].count}";
+                    _factoryCtrl.outputNumber.text = $"{_factory.localFacInfo.buildingOutputProduct.productName}: {_factory.localFacInfo.buildingOutputProduct.count}";
                 }
             }
         }

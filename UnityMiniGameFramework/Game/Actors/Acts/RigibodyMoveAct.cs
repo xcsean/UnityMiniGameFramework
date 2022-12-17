@@ -98,7 +98,7 @@ namespace UnityMiniGameFramework
             if (_actor.actionComponent.hasState(ActStates.STATE_KEY_NO_MOVE))
             {
                 // can't move
-                _onStop();
+                //_onStop();
                 return;
             }
 

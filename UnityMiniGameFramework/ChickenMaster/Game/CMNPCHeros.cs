@@ -227,6 +227,16 @@ namespace UnityMiniGameFramework
             var gunInfo = _cmGame.GetWeaponInfo(weaponId);
             var cmGunConf = _cmGame.gameConf.getCMGunConf(weaponId);
             var gunLevelConf = cmGunConf.gunLevelConf[gunInfo.level];
+            
+            if(!cmGunConf.gunLevelConf.ContainsKey(gunInfo.level+1))
+            {
+                // max level
+
+                // for Debug ...
+                _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"Already max level");
+
+                return false;
+            }
 
             var itemInfo = _cmGame.Self.GetBackpackItemInfo(cmGunConf.upgradeItemName);
             if (itemInfo != null)

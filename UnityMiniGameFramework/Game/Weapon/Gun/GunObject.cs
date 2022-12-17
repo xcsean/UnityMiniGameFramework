@@ -209,6 +209,49 @@ namespace UnityMiniGameFramework
         override public void Dispose()
         {
             base.Dispose();
+
+            // clear projectiles
+            if(_currentProjectiles != null)
+            {
+                foreach(var proj in _currentProjectiles)
+                {
+                    UnityGameApp.Inst.VFXManager.onVFXDestory(proj);
+                }
+                _currentProjectiles = null;
+            }
+
+            // clear ray
+            if (_rayVFX != null)
+            {
+                UnityGameApp.Inst.VFXManager.onVFXDestory(_rayVFX);
+                _rayVFX = null;
+            }
+            if (_rayImpactVFX != null)
+            {
+                UnityGameApp.Inst.VFXManager.onVFXDestory(_rayImpactVFX);
+                _rayImpactVFX = null;
+            }
+
+            // clear emmiter
+            if (_throwEmmiter != null)
+            {
+                UnityGameApp.Inst.VFXManager.onVFXDestory(_throwEmmiter);
+                _throwEmmiter = null;
+
+                foreach (var pair in _emmiterHitObjectsTime)
+                {
+                    var ugo = pair.Key.GetComponent<UnityGameObjectBehaviour>();
+                    if (ugo != null)
+                    {
+                        var actor = ugo.mgGameObject as ActorObject;
+                        if (actor != null)
+                        {
+                            actor.OnDispose -= Actor_OnDispose;
+                        }
+                    }
+                }
+                _emmiterHitObjectsTime = null;
+            }
         }
 
         override public void OnUpdate(float timeElasped)

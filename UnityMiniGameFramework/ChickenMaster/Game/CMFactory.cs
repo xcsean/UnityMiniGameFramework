@@ -10,7 +10,10 @@ namespace UnityMiniGameFramework
     public class CMFactory
     {
         CMFactoryConf _factoryConf;
-        CMFactoryConf factoryConf => _factoryConf;
+        public CMFactoryConf factoryConf => _factoryConf;
+
+        CMFactoryLevelConf _factoryLevelConf;
+        public CMFactoryLevelConf factoryLevelConf => _factoryLevelConf;
 
         protected string _factoryName;
         public string factoryName => _factoryName;
@@ -18,17 +21,12 @@ namespace UnityMiniGameFramework
         public LocalFactoryInfo localFacInfo => _localFacInfo;
         protected LocalFactoryInfo _localFacInfo;
 
-        public float produceCD => _produceCD;
-        protected float _produceCD;
-        public int maxInputProductStore => _maxInputProductStore;
-        protected int _maxInputProductStore;
-        public int maxOutputProductStore => _maxOutputProductStore;
-        protected int _maxOutputProductStore;
+        public float produceCD => _factoryLevelConf.produceCD;
+        public int maxInputProductStore => _factoryLevelConf.maxInputProductStore;
+        public int maxOutputProductStore => _factoryLevelConf.maxOutputProductStore;
 
-        public int currentProductInputStore => _currentProductInputStore;
-        protected int _currentProductInputStore;
-        public int currentProductOutputStore => _currentProductOutputStore;
-        protected int _currentProductOutputStore;
+        public int currentProductInputStore => _localFacInfo.buildingInputProduct == null? 0 : _localFacInfo.buildingInputProduct.count;
+        public int currentProductOutputStore => _localFacInfo.buildingOutputProduct == null ? 0 : _localFacInfo.buildingOutputProduct.count;
 
         public float currentCD => _currentCD;
         protected float _currentCD;
@@ -49,38 +47,21 @@ namespace UnityMiniGameFramework
                 return false;
             }
 
-            _produceCD = _factoryConf.produceCD + _factoryConf.produceCDAddPerLevel * _localFacInfo.level;
-            _maxInputProductStore = _factoryConf.maxInputProductStore + _factoryConf.maxInputProductStoreAddPerLevel * _localFacInfo.level;
-            _maxOutputProductStore = _factoryConf.maxOutputProductStore + _factoryConf.maxOutputProductStoreAddPerLevel * _localFacInfo.level;
+            if(!_factoryConf.levelConfs.TryGetValue(_localFacInfo.level, out _factoryLevelConf))
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory [{_factoryName}] level [{_localFacInfo.level}] config not exist");
+                return false;
+            }
 
-            _refreshInfo();
-
-            _currentCD = _produceCD;
+            _currentCD = produceCD;
             _produceVer = 0;
 
             return true;
         }
 
-
-        virtual protected void _refreshInfo()
-        {
-            _currentProductInputStore = 0;
-            _currentProductOutputStore = 0;
-
-            foreach (var info in _localFacInfo.buildingInputProducts)
-            {
-                _currentProductInputStore += info.count;
-            }
-            foreach (var info in _localFacInfo.buildingOutputProducts)
-            {
-                _currentProductOutputStore += info.count;
-            }
-        }
         public int getUpgradeGoldCost()
         {
-            int upgradeGold = 0;
-            _factoryConf.upgradeGoldCostPerLevel.TryGetValue(_localFacInfo.level, out upgradeGold);
-            return upgradeGold;
+            return _factoryLevelConf.upgradeGoldCost;
         }
 
         public bool TryUpgrade()
@@ -93,6 +74,11 @@ namespace UnityMiniGameFramework
             //    return false;
             //}
 
+            if(!_factoryConf.levelConfs.ContainsKey(_localFacInfo.level + 1))
+            {
+                return false;
+            }
+
             int upgradeGold = getUpgradeGoldCost();
             if (upgradeGold <= 0)
             {
@@ -104,6 +90,7 @@ namespace UnityMiniGameFramework
             {
                 // upgrade 
                 _localFacInfo.level = _localFacInfo.level + 1;
+                _factoryLevelConf = _factoryConf.levelConfs[_localFacInfo.level];
                 cmGame.baseInfo.markDirty();
             }
             else
@@ -117,19 +104,25 @@ namespace UnityMiniGameFramework
 
         public virtual void fillProduct(LocalPackProductInfo info)
         {
+            if (info.productName != _factoryConf.inputProductName)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"factory [{_factoryConf.mapBuildName}] fill product [{info.productName}] but expect [{_factoryConf.inputProductName}]");
+                return;
+            }
+
             if (info.count <= 0)
             {
                 return;
             }
 
-            if (_currentProductInputStore >= _maxInputProductStore)
+            if (currentProductInputStore >= maxInputProductStore)
             {
                 return;
             }
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
 
-            int toFill = _maxInputProductStore - _currentProductInputStore;
+            int toFill = maxInputProductStore - currentProductInputStore;
             if (toFill > info.count)
             {
                 toFill = info.count;
@@ -138,29 +131,18 @@ namespace UnityMiniGameFramework
             info.count -= toFill;
             // TO DO : find product index and fill
 
-            LocalPackProductInfo facInfo = null;
-            for (int i = 0; i < _localFacInfo.buildingInputProducts.Count; ++i)
+            if(_localFacInfo.buildingInputProduct == null)
             {
-                if (_localFacInfo.buildingInputProducts[i].productName == info.productName)
-                {
-                    facInfo = _localFacInfo.buildingInputProducts[i];
-                }
-            }
-
-            if (facInfo == null)
-            {
-                _localFacInfo.buildingInputProducts.Add(new LocalPackProductInfo()
+                _localFacInfo.buildingInputProduct = new LocalPackProductInfo()
                 {
                     productName = info.productName,
                     count = toFill
-                });
+                };
             }
             else
             {
-                facInfo.count += toFill;
+                _localFacInfo.buildingInputProduct.count += toFill;
             }
-
-            _currentProductInputStore += toFill;
 
             cmGame.baseInfo.markDirty();
             cmGame.uiMainPanel.refreshMeat();
@@ -168,28 +150,18 @@ namespace UnityMiniGameFramework
 
         public virtual int fetchProduct(string productName, int value)
         {
-            LocalPackProductInfo facInfo = null;
-            for (int i = 0; i < _localFacInfo.buildingOutputProducts.Count; ++i)
-            {
-                if (_localFacInfo.buildingOutputProducts[i].productName == productName)
-                {
-                    facInfo = _localFacInfo.buildingOutputProducts[i];
-                }
-            }
-
-            if (facInfo == null)
+            if (_localFacInfo.buildingOutputProduct == null)
             {
                 return 0;
             }
 
             int fetchCount = value;
-            if(fetchCount > facInfo.count)
+            if(fetchCount > _localFacInfo.buildingOutputProduct.count)
             {
-                fetchCount = facInfo.count;
+                fetchCount = _localFacInfo.buildingOutputProduct.count;
             }
 
-            facInfo.count -= fetchCount;
-            _currentProductOutputStore -= fetchCount;
+            _localFacInfo.buildingOutputProduct.count -= fetchCount;
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
@@ -197,69 +169,58 @@ namespace UnityMiniGameFramework
             return fetchCount;
         }
 
-        protected virtual bool _produceProduct(LocalPackProductInfo inputProd, CMProductMakerConf prodMakerConf)
+        protected virtual bool _produceProduct()
         {
-            if (inputProd.count <= 0)
+            if (currentProductInputStore <= 0)
             {
                 return false;
             }
 
-            if (_currentProductOutputStore >= _maxOutputProductStore)
+            if (currentProductOutputStore >= maxOutputProductStore)
             {
                 return false;
             }
 
-            int produceCount = prodMakerConf.produceOutputCount;
-            if (inputProd.count < prodMakerConf.costInputCount)
+            int produceCount = _factoryLevelConf.produceOutputCount;
+            if (_localFacInfo.buildingInputProduct.count < _factoryLevelConf.costInputCount)
             {
-                produceCount = inputProd.count * prodMakerConf.produceOutputCount / prodMakerConf.costInputCount;
+                produceCount = _localFacInfo.buildingInputProduct.count * _factoryLevelConf.produceOutputCount / _factoryLevelConf.costInputCount;
                 if (produceCount <= 0)
                 {
                     produceCount = 1;
                 }
             }
 
-            int spaceLeft = _maxOutputProductStore - _currentProductOutputStore;
+            int spaceLeft = maxOutputProductStore - currentProductOutputStore;
 
             if (produceCount > spaceLeft)
             {
                 produceCount = spaceLeft;
             }
 
-            int realCostInputCount = produceCount * prodMakerConf.costInputCount / prodMakerConf.produceOutputCount;
-            if (realCostInputCount >= inputProd.count)
+            int realCostInputCount = produceCount * _factoryLevelConf.costInputCount / _factoryLevelConf.produceOutputCount;
+            if (realCostInputCount >= _localFacInfo.buildingInputProduct.count)
             {
-                inputProd.count = 0;
+                _localFacInfo.buildingInputProduct.count = 0;
             }
             else
             {
-                inputProd.count -= realCostInputCount;
+                _localFacInfo.buildingInputProduct.count -= realCostInputCount;
             }
 
-            LocalPackProductInfo facInfo = null;
-            for (int i = 0; i < _localFacInfo.buildingOutputProducts.Count; ++i)
-            {
-                if (_localFacInfo.buildingOutputProducts[i].productName == prodMakerConf.outputProductName)
-                {
-                    facInfo = _localFacInfo.buildingOutputProducts[i];
-                }
-            }
 
-            if (facInfo == null)
+            if (_localFacInfo.buildingOutputProduct == null)
             {
-                _localFacInfo.buildingOutputProducts.Add(new LocalPackProductInfo()
+                _localFacInfo.buildingOutputProduct = new LocalPackProductInfo()
                 {
-                    productName = prodMakerConf.outputProductName,
+                    productName = _factoryConf.outputProductName,
                     count = produceCount
-                });
+                };
             }
             else
             {
-                facInfo.count += produceCount;
+                _localFacInfo.buildingOutputProduct.count += produceCount;
             }
-
-            _currentProductInputStore -= realCostInputCount;
-            _currentProductOutputStore += produceCount;
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
@@ -269,42 +230,15 @@ namespace UnityMiniGameFramework
 
         protected virtual void _doProduce()
         {
-            bool changed = false;
-            for (int i = 0; i < _localFacInfo.buildingInputProducts.Count; ++i)
+            if (_produceProduct())
             {
-                var inputProd = _localFacInfo.buildingInputProducts[i];
-                CMProductMakerConf prodMakerConf = null;
-                foreach (var conf in _factoryConf.productMaker)
-                {
-                    if (inputProd.productName == conf.inputProductName)
-                    {
-                        prodMakerConf = conf;
-                        break;
-                    }
-                }
-
-                if (prodMakerConf == null)
-                {
-                    // TO DO : error 
-                    continue;
-                }
-
-                if (_produceProduct(inputProd, prodMakerConf))
-                {
-                    changed = true;
-                }
-            }
-
-            if (changed)
-            {
-                _refreshInfo();
                 _produceVer++;
             }
         }
 
         public void OnUpdate()
         {
-            if (_currentProductInputStore <= 0)
+            if (currentProductInputStore <= 0)
             {
                 return;
             }
@@ -315,7 +249,7 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            _currentCD = _produceCD;
+            _currentCD = produceCD;
 
             _doProduce();
         }

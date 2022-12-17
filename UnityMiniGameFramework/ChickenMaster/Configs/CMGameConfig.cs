@@ -52,18 +52,18 @@ namespace UnityMiniGameFramework
         public List<MapConfAIState> aiStates { get; set; }
     }
 
-    public class CMProductMakerConf
+    public class CMFactoryLevelConf
     {
-        public int factoryLevelRequire { get; set; }
-        public string inputProductName { get; set; }
-        public string outputProductName { get; set; }
+        public int maxInputProductStore { get; set; }
+        public int maxOutputProductStore { get; set; }
+        public float produceCD { get; set; }
 
         public int costInputCount { get; set; }
         public int produceOutputCount { get; set; }
 
+        public int fetchPackCount { get; set; }
 
-        public int costInputCountAddPerLevel { get; set; }
-        public int produceOutputCountAddPerLevel { get; set; }
+        public int upgradeGoldCost { get; set; }
     }
 
     public class CMFactoryConf
@@ -71,19 +71,19 @@ namespace UnityMiniGameFramework
         public string mapBuildName { get; set; }
         public int userLevelRequire { get; set; }
 
-        public int maxInputProductStore { get; set; }
-        public int maxOutputProductStore { get; set; }
-        public float produceCD { get; set; }
-
-        public int maxInputProductStoreAddPerLevel { get; set; }
-        public int maxOutputProductStoreAddPerLevel { get; set; }
-
-        public float produceCDAddPerLevel { get; set; }
-
         public int activateGoldCost { get; set; }
-        public Dictionary<int, int> upgradeGoldCostPerLevel { get; set; }
 
-        public List<CMProductMakerConf> productMaker { get; set; }
+        public string inputProductName { get; set; }
+        public string outputProductName { get; set; }
+
+        public Dictionary<int, CMFactoryLevelConf> levelConfs { get; set; }
+    }
+
+    public class CMStoreHouseConf
+    {
+        public string mapBuildName { get; set; }
+
+
     }
 
     public class CMProductConf

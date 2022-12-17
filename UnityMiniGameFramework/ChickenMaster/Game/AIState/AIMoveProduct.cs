@@ -73,20 +73,23 @@ namespace UnityMiniGameFramework
                     continue;
                 }
 
-                foreach(var outputProd in fac.localFacInfo.buildingOutputProducts)
+                if(fac.localFacInfo.buildingOutputProduct == null)
                 {
-                    if(outputProd.count > 100)
+                    continue;
+                }
+
+                if(fac.localFacInfo.buildingOutputProduct.count > fac.factoryLevelConf.fetchPackCount)
+                {
+                    var outputProd = fac.localFacInfo.buildingOutputProduct;
+                    var prodConf = cmGame.gameConf.getCMProductConf(outputProd.productName);
+                    if(prodConf == null)
                     {
-                        var prodConf = cmGame.gameConf.getCMProductConf(outputProd.productName);
-                        if(prodConf == null)
-                        {
-                            continue;
-                        }
-                        int fetchCount = fac.fetchProduct(outputProd.productName, 100);
-                        if(fetchCount > 0)
-                        {
-                            cmGame.Self.AddGold(prodConf.price * fetchCount);
-                        }
+                        continue;
+                    }
+                    int fetchCount = fac.fetchProduct(outputProd.productName, fac.factoryLevelConf.fetchPackCount);
+                    if(fetchCount > 0)
+                    {
+                        cmGame.Self.AddGold(prodConf.price * fetchCount);
                     }
                 }
             }
