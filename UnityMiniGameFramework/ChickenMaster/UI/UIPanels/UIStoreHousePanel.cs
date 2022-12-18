@@ -49,11 +49,20 @@ namespace UnityMiniGameFramework
         public void refreshInfo()
         {
             _Level.text = $"Lv: {_storeHouse.storeHouseInfo.level}";
-            _Info.text = 
-                $"workers: {_storeHouse.storeHouseInfo.storeHouseWorkers.Count}\r\n" +
-                $"{_storeHouse.storeHouseConf.storeProductName}: {_storeHouse.storeHouseInfo.storeCount}/{_storeHouse.currentLevelConf.MaxstoreCount}\r\n" +
+            string info =
+                $"workers: {_storeHouse.storeHouseInfo.storeHouseWorkers.Count}";
+
+
+            foreach (var worker in _storeHouse.workers)
+            {
+                info += $"\r\n -{worker.workerConf.mapNpcName} max : {worker.maxCarryCount}";
+            }
+
+            info += $"\r\n{_storeHouse.storeHouseConf.storeProductName}: {_storeHouse.storeHouseInfo.storeCount}/{_storeHouse.currentLevelConf.MaxstoreCount}\r\n" +
                 $"fetch pack: {_storeHouse.currentLevelConf.fetchPackCount}\r\n" +
                 $"upgrade gold: {_storeHouse.currentLevelConf.upgradeGoldCost}";
+
+            _Info.text = info;
         }
 
         public void onUpgradeClick(MouseUpEvent e)

@@ -234,6 +234,8 @@ namespace UnityMiniGameFramework
 
             if(_uiMainPanel != null)
             {
+                _uiMainPanel.refreshTrainTime(_trainStation.train.timeToTrainArrival);
+
                 _uiMainPanel.OnUpdate();
             }
         }

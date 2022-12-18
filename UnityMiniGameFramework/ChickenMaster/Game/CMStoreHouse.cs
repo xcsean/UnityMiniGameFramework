@@ -20,6 +20,7 @@ namespace UnityMiniGameFramework
         public LocalStoreHouseInfo storeHouseInfo => _storeHouseInfo;
 
         protected List<CMWorker> _workers;
+        public List<CMWorker> workers => _workers;
 
         protected MapBuildingObject _mapBuildingObj;
         public MapBuildingObject mapBuildingObj => _mapBuildingObj;
@@ -201,6 +202,12 @@ namespace UnityMiniGameFramework
                 // upgrade 
                 _storeHouseInfo.level = _storeHouseInfo.level + 1;
                 _currentLevelConf = _conf.levelConfs[_storeHouseInfo.level];
+
+                foreach(var worker in _workers)
+                {
+                    worker.OnUpgradeLevel(_storeHouseInfo.level);
+                }
+
                 cmGame.baseInfo.markDirty();
             }
             else

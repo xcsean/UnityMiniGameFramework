@@ -105,7 +105,18 @@ namespace UnityMiniGameFramework
 
         protected CMFactory _fetchFactoryByInput()
         {
-            for(int i=0; i< _factories.Count; ++i)
+            // first find empty input factory
+            for (int i = 0; i < _factories.Count; ++i)
+            {
+                var fac = _factories[i];
+                if (fac.currentProductInputStore <= 0)
+                {
+                    return fac;
+                }
+            }
+
+            // then find most value product factory
+            for (int i=0; i< _factories.Count; ++i)
             {
                 var fac = _factories[i];
                 if(fac.currentProductInputStore < fac.maxInputProductStore)

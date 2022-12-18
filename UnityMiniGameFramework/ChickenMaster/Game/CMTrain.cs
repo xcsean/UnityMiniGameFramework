@@ -76,13 +76,19 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                _trainNpcObj.moveAct.directSetPosition(_station.trainStopPos.transform.position);
-                _trainNpcObj.moveAct.directSetPosition(_station.trainStartPos.transform.forward);
+                //_trainNpcObj.moveAct.directSetPosition(_station.trainStopPos.transform.position);
+                //_trainNpcObj.moveAct.directSetPosition(_station.trainStartPos.transform.forward);
+                //_onboardTimeLeft = _station.trainStaionConf.trainOnboardTime;
+                //_trainNpcObj.unityGameObject.SetActive(true); // show train
 
+                // train move to stop
+                _trainNpcObj.moveAct.directSetPosition(_station.trainStartPos.transform.position); // set to start pos
                 _trainNpcObj.unityGameObject.SetActive(true); // show train
-                _timeToTrainArrival = 0;
+                _trainNpcObj.moveAct.moveOn(new List<UnityEngine.Vector3>() { _station.trainStopPos.transform.position }, 0.1f); // move to stop
 
-                _onboardTimeLeft = _station.trainStaionConf.trainOnboardTime;
+                _timeToTrainArrival = 0;
+                _onboardTimeLeft = 0;
+
             }
 
         }
@@ -185,6 +191,7 @@ namespace UnityMiniGameFramework
                     }
 
                     var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
+                    _station.trainStationInfo.NextTrainArrivalTime = nowTickMillsecond + (long)(_station.trainStaionConf.trainArriveTime * 1000);
                     _timeToTrainArrival = _station.trainStationInfo.NextTrainArrivalTime - nowTickMillsecond;
                     if(_timeToTrainArrival <=0)
                     {

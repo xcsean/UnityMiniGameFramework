@@ -111,5 +111,20 @@ namespace UnityMiniGameFramework
 
             return true;
         }
+
+        public void OnUpgradeLevel(int level)
+        {
+            _workerLevel = level;
+
+            if (!_workerConf.levelCarryCount.ContainsKey(_workerLevel))
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMWorker init worker [{_workerConf.mapNpcName}] level [{_workerLevel}] carry count not exist, use level 1");
+                _maxCarryCount = _workerConf.levelCarryCount[1];
+            }
+            else
+            {
+                _maxCarryCount = _workerConf.levelCarryCount[_workerLevel];
+            }
+        }
     }
 }

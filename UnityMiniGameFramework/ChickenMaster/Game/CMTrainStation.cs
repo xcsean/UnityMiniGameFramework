@@ -19,6 +19,7 @@ namespace UnityMiniGameFramework
         public LocalTrainStationInfo trainStationInfo => _trainStationInfo;
 
         protected List<CMWorker> _workers;
+        public List<CMWorker> workers => _workers;
 
         protected MapBuildingObject _mapBuildingObj;
         public MapBuildingObject mapBuildingObj => _mapBuildingObj;
@@ -258,6 +259,12 @@ namespace UnityMiniGameFramework
                 // upgrade 
                 _trainStationInfo.level = _trainStationInfo.level + 1;
                 _currentLevelConf = _conf.levelConfs[_trainStationInfo.level];
+
+                foreach (var worker in _workers)
+                {
+                    worker.OnUpgradeLevel(_trainStationInfo.level);
+                }
+
                 cmGame.baseInfo.markDirty();
             }
             else

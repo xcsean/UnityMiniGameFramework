@@ -65,8 +65,15 @@ namespace UnityMiniGameFramework
 
             TimeSpan t = new TimeSpan(_trainStation.train.timeToTrainArrival * 10000);
             string info =
-                $"Workers: {_trainStation.trainStationInfo.trainStationWorkers.Count}\r\n" +
-                $"Upgrade gold: {_trainStation.currentLevelConf.upgradeGoldCost}\r\n" +
+                $"Workers: {_trainStation.trainStationInfo.trainStationWorkers.Count}";
+
+            foreach (var worker in _trainStation.workers)
+            {
+                info += $"\r\n -{worker.workerConf.mapNpcName} max : {worker.maxCarryCount}";
+            }
+
+            info +=
+                $"\r\nUpgrade gold: {_trainStation.currentLevelConf.upgradeGoldCost}\r\n" +
                 $"Train Arrive: {t.Minutes}:{t.Seconds}\r\n" +
                 $"Stored: {_trainStation.currTotalStoreCount}/{_trainStation.currentLevelConf.MaxstoreCount}";
 

@@ -52,6 +52,9 @@ namespace UnityMiniGameFramework
         protected Label _LevelInfo;
         public Label LevelInfo => _LevelInfo;
 
+        protected Label _TrainTime;
+        public Label TrainTime => _TrainTime;
+
         protected Label _NotifyText;
         public Label NotifyText => _NotifyText;
 
@@ -69,6 +72,7 @@ namespace UnityMiniGameFramework
             _CurrentLevel = this._uiObjects["CurrentLevel"].unityVisualElement as Label;
             _LevelInfo = this._uiObjects["LevelInfo"].unityVisualElement as Label;
             _NotifyText = this._uiObjects["NotifyText"].unityVisualElement as Label;
+            _TrainTime = this._uiObjects["TrainTime"].unityVisualElement as Label;
 
             _LevelInfo.text = "Not Start";
             _NotifyText.text = "";
@@ -124,6 +128,11 @@ namespace UnityMiniGameFramework
             {
                 _meatNum.text = $"Meat: {meatInfo.count}";
             }
+        }
+        public void refreshTrainTime(long time)
+        {
+            TimeSpan t = new TimeSpan(time * 10000);
+            _TrainTime.text = $"Train -{t.Minutes}:{t.Seconds}";
         }
 
         public void NofityMessage(CMGNotifyType t, string msg)
