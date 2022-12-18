@@ -45,6 +45,7 @@ namespace UnityMiniGameFramework
             var mgObj = unityHeroObj.GetComponent<UnityGameObjectBehaviour>();
             if (mgObj == null)
             {
+                UnityEngine.GameObject.Destroy(unityHeroObj);
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMHeros init map hero prefab [{heroConf.prefabName}] without UnityGameObjectBehaviour");
                 return;
             }
@@ -52,6 +53,8 @@ namespace UnityMiniGameFramework
             _mapHeroObj = mgObj.mgGameObject as MapHeroObject;
             if (_mapHeroObj == null)
             {
+                mgObj.mgGameObject.Dispose();
+                UnityEngine.GameObject.Destroy(unityHeroObj);
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMHeros init map hero prefab [{heroConf.prefabName}] not MapHeroObject");
                 return;
             }

@@ -22,12 +22,15 @@ namespace UnityMiniGameFramework
         protected UnityEngine.Rigidbody _rigiBody;
 
         protected string _defaultAniName;
+
+        protected string _movingAniName;
         
         public RigibodyMoveAct(ActorObject actor) : base(actor)
         {
             _rigiBody = actor.unityGameObject.GetComponent<UnityEngine.Rigidbody>();
 
             _defaultAniName = ActAnis.IdleAni;
+            _movingAniName = ActAnis.RunAni;
             actor.animatorComponent.playAnimation(_defaultAniName);
         }
 
@@ -36,7 +39,7 @@ namespace UnityMiniGameFramework
 
         bool _isStopping;
         public bool isStopping => _isStopping;
-        public bool isMoving => (_movVec != null);
+        public bool isMoving => (_movVec != null) || ((_movePath!=null)&& _movePath.Count>0);
         override public bool isFinished => false;
         override public bool discardWhenFinish => false;
         override public bool queueWhenNotStartable => true;
@@ -74,6 +77,15 @@ namespace UnityMiniGameFramework
 
             _curSpeed = MinSpeed;
         }
+        public void directSetPosition(UnityEngine.Vector3 pos)
+        {
+            _rigiBody.transform.position = pos;
+        }
+        public void directSetForward(UnityEngine.Vector3 forward)
+        {
+            _rigiBody.transform.forward = forward;
+        }
+
         public void stop()
         {
             _movVec = null;
@@ -82,10 +94,14 @@ namespace UnityMiniGameFramework
             _isStopping = this._curSpeed > 0;
         }
 
-        public void setDefaultAni(string _defAni)
+        public void setDefaultAni(string defAni)
         {
-            _defaultAniName = _defAni;
+            _defaultAniName = defAni;
             actor.animatorComponent.playAnimation(_defaultAniName);
+        }
+        public void setMovingAni(string movAni)
+        {
+            _movingAniName = movAni;
         }
 
         override public void Start()
@@ -156,7 +172,7 @@ namespace UnityMiniGameFramework
 
         void _onStop()
         {
-            if (actor.animatorComponent.isCurrBaseAnimation(ActAnis.RunAni))
+            if (actor.animatorComponent.isCurrBaseAnimation(_movingAniName))
             {
                 actor.animatorComponent.playAnimation(_defaultAniName);
             }
@@ -182,9 +198,9 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            if(!actor.animatorComponent.isCurrBaseAnimation(ActAnis.RunAni))
+            if(!actor.animatorComponent.isCurrBaseAnimation(_movingAniName))
             {
-                actor.animatorComponent.playAnimation(ActAnis.RunAni);
+                actor.animatorComponent.playAnimation(_movingAniName);
             }
 
             var rot = UnityEngine.Quaternion.FromToRotation(_rigiBody.transform.forward, _movVec.Value);

@@ -180,6 +180,7 @@ namespace UnityMiniGameFramework
                 if(notify.timeLeft <= 0)
                 {
                     _notifyMessages.RemoveAt(i);
+                    --i;
                     changed = true;
                 }
             }

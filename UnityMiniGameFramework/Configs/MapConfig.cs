@@ -48,6 +48,8 @@ namespace UnityMiniGameFramework
 
         public List<string> npcs { get; set; }
 
+        public List<string> buildings { get; set; }
+
         public Dictionary<string, MonsterSpawnConf> monsterSpawns { get; set; }
 
         public Dictionary<string, PathConf> paths { get; set; }

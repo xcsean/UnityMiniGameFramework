@@ -72,6 +72,8 @@ namespace UnityMiniGameFramework
         {
             base.Init(confname);
 
+            this._name = confname;
+
             // TO DO : init building 
 
             var tr = this.unityGameObject.transform.Find(_mapBuildingConf.triggerObjectName);

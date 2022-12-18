@@ -30,6 +30,12 @@ namespace UnityMiniGameFramework
         protected CMEgg _egg;
         public CMEgg Egg => _egg;
 
+        protected CMStoreHouse _storeHouse;
+        public CMStoreHouse StoreHouse => _storeHouse;
+
+        protected CMTrainStation _trainStation;
+        public CMTrainStation TrainStation => _trainStation;
+
 
         protected Dictionary<string, CMNPCHeros> _cmNPCHeros;
         public Dictionary<string, CMNPCHeros> cmNPCHeros => _cmNPCHeros;
@@ -50,6 +56,8 @@ namespace UnityMiniGameFramework
         {
             _self = new SelfControl();
             _egg = new CMEgg();
+            _storeHouse = new CMStoreHouse();
+            _trainStation = new CMTrainStation();
             _cmNPCHeros = new Dictionary<string, CMNPCHeros>();
             _cmFactories = new Dictionary<string, CMFactory>();
         }
@@ -96,14 +104,28 @@ namespace UnityMiniGameFramework
                     egg = new LocalEggInfo()
                     {
                         hp = _gameConf.gameConfs.eggConf.maxHp,
-                        lastIncHpTime = DateTime.Now.Ticks,
+                        lastIncHpTime = DateTime.Now.Ticks / 10000,
                         nextRecoverTime = 0
                     },
                     defenseHeros = new List<LocalHeroInfo>(),
                     weapons = new Dictionary<int, LocalWeaponInfo>(),
                     factories = new List<LocalFactoryInfo>(),
                     backPackProds = new List<LocalPackProductInfo>(),
-                    backPackItems = new List<LocalItemInfo>()
+                    backPackItems = new List<LocalItemInfo>(),
+                    storeHouse = new LocalStoreHouseInfo()
+                    {
+                        storeProductName = _gameConf.gameConfs.storeHouseConf.storeProductName,
+                        storeCount = 0,
+                        level = 1,
+                        storeHouseWorkers = new List<LocalWorkerInfo>(), // init in CMWorker
+                    },
+                    trainStation = new LocalTrainStationInfo()
+                    {
+                        storeProducts = new List<LocalPackProductInfo>(),
+                        level = 1,
+                        NextTrainArrivalTime = DateTime.Now.Ticks / 10000,
+                        trainStationWorkers = new List<LocalWorkerInfo>(), // init in CMWorker
+                    }
                 };
                 _baseInfo = new DataObject(baseInfo);
                 _baseInfo.markDirty();
@@ -166,6 +188,12 @@ namespace UnityMiniGameFramework
             // init egg
             _egg.Init(bi.egg);
 
+            // init storehouse
+            _storeHouse.Init(bi.storeHouse);
+
+            // init train station
+            _trainStation.Init(bi.trainStation);
+
             var tr = UnityGameApp.Inst.MainScene.mapRoot.transform.Find(_gameConf.gameConfs.levelCenterObjectName);
             if(tr == null)
             {
@@ -184,6 +212,7 @@ namespace UnityMiniGameFramework
                 }
             }
 
+
             // refresh main ui Info
             _uiMainPanel.refreshAll();
         }
@@ -198,6 +227,10 @@ namespace UnityMiniGameFramework
             }
 
             _egg.OnUpdate();
+
+            _storeHouse.OnUpdate();
+
+            _trainStation.OnUpdate();
 
             if(_uiMainPanel != null)
             {
@@ -280,6 +313,11 @@ namespace UnityMiniGameFramework
             return fac;
         }
 
+        public List<CMFactory> GetFactories()
+        {
+            return _cmFactories.Values.ToList();
+        }
+
         public CMFactory AddFactory(string factoryName)
         {
             CMFactory fac = new CMFactory();
@@ -303,6 +341,10 @@ namespace UnityMiniGameFramework
             // modify data
             (_baseInfo.getData() as LocalBaseInfo).factories.Add(fac.localFacInfo);
             _baseInfo.markDirty();
+
+            // update worker factory
+            _storeHouse.SyncWorkerFactories();
+            _trainStation.SyncWorkerFactories();
 
             return fac;
         }

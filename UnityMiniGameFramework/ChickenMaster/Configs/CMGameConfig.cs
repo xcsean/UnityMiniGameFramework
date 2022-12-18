@@ -76,14 +76,75 @@ namespace UnityMiniGameFramework
         public string inputProductName { get; set; }
         public string outputProductName { get; set; }
 
+        public string inputPutPosName { get; set; }
+        public string inputStorePosName { get; set; }
+        public string outputFetchingPosName { get; set; }
+        public string outputStorePosName { get; set; }
+
         public Dictionary<int, CMFactoryLevelConf> levelConfs { get; set; }
+    }
+
+    public class CMWorkerConf
+    {
+        public string mapNpcName { get; set; }
+        public string initSpawnPosName { get; set; }
+
+        public string fetchingAniName { get; set; }
+        public string putAniName { get; set; }
+        public string carryMovingAniName { get; set; }
+
+        public Dictionary<int, int> levelCarryCount { get; set; }
+
+    }
+
+    public class CMStoreHouseLevelConf
+    {
+        public int MaxstoreCount { get; set; }
+        public int fetchPackCount { get; set; }
+
+        public int upgradeGoldCost { get; set; }
     }
 
     public class CMStoreHouseConf
     {
         public string mapBuildName { get; set; }
 
+        public string fetchingPosName { get; set; }
+        public string storePosName { get; set; }
 
+        public string storeProductName { get; set; }
+
+        public Dictionary<int, CMStoreHouseLevelConf> levelConfs { get; set; }
+
+        public CMWorkerConf workerConf { get; set; }
+    }
+
+    public class CMTrainStationLevelConf
+    {
+        public int MaxstoreCount { get; set; }
+        public int upgradeGoldCost { get; set; }
+    }
+
+    public class CMTrainStationConf
+    {
+        public string mapBuildName { get; set; }
+
+        public string trainMapNpcName { get; set; }
+
+        public string putPosName { get; set; }
+        public string storePosName { get; set; }
+
+        public string trainStartPosName { get; set; }
+        public string trainStopPosName { get; set; }
+
+        public string trainMoveoutPosName { get; set; }
+
+        public float trainOnboardTime { get; set; }
+        public float trainArriveTime { get; set; }
+
+        public Dictionary<int, CMTrainStationLevelConf> levelConfs { get; set; }
+
+        public CMWorkerConf workerConf { get; set; }
     }
 
     public class CMProductConf
@@ -166,6 +227,10 @@ namespace UnityMiniGameFramework
         public Dictionary<string, Dictionary<int, CMMonsterDropConf>> monsterDrops { get; set; }
 
         public CMEggConf eggConf { get; set; }
+
+        public CMStoreHouseConf storeHouseConf { get; set; }
+
+        public CMTrainStationConf trainStationConf { get; set; }
     }
 
     public class CMGameConfig : JsonConfig

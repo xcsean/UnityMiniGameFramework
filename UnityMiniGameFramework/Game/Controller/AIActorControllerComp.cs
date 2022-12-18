@@ -56,7 +56,7 @@ namespace UnityMiniGameFramework
         {
             foreach(var aiS in _aiStates)
             {
-                if(aiS.GetType().IsSubclassOf(typeof(T)))
+                if(aiS.GetType() == typeof(T) || aiS.GetType().IsSubclassOf(typeof(T)))
                 {
                     return (T)aiS;
                 }

@@ -51,6 +51,32 @@ namespace UnityMiniGameFramework
         public int count { get; set; }
     }
 
+    public class LocalWorkerInfo
+    {
+        public JsonConfVector3 position { get; set; }
+
+        public List<LocalPackProductInfo> carryProducts { get; set; }
+    }
+
+    public class LocalStoreHouseInfo
+    {
+        public string storeProductName { get; set; }
+        public int storeCount { get; set; }
+        public int level { get; set; }
+
+        public List<LocalWorkerInfo> storeHouseWorkers { get; set; }
+    }
+
+    public class LocalTrainStationInfo
+    {
+        public List<LocalPackProductInfo> storeProducts { get; set; }
+        public int level { get; set; }
+
+        public long NextTrainArrivalTime { get; set; }
+
+        public List<LocalWorkerInfo> trainStationWorkers { get; set; }
+    }
+
     public class LocalBaseInfo
     {
         public int gold { get; set; }
@@ -71,6 +97,10 @@ namespace UnityMiniGameFramework
         public List<LocalPackProductInfo> backPackProds { get; set; }
 
         public List<LocalItemInfo> backPackItems { get; set; }
+
+        public LocalStoreHouseInfo storeHouse { get; set; }
+
+        public LocalTrainStationInfo trainStation { get; set; }
     }
 
     public class LocalUserInfo

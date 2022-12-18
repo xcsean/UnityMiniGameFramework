@@ -179,7 +179,7 @@ namespace UnityMiniGameFramework
             // add to scene
             unityMonsterObj.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
 
-            unityMonsterObj.transform.position = _map.getBornPos(_spawnPos);
+            unityMonsterObj.transform.position = _spawnPos.randSpawnPos();
 
             mapMonsterObj.OnDispose += MapMonsterObj_OnDispose;
 

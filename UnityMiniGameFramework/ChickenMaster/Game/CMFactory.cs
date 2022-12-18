@@ -18,6 +18,18 @@ namespace UnityMiniGameFramework
         protected string _factoryName;
         public string factoryName => _factoryName;
 
+        protected MapBuildingObject _mapBuildingObj;
+        public MapBuildingObject mapBuildingObj => _mapBuildingObj;
+
+        protected SpawnPos _inputPutPosition;
+        public SpawnPos inputPutPosition => _inputPutPosition;
+        protected SpawnPos _inputStorePosition;
+        public SpawnPos inputStorePosition => _inputStorePosition;
+        protected SpawnPos _outputFetchPosition;
+        public SpawnPos outputFetchPosition => _outputFetchPosition;
+        protected SpawnPos _outputStorePosition;
+        public SpawnPos outputStorePosition => _outputStorePosition;
+
         public LocalFactoryInfo localFacInfo => _localFacInfo;
         protected LocalFactoryInfo _localFacInfo;
 
@@ -53,6 +65,37 @@ namespace UnityMiniGameFramework
                 return false;
             }
 
+            _mapBuildingObj = null;
+            var map = (UnityGameApp.Inst.MainScene.map as Map);
+            map.buildings.TryGetValue(_factoryConf.mapBuildName, out _mapBuildingObj);
+            if (_mapBuildingObj == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory map building [{_factoryConf.mapBuildName}] not exist");
+                return false;
+            }
+
+            _inputPutPosition = map.getSpawnPosByObjectName(_factoryConf.inputPutPosName);
+            if (_inputPutPosition == null)
+            {
+                return false;
+            }
+            _inputStorePosition = map.getSpawnPosByObjectName(_factoryConf.inputStorePosName);
+            if (_inputStorePosition == null)
+            {
+                return false;
+            }
+
+            _outputFetchPosition = map.getSpawnPosByObjectName(_factoryConf.outputFetchingPosName);
+            if (_outputFetchPosition == null)
+            {
+                return false;
+            }
+            _outputStorePosition = map.getSpawnPosByObjectName(_factoryConf.outputStorePosName);
+            if (_outputStorePosition == null)
+            {
+                return false;
+            }
+
             _currentCD = produceCD;
             _produceVer = 0;
 
@@ -76,6 +119,9 @@ namespace UnityMiniGameFramework
 
             if(!_factoryConf.levelConfs.ContainsKey(_localFacInfo.level + 1))
             {
+                // for Debug ...
+                cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "already max level !");
+
                 return false;
             }
 
@@ -83,6 +129,10 @@ namespace UnityMiniGameFramework
             if (upgradeGold <= 0)
             {
                 // no more level
+
+                // for Debug ...
+                cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "already max level !");
+
                 return false;
             }
 
@@ -96,6 +146,9 @@ namespace UnityMiniGameFramework
             else
             {
                 // TO DO : not enough gold
+
+                // for Debug ...
+                cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 return false;
             }
 
@@ -148,7 +201,7 @@ namespace UnityMiniGameFramework
             cmGame.uiMainPanel.refreshMeat();
         }
 
-        public virtual int fetchProduct(string productName, int value)
+        public virtual int fetchProduct(int value)
         {
             if (_localFacInfo.buildingOutputProduct == null)
             {

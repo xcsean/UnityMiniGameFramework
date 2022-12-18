@@ -60,6 +60,9 @@ namespace UnityMiniGameFramework
                 else
                 {
                     // TO DO : not enough gold
+
+                    // for Debug ...
+                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 }
             }
             else
@@ -112,18 +115,18 @@ namespace UnityMiniGameFramework
         {
             base.showUI();
 
-            if (_factory != null)
-            {
-                // for Debug ...
-                var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
-                var meatInfo = cmGame.Self.GetBackpackProductInfo("meat");
-                if (meatInfo != null)
-                {
-                    _factory.fillProduct(meatInfo);
+            //if (_factory != null)
+            //{
+            //    // for Debug ...
+            //    var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            //    var meatInfo = cmGame.Self.GetBackpackProductInfo("meat");
+            //    if (meatInfo != null)
+            //    {
+            //        _factory.fillProduct(meatInfo);
 
-                    _refreshInfo();
-                }
-            }
+            //        _refreshInfo();
+            //    }
+            //}
 
             UnityGameApp.Inst.addUpdateCall(this.OnUpdate);
         }
