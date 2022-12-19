@@ -34,7 +34,7 @@ namespace UnityMiniGameFramework
 
         void OnApplicationPause(bool pauseStatus)
         {
-            if(pauseStatus)
+            if (pauseStatus)
             {
                 UnityGameApp.Inst.OnAppSuspended();
             }
@@ -94,7 +94,7 @@ namespace UnityMiniGameFramework
         protected virtual void FixedUpdate()
         {
         }
-        
+
         protected virtual void LateUpdate()
         {
             UnityGameApp.Inst.OnPostUpdate();
@@ -167,7 +167,7 @@ namespace UnityMiniGameFramework
         }
         public void OnPostUpdate()
         {
-            while(_nextFramePostUpdateCall.Count > 0)
+            while (_nextFramePostUpdateCall.Count > 0)
             {
                 Action a = _nextFramePostUpdateCall.Dequeue();
                 a.Invoke();
@@ -212,7 +212,7 @@ namespace UnityMiniGameFramework
             _vfxManager.OnUpdate(UnityEngine.Time.deltaTime);
             _weaponManager.OnUpdate(UnityEngine.Time.deltaTime);
 
-            foreach(var a in _updateCall)
+            foreach (var a in _updateCall)
             {
                 a();
             }
@@ -221,7 +221,7 @@ namespace UnityMiniGameFramework
 
         override public void OnAppSuspended()
         {
-            if(_datamanager != null)
+            if (_datamanager != null)
             {
                 _datamanager.localUserData.writeBack();
             }
@@ -303,7 +303,7 @@ namespace UnityMiniGameFramework
             _aiStateManager.registerAIStateObjectCreator("AITryAttack", AITryAttack.create);
             _aiStateManager.registerAIStateObjectCreator("AIMoveOnPath", AIMoveOnPath.create);
             _aiStateManager.registerAIStateObjectCreator("AIMoveProduct", AIMoveProduct.create);
-            
+
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"objects registed.");
         }
 
@@ -354,9 +354,15 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UIHeroPanel", UIHeroPanel.create);
             _ui.regUIPanelCreator("UITrainStationPanel", UITrainStationPanel.create);
             _ui.regUIPanelCreator("UIStoreHousePanel", UIStoreHousePanel.create);
+            _ui.regUIPanelCreator("UICommonFactoryPanel", UICommonFactoryPanel.create);
 
             _ui.regUIPanelCreator("UIFactory1Panel", UIFactory1Panel.create);
             _ui.regUIPanelCreator("UIFactory2Panel", UIFactory2Panel.create);
+            _ui.regUIPanelCreator("UIDoubleAttackPanel", UIDoubleAttackPanel.create);
+            _ui.regUIPanelCreator("UIDoubleExpPanel", UIDoubleExpPanel.create);
+            _ui.regUIPanelCreator("UIGetSkillPanel", UIGetSkillPanel.create);
+            _ui.regUIPanelCreator("UIPassRewardPanel", UIPassRewardPanel.create);
+            _ui.regUIPanelCreator("UIOfflineRewardPanel", UIOfflineRewardPanel.create);
 
             // reg ui control creator
             _ui.regUIObjectCreator("UIObject", UIObject.create);

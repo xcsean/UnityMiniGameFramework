@@ -116,12 +116,17 @@
     <Compile Include="ChickenMaster\UI\UIControls\UIFactoryControl.cs" />
     <Compile Include="ChickenMaster\UI\UIControls\UIHeroControl.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UICommonFactoryPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIDoubleAttackPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIDoubleExpPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIEggPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIFactoryPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIGetSkillPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIHeroPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UILevelEntryPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIControls\UILevelStateControl.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UILevelMainPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIOfflineRewardPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIPassRewardPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIStoreHousePanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationPanel.cs" />
     <Compile Include="Configs\CharacterConfig.cs" />
