@@ -24,6 +24,11 @@ namespace UnityMiniGameFramework
 
             _Init(heroInfo);
 
+            if(heroInfo.defAreaName == null)
+            {
+                heroInfo.defAreaName = _conf.initDefAreaName;
+            }
+
             _mapHeroObj.OnMapLevelFinish += _mapHeroObj_OnMapLevelFinish;
         }
 

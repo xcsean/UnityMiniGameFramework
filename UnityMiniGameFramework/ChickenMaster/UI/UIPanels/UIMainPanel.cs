@@ -60,6 +60,8 @@ namespace UnityMiniGameFramework
 
         protected List<NotifyMessage> _notifyMessages;
 
+        protected VisualElement _clickableArea;
+
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -73,6 +75,9 @@ namespace UnityMiniGameFramework
             _LevelInfo = this._uiObjects["LevelInfo"].unityVisualElement as Label;
             _NotifyText = this._uiObjects["NotifyText"].unityVisualElement as Label;
             _TrainTime = this._uiObjects["TrainTime"].unityVisualElement as Label;
+            _clickableArea = this._uiObjects["Clickable"].unityVisualElement;
+            //_clickableArea.RegisterCallback<MouseDownEvent>(onMouseDownCA);
+            //_clickableArea.RegisterCallback<MouseUpEvent>(onMouseUpCA);
 
             _LevelInfo.text = "Not Start";
             _NotifyText.text = "";

@@ -43,6 +43,7 @@ namespace UnityMiniGameFramework
         public int initGunId { get; set; }
         public int initGunLevel { get; set; }
         public string initSpawnPosName { get; set; }
+        public string initDefAreaName { get; set; }
 
         public int activateGoldCost { get; set; }
         public Dictionary<int, CMHeroLevelConf> levelConf { get; set; }

@@ -19,6 +19,7 @@ namespace UnityMiniGameFramework
         }
 
         protected Button _nextLevelBtn;
+        protected Button _quitBtn;
 
         protected UILevelStateControl _levelStateControl;
         public UILevelStateControl levelStateControl => _levelStateControl;
@@ -30,8 +31,8 @@ namespace UnityMiniGameFramework
             _nextLevelBtn = this._uiObjects["NextLevelBtn"].unityVisualElement as Button;
             _nextLevelBtn.RegisterCallback<MouseUpEvent>(onNextLevelClick);
 
-            _nextLevelBtn = this._uiObjects["QuitBtn"].unityVisualElement as Button;
-            _nextLevelBtn.RegisterCallback<MouseUpEvent>(onQuitLevelClick);
+            _quitBtn = this._uiObjects["QuitBtn"].unityVisualElement as Button;
+            _quitBtn.RegisterCallback<MouseUpEvent>(onQuitLevelClick);
 
             _levelStateControl = this._uiObjects["LevelStates"] as UILevelStateControl;
         }

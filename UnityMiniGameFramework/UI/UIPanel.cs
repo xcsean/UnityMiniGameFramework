@@ -33,7 +33,7 @@ namespace UnityMiniGameFramework
 
         public int height => (int)_unityUIDocument.rootVisualElement.layout.height;
 
-        public bool isShow => _unityUIDocument.rootVisualElement.visible;
+        public bool isShow => _unityUIDocument.rootVisualElement.style.visibility == Visibility.Visible;
 
         public UIPanel()
         {
@@ -94,14 +94,20 @@ namespace UnityMiniGameFramework
 
         virtual public void hideUI()
         {
-            _unityUIDocument.rootVisualElement.style.visibility = Visibility.Hidden;
             //_unityGameObject.SetActive(false);
+            //_unityUIDocument.rootVisualElement.SetEnabled(false);
+            _unityUIDocument.rootVisualElement.style.visibility = Visibility.Hidden;
+            //_unityUIDocument.rootVisualElement.visible = false;
+            //_unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
         }
 
         virtual public void showUI()
         {
             //_unityGameObject.SetActive(true);
+            //_unityUIDocument.rootVisualElement.SetEnabled(true);
             _unityUIDocument.rootVisualElement.style.visibility = Visibility.Visible;
+            //_unityUIDocument.rootVisualElement.visible = true;
+            //_unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
         }
         public void setPoisition(int x, int y)
         {

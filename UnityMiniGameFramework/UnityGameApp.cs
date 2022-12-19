@@ -151,6 +151,9 @@ namespace UnityMiniGameFramework
         protected AIStateManager _aiStateManager;
         public AIStateManager AIStates => _aiStateManager;
 
+        protected UIInputManager _uiInputManager;
+        public UIInputManager UIInputManager => _uiInputManager;
+
         protected UnityNetworkClient _netClient;
         public UnityNetworkClient NetClient => _netClient;
 
@@ -256,6 +259,7 @@ namespace UnityMiniGameFramework
             _mapManager = new MapManager();
             _weaponManager = new WeaponManager();
             _aiStateManager = new AIStateManager();
+            _uiInputManager = new UIInputManager();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app managers created.");
         }
@@ -294,6 +298,7 @@ namespace UnityMiniGameFramework
             _vfxManager.registerVfxObjectCreator("VFXObjectBase", VFXObjectBase.create);
             _vfxManager.registerVfxObjectCreator("VFXFootprintObject", VFXFootprintObject.create);
             _vfxManager.registerVfxObjectCreator("VFXLinerObject", VFXLinerObject.create);
+            _vfxManager.registerVfxObjectCreator("VFXRangeCricle", VFXRangeCricle.create);
 
             // reg levels
             _mapManager.registerMapLevelCreator("CMShootingLevel", CMShootingLevel.create);
@@ -355,7 +360,8 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UITrainStationPanel", UITrainStationPanel.create);
             _ui.regUIPanelCreator("UIStoreHousePanel", UIStoreHousePanel.create);
             _ui.regUIPanelCreator("UICommonFactoryPanel", UICommonFactoryPanel.create);
-
+            _ui.regUIPanelCreator("UIFlagMainPanel", UIFlagMainPanel.create);
+            
             _ui.regUIPanelCreator("UIFactory1Panel", UIFactory1Panel.create);
             _ui.regUIPanelCreator("UIFactory2Panel", UIFactory2Panel.create);
             _ui.regUIPanelCreator("UIDoubleAttackPanel", UIDoubleAttackPanel.create);
@@ -399,6 +405,11 @@ namespace UnityMiniGameFramework
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"no network.");
             }
 
+        }
+
+        override protected void _onMainSceneLoaded()
+        {
+            _uiInputManager.Init();
         }
     }
 }

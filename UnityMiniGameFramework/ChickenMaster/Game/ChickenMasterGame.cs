@@ -51,7 +51,6 @@ namespace UnityMiniGameFramework
         UILevelMainPanel _uiLevelMainPanel;
         public UILevelMainPanel uiLevelMainPanel => _uiLevelMainPanel;
 
-
         public ChickenMasterGame()
         {
             _self = new SelfControl();
@@ -253,6 +252,15 @@ namespace UnityMiniGameFramework
                 }
                 _uiLevelMainPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             }
+        }
+        public Dictionary<string, CMNPCHeros> GetDefAreaHeros()
+        {
+            Dictionary<string, CMNPCHeros> ret = new Dictionary<string, CMNPCHeros>();
+            foreach (var pair in _cmNPCHeros)
+            {
+                ret[pair.Value.heroInfo.defAreaName] = pair.Value;
+            }
+            return ret;
         }
 
         public CMNPCHeros AddDefenseHero(string mapHeroName)

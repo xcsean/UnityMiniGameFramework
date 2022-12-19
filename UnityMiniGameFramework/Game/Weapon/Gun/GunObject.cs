@@ -79,7 +79,7 @@ namespace UnityMiniGameFramework
         protected float _attackRange;
         public float attackRange => _attackRange;
 
-        static string[] _layers = new string[] { "Hitable", "Default", "Ground" };
+        protected static string[] _layers = new string[] { "Hitable", "Default", "Ground" };
 
         public GunObject()
         {

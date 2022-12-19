@@ -15,6 +15,7 @@ namespace UnityMiniGameFramework
 
         protected HealthBar _hpBar;
         protected UIEggPanel _eggUI;
+        public UIEggPanel eggUI => _eggUI;
 
         protected UnityEngine.GameObject _eggObject;
 

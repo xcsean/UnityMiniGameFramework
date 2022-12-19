@@ -124,6 +124,7 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UIHeroPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UILevelEntryPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIControls\UILevelStateControl.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIFlagMainPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UILevelMainPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIOfflineRewardPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIPassRewardPanel.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Game\Controller\InputActorControllerComp.cs" />
     <Compile Include="Game\Controller\AIActorControllerComp.cs" />
     <Compile Include="Game\Controller\NetworkActorControllerComp.cs" />
+    <Compile Include="Game\Effect\VFXObjects\VFXRangeCricle.cs" />
     <Compile Include="Game\Effect\FootPrint.cs" />
     <Compile Include="Game\Effect\QuadBatch.cs" />
     <Compile Include="Game\Effect\VFXManager.cs" />
@@ -211,6 +213,7 @@
     <Compile Include="OS\UnityProjFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\UnityResourceManager.cs" />
+    <Compile Include="UI\UIInputManager.cs" />
     <Compile Include="UI\UIObject.cs" />
     <Compile Include="UI\UIPanel.cs" />
     <Compile Include="UI\Controls\UIJoyStickControl.cs" />
