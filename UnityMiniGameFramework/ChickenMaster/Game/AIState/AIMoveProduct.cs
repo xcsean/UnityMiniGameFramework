@@ -109,7 +109,17 @@ namespace UnityMiniGameFramework
             for (int i = 0; i < _factories.Count; ++i)
             {
                 var fac = _factories[i];
-                if (fac.currentProductInputStore <= 0)
+                if (fac.currentProductInputStore <= _worker.maxCarryCount)
+                {
+                    return fac;
+                }
+            }
+
+            // then find most value product factory with more than one pack space
+            for (int i = 0; i < _factories.Count; ++i)
+            {
+                var fac = _factories[i];
+                if (fac.maxInputProductStore - fac.currentProductInputStore > _worker.maxCarryCount)
                 {
                     return fac;
                 }

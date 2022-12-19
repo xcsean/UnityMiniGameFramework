@@ -225,6 +225,68 @@ namespace UnityMiniGameFramework
             return prods;
         }
 
+        public void TrySellTrainStaionProducts()
+        {
+            if (_trainStationInfo.storeProducts.Count > 0)
+            {
+                var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                int goldAdd = 0;
+                int useSpace = 0;
+
+                for (int i=0; i< _trainStationInfo.storeProducts.Count; ++i)
+                {
+                    var prod = _trainStationInfo.storeProducts[i];
+                    var prodConf = cmGame.gameConf.getCMProductConf(prod.productName);
+                    if (prodConf == null)
+                    {
+                        // error, ignore
+                        continue;
+                    }
+
+                    int putCount = _currentLevelConf.maxSellCountPerRound - useSpace;
+                    if(putCount >= prod.count)
+                    {
+                        putCount = prod.count;
+                        _trainStationInfo.storeProducts.RemoveAt(i);
+                        --i;
+                    }
+                    else
+                    {
+                        prod.count -= putCount;
+                    }
+
+                    useSpace += putCount;
+                    _currTotalStoreCount -= putCount;
+
+                    goldAdd += putCount * prodConf.price;
+
+                    if(useSpace >= _currentLevelConf.maxSellCountPerRound)
+                    {
+                        break;
+                    }
+                }
+
+                if (goldAdd > 0)
+                {
+                    cmGame.Self.AddGold(goldAdd);
+                }
+
+                cmGame.baseInfo.markDirty();
+
+                if (_uiTrainStation != null)
+                {
+                    _uiTrainStation.refreshInfo();
+                }
+            }
+            else
+            {
+                // no products
+
+
+            }
+
+        }
+
         public bool TryUpgrade()
         {
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
@@ -277,12 +339,6 @@ namespace UnityMiniGameFramework
             }
 
             return true;
-        }
-
-        public void ClearStoreProducts()
-        {
-            _trainStationInfo.storeProducts.Clear();
-            _currTotalStoreCount = 0;
         }
 
         public bool CallTrainNow()

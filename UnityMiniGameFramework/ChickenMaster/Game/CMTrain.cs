@@ -153,42 +153,7 @@ namespace UnityMiniGameFramework
                 if(_onboardTimeLeft <= 0)
                 {
                     // onbard finish, sell item and leave
-                    if (_station.trainStationInfo.storeProducts.Count > 0)
-                    {
-                        var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-                        int goldAdd = 0;
-                        foreach (var prod in _station.trainStationInfo.storeProducts)
-                        {
-                            var prodConf = cmGame.gameConf.getCMProductConf(prod.productName);
-                            if (prodConf == null)
-                            {
-                                // error, ignore
-                                continue;
-                            }
-
-                            goldAdd += prod.count * prodConf.price;
-                        }
-
-                        if (goldAdd > 0)
-                        {
-                            cmGame.Self.AddGold(goldAdd);
-                        }
-
-                        _station.ClearStoreProducts();
-
-                        cmGame.baseInfo.markDirty();
-
-                        if (_station.uiTrainStation != null)
-                        {
-                            _station.uiTrainStation.refreshInfo();
-                        }
-                    }
-                    else
-                    {
-                        // no products
-
-
-                    }
+                    _station.TrySellTrainStaionProducts();
 
                     var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
                     _station.trainStationInfo.NextTrainArrivalTime = nowTickMillsecond + (long)(_station.trainStaionConf.trainArriveTime * 1000);

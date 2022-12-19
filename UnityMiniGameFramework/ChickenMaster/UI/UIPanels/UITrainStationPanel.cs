@@ -75,6 +75,7 @@ namespace UnityMiniGameFramework
             info +=
                 $"\r\nUpgrade gold: {_trainStation.currentLevelConf.upgradeGoldCost}\r\n" +
                 $"Train Arrive: {t.Minutes}:{t.Seconds}\r\n" +
+                $"Train Sell: {_trainStation.currentLevelConf.maxSellCountPerRound}\r\n" +
                 $"Stored: {_trainStation.currTotalStoreCount}/{_trainStation.currentLevelConf.MaxstoreCount}";
 
             foreach(var prod in _trainStation.trainStationInfo.storeProducts)
