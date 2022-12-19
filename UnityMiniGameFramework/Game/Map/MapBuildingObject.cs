@@ -87,7 +87,7 @@ namespace UnityMiniGameFramework
         public void OnTriggerEnter(string triggerObjectName, UnityEngine.Collider other)
         {
             var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
-            if(comp != null && comp.mgGameObject.type == "MapHeroObject")
+            if(comp != null && comp.mgGameObject.type == "MapHeroObject" && (comp.mgGameObject as MapHeroObject).isSelf)
             {
                 // player
                 if(_mapBuildingConf.uiPanelName != null)
@@ -115,7 +115,7 @@ namespace UnityMiniGameFramework
             if(_buildingUIPanel != null)
             {
                 var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
-                if (comp != null && comp.mgGameObject.type == "MapHeroObject")
+                if (comp != null && comp.mgGameObject.type == "MapHeroObject" && (comp.mgGameObject as MapHeroObject).isSelf)
                 {
                     // player
 

@@ -16,6 +16,14 @@ namespace UnityMiniGameFramework
             return new MapHeroObject();
         }
 
+        protected bool _isSelf;
+        public bool isSelf => _isSelf;
+
+        public void markAsSelf()
+        {
+            _isSelf = true;
+        }
+
         override protected ActorObjectConfig _getActorConf(string confname)
         {
             if (UnityGameApp.Inst.MapManager.MapConf == null)

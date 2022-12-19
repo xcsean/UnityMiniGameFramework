@@ -43,7 +43,6 @@ namespace UnityMiniGameFramework
         virtual public void Init(UIPanelConf conf)
         {
             // TO DO : 
-
             _name = conf.name;
             _unityGameObject = new UnityEngine.GameObject($"UIPanel_{_name}");
             _unityUIDocument = _unityGameObject.AddComponent<UIDocument>();

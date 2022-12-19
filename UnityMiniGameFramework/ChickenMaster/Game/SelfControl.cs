@@ -41,6 +41,7 @@ namespace UnityMiniGameFramework
             _Init(_baseInfo.selfHero);
 
             UnityGameApp.Inst.MainScene.camera.follow(_mapHeroObj);
+            _mapHeroObj.markAsSelf();
 
             _isInited = true;
 
