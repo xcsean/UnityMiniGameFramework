@@ -79,15 +79,21 @@ namespace UnityMiniGameFramework
             UnityGameApp.Inst.addUpdateCall(this.OnUpdate);
         }
 
-        public void onQuitLevelClick(MouseUpEvent e)
+        public override void hideUI()
         {
+            base.hideUI();
+
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
 
-            this.hideUI();
             cmGame.uiMainPanel.showUI();
             cmGame.Egg.eggUI.showUI();
 
             UnityGameApp.Inst.MainScene.camera.follow(cmGame.Self.mapHero);
+        }
+
+        public void onQuitLevelClick(MouseUpEvent e)
+        {
+            this.hideUI();
         }
 
         public void onMouseDownCA(MouseDownEvent e)

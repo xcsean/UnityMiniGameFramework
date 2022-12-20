@@ -14,8 +14,11 @@ namespace UnityMiniGameFramework
             public int count;
         }
 
+
+        CMDefenseLevelAward _levelFisrtCompleteAward;
         UILevelMainPanel _levelUI;
         UIMainPanel _mainUI;
+        int _level;
 
         public static CMShootingLevel create()
         {
@@ -34,6 +37,7 @@ namespace UnityMiniGameFramework
 
         public void SetDefenseLevelConf(CMDefenseLevelConf defLevelConf, int level)
         {
+            _level = level;
             int levelRange = defLevelConf.levelRangeMax - defLevelConf.levelRangeMin;
 
             for(int i=0; i< _monSpawns.Count; ++i)
@@ -55,6 +59,8 @@ namespace UnityMiniGameFramework
                     sp.mapMonSpawn.SetSpawnMonsterLevel(1);
                 }
             }
+
+            _levelFisrtCompleteAward = (UnityGameApp.Inst.Game as ChickenMasterGame).gameConf.getLevelFirstCompleteAward(level);
         }
 
         public override void OnUpdate(float timeElasped)
@@ -119,8 +125,16 @@ namespace UnityMiniGameFramework
             }
 
             // do drop
-            int exp = _dropRoll(drop.exp);
-            int gold = _dropRoll(drop.gold);
+            int exp = 0;
+            if (drop.exp != null)
+            {
+                exp = _dropRoll(drop.exp);
+            }
+            int gold = 0;
+            if(drop.gold != null)
+            { 
+                gold = _dropRoll(drop.gold);
+            }    
 
             if(gold > 0)
             {
@@ -128,19 +142,25 @@ namespace UnityMiniGameFramework
             }
             if(exp > 0)
             {
-                (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddExp(10);
+                (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddExp(exp);
             }
 
-            var prodDrop = _dropSet(drop.product);
-            if(prodDrop.count > 0)
+            if(drop.product != null)
             {
-                (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackProduct(prodDrop.name, prodDrop.count);
+                var prodDrop = _dropSet(drop.product);
+                if (prodDrop.count > 0)
+                {
+                    (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackProduct(prodDrop.name, prodDrop.count);
+                }
             }
 
-            var itemDrop = _dropSet(drop.item);
-            if(itemDrop.count > 0)
+            if(drop.item != null)
             {
-                (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackItem(itemDrop.name, itemDrop.count);
+                var itemDrop = _dropSet(drop.item);
+                if (itemDrop.count > 0)
+                {
+                    (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddBackpackItem(itemDrop.name, itemDrop.count);
+                }
             }
         }
 
@@ -213,14 +233,34 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
 
-            bi.currentLevel++;
-            if(bi.currentLevel > cmGame.gameConf.maxDefenseLevelCount)
+            if(bi.currentLevel == _level)
             {
-                // max level reached
-                bi.currentLevel = cmGame.gameConf.maxDefenseLevelCount;
+                bi.currentLevel++;
+                if (bi.currentLevel > cmGame.gameConf.maxDefenseLevelCount)
+                {
+                    // max level reached
+                    bi.currentLevel = cmGame.gameConf.maxDefenseLevelCount;
+                }
+
+                _mainUI.refreshCurrentLevel(bi.currentLevel);
             }
 
-            _mainUI.refreshCurrentLevel(bi.currentLevel);
+            if(bi.currentFetchedAwardLevel < bi.currentLevel)
+            {
+                // first complete, give award
+                if (_levelFisrtCompleteAward != null)
+                {
+                    cmGame.Self.AddGold(_levelFisrtCompleteAward.gold);
+                    cmGame.Self.AddExp(_levelFisrtCompleteAward.exp);
+
+                    foreach(var item in _levelFisrtCompleteAward.items)
+                    {
+                        cmGame.Self.AddBackpackItem(item.itemName, item.count);
+                    }
+                }
+
+                bi.currentFetchedAwardLevel = bi.currentLevel;
+            }
 
             cmGame.baseInfo.markDirty();
 

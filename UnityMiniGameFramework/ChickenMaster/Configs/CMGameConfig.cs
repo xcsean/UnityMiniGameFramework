@@ -163,6 +163,28 @@ namespace UnityMiniGameFramework
         public int levelRangeMax { get; set; }
     }
 
+    public class CMItemAward
+    {
+        public string itemName { get; set; }
+
+        public int count { get; set; }
+    }
+
+    public class CMProductAward
+    {
+        public string productName { get; set; }
+
+        public int count { get; set; }
+    }
+
+    public class CMDefenseLevelAward
+    {
+        public int gold { get; set; }
+        public int exp { get; set; }
+
+        public List<CMItemAward> items { get; set; }
+    }
+
     public class CMDefenseLevelConf
     {
         public int levelRangeMin { get; set; }
@@ -208,9 +230,33 @@ namespace UnityMiniGameFramework
         public float EggUIShowRange { get; set; }
     }
 
+    public class CMOfflineItemAward
+    {
+        public string itemName { get; set; }
+        public float countPerSec { get; set; }
+    }
+    public class CMOfflineProductAward
+    {
+        public string productName { get; set; }
+        public float countPerSec { get; set; }
+    }
+
+    public class CMOfflineAwardConf
+    {
+        public float goldPerSec { get; set; }
+        public float expPerSec { get; set; }
+
+        public List<CMOfflineItemAward> items { get; set; }
+        public List<CMOfflineProductAward> products { get; set; }
+    }
+
     public class CMGameConf
     {
         public string levelCenterObjectName { get; set; }
+
+        public float autoSaveTime { get; set; }
+
+        public float offlineAwardMinTime { get; set; }
 
         public Dictionary<int, CMGunConf> gunConfs { get; set; }
 
@@ -226,6 +272,8 @@ namespace UnityMiniGameFramework
 
         public List<CMDefenseLevelConf> defenseLevels { get; set; }
 
+        public Dictionary<int, CMDefenseLevelAward> defenseFCLevelAwards { get; set; }
+
         public Dictionary<string, Dictionary<int, CMMonsterDropConf>> monsterDrops { get; set; }
 
         public CMEggConf eggConf { get; set; }
@@ -233,6 +281,8 @@ namespace UnityMiniGameFramework
         public CMStoreHouseConf storeHouseConf { get; set; }
 
         public CMTrainStationConf trainStationConf { get; set; }
+
+        public Dictionary<int, CMOfflineAwardConf> offlineAwardsByUserLevel { get; set; }
     }
 
     public class CMGameConfig : JsonConfig
@@ -328,6 +378,14 @@ namespace UnityMiniGameFramework
                 --monLevel;
             }
             return null;
+        }
+        public CMDefenseLevelAward getLevelFirstCompleteAward(int currentLevel)
+        {
+            if (gameConfs.defenseFCLevelAwards == null || !gameConfs.defenseFCLevelAwards.ContainsKey(currentLevel))
+            {
+                return null;
+            }
+            return gameConfs.defenseFCLevelAwards[currentLevel];
         }
     }
 }

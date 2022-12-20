@@ -51,6 +51,10 @@ namespace UnityMiniGameFramework
         UILevelMainPanel _uiLevelMainPanel;
         public UILevelMainPanel uiLevelMainPanel => _uiLevelMainPanel;
 
+        long _lastSaveTime;
+        long _autoSaveTime;
+        long _offlineAwardMinTime;
+
         public ChickenMasterGame()
         {
             _self = new SelfControl();
@@ -65,6 +69,26 @@ namespace UnityMiniGameFramework
         {
             _gameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
 
+            if(_gameConf.gameConfs.autoSaveTime <= 0)
+            {
+                _autoSaveTime = 10000; // auto save per 10 sec 
+            }
+            else
+            {
+                _autoSaveTime = (long)(_gameConf.gameConfs.autoSaveTime * 1000);
+            }
+
+            if(_gameConf.gameConfs.offlineAwardMinTime <= 0)
+            {
+                _offlineAwardMinTime = 60000; // offline award min time
+            }
+            else
+            {
+                _offlineAwardMinTime = (long)(_gameConf.gameConfs.offlineAwardMinTime * 1000);
+            }
+
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+
             await UnityGameApp.Inst.Datas.CreateLocalUserDataAsync();
 
             bool newDataAdded = false;
@@ -76,7 +100,8 @@ namespace UnityMiniGameFramework
                 {
                     uid = "test",
                     uuid = "test",
-                    lastLoginTime = (int)(DateTime.Now.Ticks / 1000)
+                    lastLoginTime = nowMillisecond,
+                    lastOnlineTime = nowMillisecond
                 };
                 _userInfo = new DataObject(userInfo);
                 _userInfo.markDirty();
@@ -103,7 +128,7 @@ namespace UnityMiniGameFramework
                     egg = new LocalEggInfo()
                     {
                         hp = _gameConf.gameConfs.eggConf.maxHp,
-                        lastIncHpTime = DateTime.Now.Ticks / 10000,
+                        lastIncHpTime = nowMillisecond,
                         nextRecoverTime = 0
                     },
                     defenseHeros = new List<LocalHeroInfo>(),
@@ -122,7 +147,7 @@ namespace UnityMiniGameFramework
                     {
                         storeProducts = new List<LocalPackProductInfo>(),
                         level = 1,
-                        NextTrainArrivalTime = DateTime.Now.Ticks / 10000,
+                        NextTrainArrivalTime = nowMillisecond,
                         trainStationWorkers = new List<LocalWorkerInfo>(), // init in CMWorker
                     }
                 };
@@ -138,6 +163,8 @@ namespace UnityMiniGameFramework
                 // write back
                 await UnityGameApp.Inst.Datas.localUserData.writeBackAsync();
             }
+
+            _lastSaveTime = nowMillisecond;
         }
 
         public void OnStartSceneLoaded()
@@ -211,9 +238,79 @@ namespace UnityMiniGameFramework
                 }
             }
 
+            _checkOfflineAwards();
 
             // refresh main ui Info
             _uiMainPanel.refreshAll();
+        }
+
+        protected void _checkOfflineAwards()
+        {
+            // check offline award
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            var userInfo = (_userInfo.getData() as LocalUserInfo);
+            var bi = _baseInfo.getData() as LocalBaseInfo;
+
+            var offLineMillisecond = nowMillisecond - userInfo.lastOnlineTime;
+            if (offLineMillisecond < _offlineAwardMinTime)
+            {
+                return;
+            }
+
+            CMOfflineAwardConf offlineAwardConf = null;
+            _gameConf.gameConfs.offlineAwardsByUserLevel.TryGetValue(bi.level, out offlineAwardConf);
+
+            if (offlineAwardConf == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"user level [{bi.level}] offline award config not exist");
+                return;
+            }
+
+            if (bi.unfetchedOfflineAward == null)
+            {
+                bi.unfetchedOfflineAward = new LocalAwardInfo()
+                {
+                    gold = 0,
+                    exp = 0,
+                    items = new Dictionary<string, int>(),
+                    products = new Dictionary<string, int>()
+                };
+            }
+
+            bi.unfetchedOfflineAward.gold += (int)(offlineAwardConf.goldPerSec * offLineMillisecond / 1000);
+            bi.unfetchedOfflineAward.exp += (int)(offlineAwardConf.expPerSec * offLineMillisecond / 1000);
+
+            foreach(var itemAwd in offlineAwardConf.items)
+            {
+                int count = (int)(itemAwd.countPerSec * offLineMillisecond / 1000);
+                if(bi.unfetchedOfflineAward.items.ContainsKey(itemAwd.itemName))
+                {
+                    bi.unfetchedOfflineAward.items[itemAwd.itemName] += count;
+                }
+                else
+                {
+                    bi.unfetchedOfflineAward.items[itemAwd.itemName] = count;
+                }
+            }
+            foreach (var prodAwd in offlineAwardConf.products)
+            {
+                int count = (int)(prodAwd.countPerSec * offLineMillisecond / 1000);
+                if (bi.unfetchedOfflineAward.products.ContainsKey(prodAwd.productName))
+                {
+                    bi.unfetchedOfflineAward.products[prodAwd.productName] += count;
+                }
+                else
+                {
+                    bi.unfetchedOfflineAward.products[prodAwd.productName] = count;
+                }
+            }
+
+            // TO DO : show offline award ui
+
+            userInfo.lastOnlineTime = nowMillisecond;
+
+            _baseInfo.markDirty();
+            _userInfo.markDirty();
         }
 
         public void OnUpdate()
@@ -236,6 +333,21 @@ namespace UnityMiniGameFramework
                 _uiMainPanel.refreshTrainTime(_trainStation.train.timeToTrainArrival);
 
                 _uiMainPanel.OnUpdate();
+            }
+
+            if(_userInfo != null)
+            {
+                long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+
+                if (nowMillisecond - _lastSaveTime >= _gameConf.gameConfs.autoSaveTime)
+                {
+                    _lastSaveTime = nowMillisecond;
+
+                    (_userInfo.getData() as LocalUserInfo).lastOnlineTime = nowMillisecond;
+                    _userInfo.markDirty();
+
+                    UnityGameApp.Inst.Datas.localUserData.writeBack();
+                }
             }
         }
 

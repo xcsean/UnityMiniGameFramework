@@ -78,6 +78,15 @@ namespace UnityMiniGameFramework
         public List<LocalWorkerInfo> trainStationWorkers { get; set; }
     }
 
+    public class LocalAwardInfo
+    {
+        public int exp { get; set; }
+        public int gold { get; set; }
+
+        public Dictionary<string, int> products { get; set; }
+        public Dictionary<string, int> items { get; set; }
+    }
+
     public class LocalBaseInfo
     {
         public int gold { get; set; }
@@ -85,6 +94,9 @@ namespace UnityMiniGameFramework
         public int exp { get; set; }
 
         public int currentLevel { get; set; }
+        public int currentFetchedAwardLevel { get; set; }
+
+        public LocalAwardInfo unfetchedOfflineAward { get; set; }
 
         public LocalHeroInfo selfHero { get; set; }
 
@@ -108,7 +120,8 @@ namespace UnityMiniGameFramework
     {
         public string uid { get; set; }
         public string uuid { get; set; }
-        public int lastLoginTime { get; set; }
+        public long lastLoginTime { get; set; }
+        public long lastOnlineTime { get; set; }
     }
 
     public class LocalUserData : Data
