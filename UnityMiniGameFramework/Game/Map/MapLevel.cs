@@ -171,7 +171,10 @@ namespace UnityMiniGameFramework
 
         protected virtual void _OnWin()
         {
-
+            // 显示通关奖励界面
+            UIPassRewardPanel _passUI = UnityGameApp.Inst.UI.createUIPanel("PassRewardUI") as UIPassRewardPanel;
+            _passUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _passUI.showUI();
         }
 
         protected virtual void _OnLose()
