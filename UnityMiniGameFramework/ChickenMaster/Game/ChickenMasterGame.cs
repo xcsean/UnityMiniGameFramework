@@ -277,35 +277,71 @@ namespace UnityMiniGameFramework
                 };
             }
 
-            bi.unfetchedOfflineAward.gold += (int)(offlineAwardConf.goldPerSec * offLineMillisecond / 1000);
-            bi.unfetchedOfflineAward.exp += (int)(offlineAwardConf.expPerSec * offLineMillisecond / 1000);
+            //bi.unfetchedOfflineAward.gold += (int)(offlineAwardConf.goldPerSec * offLineMillisecond / 1000);
+            //bi.unfetchedOfflineAward.exp += (int)(offlineAwardConf.expPerSec * offLineMillisecond / 1000);
 
-            foreach(var itemAwd in offlineAwardConf.items)
+            //foreach(var itemAwd in offlineAwardConf.items)
+            //{
+            //    int count = (int)(itemAwd.countPerSec * offLineMillisecond / 1000);
+            //    if(bi.unfetchedOfflineAward.items.ContainsKey(itemAwd.itemName))
+            //    {
+            //        bi.unfetchedOfflineAward.items[itemAwd.itemName] += count;
+            //    }
+            //    else
+            //    {
+            //        bi.unfetchedOfflineAward.items[itemAwd.itemName] = count;
+            //    }
+            //}
+            //foreach (var prodAwd in offlineAwardConf.products)
+            //{
+            //    int count = (int)(prodAwd.countPerSec * offLineMillisecond / 1000);
+            //    if (bi.unfetchedOfflineAward.products.ContainsKey(prodAwd.productName))
+            //    {
+            //        bi.unfetchedOfflineAward.products[prodAwd.productName] += count;
+            //    }
+            //    else
+            //    {
+            //        bi.unfetchedOfflineAward.products[prodAwd.productName] = count;
+            //    }
+            //}
+
+            LocalAwardInfo offlineAward = new LocalAwardInfo()
+            {
+                gold = (int)(offlineAwardConf.goldPerSec * offLineMillisecond / 1000),
+                exp = (int)(offlineAwardConf.expPerSec * offLineMillisecond / 1000),
+                items = new Dictionary<string, int>(),
+                products = new Dictionary<string, int>()
+            };
+
+            foreach (var itemAwd in offlineAwardConf.items)
             {
                 int count = (int)(itemAwd.countPerSec * offLineMillisecond / 1000);
-                if(bi.unfetchedOfflineAward.items.ContainsKey(itemAwd.itemName))
+                if (offlineAward.items.ContainsKey(itemAwd.itemName))
                 {
-                    bi.unfetchedOfflineAward.items[itemAwd.itemName] += count;
+                    offlineAward.items[itemAwd.itemName] += count;
                 }
                 else
                 {
-                    bi.unfetchedOfflineAward.items[itemAwd.itemName] = count;
+                    offlineAward.items[itemAwd.itemName] = count;
                 }
             }
             foreach (var prodAwd in offlineAwardConf.products)
             {
                 int count = (int)(prodAwd.countPerSec * offLineMillisecond / 1000);
-                if (bi.unfetchedOfflineAward.products.ContainsKey(prodAwd.productName))
+                if (offlineAward.products.ContainsKey(prodAwd.productName))
                 {
-                    bi.unfetchedOfflineAward.products[prodAwd.productName] += count;
+                    offlineAward.products[prodAwd.productName] += count;
                 }
                 else
                 {
-                    bi.unfetchedOfflineAward.products[prodAwd.productName] = count;
+                    offlineAward.products[prodAwd.productName] = count;
                 }
             }
 
-            // TO DO : show offline award ui
+            //// TO DO : show offline award ui
+            UIOfflineRewardPanel _ui = UnityGameApp.Inst.UI.createUIPanel("OfflineRewardUI") as UIOfflineRewardPanel;
+            _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _ui.showReward(offlineAward, offLineMillisecond);
 
             userInfo.lastOnlineTime = nowMillisecond;
 

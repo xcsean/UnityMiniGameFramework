@@ -194,6 +194,7 @@ namespace UnityMiniGameFramework
         public Dictionary<string, CMDefenseLevelMonsterLvRange> monsterLvRanges { get; set; }
 
         public string mapLevelName { get; set; }
+        public Dictionary<string, int> passReward { get; set; }
     }
 
     public class CMDropRoll
