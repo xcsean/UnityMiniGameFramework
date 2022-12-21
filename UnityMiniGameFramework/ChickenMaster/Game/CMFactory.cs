@@ -37,7 +37,7 @@ namespace UnityMiniGameFramework
         public int maxInputProductStore => _factoryLevelConf.maxInputProductStore;
         public int maxOutputProductStore => _factoryLevelConf.maxOutputProductStore;
 
-        public int currentProductInputStore => _localFacInfo.buildingInputProduct == null? 0 : _localFacInfo.buildingInputProduct.count;
+        public int currentProductInputStore => _localFacInfo.buildingInputProduct == null ? 0 : _localFacInfo.buildingInputProduct.count;
         public int currentProductOutputStore => _localFacInfo.buildingOutputProduct == null ? 0 : _localFacInfo.buildingOutputProduct.count;
 
         public float currentCD => _currentCD;
@@ -53,13 +53,13 @@ namespace UnityMiniGameFramework
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             _factoryConf = cmGame.gameConf.getCMFactoryConf(_factoryName);
-            if(_factoryConf == null)
+            if (_factoryConf == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory [{_factoryName}] init config not exist");
                 return false;
             }
 
-            if(!_factoryConf.levelConfs.TryGetValue(_localFacInfo.level, out _factoryLevelConf))
+            if (!_factoryConf.levelConfs.TryGetValue(_localFacInfo.level, out _factoryLevelConf))
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory [{_factoryName}] level [{_localFacInfo.level}] config not exist");
                 return false;
@@ -117,7 +117,7 @@ namespace UnityMiniGameFramework
             //    return false;
             //}
 
-            if(!_factoryConf.levelConfs.ContainsKey(_localFacInfo.level + 1))
+            if (!_factoryConf.levelConfs.ContainsKey(_localFacInfo.level + 1))
             {
                 // for Debug ...
                 cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "already max level !");
@@ -184,7 +184,7 @@ namespace UnityMiniGameFramework
             info.count -= toFill;
             // TO DO : find product index and fill
 
-            if(_localFacInfo.buildingInputProduct == null)
+            if (_localFacInfo.buildingInputProduct == null)
             {
                 _localFacInfo.buildingInputProduct = new LocalPackProductInfo()
                 {
@@ -196,7 +196,7 @@ namespace UnityMiniGameFramework
             {
                 _localFacInfo.buildingInputProduct.count += toFill;
             }
-
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
             cmGame.baseInfo.markDirty();
             cmGame.uiMainPanel.refreshMeat();
         }
@@ -209,12 +209,14 @@ namespace UnityMiniGameFramework
             }
 
             int fetchCount = value;
-            if(fetchCount > _localFacInfo.buildingOutputProduct.count)
+            if (fetchCount > _localFacInfo.buildingOutputProduct.count)
             {
                 fetchCount = _localFacInfo.buildingOutputProduct.count;
             }
 
             _localFacInfo.buildingOutputProduct.count -= fetchCount;
+
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{_localFacInfo.buildingOutputProduct.count}");
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
@@ -274,6 +276,7 @@ namespace UnityMiniGameFramework
             {
                 _localFacInfo.buildingOutputProduct.count += produceCount;
             }
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}，产出总数量：{currentProductOutputStore}");
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();

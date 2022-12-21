@@ -45,8 +45,8 @@ namespace UnityMiniGameFramework
         protected IGameObject _levelCenterObject;
         public IGameObject levelCenterObject => _levelCenterObject;
 
-        UIMainPanel _uiMainPanel;
-        public UIMainPanel uiMainPanel => _uiMainPanel;
+        UIGameMainPanel _uiMainPanel;
+        public UIGameMainPanel uiMainPanel => _uiMainPanel;
 
         UILevelMainPanel _uiLevelMainPanel;
         public UILevelMainPanel uiLevelMainPanel => _uiLevelMainPanel;
@@ -174,7 +174,7 @@ namespace UnityMiniGameFramework
         public void OnMainSceneLoaded()
         {
             // init ui
-            _uiMainPanel = UnityGameApp.Inst.UI.getUIPanel("MainUI") as UIMainPanel;
+            _uiMainPanel = UnityGameApp.Inst.UI.getUIPanel("GameMainUI") as UIGameMainPanel;
 
             // init self
             _self.Init();

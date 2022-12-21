@@ -17,7 +17,7 @@ namespace UnityMiniGameFramework
 
         CMDefenseLevelAward _levelFisrtCompleteAward;
         UILevelMainPanel _levelUI;
-        UIMainPanel _mainUI;
+        UIGameMainPanel _mainUI;
         int _level;
 
         public static CMShootingLevel create()
@@ -30,7 +30,7 @@ namespace UnityMiniGameFramework
             bool ret = base.Init(confName);
 
             _levelUI = UnityGameApp.Inst.UI.getUIPanel("LevelMainUI") as UILevelMainPanel;
-            _mainUI = UnityGameApp.Inst.UI.getUIPanel("MainUI") as UIMainPanel;
+            _mainUI = UnityGameApp.Inst.UI.getUIPanel("GameMainUI") as UIGameMainPanel;
 
             return ret;
         }
