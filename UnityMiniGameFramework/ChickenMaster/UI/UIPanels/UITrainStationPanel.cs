@@ -96,6 +96,7 @@ namespace UnityMiniGameFramework
             _NextLv.text = isMaxLevel ? $"{_trainStation.trainStationInfo.level}" : $"{_trainStation.trainStationInfo.level + 1}";
             _NextCapacity.text = isMaxLevel ? $"{_trainStation.currentLevelConf.MaxstoreCount}" : $"{_trainStation.trainStaionConf.levelConfs[_trainStation.trainStationInfo.level + 1].MaxstoreCount}";
             UpgradePrice.text = $"upgrade gold: {_trainStation.currentLevelConf.upgradeGoldCost}";
+            UpgradeBtn.text = isMaxLevel ? "Max  Level" : "Upgrade";
 
             //TimeSpan t = new TimeSpan(_trainStation.train.timeToTrainArrival * 10000);
             //string info =

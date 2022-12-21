@@ -19,8 +19,8 @@ namespace UnityMiniGameFramework
         protected Button NormalGetButton;
         protected Button VideoGetButton;
         //protected Image RewardIcon;
-        //protected Label RewardNumLabel;
-        private VisualElement gridObj;
+        protected Label RewardNumLabel;
+        //private VisualElement gridObj;
 
         private int rewardNum = 0;
         override public void Init(UIPanelConf conf)
@@ -63,20 +63,20 @@ namespace UnityMiniGameFramework
                     //}
                 }
             }
-
-            //RewardNumLabel.text = "gold:" + rewardNum.ToString();
+            rewardNum = 100;
+            RewardNumLabel.text = "gold:" + rewardNum.ToString();
         }
 
         private void onClickNormalGet()
         {
-            //var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            //cmGame.Self.AddGold(rewardNum);
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.Self.AddGold(rewardNum);
             this.hideUI();
         }
         private void onClickVideoGet()
         {
-            //var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            //cmGame.Self.AddGold(rewardNum * 3);
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.Self.AddGold(rewardNum * 3);
             this.hideUI();
         }
     }
