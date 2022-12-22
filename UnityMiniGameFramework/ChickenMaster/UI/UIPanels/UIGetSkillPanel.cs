@@ -22,7 +22,7 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
-            _closeBtn = _uiObjects["CloseBtn"].unityVisualElement as Button;
+            _closeBtn = _uiObjects["CloseButton"].unityVisualElement as Button;
             _closeBtn.RegisterCallback<MouseUpEvent>(onClickClose);
         }
 
