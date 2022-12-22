@@ -59,6 +59,7 @@ namespace UnityMiniGameFramework
         protected Button _btnUseSkill;
         protected Button _btnDoubleExp;
         protected Button _btnDoubleAtt;
+        protected Button _btnSetting;
         protected VisualElement _levelsNodes;
         protected VisualElement _bossInfo;
 
@@ -84,12 +85,14 @@ namespace UnityMiniGameFramework
             _btnUseSkill = this._uiObjects["BtnUseSkill"].unityVisualElement as Button;
             _btnDoubleExp = this._uiObjects["BtnDoubleExp"].unityVisualElement as Button;
             _btnDoubleAtt = this._uiObjects["BtnDoubleAtt"].unityVisualElement as Button;
+            _btnSetting = this._uiObjects["BtnSetting"].unityVisualElement as Button;
             _levelsNodes = this._uiObjects["LevelsNodes"].unityVisualElement;
             _bossInfo = this._uiObjects["BossInfo"].unityVisualElement;
 
             _btnUseSkill.RegisterCallback<MouseUpEvent>(OnUseSkillBtnClick);
             _btnDoubleExp.RegisterCallback<MouseUpEvent>(OnDoubleExpBtnClick);
             _btnDoubleAtt.RegisterCallback<MouseUpEvent>(OnDoubleAttBtnClick);
+            _btnSetting.RegisterCallback<MouseUpEvent>(OnSettiingBtnClick);
 
             //_clickableArea.RegisterCallback<MouseDownEvent>(onMouseDownCA);
             //_clickableArea.RegisterCallback<MouseUpEvent>(onMouseUpCA);
@@ -128,6 +131,13 @@ namespace UnityMiniGameFramework
             UIDoubleAttackPanel _ui = UnityGameApp.Inst.UI.createUIPanel("DoubleAttackUI") as UIDoubleAttackPanel;
             _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _ui.showUI();
+        }
+
+        /// <summary>
+        /// 设置
+        /// </summary>
+        protected void OnSettiingBtnClick(MouseUpEvent e)
+        {
         }
 
         public void refreshAll()

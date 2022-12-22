@@ -36,7 +36,6 @@ namespace UnityMiniGameFramework
         protected LocalWeaponInfo _gun2Info;
         protected LocalWeaponInfo _gun3Info;
 
-
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -63,14 +62,18 @@ namespace UnityMiniGameFramework
             _gunItemArr[2] = _gunItem3;
 
             _gunItem1.Q<Button>("btnActive").RegisterCallback<MouseUpEvent>(onGun1Click);
-            _gunItem1.Q<Button>("btnActive").RegisterCallback<MouseUpEvent>(onGun2Click);
-            _gunItem1.Q<Button>("btnActive").RegisterCallback<MouseUpEvent>(onGun3Click);
+            _gunItem2.Q<Button>("btnActive").RegisterCallback<MouseUpEvent>(onGun2Click);
+            _gunItem3.Q<Button>("btnActive").RegisterCallback<MouseUpEvent>(onGun3Click);
             _gunItem1.Q<Button>("btnItem").RegisterCallback<MouseUpEvent>(OnChangeGunBtnClick1);
             _gunItem2.Q<Button>("btnItem").RegisterCallback<MouseUpEvent>(OnChangeGunBtnClick2);
             _gunItem3.Q<Button>("btnItem").RegisterCallback<MouseUpEvent>(OnChangeGunBtnClick3);
+
             _btnAct.RegisterCallback<MouseUpEvent>(OnActBtnClick);
         }
 
+        /// <summary>
+        /// 英雄激活和升级
+        /// </summary>
         public void OnActBtnClick(MouseUpEvent e)
         {
             if (_hero == null)
@@ -152,7 +155,7 @@ namespace UnityMiniGameFramework
                 // not active
                 _btnAct.text = "Activate";
                 _labHeroName.text = "";
-                _labHeroLv.text = "Lv:0";
+                _labHeroLv.text = "Lv.0";
                 _labUpgradeCoin.text = $"Gold: {_heroConf.activateGoldCost}";
             }
             else
@@ -166,14 +169,19 @@ namespace UnityMiniGameFramework
                 {
                     attack = conf.combatConf.attackBase;
                 }
-
+                var nextConf = _hero.getNextHeroLevelConf();
+                if (nextConf == null)
+                {
+                    nextConf = conf;
+                }
+                int upgradeCost = _hero.getUpgradeGoldCost();
                 _btnAct.text = "Upgrade";
                 _labHeroName.text = $"{_hero.heroInfo.mapHeroName}";
-                _labHeroLv.text = $"Lv:{_hero.heroInfo.level}";
-                _labUpgradeCoin.text = $"Gold: {_hero.getUpgradeGoldCost()}";
-                _labAttackLv.text = $"Attack Lv：{attack}";
+                _labHeroLv.text = $"Lv.{_hero.heroInfo.level}";
+                _labUpgradeCoin.text = $"Gold: {upgradeCost}";
+                _labAttackLv.text = $"Attack Lv.{1}";
                 _labAttackCur.text = $"{attack}";
-                _labAttackNext.text = $"{attack + 1}";
+                _labAttackNext.text = $"{nextConf.combatConf.attackBase}";
 
                 // set gun info
                 RefreshGunInfo(_gun1Info, 0);
@@ -187,9 +195,16 @@ namespace UnityMiniGameFramework
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             int gunId = _heroConf.guns[gunIndex];
             var cmGunConf = cmGame.gameConf.getCMGunConf(gunId);
-            
+
             _gunItemArr[gunIndex].Q<Label>("labGunName").text = $"Gun{cmGunConf.id}";
-            
+            if (_hero != null && _hero.heroInfo.holdWeaponId == gunId)
+            {
+                _gunItemArr[gunIndex].Q<Label>("labUse").text = "Equipped";
+            }
+            else
+            {
+                _gunItemArr[gunIndex].Q<Label>("labUse").text = "";
+            }
             // to do: set gun icon
 
             if (gunInfo == null)
@@ -199,6 +214,7 @@ namespace UnityMiniGameFramework
             else
             {
                 _gunItemArr[gunIndex].Q<Label>("labGunStar").text = $"{_gun1Info.level}";
+
             }
         }
 
@@ -220,6 +236,7 @@ namespace UnityMiniGameFramework
             if (itemInfo == null)
             {
                 gunProg.value = 0;
+                gunProg.title = $"0/{cmGunConf.activateItemCost}";
             }
             else
             {
@@ -254,7 +271,7 @@ namespace UnityMiniGameFramework
             if (itemInfo == null)
             {
                 gunProg.value = 0;
-                gunProg.title = $"0/0";
+                gunProg.title = $"0/{cmGunConf.activateItemCost}";
             }
             else
             {
@@ -300,9 +317,15 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 切换武器
         /// </summary>
-        protected void OnChangeGun(int gunId)
+        protected void OnChangeGun(int gunIndex)
         {
+            int gunId = _heroConf.guns[gunIndex];
             if (_hero == null)
+            {
+                return;
+            }
+
+            if (_hero.heroInfo.holdWeaponId == gunId)
             {
                 return;
             }
@@ -328,12 +351,13 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 解锁、升星
         /// </summary>
-        protected bool _onGunClick(int gunId)
+        protected bool _onGunClick(int gunIndex)
         {
             if (_hero == null)
             {
                 return false;
             }
+            int gunId = _heroConf.guns[gunIndex];
 
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             var gunInfo = cmGame.GetWeaponInfo(gunId);
@@ -341,6 +365,7 @@ namespace UnityMiniGameFramework
             if (gunInfo == null)
             {
                 // not active
+                Debug.DebugOutput(DebugTraceType.DTT_Debug, "检查武器碎片是否足够");
                 return _hero.TryActiveWeapon(gunId);
             }
             else
@@ -348,6 +373,7 @@ namespace UnityMiniGameFramework
                 // actived
                 if (!_hero.TryUpgradeWeapon(gunId))
                 {
+                    Debug.DebugOutput(DebugTraceType.DTT_Debug, "无法升级武器");
                     return false;
                 }
                 else
@@ -359,8 +385,8 @@ namespace UnityMiniGameFramework
 
         public void onGun1Click(MouseUpEvent e)
         {
-            var changed = _onGunClick(_heroConf.guns[0]);
-            if (changed)
+            var upgrade = _onGunClick(0);
+            if (upgrade)
             {
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
                 _gun1Info = cmGame.GetWeaponInfo(_heroConf.guns[0]);
@@ -370,8 +396,8 @@ namespace UnityMiniGameFramework
         }
         public void onGun2Click(MouseUpEvent e)
         {
-            var changed = _onGunClick(_heroConf.guns[1]);
-            if (changed)
+            var upgrade = _onGunClick(1);
+            if (upgrade)
             {
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
                 _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
@@ -381,8 +407,8 @@ namespace UnityMiniGameFramework
         }
         public void onGun3Click(MouseUpEvent e)
         {
-            var changed = _onGunClick(_heroConf.guns[2]);
-            if (changed)
+            var upgrade = _onGunClick(2);
+            if (upgrade)
             {
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
                 _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);

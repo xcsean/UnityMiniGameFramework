@@ -126,6 +126,7 @@ namespace UnityMiniGameFramework
 
         public UnityResourceManager UnityResource => (UnityResourceManager)_resManager;
         public Scene MainScene => (Scene)_mainScene;
+        public Scene StartScene => (Scene)_startScene;
 
         protected AnimationManager _aniManager;
         public AnimationManager AniManager => _aniManager;
@@ -365,6 +366,7 @@ namespace UnityMiniGameFramework
 
             _ui.regUIPanelCreator("UICommonFactoryPanel", UICommonFactoryPanel.create);
             _ui.regUIPanelCreator("UIGameMainPanel", UIGameMainPanel.create);
+            _ui.regUIPanelCreator("UIOpeningCartoonPanel", UIOpeningCartoonPanel.create);
             _ui.regUIPanelCreator("UITowerHeroPanel", UITowerHeroPanel.create);
             
             _ui.regUIPanelCreator("UIDoubleAttackPanel", UIDoubleAttackPanel.create);
