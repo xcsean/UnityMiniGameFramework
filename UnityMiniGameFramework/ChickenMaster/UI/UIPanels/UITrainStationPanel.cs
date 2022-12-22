@@ -46,6 +46,9 @@ namespace UnityMiniGameFramework
         protected Button _SpeedUpBtn;
         public Button SpeedUpBtn => _SpeedUpBtn;
 
+        protected Button _CloseBtn;
+        public Button CloseBtn => _CloseBtn;
+
         private Boolean isMaxLevel = false;
 
         override public void Init(UIPanelConf conf)
@@ -66,6 +69,8 @@ namespace UnityMiniGameFramework
             _CallBtn.RegisterCallback<MouseUpEvent>(onCallClick);
             _SpeedUpBtn = this._uiObjects["SpeedUpBtn"].unityVisualElement as Button;
             _SpeedUpBtn.RegisterCallback<MouseUpEvent>(onSpeedUpClick);
+            _CloseBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
+            _CloseBtn.RegisterCallback<MouseUpEvent>(onCloseClick);
 
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             _trainStation = cmGame.TrainStation;
@@ -90,6 +95,8 @@ namespace UnityMiniGameFramework
             isMaxLevel = _trainStation.trainStaionConf.levelConfs.Count <= _trainStation.trainStationInfo.level;
             _NextLv.text = isMaxLevel ? $"{_trainStation.trainStationInfo.level}" : $"{_trainStation.trainStationInfo.level + 1}";
             _NextCapacity.text = isMaxLevel ? $"{_trainStation.currentLevelConf.MaxstoreCount}" : $"{_trainStation.trainStaionConf.levelConfs[_trainStation.trainStationInfo.level + 1].MaxstoreCount}";
+            UpgradePrice.text = $"upgrade gold: {_trainStation.currentLevelConf.upgradeGoldCost}";
+            UpgradeBtn.text = isMaxLevel ? "Max  Level" : "Upgrade";
 
             //TimeSpan t = new TimeSpan(_trainStation.train.timeToTrainArrival * 10000);
             //string info =

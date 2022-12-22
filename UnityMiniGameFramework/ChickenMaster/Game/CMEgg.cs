@@ -42,7 +42,7 @@ namespace UnityMiniGameFramework
             {
                 // TO DO : egg die, set ui and egg status right
             }
-
+            _updateHpBar();
             _isInited = true;
         }
 
@@ -64,6 +64,7 @@ namespace UnityMiniGameFramework
                 tr.position.x,
                 tr.position.y + 0.5f,
                 tr.position.z);
+            _hpBar.barObject.SetActive(false);
 
             // init egg UI
             _eggUI = UnityGameApp.Inst.UI.createUIPanel("EggUI") as UIEggPanel;
@@ -75,6 +76,11 @@ namespace UnityMiniGameFramework
             if (_hpBar != null)
             {
                 _hpBar.setHp((float)_eggInfo.hp / (float)_conf.maxHp);
+            }
+
+            if(_eggUI != null)
+            {
+                _eggUI.setHp((float)_eggInfo.hp / (float)_conf.maxHp);
             }
         }
 
@@ -93,10 +99,11 @@ namespace UnityMiniGameFramework
                 //{
                 //    _hpBar.show();
                 //}
-                if(_eggUI.isShow)
-                {
-                    _eggUI.hideUI();
-                }
+                //if (_eggUI.isShow)
+                //{
+                //    _eggUI.hideUI();
+                //}
+                _eggUI.changeEggState(true);
             }
             else
             {
@@ -109,11 +116,12 @@ namespace UnityMiniGameFramework
                 {
                     var vec = (_eggObject.transform.position - (UnityGameApp.Inst.Game as ChickenMasterGame).Self.mapHero.unityGameObject.transform.position);
 
-                    if(vec.magnitude <= _conf.EggUIShowRange)
-                    {
-                        _eggUI.showUI();
-                    }
+                    //if(vec.magnitude <= _conf.EggUIShowRange)
+                    //{
+                    //    _eggUI.showUI();
+                    //}
                 }
+                _eggUI.changeEggState(false);
             }
 
             if(_eggUI != null)
@@ -199,6 +207,13 @@ namespace UnityMiniGameFramework
             _eggUI.onEggDie();
 
             // TO DO : egg die
+        }
+
+        public void recoverEgg()
+        {
+            // recovery
+            long nowTickMilliseconds = DateTime.Now.Ticks / 10000;
+            _eggInfo.nextRecoverTime = nowTickMilliseconds;
         }
     }
 }

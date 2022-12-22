@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
+    /// <summary>
+    /// 通用生产工厂界面
+    /// </summary>
     public class UICommonFactoryPanel : UIPopupPanel
     {
         override public string type => "UICommonFactoryPanel";
@@ -16,7 +19,8 @@ namespace UnityMiniGameFramework
         protected CMFactory _factory;
         public CMFactory factory => _factory;
 
-        virtual public string factoryName => "factoryBuilding1";
+        public string factoryName => _factoryName;
+        protected string _factoryName = "factoryBuilding1";
 
         protected Label labTitle;
         protected Label labLvCur;
@@ -36,18 +40,9 @@ namespace UnityMiniGameFramework
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
-
-            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            _factoryConf = cmGame.gameConf.getCMFactoryConf(factoryName);
-            if (_factoryConf == null)
-            {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"UICommonFactoryPanel [{factoryName}] init config not exist");
-                return;
-            }
+            
             FindUI();
-
-            _factory = cmGame.GetFactory(factoryName);
-
+            InitFactoryInfo(factoryName);
             RefreshInfo();
         }
 
@@ -68,8 +63,20 @@ namespace UnityMiniGameFramework
 
             nBtnEfficiency.RegisterCallback<MouseUpEvent>(OnEfficiencyBtnClick);
             nBtnUpgrade.RegisterCallback<MouseUpEvent>(OnUpgradeBtnClick);
+        }
 
-            labCostCoin.text = "0";
+        public void InitFactoryInfo(string name)
+        {
+            _factoryName = name;
+
+            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            _factoryConf = cmGame.gameConf.getCMFactoryConf(factoryName);
+            if (_factoryConf == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"UICommonFactoryPanel [{factoryName}] init config not exist");
+                return;
+            }
+            _factory = cmGame.GetFactory(factoryName);
         }
 
         /// <summary>

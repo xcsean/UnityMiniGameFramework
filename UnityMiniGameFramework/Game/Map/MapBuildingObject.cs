@@ -103,7 +103,10 @@ namespace UnityMiniGameFramework
                         }
                         _buildingUIPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
                     }
-
+                    if (_buildingUIPanel is UICommonFactoryPanel _factoryUI)
+                    {
+                        _factoryUI.InitFactoryInfo(unityGameObject.GetComponent<UnityGameObjectBehaviour>().mgGameObjectConfigName);
+                    }
                     _buildingUIPanel.showUI();
                 }
             }

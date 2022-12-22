@@ -90,6 +90,13 @@ namespace UnityMiniGameFramework
             _conf.levelConf.TryGetValue(_heroInfo.level, out conf);
             return conf;
         }
+        
+        public CMHeroLevelConf getNextHeroLevelConf()
+        {
+            CMHeroLevelConf conf;
+            _conf.levelConf.TryGetValue(_heroInfo.level + 1, out conf);
+            return conf;
+        }
 
         protected override void _initAdditionalComponent()
         {

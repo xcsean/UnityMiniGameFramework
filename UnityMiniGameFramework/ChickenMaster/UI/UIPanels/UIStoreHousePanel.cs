@@ -110,7 +110,18 @@ namespace UnityMiniGameFramework
         }
         public void onVideoClick(MouseUpEvent e)
         {
-            
+            //long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            //foreach (var worker in _storeHouse.workers)
+            //{
+            //    if(worker.workerInfo.buffRecoveryTime > nowMillisecond)
+            //    {
+            //        worker.workerInfo.buffRecoveryTime += 60 * 1000;
+            //    }
+            //    else
+            //    {
+            //        worker.workerInfo.buffRecoveryTime = nowMillisecond + 60 * 1000;
+            //    }
+            //}
         }
 
         public override void showUI()

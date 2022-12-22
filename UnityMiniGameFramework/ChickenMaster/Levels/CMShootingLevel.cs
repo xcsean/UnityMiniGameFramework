@@ -17,7 +17,7 @@ namespace UnityMiniGameFramework
 
         CMDefenseLevelAward _levelFisrtCompleteAward;
         UILevelMainPanel _levelUI;
-        UIMainPanel _mainUI;
+        UIGameMainPanel _mainUI;
         int _level;
 
         public static CMShootingLevel create()
@@ -30,7 +30,7 @@ namespace UnityMiniGameFramework
             bool ret = base.Init(confName);
 
             _levelUI = UnityGameApp.Inst.UI.getUIPanel("LevelMainUI") as UILevelMainPanel;
-            _mainUI = UnityGameApp.Inst.UI.getUIPanel("MainUI") as UIMainPanel;
+            _mainUI = UnityGameApp.Inst.UI.getUIPanel("GameMainUI") as UIGameMainPanel;
 
             return ret;
         }
@@ -266,6 +266,11 @@ namespace UnityMiniGameFramework
 
             // for Debug ...
             cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level Win !");
+
+            // show pass-reward
+            UIPassRewardPanel _passUI = UnityGameApp.Inst.UI.createUIPanel("PassRewardUI") as UIPassRewardPanel;
+            _passUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _passUI.showUI();
         }
 
         protected override void _OnLose()
