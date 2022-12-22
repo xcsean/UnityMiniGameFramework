@@ -11,6 +11,8 @@ namespace UnityMiniGameFramework
     public class UIDoubleExpPanel : UIPanel
     {
         override public string type => "UIDoubleExpPanel";
+
+        protected Button _closeBtn;
         public static UIDoubleExpPanel create()
         {
             return new UIDoubleExpPanel();
@@ -19,6 +21,14 @@ namespace UnityMiniGameFramework
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
+
+            _closeBtn = this._uiObjects["CloseBtn"].unityVisualElement as Button;
+            _closeBtn.RegisterCallback<MouseUpEvent>(onClickClose);
+        }
+
+        private void onClickClose(MouseUpEvent e)
+        {
+            hideUI();
         }
     }
 }

@@ -105,6 +105,9 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnUseSkillBtnClick(MouseUpEvent e)
         {
+            UIGetSkillPanel _ui = UnityGameApp.Inst.UI.createUIPanel("GetSkillUI") as UIGetSkillPanel;
+            _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _ui.showUI();
         }
 
         /// <summary>
@@ -112,6 +115,9 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnDoubleExpBtnClick(MouseUpEvent e)
         {
+            UIDoubleExpPanel _ui = UnityGameApp.Inst.UI.createUIPanel("DoubleExpUI") as UIDoubleExpPanel;
+            _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _ui.showUI();
         }
 
         /// <summary>
@@ -119,6 +125,9 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnDoubleAttBtnClick(MouseUpEvent e)
         {
+            UIDoubleAttackPanel _ui = UnityGameApp.Inst.UI.createUIPanel("DoubleAttackUI") as UIDoubleAttackPanel;
+            _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _ui.showUI();
         }
 
         public void refreshAll()

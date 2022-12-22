@@ -29,7 +29,7 @@ namespace UnityMiniGameFramework
             NormalGetButton = this._uiObjects["NormalGetButton"].unityVisualElement as Button;
             VideoGetButton = this._uiObjects["VideoGetButton"].unityVisualElement as Button;
             //RewardIcon = this._uiObjects["RewardIcon"].unityVisualElement as Image;
-            //RewardNumLabel = this._uiObjects["RewardNumLabel"].unityVisualElement as Label;
+            RewardNumLabel = this._uiObjects["RewardNumLabel"].unityVisualElement as Label;
             //gridObj = this._uiObjects["grid"].unityVisualElement as VisualElement;
             NormalGetButton.clicked += this.onClickNormalGet;
             VideoGetButton.clicked += this.onClickVideoGet;

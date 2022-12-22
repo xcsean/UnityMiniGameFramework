@@ -1,11 +1,10 @@
-﻿using MiniGameFramework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UIElements;
-
+using MiniGameFramework;
 namespace UnityMiniGameFramework
 {
     public class UIEggPanel : UIPanel
@@ -98,7 +97,7 @@ namespace UnityMiniGameFramework
         public void changeEggState(bool isFighting, bool isDie)
         {
             _recoveryTime.visible = !isFighting;
-            _startBtn.visible = !isFighting;
+            _startBtn.visible = (!isFighting && !isDie);
             RecoverBtn.visible = (!isFighting && isDie);
         }
 
