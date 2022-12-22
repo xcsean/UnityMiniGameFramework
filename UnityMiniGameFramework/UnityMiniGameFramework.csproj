@@ -84,6 +84,9 @@
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UIModule.dll</HintPath>
     </Reference>
@@ -223,7 +226,10 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UIUpgradePanel.cs" />
     <Compile Include="UI\UITemplatePanels\UIPopupPanel.cs" />
     <Compile Include="UI\DragManipulator.cs" />
+    <Compile Include="UI\UIWidget\UIImageNumText.cs" />
+    <Compile Include="UI\UIWidget\UIImageText.cs" />
     <Compile Include="UnityGameApp.cs" />
+    <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="Utility\TransformHelper.cs" />
   </ItemGroup>
   <ItemGroup>
