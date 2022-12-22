@@ -32,6 +32,9 @@ namespace UnityMiniGameFramework
 
         public LocalFactoryInfo localFacInfo => _localFacInfo;
         protected LocalFactoryInfo _localFacInfo;
+        // 头顶生产进度条
+        protected UIProduceProgressPanel _produceProgressPanel;
+        protected UIProduceProgressPanel produceProgressPanel => _produceProgressPanel;
 
         public float produceCD => _factoryLevelConf.produceCD;
         public int maxInputProductStore => _factoryLevelConf.maxInputProductStore;
@@ -99,7 +102,19 @@ namespace UnityMiniGameFramework
             _currentCD = produceCD;
             _produceVer = 0;
 
+            InitProduceProgressUI();
+
             return true;
+        }
+
+        protected void InitProduceProgressUI()
+        {
+            // init produce progress UI
+            _produceProgressPanel = UnityGameApp.Inst.UI.createUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
+            _produceProgressPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _produceProgressPanel.showUI();
+
+            DoUpdateProgress();
         }
 
         public int getUpgradeGoldCost()
@@ -196,6 +211,9 @@ namespace UnityMiniGameFramework
             {
                 _localFacInfo.buildingInputProduct.count += toFill;
             }
+            
+            DoUpdateProgress();
+
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
             cmGame.baseInfo.markDirty();
             cmGame.uiMainPanel.refreshMeat();
@@ -215,6 +233,8 @@ namespace UnityMiniGameFramework
             }
 
             _localFacInfo.buildingOutputProduct.count -= fetchCount;
+
+            DoUpdateProgress();
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{_localFacInfo.buildingOutputProduct.count}");
 
@@ -276,6 +296,9 @@ namespace UnityMiniGameFramework
             {
                 _localFacInfo.buildingOutputProduct.count += produceCount;
             }
+            
+            DoUpdateProgress();
+
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}，产出总数量：{currentProductOutputStore}");
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
@@ -292,8 +315,25 @@ namespace UnityMiniGameFramework
             }
         }
 
+        /// <summary>
+        /// 生产进度条更新
+        /// </summary>
+        protected void DoUpdateProgress()
+        {
+            if (produceProgressPanel != null)
+            {
+                produceProgressPanel.RefreshInfo(_localFacInfo);
+            }
+        }
+
         public void OnUpdate()
         {
+            if (_produceProgressPanel != null)
+            {
+                var screenPos = (UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(_mapBuildingObj.unityGameObject.transform.position);
+                _produceProgressPanel.setPoisition((int)screenPos.x, (int)screenPos.y - 200); // todo offsetY, set to config
+            }
+
             if (currentProductInputStore <= 0)
             {
                 return;

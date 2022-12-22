@@ -133,6 +133,7 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UIOfflineRewardPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIOpeningCartoonPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIPassRewardPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIProduceProgressPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIStoreHousePanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITowerHeroPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationPanel.cs" />
