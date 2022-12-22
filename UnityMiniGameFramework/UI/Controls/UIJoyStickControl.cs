@@ -43,6 +43,9 @@ namespace UnityMiniGameFramework
             _btn = this._subControls["button"].unityVisualElement;
             _back = this._subControls["back"].unityVisualElement;
 
+            _btn.style.visibility = Visibility.Hidden;
+            _back.style.visibility = Visibility.Hidden;
+
             UnityGameApp.Inst.regNextFramePostUpdateCall(_postInit);
         }
 
@@ -76,6 +79,9 @@ namespace UnityMiniGameFramework
 
         public void OnMouseDown(MouseDownEvent e)
         {
+            _btn.style.visibility = Visibility.Visible;
+            _back.style.visibility = Visibility.Visible;
+
             _unityVE.transform.position = _transMousePosition(_unityVE, e.mousePosition);
             _btn.transform.position = _btnInitPos;
 
@@ -126,6 +132,9 @@ namespace UnityMiniGameFramework
             this._moving = false;
 
             _btn.style.unityBackgroundImageTintColor = new StyleColor(new UnityEngine.Color(1, 1, 1, 0.4f));
+
+            _btn.style.visibility = Visibility.Hidden;
+            _back.style.visibility = Visibility.Hidden;
 
             _unityVE.ReleaseMouse();
         }

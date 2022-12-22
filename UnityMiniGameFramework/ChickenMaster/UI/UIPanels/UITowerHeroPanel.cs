@@ -157,11 +157,13 @@ namespace UnityMiniGameFramework
                 _labHeroName.text = "";
                 _labHeroLv.text = "Lv.0";
                 _labUpgradeCoin.text = $"Gold: {_heroConf.activateGoldCost}";
+
+                _labAttackLv.text = $"Attack Lv.0";
+                _labAttackCur.text = $"{0}";
+                _labAttackNext.text = $"{0}";
             }
             else
             {
-                ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-
                 // get attack info
                 int attack = 0;
                 var conf = _hero.getCurrentHeroLevelConf();
@@ -179,6 +181,7 @@ namespace UnityMiniGameFramework
                 _labHeroName.text = $"{_hero.heroInfo.mapHeroName}";
                 _labHeroLv.text = $"Lv.{_hero.heroInfo.level}";
                 _labUpgradeCoin.text = $"Gold: {upgradeCost}";
+
                 _labAttackLv.text = $"Attack Lv.{1}";
                 _labAttackCur.text = $"{attack}";
                 _labAttackNext.text = $"{nextConf.combatConf.attackBase}";
@@ -225,7 +228,7 @@ namespace UnityMiniGameFramework
             var bgGray = gunItem.Q<VisualElement>("bgGray");
             var btnActive = gunItem.Q<Button>("btnActive");
 
-            bgGray.style.visibility = Visibility.Hidden;
+            bgGray.style.display = DisplayStyle.None;
             btnActive.text = "Upgrade";
 
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
@@ -260,7 +263,7 @@ namespace UnityMiniGameFramework
             var bgGray = gunItem.Q<VisualElement>("bgGray");
             var btnActive = gunItem.Q<Button>("btnActive");
 
-            bgGray.style.visibility = Visibility.Visible;
+            bgGray.style.display = DisplayStyle.Flex;
             btnActive.text = "Active";
 
             int gunId = _heroConf.guns[gunIndex];
@@ -420,7 +423,20 @@ namespace UnityMiniGameFramework
         public void ShowHero(string heroName)
         {
             setHero(heroName);
+
             showUI();
+        }
+
+        public override void showUI()
+        {
+            base.showUI();
+            unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        }
+
+        public override void hideUI()
+        {
+            base.hideUI();
+            unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
         }
 
     }
