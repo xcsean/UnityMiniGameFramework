@@ -26,6 +26,8 @@ namespace UnityMiniGameFramework
         protected Image _sprProduceGoods;
         protected ProgressBar _progressBar;
 
+        protected CMFactory _CMFactory;
+
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -45,40 +47,40 @@ namespace UnityMiniGameFramework
 
         }
 
-        public void RefreshInfo(LocalFactoryInfo lFacInfo)
+        public void RefreshInfo(CMFactory _cmFactory)
         {
-            if (lFacInfo == null)
+            _CMFactory = _cmFactory;
+            if (_CMFactory == null)
             {
                 _labStockCnt.text = $"{0}";
                 _labProduceCnt.text = $"{0}";
                 return;
             }
             // 库存
-            if (lFacInfo.buildingInputProduct == null)
-            {
-                _labStockCnt.text = $"{0}";
-            }
-            else
-            {
-                _labStockCnt.text = $"{lFacInfo.buildingInputProduct.count}";
-            }
+            _labStockCnt.text = $"{_CMFactory.currentProductInputStore}";
             // 产出
-            if (lFacInfo.buildingOutputProduct == null)
-            {
-                _labProduceCnt.text = $"{0}";
-            }
-            else
-            {
-                _labProduceCnt.text = $"{lFacInfo.buildingOutputProduct.count}";
-            }
+            _labProduceCnt.text = $"{_CMFactory.currentProductOutputStore}";
         }
 
-        private int pgNum = 0;
         protected void OnUpdate()
         {
-            pgNum = Math.Min(100, pgNum + 1);
-            if (pgNum == 100) pgNum = 0;
-            _progressBar.value = pgNum;
+            if (_CMFactory == null)
+            {
+                return;
+            }
+
+            if (_CMFactory.currentProductInputStore <= 0)
+            {
+                _progressBar.value = 0.0f;
+                return;
+            }
+
+            _progressBar.value = (1.0f - (_CMFactory.currentCD / _CMFactory.produceCD)) * 100;
+
+            //if (_lastUpdateProduceVer != _factory.produceVer)
+            //{
+            //    _refreshInfo();
+            //}
         }
 
         public override void showUI()

@@ -322,7 +322,7 @@ namespace UnityMiniGameFramework
         {
             if (produceProgressPanel != null)
             {
-                produceProgressPanel.RefreshInfo(_localFacInfo);
+                produceProgressPanel.RefreshInfo(this);
             }
         }
 
