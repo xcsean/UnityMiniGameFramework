@@ -13,6 +13,7 @@ namespace UnityMiniGameFramework
         override public string type => "UIGetSkillPanel";
 
         protected Button _closeBtn;
+        //protected VisualElement _grid;
         public static UIGetSkillPanel create()
         {
             return new UIGetSkillPanel();

@@ -43,11 +43,13 @@ namespace UnityMiniGameFramework
             var baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo");
         }
 
-        public void setBuffTime(long time)
+        public void setBuffTime(int time)
         {
-            TimeSpan t = new TimeSpan(time);
-            _timeLab.text = $"Remaining Time: {t.Minutes}M{t.Seconds}S";
-            _expPb.value = (float)time / 60 * 60 * 1000;
+            var mins = time / 60;
+            var secs = time - mins * 60;
+
+            _timeLab.text = $"Remaining Time: {mins}M{secs}S";
+            _expPb.value = (float)time / 60 * 60;
         }
     }
 }
