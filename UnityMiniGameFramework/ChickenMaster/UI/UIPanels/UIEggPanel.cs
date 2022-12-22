@@ -23,6 +23,8 @@ namespace UnityMiniGameFramework
         protected Button RecoverBtn;
         protected VisualElement stars;
 
+        private float _hp;
+
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -38,7 +40,6 @@ namespace UnityMiniGameFramework
             stars = this._uiObjects["stars"].unityVisualElement;
 
             _recoveryTime.text = "ready";
-            changeEggState(false, false);
         }
 
         public void onStartLevelClick(MouseUpEvent e)
@@ -85,7 +86,7 @@ namespace UnityMiniGameFramework
             {
                 // level is ongoing
             }
-            changeEggState(true, false);
+            //changeEggState(true);
         }
 
         private void onRecoverClick(MouseUpEvent e)
@@ -94,8 +95,9 @@ namespace UnityMiniGameFramework
             cmGame.Egg.recoverEgg();
         }
 
-        public void changeEggState(bool isFighting, bool isDie)
+        public void changeEggState(bool isFighting)
         {
+            bool isDie = _hp <= 0;
             _recoveryTime.visible = !isFighting;
             _startBtn.visible = (!isFighting && !isDie);
             RecoverBtn.visible = (!isFighting && isDie);
@@ -104,11 +106,11 @@ namespace UnityMiniGameFramework
         public void onEggDie()
         {
             // TO DO : disable start button, show quick recover button (ad. button)
-            changeEggState(false, true);
+            //changeEggState(false);
         }
         public void onEggRecover()
         {
-            changeEggState(false, false);
+            //changeEggState(false);
             _recoveryTime.text = "ready";
             // TO DO : show start button
         }
@@ -122,6 +124,7 @@ namespace UnityMiniGameFramework
 
         public void setHp(float hp)
         {
+            _hp = hp;
             for (var i = 0; i < stars.childCount; i++)
             {
                 var star = stars.ElementAt(i);

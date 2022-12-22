@@ -42,7 +42,7 @@ namespace UnityMiniGameFramework
             {
                 // TO DO : egg die, set ui and egg status right
             }
-
+            _updateHpBar();
             _isInited = true;
         }
 
@@ -103,6 +103,7 @@ namespace UnityMiniGameFramework
                 //{
                 //    _eggUI.hideUI();
                 //}
+                _eggUI.changeEggState(true);
             }
             else
             {
@@ -120,6 +121,7 @@ namespace UnityMiniGameFramework
                     //    _eggUI.showUI();
                     //}
                 }
+                _eggUI.changeEggState(false);
             }
 
             if(_eggUI != null)
