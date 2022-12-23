@@ -61,6 +61,7 @@ namespace UnityMiniGameFramework
         protected Button _btnSetting;
         protected VisualElement _levelsNodes;
         protected VisualElement _bossInfo;
+        protected VisualElement _battleStartInfo;
         protected VisualElement _expBar;
         
         protected float _expBarWidth = 72f;
@@ -91,6 +92,7 @@ namespace UnityMiniGameFramework
             _btnSetting = this._uiObjects["BtnSetting"].unityVisualElement as Button;
             _levelsNodes = this._uiObjects["LevelsNodes"].unityVisualElement;
             _bossInfo = this._uiObjects["BossInfo"].unityVisualElement;
+            _battleStartInfo = this._uiObjects["BattleStartInfo"].unityVisualElement;
 
             _btnUseSkill.RegisterCallback<MouseUpEvent>(OnUseSkillBtnClick);
             _btnDoubleExp.RegisterCallback<MouseUpEvent>(OnDoubleExpBtnClick);
@@ -108,6 +110,8 @@ namespace UnityMiniGameFramework
             _NotifyText.text = "";
 
             _notifyMessages = new List<NotifyMessage>();
+
+            ShowBattleStartInfo(false);
         }
 
         /// <summary>
@@ -243,6 +247,19 @@ namespace UnityMiniGameFramework
         {
             TimeSpan t = new TimeSpan(time * 10000);
             _TrainTime.text = $"{t.Minutes}:{t.Seconds}";
+        }
+
+        public void ShowBattleStartInfo(bool isShow = true)
+        {
+            if (isShow)
+            {
+                // TODO use animation 
+                _battleStartInfo.transform.position = new UnityEngine.Vector3(0, 0, 0);
+            }
+            else
+            {
+                _battleStartInfo.transform.position = new UnityEngine.Vector3(-240, 0, 0);
+            }
         }
 
         public void NofityMessage(CMGNotifyType t, string msg)

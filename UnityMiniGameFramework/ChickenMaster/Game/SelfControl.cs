@@ -20,8 +20,8 @@ namespace UnityMiniGameFramework
 
         public int userLevel => _baseInfo.level;
 
-        protected UIHeroPanel _heroUI;
-        public UIHeroPanel heroUI => _heroUI;
+        protected UITowerHeroPanel _heroUI;
+        public UITowerHeroPanel heroUI => _heroUI;
         protected Dictionary<string, int> _heroNearState;
 
         public SelfControl()
@@ -46,7 +46,7 @@ namespace UnityMiniGameFramework
             _isInited = true;
 
             // init hero ui
-            _heroUI = UnityGameApp.Inst.UI.createUIPanel("HeroUI") as UIHeroPanel;
+            _heroUI = UnityGameApp.Inst.UI.createUIPanel("TowerHeroUI") as UITowerHeroPanel;
             _heroUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _heroUI.hideUI();
 

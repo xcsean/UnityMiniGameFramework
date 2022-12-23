@@ -102,19 +102,20 @@ namespace UnityMiniGameFramework
             _currentCD = produceCD;
             _produceVer = 0;
 
-            InitProduceProgressUI();
+            //InitProduceProgressUI();
 
             return true;
         }
 
+        /// <summary>
+        /// 生产进度条
+        /// </summary>
         protected void InitProduceProgressUI()
         {
             // init produce progress UI
             _produceProgressPanel = UnityGameApp.Inst.UI.createUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
             _produceProgressPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _produceProgressPanel.showUI();
-
-            DoUpdateProgress();
         }
 
         public int getUpgradeGoldCost()
@@ -212,7 +213,10 @@ namespace UnityMiniGameFramework
                 _localFacInfo.buildingInputProduct.count += toFill;
             }
             
-            DoUpdateProgress();
+            if (produceProgressPanel != null)
+            {
+                produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingInputProduct.count,toFill);
+            }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
             cmGame.baseInfo.markDirty();
@@ -234,7 +238,10 @@ namespace UnityMiniGameFramework
 
             _localFacInfo.buildingOutputProduct.count -= fetchCount;
 
-            DoUpdateProgress();
+            if (produceProgressPanel != null)
+            {
+                produceProgressPanel.DoUpdateOutStore(_localFacInfo.buildingOutputProduct.count, -fetchCount);
+            }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{_localFacInfo.buildingOutputProduct.count}");
 
@@ -296,8 +303,11 @@ namespace UnityMiniGameFramework
             {
                 _localFacInfo.buildingOutputProduct.count += produceCount;
             }
-            
-            DoUpdateProgress();
+
+            if (produceProgressPanel != null)
+            {
+                produceProgressPanel.DoUpdatePruduceGoods(_localFacInfo.buildingOutputProduct.count, produceCount);
+            }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}，产出总数量：{currentProductOutputStore}");
 
@@ -312,17 +322,6 @@ namespace UnityMiniGameFramework
             if (_produceProduct())
             {
                 _produceVer++;
-            }
-        }
-
-        /// <summary>
-        /// 生产进度条更新
-        /// </summary>
-        protected void DoUpdateProgress()
-        {
-            if (produceProgressPanel != null)
-            {
-                produceProgressPanel.RefreshInfo(this);
             }
         }
 
