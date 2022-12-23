@@ -8,10 +8,17 @@ namespace UnityMiniGameFramework
 {
     static class StringUtil
     {
-        // todo：字符串格式化
+        private const int unitDigits = 3;
+
+        private static readonly List<char> units = new List<char>() {'K', 'M'};
+        
         public static string StringNumFormat(string str)
         {
-            return str;
+            int len = str.Length;
+            int index = Math.Min(units.Count, (len - 1) / unitDigits);
+            if (index <= 0)
+                return str;
+            return str.Substring(0, len - index * unitDigits) + units[index - 1];
         }
     }
 }
