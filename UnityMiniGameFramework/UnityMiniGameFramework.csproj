@@ -172,6 +172,7 @@
     <Compile Include="Game\Actors\CharacterObject.cs" />
     <Compile Include="Game\Audio\Audio.cs" />
     <Compile Include="Game\Audio\AudioManager.cs" />
+    <Compile Include="Game\Battle\BattleUI\BattleNumberEmitter.cs" />
     <Compile Include="Game\Camera\UnityGameCamera.cs" />
     <Compile Include="Game\Controller\ActorControllerComponent.cs" />
     <Compile Include="Game\Controller\AIState\AIGunFireTarget.cs" />
