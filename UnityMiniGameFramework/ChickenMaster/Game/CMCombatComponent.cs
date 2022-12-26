@@ -35,6 +35,9 @@ namespace UnityMiniGameFramework
             // TO DO : show damage text
 
             // perform onhit act
+            if (_gameObject is MGGameObject mgGameObject)
+                BattleNumberEmitter.CreateNumAction.Invoke(mgGameObject.unityGameObject, dmg,
+                    critical);
         }
         override protected void _onDie(WeaponObject weapon)
         {

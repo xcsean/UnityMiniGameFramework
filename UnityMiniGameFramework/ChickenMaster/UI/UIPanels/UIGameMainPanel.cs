@@ -55,17 +55,21 @@ namespace UnityMiniGameFramework
         protected Label _NotifyText;
         public Label NotifyText => _NotifyText;
 
-        protected ProgressBar _exp_ProgressBar;
         protected Button _btnUseSkill;
         protected Button _btnDoubleExp;
         protected Button _btnDoubleAtt;
         protected Button _btnSetting;
         protected VisualElement _levelsNodes;
         protected VisualElement _bossInfo;
-
-        protected List<NotifyMessage> _notifyMessages;
+        protected VisualElement _battleStartInfo;
+        protected VisualElement _expBar;
+        
+        protected float _expBarWidth = 72f;
 
         protected VisualElement _clickableArea;
+
+        protected List<NotifyMessage> _notifyMessages;
+        // TO DO 做成一个通用组件
 
         override public void Init(UIPanelConf conf)
         {
@@ -81,13 +85,14 @@ namespace UnityMiniGameFramework
             _NotifyText = this._uiObjects["NotifyText"].unityVisualElement as Label;
             _TrainTime = this._uiObjects["TrainTime"].unityVisualElement as Label;
             _clickableArea = this._uiObjects["Clickable"].unityVisualElement;
-            _exp_ProgressBar = this._uiObjects["Exp_ProgressBar"].unityVisualElement as ProgressBar;
+            _expBar = this._uiObjects["ExpBar"].unityVisualElement;
             _btnUseSkill = this._uiObjects["BtnUseSkill"].unityVisualElement as Button;
             _btnDoubleExp = this._uiObjects["BtnDoubleExp"].unityVisualElement as Button;
             _btnDoubleAtt = this._uiObjects["BtnDoubleAtt"].unityVisualElement as Button;
             _btnSetting = this._uiObjects["BtnSetting"].unityVisualElement as Button;
             _levelsNodes = this._uiObjects["LevelsNodes"].unityVisualElement;
             _bossInfo = this._uiObjects["BossInfo"].unityVisualElement;
+            _battleStartInfo = this._uiObjects["BattleStartInfo"].unityVisualElement;
 
             _btnUseSkill.RegisterCallback<MouseUpEvent>(OnUseSkillBtnClick);
             _btnDoubleExp.RegisterCallback<MouseUpEvent>(OnDoubleExpBtnClick);
@@ -97,10 +102,16 @@ namespace UnityMiniGameFramework
             //_clickableArea.RegisterCallback<MouseDownEvent>(onMouseDownCA);
             //_clickableArea.RegisterCallback<MouseUpEvent>(onMouseUpCA);
 
+            // TODO 动态获取一直是0
+            //_expBarWidth = _expBar.style.width.value.value;
+     
+
             _LevelInfo.text = "Not Start";
             _NotifyText.text = "";
 
             _notifyMessages = new List<NotifyMessage>();
+
+            ShowBattleStartInfo(false);
         }
 
         /// <summary>
@@ -162,8 +173,8 @@ namespace UnityMiniGameFramework
         public void refreshExp(int exp, int nextLevelExp)
         {
             //_exp.text = $"Exp:{exp}/{nextLevelExp}";
-            _exp_ProgressBar.title = $"{exp}/{nextLevelExp}";
-            _exp_ProgressBar.value = exp * 100 / nextLevelExp;
+            //_exp_ProgressBar.title = $"{exp}/{nextLevelExp}";
+            _expBar.style.width = new StyleLength(new Length(_expBarWidth * exp / nextLevelExp));
         }
         /// <summary>
         /// 当前关卡
@@ -236,6 +247,19 @@ namespace UnityMiniGameFramework
         {
             TimeSpan t = new TimeSpan(time * 10000);
             _TrainTime.text = $"{t.Minutes}:{t.Seconds}";
+        }
+
+        public void ShowBattleStartInfo(bool isShow = true)
+        {
+            if (isShow)
+            {
+                // TODO use animation 
+                _battleStartInfo.transform.position = new UnityEngine.Vector3(0, 0, 0);
+            }
+            else
+            {
+                _battleStartInfo.transform.position = new UnityEngine.Vector3(-240, 0, 0);
+            }
         }
 
         public void NofityMessage(CMGNotifyType t, string msg)

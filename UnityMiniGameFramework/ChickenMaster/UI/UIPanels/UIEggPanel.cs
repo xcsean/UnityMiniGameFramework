@@ -101,6 +101,9 @@ namespace UnityMiniGameFramework
             _recoveryTime.visible = !isFighting;
             _startBtn.visible = (!isFighting && !isDie);
             RecoverBtn.visible = (!isFighting && isDie);
+
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.uiMainPanel.ShowBattleStartInfo(isFighting && !isDie);
         }
 
         public void onEggDie()
@@ -119,7 +122,7 @@ namespace UnityMiniGameFramework
         {
             var t = new TimeSpan((long)(time * 10000));
 
-            _recoveryTime.text = $"Time: {t.Minutes}:{t.Seconds}";
+            _recoveryTime.text = $"{t.Minutes}:{t.Seconds}";
         }
 
         public void setHp(float hp)
