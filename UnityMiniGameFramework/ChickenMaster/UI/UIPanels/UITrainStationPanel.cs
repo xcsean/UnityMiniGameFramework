@@ -89,14 +89,14 @@ namespace UnityMiniGameFramework
 
         public void refreshInfo()
         {
-            _Level.text = $"Lv: {_trainStation.trainStationInfo.level}";
+            _Level.text = $"Lv. {_trainStation.trainStationInfo.level}";
             _CurLv.text = $"{_trainStation.trainStationInfo.level}";
             _CurCapacity.text = $"{_trainStation.currentLevelConf.MaxstoreCount}";
             isMaxLevel = _trainStation.trainStaionConf.levelConfs.Count <= _trainStation.trainStationInfo.level;
             _NextLv.text = isMaxLevel ? $"{_trainStation.trainStationInfo.level}" : $"{_trainStation.trainStationInfo.level + 1}";
             _NextCapacity.text = isMaxLevel ? $"{_trainStation.currentLevelConf.MaxstoreCount}" : $"{_trainStation.trainStaionConf.levelConfs[_trainStation.trainStationInfo.level + 1].MaxstoreCount}";
-            UpgradePrice.text = $"upgrade gold: {_trainStation.currentLevelConf.upgradeGoldCost}";
-            UpgradeBtn.text = isMaxLevel ? "Max  Level" : "Upgrade";
+            UpgradePrice.text = $"{_trainStation.currentLevelConf.upgradeGoldCost}";
+            //UpgradeBtn.text = isMaxLevel ? "Max  Level" : "Upgrade";
 
             //TimeSpan t = new TimeSpan(_trainStation.train.timeToTrainArrival * 10000);
             //string info =
