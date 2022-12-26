@@ -22,7 +22,7 @@ namespace UnityMiniGameFramework
         public string factoryName => _factoryName;
         protected string _factoryName = "factoryBuilding1";
 
-        protected Label labTitle;
+        protected Label labProductDesc;
         protected Label labLvCur;
         protected Label labLvNext;
         protected Label labCostCur;
@@ -48,7 +48,7 @@ namespace UnityMiniGameFramework
 
         private void FindUI()
         {
-            labTitle = this._uiObjects["labTitle"].unityVisualElement as Label;
+            labProductDesc = this._uiObjects["labProductDesc"].unityVisualElement as Label;
             labLvCur = this._uiObjects["labLvCur"].unityVisualElement as Label;
             labLvNext = this._uiObjects["labLvNext"].unityVisualElement as Label;
             labCostCur = this._uiObjects["labCostResCur"].unityVisualElement as Label;
@@ -136,29 +136,29 @@ namespace UnityMiniGameFramework
             }
             if (_factory == null)
             {
-                labTitle.text = $"";
-                labCostCoin.text = $"Coin:{0}";
+                //labProductDesc.text = $"";
+                labCostCoin.text = $"Gold: {0}";
                 labLvCur.text = $"Lv.{0}";
                 labLvNext.text = $"Lv.{1}";
-                labCostCur.text = $"{0}/次";
-                labCostNext.text = $"{0}/次";
-                labGetCur.text = $"{0}/次";
-                labGetNext.text = $"{0}/次";
-                labEfficiencyCur.text = $"{0}/次";
-                labEfficiencyNext.text = $"{0}/次";
+                labCostCur.text = $"{0}";
+                labCostNext.text = $"{0}";
+                labGetCur.text = $"{0}";
+                labGetNext.text = $"{0}";
+                labEfficiencyCur.text = $"{0}";
+                labEfficiencyNext.text = $"{0}";
             }
             else
             {
-                labTitle.text = $"没有配置标题";
-                labCostCoin.text = $"Coin:{_curLevelConf.upgradeGoldCost}";
+                //labProductDesc.text = $"";
+                labCostCoin.text = $"Gold: {_curLevelConf.upgradeGoldCost}";
                 labLvCur.text = $"Lv.{curLv}";
                 labLvNext.text = isMaxLV ? $"Lv.Max" : $"Lv.{ curLv + 1}";
-                labCostCur.text = $"{_curLevelConf.maxInputProductStore}/次";
-                labCostNext.text = $"{_nextLevelConf.maxInputProductStore}/次";
-                labGetCur.text = $"{_curLevelConf.maxOutputProductStore}/次";
-                labGetNext.text = $"{_nextLevelConf.maxOutputProductStore}/次";
-                labEfficiencyCur.text = $"{_curLevelConf.produceOutputCount}/次";
-                labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}/次";
+                labCostCur.text = $"{_curLevelConf.maxInputProductStore}";
+                labCostNext.text = $"{_nextLevelConf.maxInputProductStore}";
+                labGetCur.text = $"{_curLevelConf.maxOutputProductStore}";
+                labGetNext.text = $"{_nextLevelConf.maxOutputProductStore}";
+                labEfficiencyCur.text = $"{_curLevelConf.produceOutputCount}";
+                labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}";
             }
         }
 
