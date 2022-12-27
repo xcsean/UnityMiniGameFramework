@@ -18,9 +18,12 @@ namespace UnityMiniGameFramework
 
         protected Button NormalGetButton;
         protected Button VideoGetButton;
+        protected Button CloseButton;
         //protected Image RewardIcon;
-        protected Label RewardNumLabel;
-        //private VisualElement gridObj;
+        //protected Label RewardNumLabel;
+        private VisualElement layoutGrid;
+
+        private readonly Vec2 gridSize = new Vec2(210, 270);
 
         private int rewardNum = 0;
         override public void Init(UIPanelConf conf)
@@ -28,11 +31,13 @@ namespace UnityMiniGameFramework
             base.Init(conf);
             NormalGetButton = this._uiObjects["NormalGetButton"].unityVisualElement as Button;
             VideoGetButton = this._uiObjects["VideoGetButton"].unityVisualElement as Button;
+            CloseButton = this._uiObjects["CloseButton"].unityVisualElement as Button;
             //RewardIcon = this._uiObjects["RewardIcon"].unityVisualElement as Image;
-            RewardNumLabel = this._uiObjects["RewardNumLabel"].unityVisualElement as Label;
-            //gridObj = this._uiObjects["grid"].unityVisualElement as VisualElement;
-            NormalGetButton.clicked += this.onClickNormalGet;
-            VideoGetButton.clicked += this.onClickVideoGet;
+            //RewardNumLabel = this._uiObjects["RewardNumLabel"].unityVisualElement as Label;
+            layoutGrid = this._uiObjects["layoutGrid"].unityVisualElement as VisualElement;
+            NormalGetButton.clicked += onClickNormalGet;
+            VideoGetButton.clicked += onClickVideoGet;
+            CloseButton.clicked += onClickClose;
         }
 
         public override void showUI()
@@ -55,16 +60,16 @@ namespace UnityMiniGameFramework
 
                     //for (var i = 0; i < lvlConf.passReward.Count; i++)
                     //{
-                    //    var item = gridObj;
-                    //    if(i != 0)
-                    //    {
+                    //    //var item = layoutGrid.Children[i];
+                    //    //if (i != 0)
+                    //    //{
 
-                    //    }
+                    //    //}
                     //}
                 }
             }
-            rewardNum = 100;
-            RewardNumLabel.text = "gold:" + rewardNum.ToString();
+            //rewardNum = 100;
+            //RewardNumLabel.text = "gold:" + rewardNum.ToString();
         }
 
         private void onClickNormalGet()
@@ -78,6 +83,11 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.Self.AddGold(rewardNum * 3);
             this.hideUI();
+        }
+
+        private void onClickClose()
+        {
+            hideUI();
         }
     }
 }

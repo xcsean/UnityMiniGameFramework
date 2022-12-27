@@ -155,8 +155,8 @@ namespace UnityMiniGameFramework
                 // not active
                 _btnAct.text = "Activate";
                 _labHeroName.text = "";
-                _labHeroLv.text = "Lv.0";
-                _labUpgradeCoin.text = $"Gold: {_heroConf.activateGoldCost}";
+                _labHeroLv.text = "0";
+                _labUpgradeCoin.text = $"{_heroConf.activateGoldCost}";
 
                 _labAttackLv.text = $"Attack Lv.0";
                 _labAttackCur.text = $"{0}";
@@ -179,8 +179,8 @@ namespace UnityMiniGameFramework
                 int upgradeCost = _hero.getUpgradeGoldCost();
                 _btnAct.text = "Upgrade";
                 _labHeroName.text = $"{_hero.heroInfo.mapHeroName}";
-                _labHeroLv.text = $"Lv.{_hero.heroInfo.level}";
-                _labUpgradeCoin.text = $"Gold: {upgradeCost}";
+                _labHeroLv.text = $"{_hero.heroInfo.level}";
+                _labUpgradeCoin.text = $"{upgradeCost}";
 
                 _labAttackLv.text = $"Attack Lv.{1}";
                 _labAttackCur.text = $"{attack}";
