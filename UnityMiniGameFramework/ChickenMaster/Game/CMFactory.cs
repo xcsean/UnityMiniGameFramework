@@ -102,7 +102,7 @@ namespace UnityMiniGameFramework
             _currentCD = produceCD;
             _produceVer = 0;
 
-            //InitProduceProgressUI();
+            InitProduceProgressUI();
 
             return true;
         }
@@ -115,6 +115,7 @@ namespace UnityMiniGameFramework
             // init produce progress UI
             _produceProgressPanel = UnityGameApp.Inst.UI.createUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
             _produceProgressPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _produceProgressPanel.RefreshInfo(this);
             _produceProgressPanel.showUI();
         }
 
@@ -212,10 +213,10 @@ namespace UnityMiniGameFramework
             {
                 _localFacInfo.buildingInputProduct.count += toFill;
             }
-            
+
             if (produceProgressPanel != null)
             {
-                produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingInputProduct.count,toFill);
+                produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingInputProduct.count, toFill);
             }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
@@ -290,6 +291,10 @@ namespace UnityMiniGameFramework
                 _localFacInfo.buildingInputProduct.count -= realCostInputCount;
             }
 
+            if (produceProgressPanel != null)
+            {
+                produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingOutputProduct.count, -realCostInputCount);
+            }
 
             if (_localFacInfo.buildingOutputProduct == null)
             {

@@ -32,6 +32,7 @@ namespace UnityMiniGameFramework
 
         public async void onEnterGameClick()
         {
+            // 初始化游戏信息
             await UnityGameApp.Inst.Game.InitAsync();
 
             // login
@@ -48,7 +49,17 @@ namespace UnityMiniGameFramework
             //    }
             //);
 
-            UnityGameApp.Inst.LoadMainScene();
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            if (cmGame != null && cmGame.isNewUser)
+            {
+                UIOpeningCartoonPanel _ui = UnityGameApp.Inst.UI.createUIPanel("OpeningCartoonUI") as UIOpeningCartoonPanel;
+                _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.StartScene.uiRootObject).unityGameObject.transform);
+                _ui.showUI();
+            }
+            else
+            {
+                UnityGameApp.Inst.LoadMainScene();
+            }
         }
     }
 }

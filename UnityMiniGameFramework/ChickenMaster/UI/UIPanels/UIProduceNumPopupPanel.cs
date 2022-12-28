@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using UnityEngine;
 using UnityEngine.UIElements;
 using MiniGameFramework;
 
@@ -18,6 +19,7 @@ namespace UnityMiniGameFramework
         }
 
         protected Label _labNum;
+        protected float labelUpValue = 0f;
 
         override public void Init(UIPanelConf conf)
         {
@@ -31,19 +33,31 @@ namespace UnityMiniGameFramework
             _labNum = this._uiObjects["labNum"].unityVisualElement as Label;
         }
 
-        public void Show(int num, Action endCb = null)
+        public void PopupAction(int num, Action endCb = null)
         {
             if (num == 0)
             {
-                if (endCb != null) endCb();
+                if (endCb != null)
+                {
+                    endCb();
+                }
                 return;
             }
-
-            _labNum.style.color = new StyleColor(UnityEngine.Color.green);
+            _labNum.text = num > 0 ? $"+{num}" : $"{num}";
+            _labNum.style.color = new StyleColor(num > 0 ? Color.green : Color.red);
+            _labNum.transform.position = Vector3.zero;
+            labelUpValue = 0f;
         }
 
         public void OnUpdate()
-        { 
+        {
+            if (labelUpValue > 100)
+            {
+                _labNum.text = "";
+                return;
+            }
+            labelUpValue += Time.deltaTime;
+            _labNum.transform.position = new Vector3(0, labelUpValue, 0);
         }
 
         public override void showUI()

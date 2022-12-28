@@ -142,16 +142,15 @@ namespace UnityMiniGameFramework
         /// </summary>
         public void EndPlay()
         {
-            hideUI();
-            //OnEnterGame();
+            OnEnterGame();
+            //hideUI();
         }
 
         /// <summary>
         /// 进入游戏战斗场景
         /// </summary>
-        private async void OnEnterGame()
+        private void OnEnterGame()
         {
-            await UnityGameApp.Inst.Game.InitAsync();
             UnityGameApp.Inst.LoadMainScene();
         }
 

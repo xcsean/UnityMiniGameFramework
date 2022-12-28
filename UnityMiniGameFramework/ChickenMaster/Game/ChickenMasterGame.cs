@@ -52,6 +52,9 @@ namespace UnityMiniGameFramework
         UILevelMainPanel _uiLevelMainPanel;
         public UILevelMainPanel uiLevelMainPanel => _uiLevelMainPanel;
 
+        protected bool _isNewUser = false;
+        public bool isNewUser => _isNewUser;
+
         long _lastSaveTime;
         long _autoSaveTime;
         long _offlineAwardMinTime;
@@ -97,6 +100,8 @@ namespace UnityMiniGameFramework
             if (_userInfo == null)
             {
                 // new user info
+                _isNewUser = true;
+
                 var userInfo = new LocalUserInfo()
                 {
                     uid = "test",
@@ -109,6 +114,10 @@ namespace UnityMiniGameFramework
 
                 UnityGameApp.Inst.Datas.localUserData.addNewData("userInfo", _userInfo);
                 newDataAdded = true;
+            }
+            else
+            {
+                _isNewUser = false;
             }
 
             _baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo");
