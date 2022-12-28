@@ -19,9 +19,8 @@ namespace UnityMiniGameFramework
         protected Button NormalGetButton;
         protected Button VideoGetButton;
         protected Button CloseButton;
-        //protected Image RewardIcon;
-        //protected Label RewardNumLabel;
         private VisualElement layoutGrid;
+        private CMDefenseLevelAward rewards;
 
         private readonly Vec2 gridSize = new Vec2(210, 270);
 
@@ -32,8 +31,6 @@ namespace UnityMiniGameFramework
             NormalGetButton = this._uiObjects["NormalGetButton"].unityVisualElement as Button;
             VideoGetButton = this._uiObjects["VideoGetButton"].unityVisualElement as Button;
             CloseButton = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            //RewardIcon = this._uiObjects["RewardIcon"].unityVisualElement as Image;
-            //RewardNumLabel = this._uiObjects["RewardNumLabel"].unityVisualElement as Label;
             layoutGrid = this._uiObjects["layoutGrid"].unityVisualElement as VisualElement;
             NormalGetButton.clicked += onClickNormalGet;
             VideoGetButton.clicked += onClickVideoGet;
@@ -52,42 +49,84 @@ namespace UnityMiniGameFramework
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
             int level = bi.currentLevel - 1;
             var _gameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
+
+            for(int i = 0; i < 6; i++)
+            {
+                var grid = layoutGrid.Q<VisualElement>($"grid{i}");
+                grid.visible = false;
+            }
+
             foreach (var lvlConf in _gameConf.gameConfs.defenseLevels)
             {
                 if (level >= lvlConf.levelRangeMin && level <= lvlConf.levelRangeMax)
                 {
-                    //rewardNum = lvlConf.passReward;
+                    var rewardConf = _gameConf.gameConfs.defenseFCLevelAwards[level];
+                    rewards = rewardConf;
+                    int index = 0;
+                    if(rewardConf.gold > 0)
+                    {
+                        var grid = layoutGrid.Q<VisualElement>($"grid{index}");
+                        grid.Q<Label>("count").text = $"X{rewardConf.gold}";
+                        grid.Q<Label>("have").text = $"OWNED: {bi.gold}";
+                        grid.Q<Label>("name").text = "GOLD";
+                        grid.Q<VisualElement>("weapon").visible = false;
+                        grid.Q<Label>("have").visible = true;
+                        grid.visible = true;
+                        index++;
+                    }
 
-                    //for (var i = 0; i < lvlConf.passReward.Count; i++)
-                    //{
-                    //    //var item = layoutGrid.Children[i];
-                    //    //if (i != 0)
-                    //    //{
+                    if (rewardConf.exp > 0)
+                    {
+                        var grid = layoutGrid.Q<VisualElement>($"grid{index}");
+                        grid.Q<Label>("count").text = $"X{rewardConf.exp}";
+                        grid.Q<Label>("have").text = $"OWNED: {bi.exp}";
+                        grid.Q<Label>("name").text = "EXP";
+                        grid.Q<VisualElement>("weapon").visible = false;
+                        grid.Q<Label>("have").visible = true;
+                        grid.visible = true;
+                        index++;
+                    }
 
-                    //    //}
-                    //}
+                    for (var i = 0; i < rewardConf.items.Count; i++)
+                    {
+                        if(index < 6)
+                        {
+                            var grid = layoutGrid.Q<VisualElement>($"grid{index}");
+                            grid.Q<Label>("count").text = $"X{rewardConf.items[i].count}";
+                            grid.Q<Label>("name").text = $"{rewardConf.items[i].itemName}";
+                            grid.Q<VisualElement>("weapon").visible = true;
+                            grid.Q<Label>("have").visible = false;
+                            grid.visible = true;
+                            index++;
+                        }
+                    }
                 }
             }
-            //rewardNum = 100;
-            //RewardNumLabel.text = "gold:" + rewardNum.ToString();
         }
 
         private void onClickNormalGet()
         {
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.Self.AddGold(rewardNum);
+            collectRewards();
             this.hideUI();
         }
         private void onClickVideoGet()
         {
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.Self.AddGold(rewardNum * 3);
+            collectRewards(true);
             this.hideUI();
         }
 
         private void onClickClose()
         {
+            collectRewards();
             hideUI();
+        }
+
+        private void collectRewards(bool isVideo = false)
+        {
+            int triple = isVideo ? 3 : 1;
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.Self.AddGold(rewards.gold * triple);
+            cmGame.Self.AddExp(rewards.exp * triple);
         }
     }
 }
