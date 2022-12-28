@@ -208,6 +208,7 @@ namespace UnityMiniGameFramework
             VisualElement gunItem = _gunItemArr[gunIndex];
             var btnArmed = gunItem.Q<Button>("btnArmed");
 
+            // TODO gun name
             gunItem.Q<Label>("labGunName").text = $"Gun{cmGunConf.id}";
 
             // 切换武器
@@ -399,20 +400,29 @@ namespace UnityMiniGameFramework
             }
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
 
+            LocalWeaponInfo _gunInfo = null;
             if (gunIndex == 0)
             {
                 _gun1Info = cmGame.GetWeaponInfo(_heroConf.guns[gunIndex]);
+                _gunInfo = _gun1Info;
             }
             else if (gunIndex == 1)
             {
                 _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[gunIndex]);
+                _gunInfo = _gun2Info;
             }
             else if (gunIndex == 2)
             {
                 _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[gunIndex]);
+                _gunInfo = _gun3Info;
+            }
+            if (_gunInfo == null)
+            {
+                return;
             }
             refreshInfo();
             refreshGunUpgradeProgress();
+            GunAscendSuccess(_gunInfo);
         }
 
         protected void OnUpgradeGunBtnClick1(MouseUpEvent e)
@@ -464,6 +474,7 @@ namespace UnityMiniGameFramework
                 _gun1Info = cmGame.GetWeaponInfo(_heroConf.guns[0]);
                 refreshInfo();
                 refreshGunUpgradeProgress();
+                GunAscendSuccess(_gun1Info);
             }
         }
         public void onGun2Click(MouseUpEvent e)
@@ -475,6 +486,7 @@ namespace UnityMiniGameFramework
                 _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
                 refreshInfo();
                 refreshGunUpgradeProgress();
+                GunAscendSuccess(_gun2Info);
             }
         }
         public void onGun3Click(MouseUpEvent e)
@@ -486,7 +498,15 @@ namespace UnityMiniGameFramework
                 _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
                 refreshInfo();
                 refreshGunUpgradeProgress();
+                GunAscendSuccess(_gun3Info);
             }
+        }
+
+        private void GunAscendSuccess(LocalWeaponInfo gunInfo)
+        {
+            UIWeaponAscendPanel _ui = UnityGameApp.Inst.UI.createUIPanel("WeaponAscendUI") as UIWeaponAscendPanel;
+            _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _ui.SetWeaponInfo(gunInfo);
         }
 
         public void ShowHero(string heroName)
