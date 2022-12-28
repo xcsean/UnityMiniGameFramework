@@ -23,8 +23,6 @@ namespace UnityMiniGameFramework
         private CMDefenseLevelAward rewards;
 
         private readonly Vec2 gridSize = new Vec2(210, 270);
-
-        private int rewardNum = 0;
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -107,18 +105,15 @@ namespace UnityMiniGameFramework
         private void onClickNormalGet()
         {
             collectRewards();
-            this.hideUI();
         }
         private void onClickVideoGet()
         {
             collectRewards(true);
-            this.hideUI();
         }
 
         private void onClickClose()
         {
             collectRewards();
-            hideUI();
         }
 
         private void collectRewards(bool isVideo = false)
@@ -127,6 +122,23 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.Self.AddGold(rewards.gold * triple);
             cmGame.Self.AddExp(rewards.exp * triple);
+            foreach(var reward in rewards.items)
+            {
+                cmGame.Self._RealAddBackpackItem(reward.itemName, reward.count * triple);
+            }
+            hideUI();
+        }
+
+        public override void hideUI()
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                var grid = layoutGrid.Q<VisualElement>($"grid{i}");
+                grid.visible = false;
+                grid.Q<VisualElement>("weapon").visible = false;
+                grid.Q<Label>("have").visible = false;
+            }
+            base.hideUI();
         }
     }
 }
