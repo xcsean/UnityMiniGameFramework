@@ -63,7 +63,7 @@ namespace UnityMiniGameFramework
         protected VisualElement _bossInfo;
         protected VisualElement _battleStartInfo;
         protected VisualElement _expBar;
-        
+
         protected float _expBarWidth = 72f;
 
         protected VisualElement _clickableArea;
@@ -104,7 +104,7 @@ namespace UnityMiniGameFramework
 
             // TODO 动态获取一直是0
             //_expBarWidth = _expBar.style.width.value.value;
-     
+
 
             _LevelInfo.text = "Not Start";
             _NotifyText.text = "";
@@ -164,7 +164,7 @@ namespace UnityMiniGameFramework
 
         public void refreshGold(int gold)
         {
-            _goldNum.text = $"{gold}";
+            _goldNum.text = StringUtil.StringNumFormat($"{gold}");
         }
         public void refreshLevel(int level)
         {
@@ -240,7 +240,7 @@ namespace UnityMiniGameFramework
             var meatInfo = cmGame.Self.GetBackpackProductInfo("meat");
             if (meatInfo != null)
             {
-                _meatNum.text = $"{meatInfo.count}";
+                _meatNum.text = StringUtil.StringNumFormat($"{meatInfo.count}");
             }
         }
         public void refreshTrainTime(long time)

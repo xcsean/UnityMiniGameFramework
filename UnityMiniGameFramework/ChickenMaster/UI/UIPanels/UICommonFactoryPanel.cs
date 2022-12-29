@@ -137,7 +137,7 @@ namespace UnityMiniGameFramework
             if (_factory == null)
             {
                 //labProductDesc.text = $"";
-                labCostCoin.text = $"Gold: {0}";
+                labCostCoin.text = $"{0}";
                 labLvCur.text = $"Lv.{0}";
                 labLvNext.text = $"Lv.{1}";
                 labCostCur.text = $"{0}";
@@ -150,13 +150,13 @@ namespace UnityMiniGameFramework
             else
             {
                 //labProductDesc.text = $"";
-                labCostCoin.text = $"Gold: {_curLevelConf.upgradeGoldCost}";
+                labCostCoin.text = $"{_curLevelConf.upgradeGoldCost}";
                 labLvCur.text = $"Lv.{curLv}";
                 labLvNext.text = isMaxLV ? $"Lv.Max" : $"Lv.{ curLv + 1}";
-                labCostCur.text = $"{_curLevelConf.maxInputProductStore}";
-                labCostNext.text = $"{_nextLevelConf.maxInputProductStore}";
-                labGetCur.text = $"{_curLevelConf.maxOutputProductStore}";
-                labGetNext.text = $"{_nextLevelConf.maxOutputProductStore}";
+                labCostCur.text = StringUtil.StringNumFormat($"{_curLevelConf.maxInputProductStore}");
+                labCostNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxInputProductStore}");
+                labGetCur.text = StringUtil.StringNumFormat($"{_curLevelConf.maxOutputProductStore}");
+                labGetNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxOutputProductStore}");
                 labEfficiencyCur.text = $"{_curLevelConf.produceOutputCount}";
                 labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}";
             }

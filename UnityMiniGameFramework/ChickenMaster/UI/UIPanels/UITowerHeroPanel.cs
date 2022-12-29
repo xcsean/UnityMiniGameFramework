@@ -188,8 +188,8 @@ namespace UnityMiniGameFramework
                 _labUpgradeCoin.text = $"{upgradeCost}";
 
                 _labAttacked.text = $"{attack}";
-                _labAttackCur.text = $"{attack}";
-                _labAttackNext.text = $"{nextConf.combatConf.attackBase}";
+                _labAttackCur.text = StringUtil.StringNumFormat($"{attack}");
+                _labAttackNext.text = StringUtil.StringNumFormat($"{nextConf.combatConf.attackBase}");
 
                 refreshHeroAdvanced(_hero.heroInfo.level);
                 // set gun info
