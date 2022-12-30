@@ -32,6 +32,7 @@ namespace UnityMiniGameFramework
         protected Label labEfficiencyCur;
         protected Label labEfficiencyNext;
         protected Label labCostCoin;
+        protected VisualElement sprChicken;
 
         protected Button nBtnEfficiency;
         protected Button nBtnUpgrade;
@@ -40,7 +41,7 @@ namespace UnityMiniGameFramework
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
-            
+
             FindUI();
             InitFactoryInfo(factoryName);
             RefreshInfo();
@@ -48,6 +49,7 @@ namespace UnityMiniGameFramework
 
         private void FindUI()
         {
+            sprChicken = this._uiObjects["sprChicken"].unityVisualElement;
             labProductDesc = this._uiObjects["labProductDesc"].unityVisualElement as Label;
             labLvCur = this._uiObjects["labLvCur"].unityVisualElement as Label;
             labLvNext = this._uiObjects["labLvNext"].unityVisualElement as Label;
@@ -77,6 +79,12 @@ namespace UnityMiniGameFramework
                 return;
             }
             _factory = cmGame.GetFactory(factoryName);
+
+            // 产品图
+            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_{_factoryConf.outputProductName}");
+            sprChicken.style.backgroundImage = tx;
+            sprChicken.style.width = tx.width;
+            sprChicken.style.height = tx.height;
         }
 
         /// <summary>

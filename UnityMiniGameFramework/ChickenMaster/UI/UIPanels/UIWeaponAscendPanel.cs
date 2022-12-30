@@ -18,7 +18,7 @@ namespace UnityMiniGameFramework
             return new UIWeaponAscendPanel();
         }
 
-        protected Image _sprGunIcon;
+        protected VisualElement _sprGunIcon;
         protected Label _labGunName;
         protected Label _labGunStar;
         protected Label _labDamage;
@@ -39,7 +39,7 @@ namespace UnityMiniGameFramework
             _labRange = this._uiObjects["labRange"].unityVisualElement as Label;
             _labGunName = this._uiObjects["labGunName"].unityVisualElement as Label;
             _labGunStar = this._uiObjects["labGunStar"].unityVisualElement as Label;
-            _sprGunIcon = this._uiObjects["sprGunIcon"].unityVisualElement as Image;
+            _sprGunIcon = this._uiObjects["sprGunIcon"].unityVisualElement;
         }
 
         /// <summary>

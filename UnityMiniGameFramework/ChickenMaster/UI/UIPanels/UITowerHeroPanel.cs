@@ -19,11 +19,11 @@ namespace UnityMiniGameFramework
 
         protected Label _labHeroName;
         protected Label _labAttacked;
-        protected Image _sprHeroIcon;
         protected Label _labUpgradeCoin;
         protected Label _labAttackCur;
         protected Label _labAttackNext;
         protected Button _btnAct;
+        protected VisualElement _sprHeroIcon;
         protected VisualElement _advanced;
         protected VisualElement _gunItem1;
         protected VisualElement _gunItem2;
@@ -46,7 +46,7 @@ namespace UnityMiniGameFramework
 
         protected void FindUi()
         {
-            _sprHeroIcon = this._uiObjects["sprHeroIcon"].unityVisualElement as Image;
+            _sprHeroIcon = this._uiObjects["sprHeroIcon"].unityVisualElement;
             _labHeroName = this._uiObjects["labHeroName"].unityVisualElement as Label;
             _labUpgradeCoin = this._uiObjects["labUpgradeCoin"].unityVisualElement as Label;
             _labAttacked = this._uiObjects["labAttacked"].unityVisualElement as Label;

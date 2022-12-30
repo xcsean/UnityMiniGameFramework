@@ -33,9 +33,9 @@ namespace UnityMiniGameFramework
         protected Label _labLeftPopup;
         protected Label _labRightPopup;
         protected Label _labStockCnt;
-        protected Image _sprStockGoods;
+        protected VisualElement _sprStockGoods;
         protected Label _labProduceCnt;
-        protected Image _sprProduceGoods;
+        protected VisualElement _sprProduceGoods;
         protected ProgressBar _progressBar;
 
         protected CMFactory _CMFactory;
@@ -57,9 +57,9 @@ namespace UnityMiniGameFramework
             _labLeftPopup = this._uiObjects["labLeftPopup"].unityVisualElement as Label;
             _labRightPopup = this._uiObjects["labRightPopup"].unityVisualElement as Label;
             _labStockCnt = this._uiObjects["labStockCnt"].unityVisualElement as Label;
-            _sprStockGoods = this._uiObjects["sprStockGoods"].unityVisualElement as Image;
+            _sprStockGoods = this._uiObjects["sprStockGoods"].unityVisualElement;
             _labProduceCnt = this._uiObjects["labProduceCnt"].unityVisualElement as Label;
-            _sprProduceGoods = this._uiObjects["sprProduceGoods"].unityVisualElement as Image;
+            _sprProduceGoods = this._uiObjects["sprProduceGoods"].unityVisualElement;
             _progressBar = this._uiObjects["progressBar"].unityVisualElement as ProgressBar;
 
             _labLeftPopup.text = "";
@@ -76,6 +76,12 @@ namespace UnityMiniGameFramework
                 return;
             }
             _lastUpdateProduceVer = _CMFactory.produceVer;
+
+            // 产品图
+            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_{_cmFactory.factoryConf.outputProductName}");
+            _sprProduceGoods.style.backgroundImage = tx;
+            _sprProduceGoods.style.width = tx.width / (tx.width / 40 + 1);
+            _sprProduceGoods.style.height = tx.width / (tx.height / 40 + 1);
 
             DoUpdateInputStore(_CMFactory.currentProductInputStore, 0);
             DoUpdatePruduceGoods(_CMFactory.currentProductOutputStore, 0);
@@ -108,6 +114,7 @@ namespace UnityMiniGameFramework
         {
             // 产出
             _labProduceCnt.text = $"{totalCnt}";
+
             if (changeCnt != 0)
             {
                 rightPopupNumber = new PopupNumber()

@@ -33,5 +33,22 @@ namespace UnityMiniGameFramework
         {
             Resources.UnloadAsset(o);
         }
+
+        public Texture2D LoadTexture(string iconName)
+        {
+            var t2d = Resources.Load(iconName) as Texture2D;
+            if (t2d == null)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadTexture {iconName} not exist");
+                return null;
+            }
+            return t2d;
+        }
+
+        public Texture2D LoadProductIcon(string iconName)
+        {
+            string path = $"Product_Icon/{iconName}";
+            return LoadTexture(path);
+        }
     }
 }
