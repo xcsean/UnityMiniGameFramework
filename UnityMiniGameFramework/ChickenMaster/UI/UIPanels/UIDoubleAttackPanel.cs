@@ -45,11 +45,12 @@ namespace UnityMiniGameFramework
 
         public void setBuffTime(int time)
         {
-            var mins = time / 60;
-            var secs = time - mins * 60;
+            var hours = time / 60 / 60;
+            var mins = (time - hours * 60 * 60) / 60;
+            var secs = time - hours * 60 * 60 - mins * 60;
 
-            _timeLab.text = $"Remaining Time: {mins}M{secs}S";
-            _dmgPb.value = (float)time / 60 * 60;
+            _timeLab.text = $"REMAINING TIME: {mins}:{mins}:{secs}";
+            _dmgPb.value = (float)time / (60 * 60);
         }
     }
 }

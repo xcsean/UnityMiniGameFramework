@@ -44,12 +44,12 @@ namespace UnityMiniGameFramework
         public void showReward(LocalAwardInfo offlineReward, long offLineMillisecond)
         {
             _offlineReward = offlineReward;
-            RewardLabel.text = $"reward gold: {_offlineReward.gold}";
+            RewardLabel.text = $"{_offlineReward.gold}";
             int second = (int)(offLineMillisecond / 1000);
             var hours = second / (60 * 60);
             var mins = (second - hours * 60 * 60) / 60;
             var secs = second - hours * 60 * 60 - mins * 60;
-            OfflineTimeLabel.text = $"Offline duration: {hours}:{mins}:{secs}";
+            OfflineTimeLabel.text = $"OFF-LINE TIME: {hours}:{mins}:{secs}";
 
             this.showUI();
         }

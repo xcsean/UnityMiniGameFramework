@@ -323,17 +323,13 @@ namespace UnityMiniGameFramework
                 products = new Dictionary<string, int>()
             };
 
-            foreach (var itemAwd in offlineAwardConf.items)
+            if(offlineAwardConf.items != null)
             {
-                int count = (int)(itemAwd.countPerSec * offLineMillisecond / 1000);
-                if (offlineAward.items.ContainsKey(itemAwd.itemName))
-                {
-                    offlineAward.items[itemAwd.itemName] += count;
-                }
-                else
-                {
-                    offlineAward.items[itemAwd.itemName] = count;
-                }
+                offlineAwardConf.items = new List<CMOfflineItemAward>();
+            }
+            if (offlineAwardConf.products != null)
+            {
+                offlineAwardConf.products = new List<CMOfflineProductAward>();
             }
             foreach (var prodAwd in offlineAwardConf.products)
             {
