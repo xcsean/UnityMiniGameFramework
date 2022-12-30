@@ -14,7 +14,7 @@ namespace UnityMiniGameFramework
 
         protected Button _closeBtn;
         protected Button _videoBtn;
-        protected ProgressBar _expPb;
+        protected VisualElement _expPb;
         protected Label _timeLab;
         public static UIDoubleExpPanel create()
         {
@@ -29,7 +29,7 @@ namespace UnityMiniGameFramework
             _closeBtn.RegisterCallback<MouseUpEvent>(onClickClose);
             _videoBtn = this._uiObjects["VideoButton"].unityVisualElement as Button;
             _videoBtn.RegisterCallback<MouseUpEvent>(onClickVideo);
-            _expPb = this._uiObjects["TimeProgressBar"].unityVisualElement as ProgressBar;
+            _expPb = this._uiObjects["TimeProgressBar"].unityVisualElement;
             _timeLab = this._uiObjects["TimeLabel"].unityVisualElement as Label;
         }
 
@@ -50,7 +50,8 @@ namespace UnityMiniGameFramework
             var secs = time - hours * 60 * 60 - mins * 60;
 
             _timeLab.text = $"REMAINING TIME: {mins}:{mins}:{secs}";
-            _expPb.value = (float)time / (60 * 60);
+            float prog = (float)time / (60 * 60);
+            _expPb.style.width = new StyleLength(new Length(prog * 326));
         }
     }
 }

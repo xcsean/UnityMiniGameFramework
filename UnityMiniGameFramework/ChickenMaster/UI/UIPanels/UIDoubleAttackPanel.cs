@@ -50,7 +50,8 @@ namespace UnityMiniGameFramework
             var secs = time - hours * 60 * 60 - mins * 60;
 
             _timeLab.text = $"REMAINING TIME: {mins}:{mins}:{secs}";
-            _dmgPb.value = (float)time / (60 * 60);
+            float prog = (float)time / (60 * 60);
+            _dmgPb.style.width = new StyleLength(new Length(prog * 326));
         }
     }
 }
