@@ -222,6 +222,8 @@ namespace UnityMiniGameFramework
             }
 
             // TODO set gun icon
+            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"Weapon_Icon/wuqi_0{cmGunConf.id}");
+            gunItem.Q("sprGunIcon").style.backgroundImage = tx;
 
             if (gunInfo == null)
             {
