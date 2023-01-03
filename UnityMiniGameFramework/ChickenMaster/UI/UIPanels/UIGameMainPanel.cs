@@ -119,7 +119,11 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnUseSkillBtnClick(MouseUpEvent e)
         {
-            UIGetSkillPanel _ui = UnityGameApp.Inst.UI.createUIPanel("GetSkillUI") as UIGetSkillPanel;
+            //UIGetSkillPanel _ui = UnityGameApp.Inst.UI.createUIPanel("GetSkillUI") as UIGetSkillPanel;
+            //_ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            //_ui.showUI();
+
+            UISkillUpgradePanel _ui = UnityGameApp.Inst.UI.createUIPanel("SkillUpgradeUI") as UISkillUpgradePanel;
             _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _ui.showUI();
         }
