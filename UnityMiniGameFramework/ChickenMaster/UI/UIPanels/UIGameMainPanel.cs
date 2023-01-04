@@ -119,11 +119,8 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnUseSkillBtnClick(MouseUpEvent e)
         {
-            //UIGetSkillPanel _ui = UnityGameApp.Inst.UI.createUIPanel("GetSkillUI") as UIGetSkillPanel;
-            //_ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
-            //_ui.showUI();
-
-            UISkillUpgradePanel _ui = UnityGameApp.Inst.UI.createUIPanel("SkillUpgradeUI") as UISkillUpgradePanel;
+            // 此处需要判断技能次数： 有则释放技能，无则打开视频获取技能界面
+            UIGetSkillPanel _ui = UnityGameApp.Inst.UI.createUIPanel("GetSkillUI") as UIGetSkillPanel;
             _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _ui.showUI();
         }
