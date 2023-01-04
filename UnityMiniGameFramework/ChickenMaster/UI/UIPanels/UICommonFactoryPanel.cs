@@ -139,7 +139,7 @@ namespace UnityMiniGameFramework
                 labGetNext.text = $"{0}";
                 labEfficiencyCur.text = $"{0}";
                 labEfficiencyNext.text = $"{0}";
-                nBtnUpgrade.text = $"ACTIVE";
+                nBtnUpgrade.text = $"ACTIVATE";
             }
             else
             {
