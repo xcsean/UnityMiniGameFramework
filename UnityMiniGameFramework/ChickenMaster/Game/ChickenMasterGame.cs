@@ -179,6 +179,22 @@ namespace UnityMiniGameFramework
 
         public void OnStartSceneLoaded()
         {
+            UIPanelStartMain _ui = UnityGameApp.Inst.UI.getUIPanel("startMainUI") as UIPanelStartMain;
+            _ui.show();
+        }
+
+        private List<Func<int>> _updateList = new List<Func<int>>();
+        public void addUpdateFunc(Func<int> a)
+        {
+            _updateList.Add(a);
+        }
+
+        public void removeUpdateFunc(Func<int> a)
+        {
+            if (_updateList.Contains(a))
+            {
+                _updateList.Remove(a);
+            }
         }
 
         public void OnMainSceneLoaded()
@@ -358,6 +374,11 @@ namespace UnityMiniGameFramework
         public void OnUpdate()
         {
             _self.OnUpdate();
+
+            foreach(var func in _updateList)
+            {
+                func();
+            }
 
             foreach(var fac in _cmFactories)
             {
