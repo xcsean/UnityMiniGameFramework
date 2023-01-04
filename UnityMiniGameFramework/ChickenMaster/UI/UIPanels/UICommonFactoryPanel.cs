@@ -94,7 +94,17 @@ namespace UnityMiniGameFramework
         {
             if (_factory == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, "UICommonFactoryPanel _factory is null");
+                ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                if (cmGame.Self.TrySubGold(_factoryConf.activateGoldCost))
+                {
+                    _factory = cmGame.AddFactory(_factoryConf.mapBuildName);
+
+                    RefreshInfo();
+                }
+                else
+                {
+                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
+                }
             }
             else
             {
@@ -103,7 +113,7 @@ namespace UnityMiniGameFramework
                 {
                     RefreshInfo();
                 }
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"当前等级：{lv}，升级后等级：{_factory.localFacInfo.level}");
+                Debug.DebugOutput(DebugTraceType.DTT_Debug, $"当前等级：{lv}，升级后等级：{_factory.localFacInfo.level}");
             }
         }
 
@@ -117,35 +127,10 @@ namespace UnityMiniGameFramework
 
         protected void RefreshInfo()
         {
-            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            if (_factory == null)
-            {
-                if (cmGame.Self.TrySubGold(_factoryConf.activateGoldCost))
-                {
-                    _factory = cmGame.AddFactory(_factoryConf.mapBuildName);
-                }
-                else
-                {
-                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
-                }
-            }
-            bool isMaxLV = false;
-            int curLv = _factory.localFacInfo.level;
-            var _curLevelConf = _factoryConf.levelConfs[curLv];
-            var _nextLevelConf = _curLevelConf;
-
-            if (_factoryConf.levelConfs.ContainsKey(curLv + 1))
-            {
-                _nextLevelConf = _factoryConf.levelConfs[curLv + 1];
-            }
-            else
-            {
-                isMaxLV = true;
-            }
             if (_factory == null)
             {
                 //labProductDesc.text = $"";
-                labCostCoin.text = $"{0}";
+                labCostCoin.text = $"{_factoryConf.activateGoldCost}";
                 labLvCur.text = $"Lv.{0}";
                 labLvNext.text = $"Lv.{1}";
                 labCostCur.text = $"{0}";
@@ -154,9 +139,24 @@ namespace UnityMiniGameFramework
                 labGetNext.text = $"{0}";
                 labEfficiencyCur.text = $"{0}";
                 labEfficiencyNext.text = $"{0}";
+                nBtnUpgrade.text = $"ACTIVE";
             }
             else
             {
+                bool isMaxLV = false;
+                int curLv = _factory.localFacInfo.level;
+                var _curLevelConf = _factoryConf.levelConfs[curLv];
+                var _nextLevelConf = _curLevelConf;
+
+                if (_factoryConf.levelConfs.ContainsKey(curLv + 1))
+                {
+                    _nextLevelConf = _factoryConf.levelConfs[curLv + 1];
+                }
+                else
+                {
+                    isMaxLV = true;
+                }
+
                 //labProductDesc.text = $"";
                 labCostCoin.text = $"{_curLevelConf.upgradeGoldCost}";
                 labLvCur.text = $"Lv.{curLv}";
@@ -167,6 +167,7 @@ namespace UnityMiniGameFramework
                 labGetNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxOutputProductStore}");
                 labEfficiencyCur.text = $"{_curLevelConf.produceOutputCount}";
                 labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}";
+                nBtnUpgrade.text = $"UPGRADE";
             }
         }
 
