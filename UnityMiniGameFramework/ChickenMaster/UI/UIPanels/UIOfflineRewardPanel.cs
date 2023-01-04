@@ -73,6 +73,9 @@ namespace UnityMiniGameFramework
             bi.unfetchedOfflineAward.gold += _offlineReward.gold * rate;
             bi.unfetchedOfflineAward.exp += _offlineReward.exp * rate;
 
+            bi.gold += _offlineReward.gold * rate;
+            bi.exp += _offlineReward.exp * rate;
+
             foreach (var itemAwd in _offlineReward.items)
             {
                 if (bi.unfetchedOfflineAward.items.ContainsKey(itemAwd.Key))
@@ -95,6 +98,9 @@ namespace UnityMiniGameFramework
                     bi.unfetchedOfflineAward.products[prodAwd.Key] = prodAwd.Value * rate;
                 }
             }
+
+            var _cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            _cmGame.uiMainPanel.refreshAll();
 
             _baseInfo.markDirty();
         }
