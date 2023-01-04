@@ -580,6 +580,13 @@ namespace UnityMiniGameFramework
                 return;
             }
 
+            /** 增幅-双倍经验 */
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            if (_baseInfo.buffs.doubleExp >= nowMillisecond)
+            {
+                exp *= 2;
+            }
+
             _baseInfo.exp += exp;
 
             int levelUpExp = _cmGame.gameConf.getLevelUpExpRequire(_baseInfo.level);

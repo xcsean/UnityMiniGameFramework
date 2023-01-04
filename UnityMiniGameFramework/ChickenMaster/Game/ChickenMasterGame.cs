@@ -159,6 +159,11 @@ namespace UnityMiniGameFramework
                         level = 1,
                         NextTrainArrivalTime = nowMillisecond,
                         trainStationWorkers = new List<LocalWorkerInfo>(), // init in CMWorker
+                    },
+                    buffs = new LocalBuffInfo
+                    {
+                        doubleExp = nowMillisecond,
+                        doubleAtk = nowMillisecond,
                     }
                 };
                 _baseInfo = new DataObject(baseInfo);
