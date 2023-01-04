@@ -58,6 +58,7 @@ namespace UnityMiniGameFramework
         long _lastSaveTime;
         long _autoSaveTime;
         long _offlineAwardMinTime;
+        long _lastOnlineTime;
 
         public ChickenMasterGame()
         {
@@ -119,6 +120,8 @@ namespace UnityMiniGameFramework
             {
                 _isNewUser = false;
             }
+
+            _lastOnlineTime = (_userInfo.getData() as LocalUserInfo).lastOnlineTime;
 
             _baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo");
             if (_baseInfo == null)
@@ -282,7 +285,7 @@ namespace UnityMiniGameFramework
             var userInfo = (_userInfo.getData() as LocalUserInfo);
             var bi = _baseInfo.getData() as LocalBaseInfo;
 
-            var offLineMillisecond = nowMillisecond - userInfo.lastOnlineTime;
+            var offLineMillisecond = nowMillisecond - _lastOnlineTime;
             if (offLineMillisecond < _offlineAwardMinTime)
             {
                 return;
