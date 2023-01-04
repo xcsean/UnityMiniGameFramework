@@ -86,7 +86,7 @@ namespace UnityMiniGameFramework
                         Node = black,
                         InitFunc = () =>
                         {
-                            //black.style.opacity = 100;
+                            //
                         },
                         DelayTime = 2
                     });
@@ -100,13 +100,14 @@ namespace UnityMiniGameFramework
         protected void OnUpdatePlay()
         {
             // 黑色遮罩慢慢消失
-            if (_curFadeItem != null && _curFadeItem.Node != null && _curFadeOpacity > 0)
+            if (_curFadeItem != null && _curFadeItem.Node != null && _curFadeOpacity > 0f)
             {
-                _curFadeOpacity = Mathf.Lerp(0, _curFadeOpacity, Time.deltaTime * 1f);
-                _curFadeItem.Node.style.opacity = (int)_curFadeOpacity;
+                _curFadeOpacity -= 3f;
+                _curFadeItem.Node.style.opacity = _curFadeOpacity/100f;
 
-                if (_curFadeOpacity == 0)
+                if (_curFadeOpacity < 1)
                 {
+                    _curFadeOpacity = 0f;
                     _curFadeItem = null;
                 }
             }
@@ -126,7 +127,7 @@ namespace UnityMiniGameFramework
                 return;
             }
             // 避免超出DelayTime时间 透明度变化还没执行完毕
-            if (_curFadeItem != null && _curFadeItem.Node != null) _curFadeItem.Node.style.opacity = 0;
+            if (_curFadeItem != null && _curFadeItem.Node != null) _curFadeItem.Node.style.opacity = 0f;
 
             _curFadeItem = blackList.First();
             _curFadeItem.InitFunc();
@@ -134,7 +135,7 @@ namespace UnityMiniGameFramework
 
             _timeInterval = _curFadeItem.DelayTime;
             _time = 0;
-            _curFadeOpacity = 100;
+            _curFadeOpacity = 100f;
         }
 
         /// <summary>
