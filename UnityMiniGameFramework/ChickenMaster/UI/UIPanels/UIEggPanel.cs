@@ -39,7 +39,7 @@ namespace UnityMiniGameFramework
             RecoverBtn.RegisterCallback<MouseUpEvent>(onRecoverClick);
             stars = this._uiObjects["stars"].unityVisualElement;
 
-            _recoveryTime.text = "ready";
+            _recoveryTime.text = "Ready";
         }
 
         public void onStartLevelClick(MouseUpEvent e)
@@ -114,7 +114,7 @@ namespace UnityMiniGameFramework
         public void onEggRecover()
         {
             //changeEggState(false);
-            _recoveryTime.text = "ready";
+            _recoveryTime.text = "Ready";
             // TO DO : show start button
         }
 
