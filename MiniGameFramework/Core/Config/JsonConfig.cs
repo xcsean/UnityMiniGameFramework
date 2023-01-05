@@ -26,7 +26,7 @@ namespace MiniGameFramework
 
             try
             {
-                string confStr = GameApp.Inst.File.readStringFrom(filename);
+                string confStr = GameApp.Inst.File.readStringFromStreamPath(filename);
 
                 _conf = _JsonDeserialize(confStr);
             }

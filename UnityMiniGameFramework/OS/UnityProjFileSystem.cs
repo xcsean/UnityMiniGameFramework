@@ -16,7 +16,7 @@ namespace UnityMiniGameFramework
         protected string _getFullPath(string fileName)
         {
 #if UNITY_ANDROID || UNITY_IPHONE
-                        return Application.persistentDataPath + filename;
+            return Application.persistentDataPath + filename;
 #else
             return Application.dataPath + fileName;
 #endif
@@ -36,14 +36,43 @@ namespace UnityMiniGameFramework
 
         public FileStream getFileReadBinaryStream(string filename)
         {
-            string path = _getFullPath(filename);
+            string path;
+            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
+            {
+                path = Application.persistentDataPath + filename;
+                createDir(path);    
+            }
+            else
+            {
+                path = _getFullPath(filename);
+            }
+            
             return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read);
         }
 
         public FileStream getFileWriteBinaryStream(string filename)
         {
-            string path = _getFullPath(filename);
+            string path;
+            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
+            {
+                path = Application.persistentDataPath + filename;
+                createDir(path);    
+            }
+            else
+            {
+                path = _getFullPath(filename);
+            }
+            
             return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
+        }
+        
+        private void createDir(string filePath)
+        {
+            var dir = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir ?? string.Empty);
+            }
         }
 
         public bool isFileExist(string filename)
@@ -65,7 +94,15 @@ namespace UnityMiniGameFramework
 
         public string readStringFrom(string filename)
         {
-            ;
+            string path = _getFullPath(filename);
+            using (StreamReader reader = new StreamReader(path))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
+        public string readStringFromStreamPath(string filename)
+        {
             string path = Application.streamingAssetsPath + filename;
             WWW www = new WWW(path);
             while (!www.isDone)

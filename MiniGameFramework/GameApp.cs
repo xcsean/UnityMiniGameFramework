@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityMiniGameFramework;
 
 namespace MiniGameFramework
 {
@@ -65,6 +66,14 @@ namespace MiniGameFramework
 
         protected IScene _startScene;
         protected IScene _mainScene;
+        private static PlatformEnum _platform = PlatformEnum.PlatformEditor;
+
+        public PlatformEnum Platform
+        {
+            get => _platform;
+            set => _platform = value;
+        }
+
 
         virtual public bool Init(GameAPPInitParameter par)
         {

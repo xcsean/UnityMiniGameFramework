@@ -293,7 +293,9 @@ namespace UnityMiniGameFramework
 
             if (produceProgressPanel != null)
             {
-                produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingOutputProduct.count, -realCostInputCount);
+                // 判空
+                if (_localFacInfo.buildingOutputProduct != null)
+                    produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingOutputProduct.count, -realCostInputCount);
             }
 
             if (_localFacInfo.buildingOutputProduct == null)

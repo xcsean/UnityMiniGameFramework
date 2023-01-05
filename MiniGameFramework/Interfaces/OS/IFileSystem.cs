@@ -20,7 +20,8 @@ namespace MiniGameFramework
 
         byte[] readRawDataFrom(string filename);
         string readStringFrom(string filename);
-
+        string readStringFromStreamPath(string filename);
+        
         void writeRawDataTo(string filename, byte[] rawData);
         void writeStringDataTo(string filename, string strData);
     }

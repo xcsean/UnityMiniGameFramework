@@ -67,6 +67,7 @@ namespace UnityMiniGameFramework
             MiniGameFramework.Debug.Init(dbgOutput, dbgError);
 
             UnityGameApp.setInst(new UnityGameApp());
+            initGameAppPlatform();
 
             UnityGameApp.Inst.unityUIPanelSettings = unityUIPanelSettings;
 
@@ -80,6 +81,11 @@ namespace UnityMiniGameFramework
             Application.targetFrameRate = 60;
 
             Application.quitting += UnityGameApp.Inst.OnAppExit;
+        }
+
+        protected virtual void initGameAppPlatform()
+        {
+            GameApp.Inst.Platform = PlatformEnum.PlatformEditor;
         }
 
         protected virtual void Start()
