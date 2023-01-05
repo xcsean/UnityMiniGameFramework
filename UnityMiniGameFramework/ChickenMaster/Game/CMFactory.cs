@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
+using GameObject = UnityEngine.GameObject;
 
 namespace UnityMiniGameFramework
 {
@@ -48,6 +51,8 @@ namespace UnityMiniGameFramework
 
         protected int _produceVer;
         public int produceVer => _produceVer;
+        private UnityEngine.GameObject _outPutGo;
+        private UnityEngine.GameObject _inPutGo;
 
         public bool Init(LocalFactoryInfo facInfo)
         {
@@ -219,6 +224,8 @@ namespace UnityMiniGameFramework
                 produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingInputProduct.count, toFill);
             }
 
+            _updateProductBox(factoryConf.inputStorePrefabPath, _inPutGo, currentProductInputStore, _inputStorePosition);
+
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
             cmGame.baseInfo.markDirty();
             cmGame.uiMainPanel.refreshMeat();
@@ -317,7 +324,8 @@ namespace UnityMiniGameFramework
             }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}，产出总数量：{currentProductOutputStore}");
-
+            _updateProductBox(factoryConf.inputStorePrefabPath, _inPutGo, currentProductInputStore, _inputStorePosition);
+            _updateProductBox(factoryConf.outputStorePrefabPath, _outPutGo, currentProductOutputStore, _outputStorePosition);
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
 
@@ -332,6 +340,50 @@ namespace UnityMiniGameFramework
             }
         }
 
+        protected virtual void _updateProductBox(string boxPrefabPath, GameObject boxObject, int currentProductStore,SpawnPos spawnPos)
+        {
+            int boxNum = currentProductStore / _factoryLevelConf.fetchPackCount;
+            var putTf = spawnPos.spawnObject.transform;
+            int childCount = putTf.childCount;
+            if (childCount == boxNum)
+                return;
+            if (!boxObject)
+            {
+                boxObject = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject(boxPrefabPath);
+            }
+
+            // remove 
+            for (int i = childCount - 1; i >= boxNum; i--)
+            {
+                var box = putTf.GetChild(i).gameObject;
+                GameObject.Destroy(box);
+            }
+
+            childCount = putTf.childCount;
+            // add
+            for (int i = childCount; i < boxNum; i++)
+            {
+                var obj = GameObject.Instantiate(boxObject);
+                obj.transform.SetParent(putTf);
+            }
+
+            // setPos 先写死位置
+            Vector3 initPos = new Vector3(0.32f, 0, 0.32f);
+            for (int i = 0; i < putTf.childCount; i++)
+            {
+                int height = i / 9;
+                int index = i % 9;
+                int row = index % 3;
+                int col = index / 3;
+                Vector3 pos = Vector3.zero;
+                pos.x = initPos.x - 0.32f * row;
+                pos.y = initPos.y + 0.32f * height;
+                pos.z = initPos.z - 0.32f * col;
+                var childTf = putTf.GetChild(i);
+                childTf.localPosition = pos;
+            }
+        }
+        
         public void OnUpdate()
         {
             if (_produceProgressPanel != null)

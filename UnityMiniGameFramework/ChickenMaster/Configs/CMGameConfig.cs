@@ -81,7 +81,9 @@ namespace UnityMiniGameFramework
         public string inputStorePosName { get; set; }
         public string outputFetchingPosName { get; set; }
         public string outputStorePosName { get; set; }
-
+        public string inputStorePrefabPath { get; set;}
+        public string outputStorePrefabPath { get; set; }
+        
         public Dictionary<int, CMFactoryLevelConf> levelConfs { get; set; }
     }
 
