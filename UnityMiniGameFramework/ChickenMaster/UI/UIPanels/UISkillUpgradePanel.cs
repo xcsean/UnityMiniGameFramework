@@ -23,7 +23,7 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             _closeBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            _closeBtn.RegisterCallback<MouseUpEvent>(onClickClose);
+            _closeBtn.clicked += onClickClose;
             content = this._uiObjects["unity-content-container"].unityVisualElement;
         }
 
@@ -38,7 +38,7 @@ namespace UnityMiniGameFramework
             //}
         }
 
-        private void onClickClose(MouseUpEvent e)
+        private void onClickClose()
         {
             hideUI();
         }

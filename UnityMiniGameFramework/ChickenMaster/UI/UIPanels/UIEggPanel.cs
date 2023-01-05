@@ -34,15 +34,15 @@ namespace UnityMiniGameFramework
             _recoveryTime = this._uiObjects["RecoverTime"].unityVisualElement as Label;
 
             _startBtn = this._uiObjects["StartBtn"].unityVisualElement as Button;
-            _startBtn.RegisterCallback<MouseUpEvent>(onStartLevelClick);
+            _startBtn.clicked += onStartLevelClick;
             RecoverBtn = this._uiObjects["RecoverBtn"].unityVisualElement as Button;
-            RecoverBtn.RegisterCallback<MouseUpEvent>(onRecoverClick);
+            _startBtn.clicked += onRecoverClick;
             stars = this._uiObjects["stars"].unityVisualElement;
 
-            _recoveryTime.text = "Ready";
+            _recoveryTime.text = "ready";
         }
 
-        public void onStartLevelClick(MouseUpEvent e)
+        public void onStartLevelClick()
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
@@ -89,7 +89,7 @@ namespace UnityMiniGameFramework
             //changeEggState(true);
         }
 
-        private void onRecoverClick(MouseUpEvent e)
+        private void onRecoverClick()
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.Egg.recoverEgg();
@@ -114,7 +114,7 @@ namespace UnityMiniGameFramework
         public void onEggRecover()
         {
             //changeEggState(false);
-            _recoveryTime.text = "Ready";
+            _recoveryTime.text = "ready";
             // TO DO : show start button
         }
 

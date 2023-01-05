@@ -48,8 +48,8 @@ namespace UnityMiniGameFramework
 
             _UpgradeBtn = this._uiObjects["UpgradeBtn"].unityVisualElement as Button;
             _VideoBtn = this._uiObjects["VideoBtn"].unityVisualElement as Button;
-            _UpgradeBtn.RegisterCallback<MouseUpEvent>(onUpgradeClick);
-            _VideoBtn.RegisterCallback<MouseUpEvent>(onVideoClick);
+            _UpgradeBtn.clicked += onUpgradeClick;
+            _VideoBtn.clicked += onVideoClick;
 
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             _storeHouse = cmGame.StoreHouse;
@@ -84,7 +84,7 @@ namespace UnityMiniGameFramework
             level.text = isMaxLevel ? $"Lv.{_storeHouse.storeHouseInfo.level} is max" : $"Lv.{_storeHouse.storeHouseInfo.level}";
         }
 
-        public void onUpgradeClick(MouseUpEvent e)
+        public void onUpgradeClick()
         {
             if (isMaxLevel)
             {
@@ -97,7 +97,7 @@ namespace UnityMiniGameFramework
                 refreshInfo();
             }
         }
-        public void onVideoClick(MouseUpEvent e)
+        public void onVideoClick()
         {
             //long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
             //foreach (var worker in _storeHouse.workers)

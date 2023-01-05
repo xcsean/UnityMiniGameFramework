@@ -64,26 +64,28 @@ namespace UnityMiniGameFramework
                     if(rewardConf.gold > 0)
                     {
                         var grid = layoutGrid.Q<VisualElement>($"grid{index}");
-                        grid.Q<Label>("count").text = $"X{rewardConf.gold}";
+                        grid.Q<Label>("count").text = $"x{rewardConf.gold}";
                         grid.Q<Label>("have").text = $"OWNED: {bi.gold}";
                         grid.Q<Label>("name").text = "GOLD";
                         grid.Q<VisualElement>("weapon").visible = false;
                         grid.Q<Label>("have").visible = true;
+                        var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_jinbi");
+                        grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
                         grid.visible = true;
                         index++;
                     }
 
-                    if (rewardConf.exp > 0)
-                    {
-                        var grid = layoutGrid.Q<VisualElement>($"grid{index}");
-                        grid.Q<Label>("count").text = $"X{rewardConf.exp}";
-                        grid.Q<Label>("have").text = $"OWNED: {bi.exp}";
-                        grid.Q<Label>("name").text = "EXP";
-                        grid.Q<VisualElement>("weapon").visible = false;
-                        grid.Q<Label>("have").visible = true;
-                        grid.visible = true;
-                        index++;
-                    }
+                    //if (rewardConf.exp > 0)
+                    //{
+                    //    var grid = layoutGrid.Q<VisualElement>($"grid{index}");
+                    //    grid.Q<Label>("count").text = $"X{rewardConf.exp}";
+                    //    grid.Q<Label>("have").text = $"OWNED: {bi.exp}";
+                    //    grid.Q<Label>("name").text = "EXP";
+                    //    grid.Q<VisualElement>("weapon").visible = false;
+                    //    grid.Q<Label>("have").visible = true;
+                    //    grid.visible = true;
+                    //    index++;
+                    //}
 
                     for (var i = 0; i < rewardConf.items.Count; i++)
                     {
@@ -94,6 +96,8 @@ namespace UnityMiniGameFramework
                             grid.Q<Label>("name").text = $"{rewardConf.items[i].itemName}";
                             grid.Q<VisualElement>("weapon").visible = true;
                             grid.Q<Label>("have").visible = false;
+                            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_jinbi");
+                            grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
                             grid.visible = true;
                             index++;
                         }

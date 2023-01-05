@@ -29,9 +29,9 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             _closeBtn = _uiObjects["CloseButton"].unityVisualElement as Button;
-            _closeBtn.RegisterCallback<MouseUpEvent>(onClickClose);
+            _closeBtn.clicked += onClickClose;
             _videoBtn = this._uiObjects["VideoButton"].unityVisualElement as Button;
-            _videoBtn.RegisterCallback<MouseUpEvent>(onClickVideo);
+            _videoBtn.clicked += onClickVideo;
             _progressBar = this._uiObjects["ProgressBar"].unityVisualElement as ProgressBar;
             _timeLab = this._uiObjects["Time"].unityVisualElement as Label;
             _countLab = this._uiObjects["SkillCount"].unityVisualElement as Label;
@@ -39,12 +39,12 @@ namespace UnityMiniGameFramework
             _skillIcon = this._uiObjects["SkillIcon"].unityVisualElement;
         }
 
-        private void onClickClose(MouseUpEvent e)
+        private void onClickClose()
         {
             hideUI();
         }
 
-        private void onClickVideo(MouseUpEvent e)
+        private void onClickVideo()
         {
 
         }

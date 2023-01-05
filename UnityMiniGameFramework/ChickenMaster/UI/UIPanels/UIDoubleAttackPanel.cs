@@ -29,19 +29,19 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             _closeBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            _closeBtn.RegisterCallback<MouseUpEvent>(onClickClose);
+            _closeBtn.clicked += onClickClose;
             _videoBtn = this._uiObjects["VideoButton"].unityVisualElement as Button;
-            _videoBtn.RegisterCallback<MouseUpEvent>(onClickVideo);
+            _videoBtn.clicked += onClickVideo;
             _dmgPb = this._uiObjects["TimeProgressBar"].unityVisualElement;
             _timeLab = this._uiObjects["TimeLabel"].unityVisualElement as Label;
         }
 
-        private void onClickClose(MouseUpEvent e)
+        private void onClickClose()
         {
             hideUI();
         }
 
-        private void onClickVideo(MouseUpEvent e)
+        private void onClickVideo()
         {
             long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
             if (buffTime < nowMillisecond)
