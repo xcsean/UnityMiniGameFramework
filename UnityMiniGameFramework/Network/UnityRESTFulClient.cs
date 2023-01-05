@@ -18,5 +18,21 @@ namespace UnityMiniGameFramework
                 cb(res.content as S2C_LoginResult);
             });
         }
+
+        public void Upload(BaseUserInfo par, Action<S2C_LoginResult> cb)
+        {
+            this.DoAction<S2C_LoginResult, BaseUserInfo>("upload", par, (RCPostActResult res) =>
+            {
+                cb(res.content as S2C_LoginResult);
+            });
+        }
+
+        public void Report(ReportInfo par, Action<S2C_LoginResult> cb)
+        {
+            this.DoAction<S2C_LoginResult, ReportInfo>("report", par, (RCPostActResult res) =>
+            {
+                cb(res.content as S2C_LoginResult);
+            });
+        }
     }
 }

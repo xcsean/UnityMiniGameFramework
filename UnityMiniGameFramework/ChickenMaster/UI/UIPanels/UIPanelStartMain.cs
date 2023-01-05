@@ -49,6 +49,33 @@ namespace UnityMiniGameFramework
             //    }
             //);
 
+            //UnityGameApp.Inst.RESTFulClient.Upload(
+            //    new BaseUserInfo()
+            //    {
+            //        uid = "12314",
+            //        level = 10,
+            //        vipLevel = 10
+            //    },
+            //    (RESTFulAPI.S2C_LoginResult res) =>
+            //    {
+            //        UnityGameApp.Inst.LoadMainScene();
+            //    }
+            //);
+
+            UnityGameApp.Inst.RESTFulClient.Report(
+                 new ReportInfo()
+                 {
+                     uid = "12314",
+                     type = 1,
+                     createtime = DateTime.Now,
+                     msg = "测试",
+                 },
+                 (RESTFulAPI.S2C_LoginResult res) =>
+                 {
+                     UnityGameApp.Inst.LoadMainScene();
+                 }
+            );
+
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             if (cmGame != null && cmGame.isNewUser)
             {

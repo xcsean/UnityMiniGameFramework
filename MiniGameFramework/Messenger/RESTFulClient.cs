@@ -126,6 +126,7 @@ namespace MiniGameFramework
             _url = url;
             _finished = false;
             _actsEvent = new AutoResetEvent(false);
+            _httpClient = GameApp.Inst.Net.CreateHttpClient();
 
             _Acts = new List<PostAct>();
             _ActResults = new Queue<PostActResult>();
