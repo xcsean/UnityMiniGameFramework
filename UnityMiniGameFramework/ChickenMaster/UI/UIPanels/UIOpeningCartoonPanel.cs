@@ -158,14 +158,12 @@ namespace UnityMiniGameFramework
         public override void showUI()
         {
             base.showUI();
-            unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
             UnityGameApp.Inst.addUpdateCall(this.OnUpdatePlay);
         }
 
         public override void hideUI()
         {
             base.hideUI();
-            unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
             // to do: update方法里移除会导致Hashset的foreach遍历报错
             //UnityGameApp.Inst.removeUpdateCall(this.OnUpdatePlay);
         }

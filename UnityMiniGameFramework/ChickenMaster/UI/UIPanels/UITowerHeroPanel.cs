@@ -529,17 +529,5 @@ namespace UnityMiniGameFramework
             showUI();
         }
 
-        public override void showUI()
-        {
-            base.showUI();
-            unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-        }
-
-        public override void hideUI()
-        {
-            base.hideUI();
-            unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
-        }
-
     }
 }
