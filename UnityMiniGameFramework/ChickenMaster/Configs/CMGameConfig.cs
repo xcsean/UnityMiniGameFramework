@@ -252,6 +252,18 @@ namespace UnityMiniGameFramework
         public List<CMOfflineProductAward> products { get; set; }
     }
 
+    public class CMBuffsConf
+    {
+        public CMSingleBuffConf doubleExp { get; set; }
+        public CMSingleBuffConf doubleAtk { get; set; }
+    }
+
+    public class CMSingleBuffConf
+    {
+        public int videoGet { get; set; }
+        public int maxBuff { get; set; }
+    }
+
     public class CMGameConf
     {
         public string levelCenterObjectName { get; set; }
@@ -285,6 +297,8 @@ namespace UnityMiniGameFramework
         public CMTrainStationConf trainStationConf { get; set; }
 
         public Dictionary<int, CMOfflineAwardConf> offlineAwardsByUserLevel { get; set; }
+
+        public CMBuffsConf buffsConf { get; set; }
     }
 
     public class CMGameConfig : JsonConfig

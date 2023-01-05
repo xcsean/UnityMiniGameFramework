@@ -58,6 +58,7 @@ namespace UnityMiniGameFramework
         long _lastSaveTime;
         long _autoSaveTime;
         long _offlineAwardMinTime;
+        long _lastOnlineTime;
 
         public ChickenMasterGame()
         {
@@ -120,6 +121,8 @@ namespace UnityMiniGameFramework
                 _isNewUser = false;
             }
 
+            _lastOnlineTime = (_userInfo.getData() as LocalUserInfo).lastOnlineTime;
+
             _baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo");
             if (_baseInfo == null)
             {
@@ -159,6 +162,11 @@ namespace UnityMiniGameFramework
                         level = 1,
                         NextTrainArrivalTime = nowMillisecond,
                         trainStationWorkers = new List<LocalWorkerInfo>(), // init in CMWorker
+                    },
+                    buffs = new LocalBuffInfo
+                    {
+                        doubleExp = nowMillisecond,
+                        doubleAtk = nowMillisecond,
                     }
                 };
                 _baseInfo = new DataObject(baseInfo);
@@ -179,6 +187,22 @@ namespace UnityMiniGameFramework
 
         public void OnStartSceneLoaded()
         {
+            UIPanelStartMain _ui = UnityGameApp.Inst.UI.getUIPanel("startMainUI") as UIPanelStartMain;
+            _ui.show();
+        }
+
+        private List<Func<int>> _updateList = new List<Func<int>>();
+        public void addUpdateFunc(Func<int> a)
+        {
+            _updateList.Add(a);
+        }
+
+        public void removeUpdateFunc(Func<int> a)
+        {
+            if (_updateList.Contains(a))
+            {
+                _updateList.Remove(a);
+            }
         }
 
         public void OnMainSceneLoaded()
@@ -261,7 +285,7 @@ namespace UnityMiniGameFramework
             var userInfo = (_userInfo.getData() as LocalUserInfo);
             var bi = _baseInfo.getData() as LocalBaseInfo;
 
-            var offLineMillisecond = nowMillisecond - userInfo.lastOnlineTime;
+            var offLineMillisecond = nowMillisecond - _lastOnlineTime;
             if (offLineMillisecond < _offlineAwardMinTime)
             {
                 return;
@@ -358,6 +382,11 @@ namespace UnityMiniGameFramework
         public void OnUpdate()
         {
             _self.OnUpdate();
+
+            foreach(var func in _updateList)
+            {
+                func();
+            }
 
             foreach(var fac in _cmFactories)
             {

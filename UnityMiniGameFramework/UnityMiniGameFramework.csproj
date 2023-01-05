@@ -99,6 +99,9 @@
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChickenMaster\Configs\CMGameConfig.cs" />
@@ -134,6 +137,7 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UIOpeningCartoonPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIPassRewardPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIProduceProgressPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UISkillUpgradePanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIStoreHousePanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITowerHeroPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationPanel.cs" />

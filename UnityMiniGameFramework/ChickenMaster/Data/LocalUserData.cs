@@ -87,6 +87,12 @@ namespace UnityMiniGameFramework
         public Dictionary<string, int> items { get; set; }
     }
 
+    public class LocalBuffInfo
+    {
+        public long doubleExp { get; set; }
+        public long doubleAtk { get; set; }
+    }
+
     public class LocalBaseInfo
     {
         public int gold { get; set; }
@@ -114,6 +120,8 @@ namespace UnityMiniGameFramework
         public LocalStoreHouseInfo storeHouse { get; set; }
 
         public LocalTrainStationInfo trainStation { get; set; }
+
+        public LocalBuffInfo buffs { get; set; }
     }
 
     public class LocalUserInfo

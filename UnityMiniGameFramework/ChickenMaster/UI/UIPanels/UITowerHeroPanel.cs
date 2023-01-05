@@ -103,6 +103,7 @@ namespace UnityMiniGameFramework
                     _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
 
                     refreshInfo();
+                    refreshGunUpgradeProgress();
                 }
                 else
                 {
@@ -118,6 +119,7 @@ namespace UnityMiniGameFramework
                 if (_hero.TryUpgrade())
                 {
                     refreshInfo();
+                    refreshGunUpgradeProgress();
                 }
             }
 
@@ -166,6 +168,11 @@ namespace UnityMiniGameFramework
                 _labAttackNext.text = $"{0}";
 
                 refreshHeroAdvanced(0);
+
+                for (int i = 0; i < _gunItemArr.Length; i++)
+                {
+                    _gunItemArr[i].style.display = DisplayStyle.None;
+                }
             }
             else
             {
@@ -206,6 +213,7 @@ namespace UnityMiniGameFramework
             var cmGunConf = cmGame.gameConf.getCMGunConf(gunId);
 
             VisualElement gunItem = _gunItemArr[gunIndex];
+            gunItem.style.display = DisplayStyle.Flex;
             var btnArmed = gunItem.Q<Button>("btnArmed");
 
             // TODO gun name
@@ -221,7 +229,9 @@ namespace UnityMiniGameFramework
                 btnArmed.text = "UNARMED";
             }
 
-            // TODO set gun icon
+            // set gun icon
+            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"Weapon_Icon/wuqi_0{cmGunConf.id}");
+            gunItem.Q("sprGunIcon").style.backgroundImage = tx;
 
             if (gunInfo == null)
             {
@@ -338,7 +348,7 @@ namespace UnityMiniGameFramework
         /// </summary>
         private void refreshHeroAdvanced(int lv)
         {
-                // TODO 5级一次进阶 读配置
+            // TODO 5级一次进阶 读配置
             float n = ((float)lv / 5 - 1);
             int len = _advanced.childCount;
             for (int i = 0; i < len; i++)
@@ -502,6 +512,9 @@ namespace UnityMiniGameFramework
             }
         }
 
+        /// <summary>
+        /// 武器升星成功
+        /// </summary>
         private void GunAscendSuccess(LocalWeaponInfo gunInfo)
         {
             UIWeaponAscendPanel _ui = UnityGameApp.Inst.UI.createUIPanel("WeaponAscendUI") as UIWeaponAscendPanel;

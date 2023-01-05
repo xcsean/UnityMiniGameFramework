@@ -374,6 +374,7 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UIDoubleAttackPanel", UIDoubleAttackPanel.create);
             _ui.regUIPanelCreator("UIDoubleExpPanel", UIDoubleExpPanel.create);
             _ui.regUIPanelCreator("UIGetSkillPanel", UIGetSkillPanel.create);
+            _ui.regUIPanelCreator("UISkillUpgradePanel", UISkillUpgradePanel.create);
             _ui.regUIPanelCreator("UIPassRewardPanel", UIPassRewardPanel.create);
             _ui.regUIPanelCreator("UIOfflineRewardPanel", UIOfflineRewardPanel.create);
 
