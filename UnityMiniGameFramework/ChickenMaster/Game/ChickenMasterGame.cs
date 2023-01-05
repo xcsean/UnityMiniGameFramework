@@ -46,7 +46,6 @@ namespace UnityMiniGameFramework
         public IGameObject levelCenterObject => _levelCenterObject;
 
         UIGameMainPanel _uiMainPanel;
-        UIDoubleAttackPanel _uiDmgPanel;
         public UIGameMainPanel uiMainPanel => _uiMainPanel;
 
         UILevelMainPanel _uiLevelMainPanel;
@@ -405,15 +404,6 @@ namespace UnityMiniGameFramework
 
                 _uiMainPanel.OnUpdate();
             }
-
-            //_uiDmgPanel = UnityGameApp.Inst.UI.getUIPanel("DoubleAttackUI") as UIDoubleAttackPanel;
-            //if(_uiDmgPanel != null)
-            //{
-            //    var bi = _baseInfo.getData() as LocalBaseInfo;
-            //    long nowMillisecond = (long)(DateTime.Now.Ticks);
-            //    int time = (int)(bi.buffs.DoubleDmgBuff - nowMillisecond) / 1000;
-            //    _uiDmgPanel.setBuffTime(time);
-            //}
 
             if (_userInfo != null)
             {
