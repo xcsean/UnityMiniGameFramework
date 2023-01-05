@@ -18,14 +18,10 @@ namespace UnityMiniGameFramework
 
         CMStoreHouse _storeHouse;
 
-        public Label curLv;
-        public Label curCapacity;
-        public Label curStorage;
-        public Label curProductivity;
-        public Label nextLv;
-        public Label nextCapacity;
-        public Label nextStorage;
-        public Label nextProductivity;
+        public Label level;
+        public Label capacity;
+        public Label storage;
+        public Label deposited;
 
 
         protected Label _UpgradePrice;
@@ -44,14 +40,10 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
-            curLv = this._uiObjects["curLv"].unityVisualElement as Label;
-            curStorage = this._uiObjects["curStorage"].unityVisualElement as Label;
-            curCapacity = this._uiObjects["curCapacity"].unityVisualElement as Label;
-            curProductivity = this._uiObjects["curProductivity"].unityVisualElement as Label;
-            nextLv = this._uiObjects["nextLv"].unityVisualElement as Label;
-            nextStorage = this._uiObjects["nextStorage"].unityVisualElement as Label;
-            nextCapacity = this._uiObjects["nextCapacity"].unityVisualElement as Label;
-            nextProductivity = this._uiObjects["nextProductivity"].unityVisualElement as Label;
+            level = this._uiObjects["Level"].unityVisualElement as Label;
+            storage = this._uiObjects["Storage"].unityVisualElement as Label;
+            capacity = this._uiObjects["Capacity"].unityVisualElement as Label;
+            deposited = this._uiObjects["Deposited"].unityVisualElement as Label;
             _UpgradePrice = this._uiObjects["upgradePrice"].unityVisualElement as Label;
 
             _UpgradeBtn = this._uiObjects["UpgradeBtn"].unityVisualElement as Button;
@@ -69,7 +61,6 @@ namespace UnityMiniGameFramework
 
         public void refreshInfo()
         {
-            curLv.text = $"{_storeHouse.storeHouseInfo.level}";
             //string info =
             //    $"workers: {_storeHouse.storeHouseInfo.storeHouseWorkers.Count}";
 
@@ -83,29 +74,14 @@ namespace UnityMiniGameFramework
             //    $"fetch pack: {_storeHouse.currentLevelConf.fetchPackCount}\r\n" +
             //    $"upgrade gold: {_storeHouse.currentLevelConf.upgradeGoldCost}";
 
-            curStorage.text = $"{_storeHouse.currentLevelConf.MaxstoreCount}";
-            //_Output.text = $"{_storeHouse.currentLevelConf.outputCeiling}";
-            curCapacity.text = $"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[_storeHouse.storeHouseInfo.level]}";
-            curProductivity.text = $"{_storeHouse.currentLevelConf.efficiency}";
+            storage.text = $"{_storeHouse.currentLevelConf.MaxstoreCount}";
+            capacity.text = $"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[_storeHouse.storeHouseInfo.level]}";
             _UpgradePrice.text = $"{_storeHouse.currentLevelConf.upgradeGoldCost}";
+            deposited.text = $"{_storeHouse.storeHouseInfo.storeCount}";
 
             isMaxLevel = _storeHouse.storeHouseInfo.level >= _storeHouse.storeHouseConf.levelConfs.Count;
-            _UpgradeBtn.text = isMaxLevel ? "CONFIRM" : "UPGRADE";
-
-            if (!isMaxLevel)
-            {
-                nextLv.text = $"{_storeHouse.storeHouseInfo.level + 1}";
-                nextStorage.text = $"{_storeHouse.storeHouseConf.levelConfs[_storeHouse.storeHouseInfo.level + 1].MaxstoreCount}";
-                nextCapacity.text = $"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[_storeHouse.storeHouseInfo.level + 1]}";
-                nextProductivity.text = $"{_storeHouse.storeHouseConf.levelConfs[_storeHouse.storeHouseInfo.level + 1].efficiency}";
-            }
-            else
-            {
-                nextLv.text = "Max";
-                nextStorage.text = $"{_storeHouse.currentLevelConf.MaxstoreCount}";
-                nextCapacity.text = $"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[_storeHouse.storeHouseInfo.level]}";
-                nextProductivity.text = $"{_storeHouse.currentLevelConf.efficiency}";
-            }
+            _UpgradeBtn.text = isMaxLevel ? "OK" : "UPGRADE";
+            level.text = isMaxLevel ? $"Lv.{_storeHouse.storeHouseInfo.level} is max" : $"Lv.{_storeHouse.storeHouseInfo.level}";
         }
 
         public void onUpgradeClick(MouseUpEvent e)

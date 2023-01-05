@@ -103,8 +103,6 @@ namespace UnityMiniGameFramework
         public int MaxstoreCount { get; set; }
         public int fetchPackCount { get; set; }
         public int upgradeGoldCost { get; set; }
-        public int outputCeiling { get; set; }
-        public int efficiency { get; set; }
     }
 
     public class CMStoreHouseConf
