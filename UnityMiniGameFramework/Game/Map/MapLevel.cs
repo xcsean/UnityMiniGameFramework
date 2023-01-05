@@ -192,15 +192,15 @@ namespace UnityMiniGameFramework
                 bool win = true;
                 foreach(var km in _conf.kmWinCheck)
                 {
-                    if(_kmCount.ContainsKey(km.mapMonsterName))
+                    if (_kmCount.ContainsKey(km.mapMonsterName))
                     {
-                        if(_kmCount[km.mapMonsterName] < km.killCount)
+                        if (_kmCount[km.mapMonsterName] < km.killCount)
                         {
                             win = false;
                             break;
                         }
                     }
-                    else
+                    else if (km.killCount > 0)
                     {
                         win = false;
                         break;
