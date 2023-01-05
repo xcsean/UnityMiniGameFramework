@@ -32,6 +32,8 @@ namespace UnityMiniGameFramework
 
         UIStoreHousePanel _uiStoreHouse;
 
+        private UIStorehouseCapacityPanel _uiStorehouseCapacityPanel;
+
         public void Init(LocalStoreHouseInfo info)
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
@@ -63,6 +65,8 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
+
+            InitCapacityUI();
 
             if (info.storeHouseWorkers.Count <= 0)
             {
@@ -100,7 +104,11 @@ namespace UnityMiniGameFramework
 
         public void OnUpdate()
         {
-
+            if (_uiStorehouseCapacityPanel != null)
+            {
+                var screenPos = (UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(_mapBuildingObj.unityGameObject.transform.position);
+                _uiStorehouseCapacityPanel.setPoisition((int)screenPos.x, (int)screenPos.y - 200);
+            }
         }
 
         public void setUIPanel(UIStoreHousePanel ui)
@@ -122,6 +130,11 @@ namespace UnityMiniGameFramework
             }
 
             _storeHouseInfo.storeCount -= fetchCount;
+
+            if (_uiStorehouseCapacityPanel != null)
+            {
+                _uiStorehouseCapacityPanel.DoUpdateInputStore(_storeHouseInfo.storeCount, -fetchCount);
+            }
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.baseInfo.markDirty();
@@ -163,6 +176,11 @@ namespace UnityMiniGameFramework
             info.count -= toFill;
 
             _storeHouseInfo.storeCount += toFill;
+
+            if (_uiStorehouseCapacityPanel != null)
+            {
+                _uiStorehouseCapacityPanel.DoUpdateInputStore(_storeHouseInfo.storeCount, toFill);
+            }
 
             cmGame.baseInfo.markDirty();
             cmGame.uiMainPanel.refreshMeat();
@@ -220,6 +238,16 @@ namespace UnityMiniGameFramework
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 仓库建筑头顶容量显示
+        /// </summary>
+        protected void InitCapacityUI()
+        {
+            _uiStorehouseCapacityPanel = UnityGameApp.Inst.UI.createUIPanel("StorehouseCapacityUI") as UIStorehouseCapacityPanel;
+            _uiStorehouseCapacityPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _uiStorehouseCapacityPanel.showUI();
         }
     }
 }
