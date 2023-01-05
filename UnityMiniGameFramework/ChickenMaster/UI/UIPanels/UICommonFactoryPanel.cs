@@ -63,8 +63,8 @@ namespace UnityMiniGameFramework
             nBtnEfficiency = this._uiObjects["nBtnEfficiency"].unityVisualElement as Button;
             nBtnUpgrade = this._uiObjects["nBtnUpgrade"].unityVisualElement as Button;
 
-            nBtnEfficiency.RegisterCallback<MouseUpEvent>(OnEfficiencyBtnClick);
-            nBtnUpgrade.RegisterCallback<MouseUpEvent>(OnUpgradeBtnClick);
+            nBtnEfficiency.clicked += OnEfficiencyBtnClick;
+            nBtnUpgrade.clicked += OnUpgradeBtnClick;
         }
 
         public void InitFactoryInfo(string name)
@@ -90,7 +90,7 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 升级
         /// </summary>
-        protected void OnUpgradeBtnClick(MouseUpEvent e)
+        protected void OnUpgradeBtnClick()
         {
             if (_factory == null)
             {
@@ -120,7 +120,7 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 效率翻倍
         /// </summary>
-        protected void OnEfficiencyBtnClick(MouseUpEvent e)
+        protected void OnEfficiencyBtnClick()
         {
             Debug.DebugOutput(DebugTraceType.DTT_Debug, "onEfficiencyBtnClick...");
         }

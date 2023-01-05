@@ -63,23 +63,23 @@ namespace UnityMiniGameFramework
             _gunItemArr[1] = _gunItem2;
             _gunItemArr[2] = _gunItem3;
 
-            _gunItem1.Q<Button>("btnActive").RegisterCallback<MouseUpEvent>(onGun1Click);
-            _gunItem2.Q<Button>("btnActive").RegisterCallback<MouseUpEvent>(onGun2Click);
-            _gunItem3.Q<Button>("btnActive").RegisterCallback<MouseUpEvent>(onGun3Click);
-            _gunItem1.Q<Button>("btnItem").RegisterCallback<MouseUpEvent>(OnUpgradeGunBtnClick1);
-            _gunItem2.Q<Button>("btnItem").RegisterCallback<MouseUpEvent>(OnUpgradeGunBtnClick2);
-            _gunItem3.Q<Button>("btnItem").RegisterCallback<MouseUpEvent>(OnUpgradeGunBtnClick3);
-            _gunItem1.Q<Button>("btnArmed").RegisterCallback<MouseUpEvent>(OnChangeGunBtnClick1);
-            _gunItem2.Q<Button>("btnArmed").RegisterCallback<MouseUpEvent>(OnChangeGunBtnClick2);
-            _gunItem3.Q<Button>("btnArmed").RegisterCallback<MouseUpEvent>(OnChangeGunBtnClick3);
+            _gunItem1.Q<Button>("btnActive").clicked += onGun1Click;
+            _gunItem2.Q<Button>("btnActive").clicked += onGun2Click;
+            _gunItem3.Q<Button>("btnActive").clicked += onGun3Click;
+            _gunItem1.Q<Button>("btnItem").clicked += OnUpgradeGunBtnClick1;
+            _gunItem2.Q<Button>("btnItem").clicked += OnUpgradeGunBtnClick2;
+            _gunItem3.Q<Button>("btnItem").clicked += OnUpgradeGunBtnClick3;
+            _gunItem1.Q<Button>("btnArmed").clicked += OnChangeGunBtnClick1;
+            _gunItem2.Q<Button>("btnArmed").clicked += OnChangeGunBtnClick2;
+            _gunItem3.Q<Button>("btnArmed").clicked += OnChangeGunBtnClick3;
 
-            _btnAct.RegisterCallback<MouseUpEvent>(OnActBtnClick);
+            _btnAct.clicked += OnActBtnClick;
         }
 
         /// <summary>
         /// 英雄激活和升级
         /// </summary>
-        public void OnActBtnClick(MouseUpEvent e)
+        public void OnActBtnClick()
         {
             if (_hero == null)
             {
@@ -194,7 +194,7 @@ namespace UnityMiniGameFramework
                 _labHeroName.text = $"{_heroConf.mapHeroName}";
                 _labUpgradeCoin.text = $"{upgradeCost}";
 
-                _labAttacked.text = $"{attack}";
+                _labAttacked.text = $"{_hero.heroInfo.level}";  // 改为等级
                 _labAttackCur.text = StringUtil.StringNumFormat($"{attack}");
                 _labAttackNext.text = StringUtil.StringNumFormat($"{nextConf.combatConf.attackBase}");
 
@@ -377,17 +377,17 @@ namespace UnityMiniGameFramework
             refreshInfo();
         }
 
-        protected void OnChangeGunBtnClick1(MouseUpEvent e)
+        protected void OnChangeGunBtnClick1()
         {
             OnChangeGun(0);
         }
 
-        protected void OnChangeGunBtnClick2(MouseUpEvent e)
+        protected void OnChangeGunBtnClick2()
         {
             OnChangeGun(1);
         }
 
-        protected void OnChangeGunBtnClick3(MouseUpEvent e)
+        protected void OnChangeGunBtnClick3()
         {
             OnChangeGun(2);
         }
@@ -435,16 +435,16 @@ namespace UnityMiniGameFramework
             GunAscendSuccess(_gunInfo);
         }
 
-        protected void OnUpgradeGunBtnClick1(MouseUpEvent e)
+        protected void OnUpgradeGunBtnClick1()
         {
             OnUpgradeGun(0);
         }
-        protected void OnUpgradeGunBtnClick2(MouseUpEvent e)
+        protected void OnUpgradeGunBtnClick2()
         {
             OnUpgradeGun(1);
         }
 
-        protected void OnUpgradeGunBtnClick3(MouseUpEvent e)
+        protected void OnUpgradeGunBtnClick3()
         {
             OnUpgradeGun(2);
         }
@@ -475,7 +475,7 @@ namespace UnityMiniGameFramework
             }
         }
 
-        public void onGun1Click(MouseUpEvent e)
+        public void onGun1Click()
         {
             var upgrade = OnUnlockGunClick(0);
             if (upgrade)
@@ -487,7 +487,7 @@ namespace UnityMiniGameFramework
                 GunAscendSuccess(_gun1Info);
             }
         }
-        public void onGun2Click(MouseUpEvent e)
+        public void onGun2Click()
         {
             var upgrade = OnUnlockGunClick(1);
             if (upgrade)
@@ -499,7 +499,7 @@ namespace UnityMiniGameFramework
                 GunAscendSuccess(_gun2Info);
             }
         }
-        public void onGun3Click(MouseUpEvent e)
+        public void onGun3Click()
         {
             var upgrade = OnUnlockGunClick(2);
             if (upgrade)

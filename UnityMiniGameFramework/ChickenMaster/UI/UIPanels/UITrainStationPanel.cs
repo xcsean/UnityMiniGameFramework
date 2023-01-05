@@ -63,14 +63,12 @@ namespace UnityMiniGameFramework
             _UpgradePrice = this._uiObjects["UpgradePrice"].unityVisualElement as Label;
 
             _UpgradeBtn = this._uiObjects["UpgradeBtn"].unityVisualElement as Button;
-            _UpgradeBtn.RegisterCallback<MouseUpEvent>(onUpgradeClick);
+            _UpgradeBtn.clicked += onUpgradeClick;
 
             _CallBtn = this._uiObjects["CallBtn"].unityVisualElement as Button;
-            _CallBtn.RegisterCallback<MouseUpEvent>(onCallClick);
+            _CallBtn.clicked += onCallClick;
             _SpeedUpBtn = this._uiObjects["SpeedUpBtn"].unityVisualElement as Button;
-            _SpeedUpBtn.RegisterCallback<MouseUpEvent>(onSpeedUpClick);
-            _CloseBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            _CloseBtn.RegisterCallback<MouseUpEvent>(onCloseClick);
+            _SpeedUpBtn.clicked += onSpeedUpClick;
 
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             _trainStation = cmGame.TrainStation;
@@ -120,7 +118,7 @@ namespace UnityMiniGameFramework
 
         }
 
-        public void onUpgradeClick(MouseUpEvent e)
+        public void onUpgradeClick()
         {
             // upgrade
             if (_trainStation.TryUpgrade())
@@ -128,7 +126,7 @@ namespace UnityMiniGameFramework
                 refreshInfo();
             }
         }
-        public void onCallClick(MouseUpEvent e)
+        public void onCallClick()
         {
             // call
             if (_trainStation.CallTrainNow())
@@ -136,7 +134,7 @@ namespace UnityMiniGameFramework
                 refreshInfo();
             }
         }
-        public void onSpeedUpClick(MouseUpEvent e)
+        public void onSpeedUpClick()
         {
 
         }

@@ -37,7 +37,7 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             _quitBtn = this._uiObjects["QuitBtn"].unityVisualElement as Button;
-            _quitBtn.RegisterCallback<MouseUpEvent>(onQuitLevelClick);
+            _quitBtn.clicked += onQuitLevelClick;
 
             _clickableArea = this._uiObjects["Clickable"].unityVisualElement;
             _clickableArea.RegisterCallback<MouseDownEvent>(onMouseDownCA);
@@ -91,7 +91,7 @@ namespace UnityMiniGameFramework
             UnityGameApp.Inst.MainScene.camera.follow(cmGame.Self.mapHero);
         }
 
-        public void onQuitLevelClick(MouseUpEvent e)
+        public void onQuitLevelClick()
         {
             this.hideUI();
         }

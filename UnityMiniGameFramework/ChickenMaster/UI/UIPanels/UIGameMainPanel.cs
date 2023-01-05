@@ -94,13 +94,10 @@ namespace UnityMiniGameFramework
             _bossInfo = this._uiObjects["BossInfo"].unityVisualElement;
             _battleStartInfo = this._uiObjects["BattleStartInfo"].unityVisualElement;
 
-            _btnUseSkill.RegisterCallback<MouseUpEvent>(OnUseSkillBtnClick);
-            _btnDoubleExp.RegisterCallback<MouseUpEvent>(OnDoubleExpBtnClick);
-            _btnDoubleAtt.RegisterCallback<MouseUpEvent>(OnDoubleAttBtnClick);
-            _btnSetting.RegisterCallback<MouseUpEvent>(OnSettiingBtnClick);
-
-            //_clickableArea.RegisterCallback<MouseDownEvent>(onMouseDownCA);
-            //_clickableArea.RegisterCallback<MouseUpEvent>(onMouseUpCA);
+            _btnUseSkill.clicked += OnUseSkillBtnClick;
+            _btnDoubleExp.clicked += OnDoubleExpBtnClick;
+            _btnDoubleAtt.clicked += OnDoubleAttBtnClick;
+            _btnSetting.clicked += OnSettiingBtnClick;
 
             // TODO 动态获取一直是0
             //_expBarWidth = _expBar.style.width.value.value;
@@ -117,7 +114,7 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 使用技能
         /// </summary>
-        protected void OnUseSkillBtnClick(MouseUpEvent e)
+        protected void OnUseSkillBtnClick()
         {
             // 此处需要判断技能次数： 有则释放技能，无则打开视频获取技能界面
             UIGetSkillPanel _ui = UnityGameApp.Inst.UI.createUIPanel("GetSkillUI") as UIGetSkillPanel;
@@ -128,7 +125,7 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 双倍经验
         /// </summary>
-        protected void OnDoubleExpBtnClick(MouseUpEvent e)
+        protected void OnDoubleExpBtnClick()
         {
             UIDoubleExpPanel _ui = UnityGameApp.Inst.UI.createUIPanel("DoubleExpUI") as UIDoubleExpPanel;
             _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
@@ -138,7 +135,7 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 双倍攻击
         /// </summary>
-        protected void OnDoubleAttBtnClick(MouseUpEvent e)
+        protected void OnDoubleAttBtnClick()
         {
             UIDoubleAttackPanel _ui = UnityGameApp.Inst.UI.createUIPanel("DoubleAttackUI") as UIDoubleAttackPanel;
             _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
@@ -148,7 +145,7 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 设置
         /// </summary>
-        protected void OnSettiingBtnClick(MouseUpEvent e)
+        protected void OnSettiingBtnClick()
         {
         }
 
