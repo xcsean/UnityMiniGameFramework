@@ -148,6 +148,7 @@
     <Compile Include="Messenger\RESTFulClient.cs" />
     <Compile Include="Messenger\SessionClient.cs" />
     <Compile Include="Messenger\SessionServer.cs" />
+    <Compile Include="PlatformEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\ResourceManager.cs" />
     <Compile Include="UI\Config\UIConfig.cs" />
