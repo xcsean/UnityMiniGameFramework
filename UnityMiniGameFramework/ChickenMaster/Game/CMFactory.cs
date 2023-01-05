@@ -224,7 +224,7 @@ namespace UnityMiniGameFramework
                 produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingInputProduct.count, toFill);
             }
 
-            _updateProductBox(factoryConf.inputStorePrefabPath, _inPutGo, currentProductInputStore, _inputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath, ref _inPutGo, currentProductInputStore, _inputStorePosition);
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
             cmGame.baseInfo.markDirty();
@@ -252,7 +252,7 @@ namespace UnityMiniGameFramework
             }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{_localFacInfo.buildingOutputProduct.count}");
-
+            _updateProductBox(factoryConf.outputStorePrefabPath, ref _outPutGo, currentProductOutputStore, _outputStorePosition);
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
 
@@ -324,8 +324,8 @@ namespace UnityMiniGameFramework
             }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}，产出总数量：{currentProductOutputStore}");
-            _updateProductBox(factoryConf.inputStorePrefabPath, _inPutGo, currentProductInputStore, _inputStorePosition);
-            _updateProductBox(factoryConf.outputStorePrefabPath, _outPutGo, currentProductOutputStore, _outputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath,ref _inPutGo, currentProductInputStore, _inputStorePosition);
+            _updateProductBox(factoryConf.outputStorePrefabPath,ref _outPutGo, currentProductOutputStore, _outputStorePosition);
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
 
@@ -340,7 +340,7 @@ namespace UnityMiniGameFramework
             }
         }
 
-        protected virtual void _updateProductBox(string boxPrefabPath, GameObject boxObject, int currentProductStore,SpawnPos spawnPos)
+        protected virtual void _updateProductBox(string boxPrefabPath, ref GameObject boxObject, int currentProductStore,SpawnPos spawnPos)
         {
             int boxNum = currentProductStore / _factoryLevelConf.fetchPackCount;
             var putTf = spawnPos.spawnObject.transform;

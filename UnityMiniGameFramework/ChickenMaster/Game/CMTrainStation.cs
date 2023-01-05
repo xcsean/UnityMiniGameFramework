@@ -164,7 +164,7 @@ namespace UnityMiniGameFramework
         public List<LocalPackProductInfo> PutProducts(List<LocalPackProductInfo> prods)
         {
             bool changed = false;
-            for(int i=0; i<prods.Count; ++i)
+            for (int i = 0; i < prods.Count; ++i)
             {
                 int spaceLeft = _currentLevelConf.MaxstoreCount - _currTotalStoreCount;
                 if (spaceLeft <= 0)
@@ -175,15 +175,15 @@ namespace UnityMiniGameFramework
                 var inputProd = prods[i];
 
                 LocalPackProductInfo storeProd = null;
-                for(int j=0;j<_trainStationInfo.storeProducts.Count; ++j)
+                for (int j = 0; j < _trainStationInfo.storeProducts.Count; ++j)
                 {
-                    if(_trainStationInfo.storeProducts[j].productName == inputProd.productName)
+                    if (_trainStationInfo.storeProducts[j].productName == inputProd.productName)
                     {
                         storeProd = _trainStationInfo.storeProducts[j];
                     }
                 }
 
-                if(storeProd == null)
+                if (storeProd == null)
                 {
                     storeProd = new LocalPackProductInfo()
                     {
@@ -194,7 +194,7 @@ namespace UnityMiniGameFramework
                 }
 
                 int inputValue = inputProd.count;
-                if(inputValue > spaceLeft)
+                if (inputValue > spaceLeft)
                 {
                     inputValue = spaceLeft;
                     inputProd.count -= inputValue;
@@ -211,20 +211,26 @@ namespace UnityMiniGameFramework
                 changed = true;
             }
 
-            if(changed)
+            if (changed)
             {
                 var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
                 cmGame.baseInfo.markDirty();
 
-                if(_uiTrainStation != null)
+                if (_uiTrainStation != null)
                 {
                     _uiTrainStation.refreshInfo();
                 }
+                updateProductBox();
             }
 
             return prods;
         }
 
+        private void updateProductBox()
+        {
+            
+        }
+        
         public void TrySellTrainStaionProducts()
         {
             if (_trainStationInfo.storeProducts.Count > 0)
@@ -269,6 +275,7 @@ namespace UnityMiniGameFramework
                 if (goldAdd > 0)
                 {
                     cmGame.Self.AddGold(goldAdd);
+                    updateProductBox();
                 }
 
                 cmGame.baseInfo.markDirty();
