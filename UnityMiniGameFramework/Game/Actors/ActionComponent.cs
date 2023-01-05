@@ -26,6 +26,8 @@ namespace UnityMiniGameFramework
         protected List<Act> _penddingActions;
         protected HashSet<Act> _currActivateActions;
 
+        protected HashSet<ActBuf> _bufs;
+
         public List<Act> penddingActions => _penddingActions;
         public List<Act> currActivateActions => _currActivateActions.ToList();
 
@@ -33,16 +35,22 @@ namespace UnityMiniGameFramework
         {
             _penddingActions = new List<Act>();
             _currActivateActions = new HashSet<Act>();
+
+            _bufs = new HashSet<ActBuf>();
         }
 
         public void AddBuf(ActBuf buf)
         {
-            // TO DO : 
+            _bufs.Add(buf);
+
+            buf.OnAdd();
         }
 
         public void OnBufRemove(ActBuf buf)
         {
-            // TO DO : 
+            buf.OnRemove();
+
+            _bufs.Remove(buf);
         }
 
         public void AddAction(Act act)
@@ -106,6 +114,14 @@ namespace UnityMiniGameFramework
                     }
                 }
             }
+
+            if(_bufs != null)
+            {
+                foreach (var buf in _bufs)
+                {
+                    buf.OnUpdate();
+                }
+            }
         }
         override public void OnPostUpdate(float timeElasped)
         {
@@ -124,6 +140,15 @@ namespace UnityMiniGameFramework
                 foreach (var act in toDelAct)
                 {
                     _currActivateActions.Remove(act);
+                }
+            }
+
+            if (_bufs != null)
+            {
+                ActBuf[] bufArray = _bufs.ToArray();
+                foreach (var buf in bufArray)
+                {
+                    buf.OnPostUpdate();
                 }
             }
         }

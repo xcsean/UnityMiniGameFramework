@@ -18,8 +18,14 @@ namespace UnityMiniGameFramework
 
         private void OnCollisionEnter(UnityEngine.Collision collision)
         {
-            gunObject.onProjectileHit(this, collision);
+            var contact = collision.GetContact(0);
+            gunObject.onProjectileHit(this, contact.point, collision.gameObject);
         }
+
+        //private void OnTriggerEnter(UnityEngine.Collider other)
+        //{
+        //    gunObject.onProjectileHit(this, other.ClosestPoint(this.gameObject.transform.position), other.gameObject);
+        //}
 
     }
     public class UnityEmmiterCollider : UnityEngine.MonoBehaviour
@@ -295,51 +301,51 @@ namespace UnityMiniGameFramework
             base.OnPostUpdate(timeElasped);
         }
 
-        virtual public void onProjectileHit(UnityProjectileCollider projectileObject, UnityEngine.Collision collision)
-        {
-            var contact = collision.GetContact(0);
 
-            if(_conf.FireConf.hitVFX != null)
+        virtual public void onProjectileHit(UnityProjectileCollider projectileObject, UnityEngine.Vector3 hitPoint, UnityEngine.GameObject other)
+        {
+
+            if (_conf.FireConf.hitVFX != null)
             {
                 var hitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.hitVFX);
                 if (hitVfx != null)
                 {
                     hitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                    hitVfx.unityGameObject.transform.position = contact.point;
-                    hitVfx.unityGameObject.transform.forward = contact.normal;
+                    hitVfx.unityGameObject.transform.position = hitPoint;
+                    //hitVfx.unityGameObject.transform.forward = contact.normal;
                 }
             }
 
             // do hit result
-            var ugbGameObj = collision.gameObject.GetComponent<UnityGameObjectBehaviour>();
-            if(ugbGameObj != null)
+            var ugbGameObj = other.GetComponent<UnityGameObjectBehaviour>();
+            if (ugbGameObj != null)
             {
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
-                if(combComp != null)
+                if (combComp != null)
                 {
                     combComp.OnHitby(this);
                 }
             }
-            
-            var rigiBody = collision.gameObject.GetComponent<UnityEngine.Rigidbody>();
-            if(rigiBody != null)
-            {
-                //rigiBody.AddForce(collision.impulse.normalized * _hitForce);
-                rigiBody.AddForce(projectileObject.gameObject.transform.forward * _hitForce);
-            }
+
+            //var rigiBody = other.GetComponent<UnityEngine.Rigidbody>();
+            //if (rigiBody != null)
+            //{
+            //    //rigiBody.AddForce(collision.impulse.normalized * _hitForce);
+            //    rigiBody.AddForce(projectileObject.gameObject.transform.forward * _hitForce);
+            //}
 
             UnityGameApp.Inst.VFXManager.onVFXDestory(projectileObject.projVfxObj);
             _currentProjectiles.Remove(projectileObject.projVfxObj);
 
-            if(_conf.FireConf.collideExplosive != null)
+            if (_conf.FireConf.collideExplosive != null)
             {
                 var explosiveObj = UnityGameApp.Inst.WeaponManager.CreateExplosiveObject(_conf.FireConf.collideExplosive);
-                if(explosiveObj.explosiveVFX != null)
+                if (explosiveObj.explosiveVFX != null)
                 {
                     explosiveObj.setGunObject(this);
                     explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                    explosiveObj.explosiveVFX.unityGameObject.transform.position = contact.point;
-                    explosiveObj.explosiveVFX.unityGameObject.transform.forward = contact.normal;
+                    explosiveObj.explosiveVFX.unityGameObject.transform.position = hitPoint;
+                    //explosiveObj.explosiveVFX.unityGameObject.transform.forward = contact.normal;
                 }
             }
         }
@@ -410,11 +416,11 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            var rigiBody = o.GetComponent<UnityEngine.Rigidbody>();
-            if (rigiBody != null)
-            {
-                rigiBody.AddForce((o.transform.position - this.unityGameObject.transform.position).normalized * _hitForce);
-            }
+            //var rigiBody = o.GetComponent<UnityEngine.Rigidbody>();
+            //if (rigiBody != null)
+            //{
+            //    rigiBody.AddForce((o.transform.position - this.unityGameObject.transform.position).normalized * _hitForce);
+            //}
         }
 
         virtual protected void _updateProjectile()
@@ -575,11 +581,11 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            var rigiBody = _currentRayHitObject.GetComponent<UnityEngine.Rigidbody>();
-            if (rigiBody != null)
-            {
-                rigiBody.AddForce(_currentRay.direction.normalized * _hitForce);
-            }
+            //var rigiBody = _currentRayHitObject.GetComponent<UnityEngine.Rigidbody>();
+            //if (rigiBody != null)
+            //{
+            //    rigiBody.AddForce(_currentRay.direction.normalized * _hitForce);
+            //}
 
             return true;
         }

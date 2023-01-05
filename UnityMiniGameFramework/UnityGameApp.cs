@@ -426,5 +426,10 @@ namespace UnityMiniGameFramework
         {
             _uiInputManager.Init();
         }
+
+        public UnityEngine.Vector2 ScreenToUIPos(UnityEngine.Vector2 screenPos)
+        {
+            return new Vector2(screenPos.x * unityUIPanelSettings.referenceResolution.x / Screen.width, screenPos.y * unityUIPanelSettings.referenceResolution.y / Screen.height);
+        }
     }
 }

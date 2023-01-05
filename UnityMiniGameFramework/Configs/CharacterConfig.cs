@@ -9,6 +9,32 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
+    public class ActBufDotConfig
+    {
+        public float time { get; set; }
+        public float damage { get; set; }
+    }
+
+    public class ActBufAttrConfig
+    {
+        public string name { get; set; }
+        public float addValue { get; set; }
+        public float mulValue { get; set; }
+    }
+
+    public class ActBufConfig
+    {
+        public string bufName { get; set; }
+
+        public string bufVFXName { get; set; }
+
+        public List<int> bufAddStates { get; set; }
+
+        public List<ActBufAttrConfig> bufAttrs { get; set; }
+
+        public ActBufDotConfig dot { get; set; }
+    }
+
     public class ActorObjectConfig
     {
         public string name { get; set; }

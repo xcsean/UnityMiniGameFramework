@@ -16,6 +16,29 @@ namespace MiniGameFramework
 
         protected Dictionary<int, int> _states; // state name => state
 
+        public void addState(int stateKey)
+        {
+            if (_states.ContainsKey(stateKey))
+            {
+                ++_states[stateKey];
+            }
+            else
+            {
+                _states[stateKey] = 1;
+            }
+        }
+        public void subState(int stateKey)
+        {
+            if (_states.ContainsKey(stateKey))
+            {
+                --_states[stateKey];
+                if(_states[stateKey] <= 0)
+                {
+                    _states.Remove(stateKey);
+                }
+            }
+        }
+
         public void setState(int stateKey, int stateValue)
         {
             _states[stateKey] = stateValue;
