@@ -177,25 +177,6 @@ namespace UnityMiniGameFramework
 
                 var inputProd = prods[i];
 
-                // LocalPackProductInfo storeProd = null;
-                // for (int j = 0; j < _trainStationInfo.storeProducts.Count; ++j)
-                // {
-                //     if (_trainStationInfo.storeProducts[j].productName == inputProd.productName)
-                //     {
-                //         storeProd = _trainStationInfo.storeProducts[j];
-                //     }
-                // }
-                //
-                // if (storeProd == null)
-                // {
-                //     storeProd = new LocalPackProductInfo()
-                //     {
-                //         productName = inputProd.productName,
-                //         count = 0
-                //     };
-                //     _trainStationInfo.storeProducts.Add(storeProd);
-                // }
-
                 int inputValue = inputProd.count;
                 if (inputValue > spaceLeft)
                 {
@@ -209,8 +190,7 @@ namespace UnityMiniGameFramework
                 }
 
                 _trainStationInfo.storeProducts.Add(inputProd);
-
-                //storeProd.count += inputValue;
+                
                 _currTotalStoreCount += inputValue;
 
                 changed = true;
@@ -225,7 +205,7 @@ namespace UnityMiniGameFramework
                 {
                     _uiTrainStation.refreshInfo();
                 }
-                //UpdateProductBox();
+                UpdateProductBox();
             }
 
             return prods;
@@ -324,7 +304,7 @@ namespace UnityMiniGameFramework
                 if (goldAdd > 0)
                 {
                     cmGame.Self.AddGold(goldAdd);
-                    //UpdateProductBox();
+                    UpdateProductBox();
                 }
 
                 cmGame.baseInfo.markDirty();
