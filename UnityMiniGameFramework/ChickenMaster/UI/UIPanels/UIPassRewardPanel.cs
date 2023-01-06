@@ -159,6 +159,8 @@ namespace UnityMiniGameFramework
                 grid.Q<Label>("have").visible = false;
             }
             base.hideUI();
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.reshowAllUI();
         }
     }
 }

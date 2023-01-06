@@ -204,6 +204,46 @@ namespace UnityMiniGameFramework
             }
         }
 
+        private List<UIPanel> panels = new List<UIPanel>();
+        public void addUI(UIPanel ui)
+        {
+            if (
+                ui.type == "UIStorehouseCapacityPanel"
+                || ui.type == "UIProduceProgressPanel"
+                )
+            {
+                return;
+            }
+            if (!panels.Contains(ui))
+            {
+                panels.Add(ui);
+            }
+        }
+
+        public void removeUI(UIPanel ui)
+        {
+            if (panels.Contains(ui))
+            {
+                panels.Remove(ui);
+            }
+        }
+
+        public void hideAllUI()
+        {
+            foreach(var ui in panels)
+            {
+                ui.display(false);
+            }
+        }
+
+        public void reshowAllUI()
+        {
+            foreach (var ui in panels)
+            {
+                ui.display(true);
+            }
+        }
+
         public void OnMainSceneLoaded()
         {
             // init ui
