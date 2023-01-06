@@ -50,7 +50,7 @@ namespace UnityMiniGameFramework
         public string appConfigFileName;
         public string uiConfigName;
         public string preloaderUIConfName;
-
+        public UnityEngine.GameObject GameObjectCachePool;
         public PanelSettings unityUIPanelSettings;
 
         static void dbgOutput(string msg)
@@ -68,9 +68,9 @@ namespace UnityMiniGameFramework
 
             UnityGameApp.setInst(new UnityGameApp());
             initGameAppPlatform();
-
+            UnityEngine.GameObject.DontDestroyOnLoad(GameObjectCachePool);
             UnityGameApp.Inst.unityUIPanelSettings = unityUIPanelSettings;
-
+            UnityGameApp.Inst.CachePoolRoot = GameObjectCachePool;
             GameAPPInitParameter InitParameter = new GameAPPInitParameter
             {
                 appConfigFileName = appConfigFileName,
@@ -168,9 +168,10 @@ namespace UnityMiniGameFramework
         public UnityRESTFulClient RESTFulClient => _restfulClient;
 
         protected Queue<Action> _nextFramePostUpdateCall;
-
+        
         protected HashSet<Action> _updateCall;
-
+        
+        public UnityEngine.GameObject CachePoolRoot;
         public void regNextFramePostUpdateCall(Action a)
         {
             _nextFramePostUpdateCall.Enqueue(a);

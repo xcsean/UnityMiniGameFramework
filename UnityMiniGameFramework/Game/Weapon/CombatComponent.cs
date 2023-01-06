@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -18,33 +19,35 @@ namespace UnityMiniGameFramework
             // TO DO : init bar object from manager
 
             // for Debug ...
-            _barObject = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadUnityPrefabObject("actor/HealthBar");
-            _barObject = UnityEngine.GameObject.Instantiate(_barObject);
-
+            _barObject = UnityGameObjectPool.GetInstance().GetUnityPrefabObject("actor/HealthBar");
+            //_barObject = UnityEngine.GameObject.Instantiate(_barObject);
             // TO DO : set transform to hp bar root
             _barObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-
-
+            setHp(1);
         }
 
         public void Dispose()
         {
-            UnityEngine.GameObject.Destroy(_barObject);
+            //UnityEngine.GameObject.Destroy(_barObject);
+            UnityGameObjectPool.GetInstance().PutUnityPrefabObject("actor/HealthBar", _barObject);
         }
+        private static readonly int Fill = Shader.PropertyToID("_Fill");
 
         public void setHp(float per)
         {
             // TO DO : change shader to quad hp bar shader, set mat value, do batch reandering
             _barObject.transform.localScale = new UnityEngine.Vector3(per * 0.5f, _barObject.transform.localScale.y, _barObject.transform.localScale.z);
+            _barObject.GetComponent<Renderer>().material.SetFloat(Fill, per > 0.3f ? 1.0f : 0.5f);
         }
 
         public void show()
         {
-            _barObject.SetActive(true);
+            _barObject = UnityGameObjectPool.GetInstance().GetUnityPrefabObject("actor/HealthBar");
         }
         public void hide()
         {
-            _barObject.SetActive(false);
+            //_barObject.SetActive(false);
+            UnityGameObjectPool.GetInstance().PutUnityPrefabObject("actor/HealthBar", _barObject);
         }
     }
 

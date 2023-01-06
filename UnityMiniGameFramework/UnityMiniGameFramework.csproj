@@ -227,6 +227,7 @@
     <Compile Include="OS\Randomness.cs" />
     <Compile Include="OS\UnityProjFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\UnityGameObjectPool.cs" />
     <Compile Include="Resource\UnityResourceManager.cs" />
     <Compile Include="SDK\ISDK.cs" />
     <Compile Include="SDK\SDKManager.cs" />
