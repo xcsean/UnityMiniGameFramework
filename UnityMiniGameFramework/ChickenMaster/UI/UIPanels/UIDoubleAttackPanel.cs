@@ -61,6 +61,12 @@ namespace UnityMiniGameFramework
             var bi = cmGame.baseInfo.getData() as LocalBaseInfo;
             bi.buffs.doubleAtk = buffTime;
             cmGame.baseInfo.markDirty();
+
+            foreach (var npc in cmGame.cmNPCHeros)
+            {
+                npc.Value.combatComp.RecalcAttributes();
+            }
+            //cmGame.Self.combatComp.RecalcAttributes();
         }
 
         public void setBuffTime()
