@@ -63,6 +63,7 @@ namespace UnityMiniGameFramework
             _mapHeroObj.AddComponent(_combatComp);
             _initCombatConfig();
             _combatComp.hpBar.hide();
+            _combatComp.OnRecalcAttributes += _combatComp_OnRecalcAttributes;
 
             // add to scene
             unityHeroObj.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
@@ -75,6 +76,7 @@ namespace UnityMiniGameFramework
 
             _initAdditionalComponent();
         }
+
         protected virtual void _initAdditionalComponent()
         {
         }
@@ -202,5 +204,18 @@ namespace UnityMiniGameFramework
             }
         }
 
+        private void _combatComp_OnRecalcAttributes()
+        {
+            _recalcAttack();
+
+            var bufAttrs = _combatComp.bufAttrs.ToArray();
+
+            // calc attack
+            float extraAtkMul = 0;
+            _gun.onRecalcAttributes(bufAttrs, extraAtkMul);
+
+            // calc speed
+            _mapHeroObj.moveAct.onRecalcAttributes(bufAttrs);
+        }
     }
 }

@@ -323,7 +323,7 @@ namespace UnityMiniGameFramework
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
                 if (combComp != null)
                 {
-                    combComp.OnHitby(this);
+                    combComp.OnHitByWeapon(this);
                 }
             }
 
@@ -407,7 +407,7 @@ namespace UnityMiniGameFramework
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
                 if (combComp != null)
                 {
-                    combComp.OnHitby(this);
+                    combComp.OnHitByWeapon(this);
                 }
 
                 if(hitVfx != null)
@@ -571,7 +571,7 @@ namespace UnityMiniGameFramework
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
                 if (combComp != null)
                 {
-                    combComp.OnHitby(this);
+                    combComp.OnHitByWeapon(this);
                 }
 
 

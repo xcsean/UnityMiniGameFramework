@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiniGameFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,6 +51,22 @@ namespace UnityMiniGameFramework
         public void setLevel(int level)
         {
             _level = level;
+        }
+
+        public void CombatComp_OnRecalcAttributes()
+        {
+            var combatComp = getComponent("CombatComponent") as CombatComponent;
+
+            if(combatComp == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"MapMonsterObject [{_name}] without CombatComponent");
+                return;
+            }
+
+            var bufAttrs = combatComp.bufAttrs.ToArray();
+
+            // calc speed
+            _rigiMovAct.onRecalcAttributes(bufAttrs);
         }
     }
 }

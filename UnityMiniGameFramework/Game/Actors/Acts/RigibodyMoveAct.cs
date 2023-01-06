@@ -49,14 +49,34 @@ namespace UnityMiniGameFramework
         protected int _curPathTargetIndex;
         protected UnityEngine.Vector3? _curTargetPos;
 
+        protected MovingConf _conf;
+
         public void setMovingConf(MovingConf conf)
         {
-            TurnSpeed = conf.TurnSpeed;
-            TurnDecSpeed = conf.TurnDecSpeed;
-            AccSpeed = conf.AccSpeed;
-            DecSpeed = conf.DecSpeed;
-            MaxSpeed = conf.MaxSpeed;
-            MinSpeed = conf.MinSpeed;
+            _conf = conf;
+            TurnSpeed = _conf.TurnSpeed;
+            TurnDecSpeed = _conf.TurnDecSpeed;
+            AccSpeed = _conf.AccSpeed;
+            DecSpeed = _conf.DecSpeed;
+            MaxSpeed = _conf.MaxSpeed;
+            MinSpeed = _conf.MinSpeed;
+        }
+
+        public void onRecalcAttributes(ActBufAttrConfig[] bufAttrs)
+        {
+            float speedMul = 0;
+
+            foreach (var bufAttr in bufAttrs)
+            {
+                if (bufAttr.name == "MOV_SPEED")
+                {
+                    speedMul += bufAttr.mulValue;
+                }
+            }
+
+            AccSpeed = _conf.AccSpeed * (1 + speedMul);
+            MaxSpeed = _conf.MaxSpeed * (1 + speedMul);
+            MinSpeed = _conf.MinSpeed * (1 + speedMul);
         }
 
         public void moveToward(UnityEngine.Vector3 to)

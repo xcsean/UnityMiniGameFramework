@@ -45,6 +45,42 @@ namespace UnityMiniGameFramework
             _attackInfo.criticalHitPer += atkAdd.criticalHitPer;
         }
 
+        public void onRecalcAttributes(ActBufAttrConfig[] bufAttrs, float extraAtkMul = 0)
+        {
+            float attackAdd = 0;
+            float attackMul = extraAtkMul;
+            float missingRateAdd = 0;
+            float criticalHitRateAdd = 0;
+            float criticalHitPerAdd = 0;
+
+            foreach (var bufAttr in bufAttrs)
+            {
+                if (bufAttr.name == "ATK")
+                {
+                    attackAdd += bufAttr.addValue;
+                    attackMul += bufAttr.mulValue;
+                }
+                else if (bufAttr.name == "MISS")
+                {
+                    missingRateAdd += bufAttr.addValue;
+                }
+                else if (bufAttr.name == "CRIT_RATE")
+                {
+                    criticalHitRateAdd += bufAttr.addValue;
+                }
+                else if (bufAttr.name == "CRIT_PER")
+                {
+                    criticalHitPerAdd += bufAttr.addValue;
+                }
+            }
+
+            _attackInfo.attackMin = (int)(_attackInfo.attackMin * (1 + attackMul) + attackAdd);
+            _attackInfo.attackMax = (int)(_attackInfo.attackMax * (1 + attackMul) + attackAdd);
+            _attackInfo.missingRate = (int)(_attackInfo.missingRate + missingRateAdd);
+            _attackInfo.criticalHitRate = (int)(_attackInfo.criticalHitRate + criticalHitRateAdd);
+            _attackInfo.criticalHitPer = (int)(_attackInfo.criticalHitPer + criticalHitPerAdd);
+        }
+
         public void setHolder(ActorObject h)
         {
             _holder = h;

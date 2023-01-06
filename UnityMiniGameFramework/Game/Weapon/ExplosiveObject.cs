@@ -104,7 +104,7 @@ namespace UnityMiniGameFramework
                 var combComp = ugo.mgGameObject.getComponent("CombatComponent") as CombatComponent;
                 if (combComp != null)
                 {
-                    combComp.OnHitby(_gunObjFrom);
+                    combComp.OnHitByWeapon(_gunObjFrom);
                 }
 
                 var actor = ugo.mgGameObject as ActorObject;

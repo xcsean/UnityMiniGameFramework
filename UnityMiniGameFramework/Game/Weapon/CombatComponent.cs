@@ -62,16 +62,20 @@ namespace UnityMiniGameFramework
 
         protected bool _isDie;
 
+        protected HashSet<ActBufAttrConfig> _bufAttrs;
+        public HashSet<ActBufAttrConfig> bufAttrs => _bufAttrs;
+
+        protected CombatConf _ccConf;
+
         public override void Init(object config)
         {
             base.Init(config);
 
-            var ccConf = config as CombatConf;
+            _ccConf = config as CombatConf;
 
-            // TO DO : calculate level
-            _HP = ccConf.hpMax;
-            _maxHP = ccConf.hpMax;
-            _Def = ccConf.def;
+            _HP = _ccConf.hpMax;
+            _maxHP = _ccConf.hpMax;
+            _Def = _ccConf.def;
 
             // for Debug ...
             // init hp bar
@@ -82,6 +86,7 @@ namespace UnityMiniGameFramework
             _isDie = false;
             // TO DO : init hp bar from config
 
+            _bufAttrs = new HashSet<ActBufAttrConfig>();
         }
 
         public override void Dispose()
@@ -106,40 +111,50 @@ namespace UnityMiniGameFramework
                 mgGameObject.unityGameObject.transform.position.z);
         }
 
-        virtual public void OnHitby(WeaponObject weapon)
+        virtual public void OnHitByWeapon(WeaponObject weapon)
         {
-            if(_isDie)
+            if (_isDie)
             {
                 return;
             }
 
             // check missing
             var missed = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
-            if(missed < weapon.attackInfo.missingRate * 10000)
+            if (missed < weapon.attackInfo.missingRate * 10000)
             {
                 // missed
-                _onHitMissed(weapon);
+                _onHitMissed(weapon.holder);
                 return;
             }
 
             // rand dmg
             int dmg = UnityGameApp.Inst.Rand.RandomBetween(weapon.attackInfo.attackMin, weapon.attackInfo.attackMax);
 
-            dmg = dmg - _Def;
-
             bool critical = false;
             var criticalHit = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
-            if(criticalHit < weapon.attackInfo.criticalHitRate * 10000)
+            if (criticalHit < weapon.attackInfo.criticalHitRate * 10000)
             {
                 // critical
                 dmg = (int)(dmg * weapon.attackInfo.criticalHitPer);
                 critical = true;
             }
 
-            _onDamage(weapon, dmg, critical);
+            OnDamageBy(weapon.holder, dmg, critical);
+        }
+
+        virtual public void OnDamageBy(ActorObject actor, int dmg, bool critical = false)
+        {
+            if (_isDie)
+            {
+                return;
+            }
+
+            dmg = dmg - _Def;
+
+            _onDamage(actor, dmg, critical);
 
             _HP -= dmg;
-            if(_HP < 0)
+            if (_HP < 0)
             {
                 _HP = 0;
             }
@@ -150,7 +165,7 @@ namespace UnityMiniGameFramework
             {
                 _isDie = true;
 
-                _onDie(weapon);
+                _onDie(actor);
 
                 if (OnDie != null)
                 {
@@ -159,17 +174,33 @@ namespace UnityMiniGameFramework
             }
         }
 
-        virtual protected void _onHitMissed(WeaponObject weapon)
+        public virtual void AddBufAttr(ActBufAttrConfig attr)
+        {
+            _bufAttrs.Add(attr);
+        }
+
+        public virtual void RemoveBufAttr(ActBufAttrConfig attr)
+        {
+            _bufAttrs.Remove(attr);
+        }
+
+        public virtual void RecalcAttributes()
         {
 
         }
-        virtual protected void _onDamage(WeaponObject weapon, int dmg, bool critical)
+
+        virtual protected void _onHitMissed(ActorObject actor)
         {
 
         }
-        virtual protected void _onDie(WeaponObject weapon)
+        virtual protected void _onDamage(ActorObject actor, int dmg, bool critical)
         {
 
         }
+        virtual protected void _onDie(ActorObject actor)
+        {
+
+        }
+
     }
 }

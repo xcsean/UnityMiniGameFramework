@@ -12,7 +12,7 @@ namespace UnityMiniGameFramework
     public class ActBufDotConfig
     {
         public float time { get; set; }
-        public float damage { get; set; }
+        public int damage { get; set; }
     }
 
     public class ActBufAttrConfig

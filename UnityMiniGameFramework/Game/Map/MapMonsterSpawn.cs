@@ -171,6 +171,7 @@ namespace UnityMiniGameFramework
             mapMonsterObj.AddComponent(combatComp);
             combatComp.Init(combatConf);
             combatComp.OnDie = MapMonsterObj_OnDie;
+            combatComp.OnRecalcAttributes += mapMonsterObj.CombatComp_OnRecalcAttributes;
 
             var aiControlComp = new AIActorControllerComp();
             mapMonsterObj.AddComponent(aiControlComp);
@@ -187,6 +188,7 @@ namespace UnityMiniGameFramework
 
             ++_totalSpawned;
         }
+
 
         private void MapMonsterObj_OnDie(ActorObject mon)
         {
