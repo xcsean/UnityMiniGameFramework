@@ -21,7 +21,6 @@ namespace UnityMiniGameFramework
         public Label level;
         public Label capacity;
         public Label storage;
-        public Label deposited;
 
 
         protected Label _UpgradePrice;
@@ -43,7 +42,6 @@ namespace UnityMiniGameFramework
             level = this._uiObjects["Level"].unityVisualElement as Label;
             storage = this._uiObjects["Storage"].unityVisualElement as Label;
             capacity = this._uiObjects["Capacity"].unityVisualElement as Label;
-            deposited = this._uiObjects["Deposited"].unityVisualElement as Label;
             _UpgradePrice = this._uiObjects["upgradePrice"].unityVisualElement as Label;
 
             _UpgradeBtn = this._uiObjects["UpgradeBtn"].unityVisualElement as Button;
@@ -77,7 +75,6 @@ namespace UnityMiniGameFramework
             storage.text = $"{_storeHouse.currentLevelConf.MaxstoreCount}";
             capacity.text = $"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[_storeHouse.storeHouseInfo.level]}";
             _UpgradePrice.text = $"{_storeHouse.currentLevelConf.upgradeGoldCost}";
-            deposited.text = $"{_storeHouse.storeHouseInfo.storeCount}";
 
             isMaxLevel = _storeHouse.storeHouseInfo.level >= _storeHouse.storeHouseConf.levelConfs.Count;
             _UpgradeBtn.text = isMaxLevel ? "OK" : "UPGRADE";
