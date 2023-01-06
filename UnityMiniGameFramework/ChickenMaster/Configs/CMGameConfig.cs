@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -188,6 +188,8 @@ namespace UnityMiniGameFramework
 
     public class CMDefenseLevelConf
     {
+        public int levelDivide { get; set; }
+        public int level { get; set; }
         public int levelRangeMin { get; set; }
         public int levelRangeMax { get; set; }
 
