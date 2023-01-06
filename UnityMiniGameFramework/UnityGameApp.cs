@@ -172,6 +172,9 @@ namespace UnityMiniGameFramework
         protected HashSet<Action> _updateCall;
         
         public UnityEngine.GameObject CachePoolRoot;
+
+        protected float _panelScale;
+
         public void regNextFramePostUpdateCall(Action a)
         {
             _nextFramePostUpdateCall.Enqueue(a);
@@ -207,6 +210,8 @@ namespace UnityMiniGameFramework
             _rand = new Randomness();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"OS implement initialized.");
+
+            _panelScale = _GetPanelScale(unityUIPanelSettings);
 
             base.Init(par);
 
@@ -430,7 +435,61 @@ namespace UnityMiniGameFramework
 
         public UnityEngine.Vector2 ScreenToUIPos(UnityEngine.Vector2 screenPos)
         {
-            return new Vector2(screenPos.x * unityUIPanelSettings.referenceResolution.x / Screen.width, screenPos.y * unityUIPanelSettings.referenceResolution.y / Screen.height);
+            //if (unityUIPanelSettings.scaleMode == PanelScaleMode.ScaleWithScreenSize)
+            //{
+            //    if(unityUIPanelSettings.screenMatchMode == PanelScreenMatchMode.MatchWidthOrHeight)
+            //    {
+            //        return new Vector2(unityUIPanelSettings.scale * screenPos.x * unityUIPanelSettings.referenceResolution.x / Screen.width, unityUIPanelSettings.scale * screenPos.y * unityUIPanelSettings.referenceResolution.y / Screen.height);
+            //    }
+            //}
+
+            //return new Vector2(screenPos.x * unityUIPanelSettings.referenceResolution.x / Screen.width, screenPos.y * unityUIPanelSettings.referenceResolution.y / Screen.height);
+
+            return screenPos * _panelScale;
+        }
+
+        static protected float _GetPanelScale(PanelSettings settings)
+        {
+            // Calculate scaling
+            float resolvedScale = 1.0f;
+            switch (settings.scaleMode)
+            {
+                case PanelScaleMode.ConstantPixelSize:
+                    break;
+                case PanelScaleMode.ConstantPhysicalSize:
+                    {
+                        var dpi = Screen.dpi == 0.0f ? settings.fallbackDpi : Screen.dpi;
+                        if (dpi != 0.0f)
+                            resolvedScale = settings.referenceDpi / dpi;
+                    }
+                    break;
+                case PanelScaleMode.ScaleWithScreenSize:
+                    if (settings.referenceResolution.x * settings.referenceResolution.y != 0)
+                    {
+                        var refSize = (Vector2)settings.referenceResolution;
+                        var sizeRatio = new Vector2(Screen.width / refSize.x, Screen.height / refSize.y);
+
+                        var denominator = 0.0f;
+                        switch (settings.screenMatchMode)
+                        {
+                            case PanelScreenMatchMode.Expand:
+                                denominator = Mathf.Min(sizeRatio.x, sizeRatio.y);
+                                break;
+                            case PanelScreenMatchMode.Shrink:
+                                denominator = Mathf.Max(sizeRatio.x, sizeRatio.y);
+                                break;
+                            default: // PanelScreenMatchMode.MatchWidthOrHeight:
+                                var widthHeightRatio = Mathf.Clamp01(settings.match);
+                                denominator = Mathf.Lerp(sizeRatio.x, sizeRatio.y, widthHeightRatio);
+                                break;
+                        }
+                        if (denominator != 0.0f)
+                            resolvedScale = 1.0f / denominator;
+                    }
+                    break;
+            }
+
+            return settings.scale > 0.0f ? resolvedScale / settings.scale : 0.0f;
         }
     }
 }
