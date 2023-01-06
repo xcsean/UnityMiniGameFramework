@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -45,6 +47,7 @@ namespace UnityMiniGameFramework
         public UnityEngine.GameObject trainStopPos => _trainStopPos;
         protected UnityEngine.GameObject _trainMoveoutPos;
         public UnityEngine.GameObject trainMoveoutPos => _trainMoveoutPos;
+        private UnityEngine.GameObject _productBoxGo;
 
         public CMTrainStation()
         {
@@ -174,25 +177,6 @@ namespace UnityMiniGameFramework
 
                 var inputProd = prods[i];
 
-                LocalPackProductInfo storeProd = null;
-                for (int j = 0; j < _trainStationInfo.storeProducts.Count; ++j)
-                {
-                    if (_trainStationInfo.storeProducts[j].productName == inputProd.productName)
-                    {
-                        storeProd = _trainStationInfo.storeProducts[j];
-                    }
-                }
-
-                if (storeProd == null)
-                {
-                    storeProd = new LocalPackProductInfo()
-                    {
-                        productName = inputProd.productName,
-                        count = 0
-                    };
-                    _trainStationInfo.storeProducts.Add(storeProd);
-                }
-
                 int inputValue = inputProd.count;
                 if (inputValue > spaceLeft)
                 {
@@ -205,7 +189,8 @@ namespace UnityMiniGameFramework
                     --i;
                 }
 
-                storeProd.count += inputValue;
+                _trainStationInfo.storeProducts.Add(inputProd);
+                
                 _currTotalStoreCount += inputValue;
 
                 changed = true;
@@ -220,15 +205,59 @@ namespace UnityMiniGameFramework
                 {
                     _uiTrainStation.refreshInfo();
                 }
-                updateProductBox();
+                UpdateProductBox();
             }
 
             return prods;
         }
 
-        private void updateProductBox()
+        private void UpdateProductBox()
         {
+            var storeTransform = _storePosition.spawnObject.transform;
+            int boxNum = _trainStationInfo.storeProducts.Count;
+            int childCount = storeTransform.childCount;
+            if(boxNum == childCount)
+                return;
+            if (!_productBoxGo)
+                _productBoxGo = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject("box/OutputStoreProduct");
+            for (int i = childCount - 1; i >= boxNum; i--)
+            {
+                var box = storeTransform.GetChild(i).gameObject;
+                UnityEngine.GameObject.Destroy(box);
+            }
+
+            childCount = storeTransform.childCount;
+            for (int i = childCount; i < boxNum; i++)
+            {
+                var obj = UnityEngine.GameObject.Instantiate(_productBoxGo);
+                obj.transform.SetParent(storeTransform);
+            }
+
+            var boxCollider = _storePosition.spawnObject.GetComponent<BoxCollider>();
+            if (!boxCollider)
+                return;
+            Vector3 size = boxCollider.size;
+            float boxLenght = 0.32f;
+            float length = size.x;
+            float width = size.z;
+            int colConst = (int) Math.Floor(length / boxLenght);
+            int rowConst = (int) Math.Floor(width / boxLenght);
+            int layerCount = rowConst * colConst;
+            Vector3 initPos = new Vector3(boxLenght * (colConst / 2), 0, boxLenght * (rowConst / 2));
             
+            for (int i = 0; i < storeTransform.childCount; i++)
+            {
+                int height = i / layerCount;
+                int index = i % layerCount;
+                int row = index % rowConst;
+                int col = index / colConst;
+                Vector3 pos = Vector3.zero;
+                pos.x = initPos.x - boxLenght * row;
+                pos.y = initPos.y + boxLenght * height;
+                pos.z = initPos.z - boxLenght * col;
+                var childTf = storeTransform.GetChild(i);
+                childTf.localPosition = pos;
+            }
         }
         
         public void TrySellTrainStaionProducts()
@@ -275,7 +304,7 @@ namespace UnityMiniGameFramework
                 if (goldAdd > 0)
                 {
                     cmGame.Self.AddGold(goldAdd);
-                    updateProductBox();
+                    UpdateProductBox();
                 }
 
                 cmGame.baseInfo.markDirty();

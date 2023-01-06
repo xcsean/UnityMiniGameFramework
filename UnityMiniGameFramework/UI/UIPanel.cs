@@ -98,6 +98,8 @@ namespace UnityMiniGameFramework
             //_unityUIDocument.rootVisualElement.style.visibility = Visibility.Hidden;
             //_unityUIDocument.rootVisualElement.visible = false;
             _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.removeUI(this);
         }
 
         virtual public void showUI()
@@ -107,10 +109,17 @@ namespace UnityMiniGameFramework
             //_unityUIDocument.rootVisualElement.style.visibility = Visibility.Visible;
             //_unityUIDocument.rootVisualElement.visible = true;
             _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.addUI(this);
         }
         public void setPoisition(int x, int y)
         {
             _unityUIDocument.rootVisualElement.transform.position = new UnityEngine.Vector2(x, y);
+        }
+
+        virtual public void display(bool b)
+        {
+            _unityUIDocument.rootVisualElement.style.display = b ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

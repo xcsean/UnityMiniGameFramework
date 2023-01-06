@@ -65,12 +65,16 @@ namespace UnityMiniGameFramework
                     {
                         var grid = layoutGrid.Q<VisualElement>($"grid{index}");
                         grid.Q<Label>("count").text = $"x{rewardConf.gold}";
-                        grid.Q<Label>("have").text = $"OWNED: {bi.gold}";
+                        grid.Q<Label>("have").text = $"OWNED: {StringUtil.StringNumFormat(bi.gold.ToString())}";
                         grid.Q<Label>("name").text = "GOLD";
                         grid.Q<VisualElement>("weapon").visible = false;
                         grid.Q<Label>("have").visible = true;
-                        var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_jinbi");
+                        var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/common/icon_jinbi");
                         grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
+                        grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
+                        grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
+                        grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
+                        grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
                         grid.visible = true;
                         index++;
                     }
@@ -87,6 +91,7 @@ namespace UnityMiniGameFramework
                     //    index++;
                     //}
 
+                    var gunConf = _gameConf.gameConfs.gunConfs;
                     for (var i = 0; i < rewardConf.items.Count; i++)
                     {
                         if(index < 6)
@@ -96,8 +101,19 @@ namespace UnityMiniGameFramework
                             grid.Q<Label>("name").text = $"{rewardConf.items[i].itemName}";
                             grid.Q<VisualElement>("weapon").visible = true;
                             grid.Q<Label>("have").visible = false;
-                            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_jinbi");
-                            grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
+                            grid.Q<VisualElement>("RewardIcon").style.backgroundImage = null;
+                            foreach (var gun in gunConf)
+                            {
+                                if(gun.Value.upgradeItemName == rewardConf.items[i].itemName)
+                                {
+                                    var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"Weapon_Icon/wuqi_0{gun.Value.id}");
+                                    grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
+                                    grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
+                                    grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
+                                    grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
+                                    grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
+                                }
+                            }
                             grid.visible = true;
                             index++;
                         }
@@ -143,6 +159,8 @@ namespace UnityMiniGameFramework
                 grid.Q<Label>("have").visible = false;
             }
             base.hideUI();
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.reshowAllUI();
         }
     }
 }
