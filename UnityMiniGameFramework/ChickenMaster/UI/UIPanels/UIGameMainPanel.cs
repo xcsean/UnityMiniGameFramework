@@ -27,9 +27,8 @@ namespace UnityMiniGameFramework
             return new UIGameMainPanel();
         }
 
-        protected VisualElement _joystickArea;
-        protected UIJoyStickControl _joystick;
-        public UIJoyStickControl Joystick => _joystick;
+        protected UIJoyStickPanel _joystick;
+        public UIJoyStickPanel Joystick => _joystick;
 
         protected Label _meatNum;
         public Label meatNum => _meatNum;
@@ -75,7 +74,11 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
-            _joystick = this._uiObjects["JoyStick"] as UIJoyStickControl;
+            // 摇杆单独拆为一个界面
+            _joystick = UnityGameApp.Inst.UI.createUIPanel("JoyStickUI") as UIJoyStickPanel;
+            _joystick.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            //_joystick = this._uiObjects["JoyStick"] as UIJoyStickControl;
+
             _meatNum = this._uiObjects["MeatNum"].unityVisualElement as Label;
             _goldNum = this._uiObjects["GoldNum"].unityVisualElement as Label;
             _level = this._uiObjects["Level"].unityVisualElement as Label;

@@ -129,6 +129,7 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UIGameMainPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIGetSkillPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIHeroPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIJoyStickPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UILevelEntryPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIControls\UILevelStateControl.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIFlagMainPanel.cs" />
