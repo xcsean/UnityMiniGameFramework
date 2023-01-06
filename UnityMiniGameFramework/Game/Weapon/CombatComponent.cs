@@ -13,7 +13,8 @@ namespace UnityMiniGameFramework
     {
         UnityEngine.GameObject _barObject;
         public UnityEngine.GameObject barObject => _barObject;
-
+        private List<Vector2> m_meshUVs = new List<Vector2>(4);
+        private MeshFilter _meshFilter;
         public void Init()
         {
             // TO DO : init bar object from manager
@@ -23,6 +24,8 @@ namespace UnityMiniGameFramework
             //_barObject = UnityEngine.GameObject.Instantiate(_barObject);
             // TO DO : set transform to hp bar root
             _barObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+            _meshFilter = _barObject.GetComponent<MeshFilter>();
+            _meshFilter.mesh.GetUVs(0, m_meshUVs);
             setHp(1);
         }
 
@@ -36,8 +39,24 @@ namespace UnityMiniGameFramework
         public void setHp(float per)
         {
             // TO DO : change shader to quad hp bar shader, set mat value, do batch reandering
-            _barObject.transform.localScale = new UnityEngine.Vector3(per * 0.5f, _barObject.transform.localScale.y, _barObject.transform.localScale.z);
-            _barObject.GetComponent<Renderer>().material.SetFloat(Fill, per > 0.3f ? 1.0f : 0.5f);
+            //_barObject.transform.localScale = new UnityEngine.Vector3(per * 0.5f, _barObject.transform.localScale.y, _barObject.transform.localScale.z);
+            //_barObject.GetComponent<Renderer>().material.SetFloat(Fill, per > 0.3f ? 1.0f : 0.5f);
+            
+            if (per > 0.5f)
+            {
+                m_meshUVs[0] = new Vector2(0, 0);
+                m_meshUVs[1] = new Vector2(1 + 0.5f - per, 0);
+                m_meshUVs[2] = new Vector2(0, 1);
+                m_meshUVs[3] = new Vector2(1 + 0.5f - per, 1);
+            }
+            else
+            {
+                m_meshUVs[0] = new Vector2(0.5f - per, 0);
+                m_meshUVs[1] = new Vector2(1, 0);
+                m_meshUVs[2] = new Vector2(0.5f - per, 1);
+                m_meshUVs[3] = new Vector2(1, 1);
+            }
+            _meshFilter.mesh.SetUVs(0, m_meshUVs);
         }
 
         public void show()

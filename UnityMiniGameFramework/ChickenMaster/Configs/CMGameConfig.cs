@@ -264,6 +264,23 @@ namespace UnityMiniGameFramework
         public int maxBuff { get; set; }
     }
 
+    public class CMSkillLevelConf
+    {
+        public int buff { get; set; }
+        public int upgradeGold { get; set; }
+    }
+
+
+    public class CMSkillConf
+    {
+        public int id { get; set; }
+        public string title { get; set; }
+        public string icon { get; set; }
+        public string desc { get; set; }
+        public string type { get; set; }
+        public Dictionary<int, CMSkillLevelConf> levelsConf { get; set; }
+    }
+
     public class CMGameConf
     {
         public string levelCenterObjectName { get; set; }
@@ -299,6 +316,8 @@ namespace UnityMiniGameFramework
         public Dictionary<int, CMOfflineAwardConf> offlineAwardsByUserLevel { get; set; }
 
         public CMBuffsConf buffsConf { get; set; }
+
+        public Dictionary<int, CMSkillConf> skillsConf { get; set; }
     }
 
     public class CMGameConfig : JsonConfig

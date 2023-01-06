@@ -210,6 +210,7 @@ namespace UnityMiniGameFramework
             if (
                 ui.type == "UIStorehouseCapacityPanel"
                 || ui.type == "UIProduceProgressPanel"
+                || ui.type == "UIOpeningCartoonPanel"
                 )
             {
                 return;

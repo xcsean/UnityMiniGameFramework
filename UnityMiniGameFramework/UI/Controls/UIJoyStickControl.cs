@@ -17,6 +17,8 @@ namespace UnityMiniGameFramework
 
         protected VisualElement _btn;
         protected VisualElement _back;
+        protected VisualElement _content;
+        protected VisualElement _clickArea;
 
         protected bool _click;
         protected bool _moving;
@@ -42,6 +44,8 @@ namespace UnityMiniGameFramework
 
             _btn = this._subControls["button"].unityVisualElement;
             _back = this._subControls["back"].unityVisualElement;
+            _content = this._subControls["Content"].unityVisualElement;
+            _clickArea = this._subControls["ClickArea"].unityVisualElement;
 
             _btn.style.visibility = Visibility.Hidden;
             _back.style.visibility = Visibility.Hidden;
@@ -55,10 +59,10 @@ namespace UnityMiniGameFramework
             _panelInitPos = new UnityEngine.Vector2(_back.transform.position.x, _back.transform.position.y);
             _panelWidth = _back.layout.width / 2;
 
-            _unityVE.RegisterCallback<MouseDownEvent>(OnMouseDown);
-            _unityVE.RegisterCallback<MouseMoveEvent>(OnMouseMove);
-            _unityVE.RegisterCallback<MouseUpEvent>(OnMouseUp);
-
+            _clickArea.RegisterCallback<MouseDownEvent>(OnMouseDown);
+            _clickArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
+            _clickArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            _clickArea.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
         }
 
         protected UnityEngine.Vector2 _transMousePosition(VisualElement ve, UnityEngine.Vector2 mousePos)
@@ -77,20 +81,41 @@ namespace UnityMiniGameFramework
             return newPosition;
         }
 
+        private void SetClickArea(bool isFill)
+        {
+            if (isFill)
+            {
+                _clickArea.style.width = new StyleLength(Length.Percent(100));
+                _clickArea.style.height = new StyleLength(Length.Percent(100));
+                _clickArea.style.left = new StyleLength(Length.Percent(0));
+                _clickArea.style.bottom = new StyleLength(0f);
+            }
+            else
+            {
+                // 参数参考Content节点
+                _clickArea.style.width = new StyleLength(Length.Percent(76));
+                _clickArea.style.height = new StyleLength(Length.Percent(50));
+                _clickArea.style.left = new StyleLength(Length.Percent(12));
+                _clickArea.style.bottom = new StyleLength(80f);
+            }
+        }
+
         public void OnMouseDown(MouseDownEvent e)
         {
             _btn.style.visibility = Visibility.Visible;
             _back.style.visibility = Visibility.Visible;
 
-            _unityVE.transform.position = _transMousePosition(_unityVE, e.mousePosition);
+            _content.transform.position = _transMousePosition(_content, e.mousePosition);
             _btn.transform.position = _btnInitPos;
+
+            SetClickArea(true);
 
             this._click = true;
             this._moving = false;
 
             _btn.style.unityBackgroundImageTintColor = new StyleColor(new UnityEngine.Color(1, 1, 1, 1));
 
-            _unityVE.CaptureMouse();
+            _clickArea.CaptureMouse();
         }
         public void OnMouseMove(MouseMoveEvent e)
         {
@@ -123,10 +148,18 @@ namespace UnityMiniGameFramework
 
             _movVec = new UnityEngine.Vector3(-_btn.transform.position.x, 0, _btn.transform.position.y);
         }
+
+        public void OnMouseLeave(MouseLeaveEvent e)
+        {
+            //OnMouseUp(null);
+        }
+
         public void OnMouseUp(MouseUpEvent e)
         {
-            _unityVE.transform.position = _panelInitPos;
+            _content.transform.position = _panelInitPos;
             _btn.transform.position = _btnInitPos;
+
+            SetClickArea(false);
 
             this._click = false;
             this._moving = false;
@@ -136,7 +169,7 @@ namespace UnityMiniGameFramework
             _btn.style.visibility = Visibility.Hidden;
             _back.style.visibility = Visibility.Hidden;
 
-            _unityVE.ReleaseMouse();
+            _clickArea.ReleaseMouse();
         }
 
     }
