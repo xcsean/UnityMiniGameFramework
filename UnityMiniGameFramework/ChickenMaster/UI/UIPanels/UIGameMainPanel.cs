@@ -77,6 +77,7 @@ namespace UnityMiniGameFramework
             // 摇杆单独拆为一个界面
             _joystick = UnityGameApp.Inst.UI.createUIPanel("JoyStickUI") as UIJoyStickPanel;
             _joystick.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _joystick.showUI();
             //_joystick = this._uiObjects["JoyStick"] as UIJoyStickControl;
 
             _meatNum = this._uiObjects["MeatNum"].unityVisualElement as Label;

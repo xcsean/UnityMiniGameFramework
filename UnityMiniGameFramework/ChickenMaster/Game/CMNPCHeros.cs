@@ -11,6 +11,8 @@ namespace UnityMiniGameFramework
     {
         protected CMHeroConf _conf;
         protected AIGunFireTarget _fireTargetAI;
+        // 选中拖动
+        public bool isPicked;
 
         public void Init(LocalHeroInfo heroInfo)
         {

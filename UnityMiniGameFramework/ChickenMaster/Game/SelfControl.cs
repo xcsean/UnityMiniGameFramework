@@ -360,6 +360,11 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
+                    if (heroPair.Value.isPicked)
+                    {
+                        continue;
+                    }
+
                     // near by
                     int nearState = 0;
                     _heroNearState.TryGetValue(heroPair.Key, out nearState);
