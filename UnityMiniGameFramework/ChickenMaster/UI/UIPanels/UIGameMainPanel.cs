@@ -187,11 +187,13 @@ namespace UnityMiniGameFramework
             int maxLevel = cmGame.gameConf.maxDefenseLevelCount;
             int firstNum = Math.Max(0, currentLevel - 1);
             int bossLevel = 10000;
+            string bossIcon = "Mob_boss_003";
             foreach (var lvlConf in cmGame.gameConf.gameConfs.defenseLevels)
             {
-                if (lvlConf.levelRangeMin == lvlConf.levelRangeMax)
+                if (lvlConf.levelRangeMin == lvlConf.levelRangeMax && currentLevel <= lvlConf.levelRangeMin)
                 {
                     bossLevel = lvlConf.levelRangeMin;
+                    bossIcon = lvlConf.bossHead;
                 }
             }
             for (int i = 0; i < 3; i++)
@@ -222,6 +224,12 @@ namespace UnityMiniGameFramework
             {
                 labBoss.text = $"{bossLevel - currentLevel} level";
             }
+            VisualElement sprBoss = _bossInfo.Q<VisualElement>("bossHead");
+            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/boss/{bossIcon}");
+            sprBoss.style.backgroundImage = tx;
+            sprBoss.style.width = tx.width;
+            sprBoss.style.height = tx.height;
+            sprBoss.style.left = 48 - tx.width / 2;
         }
         public void refreshLevelInfo(CMShootingLevel lvl)
         {

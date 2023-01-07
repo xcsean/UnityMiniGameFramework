@@ -39,6 +39,7 @@ namespace UnityMiniGameFramework
     public class CMHeroConf
     {
         public string mapHeroName { get; set; }
+        public string halfHead { get; set; }
         public int userLevelRequire { get; set; }
         public int initGunId { get; set; }
         public int initGunLevel { get; set; }
@@ -196,6 +197,7 @@ namespace UnityMiniGameFramework
         public Dictionary<string, CMDefenseLevelMonsterLvRange> monsterLvRanges { get; set; }
 
         public string mapLevelName { get; set; }
+        public string bossHead { get; set; }
         public Dictionary<string, int> passReward { get; set; }
     }
 

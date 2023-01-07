@@ -25,6 +25,20 @@ namespace UnityMiniGameFramework
             _closeBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
             _closeBtn.clicked += onClickClose;
             content = this._uiObjects["unity-content-container"].unityVisualElement;
+            for (int index = 1; index < content.childCount + 1; index++)
+            {
+                var grid = content.Q<VisualElement>($"grid{index}");
+                switch (index)
+                {
+                    case 1:
+                        grid.Q<Button>("ChooseButton").clicked += onChose1;
+                        break;
+                    case 2:
+                        grid.Q<Button>("ChooseButton").clicked += onChose2;
+                        break;
+                }
+                grid.visible = false;
+            }
         }
 
         public override void showUI()
@@ -47,7 +61,7 @@ namespace UnityMiniGameFramework
                 var grid = content.Q<VisualElement>($"grid{index}");
                 grid.visible = false;
             }
-
+            
             for (int index = 1; index <= cmGame.gameConf.gameConfs.skillsConf.Count; index++)
             {
                 CMSkillConf cfg = cmGame.gameConf.gameConfs.skillsConf[index];
@@ -61,21 +75,24 @@ namespace UnityMiniGameFramework
                 grid.Q<Label>("nextBuff").text = $"{cfg.levelsConf[nextLv].buff}";
                 grid.Q<Label>("price").text = $"{StringUtil.StringNumFormat(cfg.levelsConf[skillLv].upgradeGold.ToString())}";
                 grid.Q<VisualElement>("armed").visible = false;
-                //grid.Q<Button>("ChooseButton").clicked += onClickChoose;
-                //var func = new Func<int, int>(funct);
                 grid.visible = true;
             }
         }
 
         private List<Func<int>> funcList = new List<Func<int>>();
-        private void onClickChoose()
+        private void onClickChoose(int id)
         {
 
         }
 
-        private int funct(int a)
+        private void onChose1()
         {
-            return 1;
+            onClickChoose(1);
+        }
+
+        private void onChose2()
+        {
+            onClickChoose(2);
         }
 
     }
