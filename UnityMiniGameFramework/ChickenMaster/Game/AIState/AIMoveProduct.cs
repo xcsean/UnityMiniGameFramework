@@ -46,7 +46,7 @@ namespace UnityMiniGameFramework
         public override void Init(MapConfAIState conf)
         {
             base.Init(conf);
-
+            _movAct.setMoveType(true);
             _setTargetName(conf.targetName);
         }
 
@@ -227,7 +227,7 @@ namespace UnityMiniGameFramework
                 else
                 {
                     _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
-                    _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.TrainStation.putPosition.randSpawnPos() }, 0.1f);
+                    _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.TrainStation.putPosition.randSpawnPos() }, 0.5f);
                     _onUpdateWorker = _updateTrainStationMovingToPut;
                 }
 
@@ -259,7 +259,7 @@ namespace UnityMiniGameFramework
                 // go to fetching position
 
                 _movAct.setMovingAni(ActAnis.RunAni);
-                _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.outputFetchPosition.randSpawnPos() }, 0.1f);
+                _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.outputFetchPosition.randSpawnPos() }, 0.5f);
                 _onUpdateWorker = _updateTrainStationMovingToFetching;
             }
 
@@ -325,7 +325,7 @@ namespace UnityMiniGameFramework
 
                 var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
                 _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
-                _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.TrainStation.putPosition.randSpawnPos() }, 0.1f);
+                _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.TrainStation.putPosition.randSpawnPos() }, 0.5f);
                 _onUpdateWorker = _updateTrainStationMovingToPut;
             }
         }
@@ -418,7 +418,7 @@ namespace UnityMiniGameFramework
                     // go to fetching position
 
                     _movAct.setMovingAni(ActAnis.RunAni);
-                    _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.StoreHouse.fetchPosition.randSpawnPos() }, 0.1f);
+                    _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.StoreHouse.fetchPosition.randSpawnPos() }, 0.5f);
                     _onUpdateWorker = _updateStoreHouseMovingToFetching;
                 }
 
@@ -503,7 +503,7 @@ namespace UnityMiniGameFramework
                 else
                 {
                     _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
-                    _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.inputPutPosition.randSpawnPos() }, 0.1f);
+                    _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.inputPutPosition.randSpawnPos() }, 0.5f);
                 }
             }
 
