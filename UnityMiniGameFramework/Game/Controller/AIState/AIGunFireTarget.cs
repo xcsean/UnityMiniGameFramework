@@ -118,7 +118,7 @@ namespace UnityMiniGameFramework
                     _actor.animatorComponent.playAnimation(ActAnis.FireAni);
                 }
 
-                _gunObj.Fire();
+                _gunObj.Fire(_currentTargetMon);
                 _actor.unityGameObject.transform.forward = (_currentTargetMon.unityGameObject.transform.position - _actor.unityGameObject.transform.position).normalized;
             }
             else

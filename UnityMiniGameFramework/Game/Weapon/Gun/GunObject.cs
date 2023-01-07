@@ -50,6 +50,7 @@ namespace UnityMiniGameFramework
 
     public class GunObject : WeaponObject
     {
+
         override public string type => "GunObject";
         new public static GunObject create()
         {
@@ -69,7 +70,7 @@ namespace UnityMiniGameFramework
         protected float _currCD;
 
         protected float _projectFlySpeed;
-        protected HashSet<VFXObjectBase> _currentProjectiles;
+        protected Dictionary<VFXObjectBase, UnityEngine.GameObject> _currentProjectiles;
 
         protected VFXObjectBase _throwEmmiter;
         protected Dictionary<UnityEngine.GameObject, float> _emmiterHitObjectsTime;
@@ -80,6 +81,8 @@ namespace UnityMiniGameFramework
         protected UnityEngine.Ray _currentRay;
         protected UnityEngine.RaycastHit _currentHitPoint;
 
+        protected ActorObject _currentTarget;
+
         protected float _hitForce;
 
         protected float _attackRange;
@@ -89,7 +92,7 @@ namespace UnityMiniGameFramework
 
         public GunObject()
         {
-            _currentProjectiles = new HashSet<VFXObjectBase>();
+            _currentProjectiles = new Dictionary<VFXObjectBase, UnityEngine.GameObject>();
             _currentRay = new UnityEngine.Ray();
             _currentHitPoint = new UnityEngine.RaycastHit();
         }
@@ -150,9 +153,11 @@ namespace UnityMiniGameFramework
 
         }
 
-        virtual public void Fire()
+        virtual public void Fire(ActorObject target)
         {
-            if(_isOpenFire)
+            _currentTarget = target;
+
+            if (_isOpenFire)
             {
                 return;
             }
@@ -183,7 +188,9 @@ namespace UnityMiniGameFramework
 
         virtual public void StopFire()
         {
-            if(!_isOpenFire)
+            _currentTarget = null;
+
+            if (!_isOpenFire)
             {
                 return;
             }
@@ -219,9 +226,9 @@ namespace UnityMiniGameFramework
             // clear projectiles
             if(_currentProjectiles != null)
             {
-                foreach(var proj in _currentProjectiles)
+                foreach(var pair in _currentProjectiles)
                 {
-                    UnityGameApp.Inst.VFXManager.onVFXDestory(proj);
+                    UnityGameApp.Inst.VFXManager.onVFXDestory(pair.Key);
                 }
                 _currentProjectiles = null;
             }
@@ -425,7 +432,7 @@ namespace UnityMiniGameFramework
 
         virtual protected void _updateProjectile()
         {
-            VFXObjectBase[] curProjs = _currentProjectiles.ToArray();
+            VFXObjectBase[] curProjs = _currentProjectiles.Keys.ToArray();
             foreach (var proj in curProjs)
             {
                 if((proj.unityGameObject.transform.position - this.unityGameObject.transform.position).magnitude > _attackRange)
@@ -437,7 +444,20 @@ namespace UnityMiniGameFramework
 
                     continue;
                 }
-                proj.unityGameObject.transform.position = proj.unityGameObject.transform.position + proj.unityGameObject.transform.forward * _projectFlySpeed * UnityEngine.Time.deltaTime;  
+
+                var targetObject = _currentProjectiles[proj];
+                if(targetObject == null)
+                {
+                    _currentProjectiles.Remove(proj);
+                    UnityGameApp.Inst.VFXManager.onVFXDestory(proj);
+
+                    // TO DO : try explosive
+
+                    continue;
+                }
+                var vec = (targetObject.transform.position - proj.unityGameObject.transform.position).normalized;
+                proj.unityGameObject.transform.forward = vec;
+                proj.unityGameObject.transform.position = proj.unityGameObject.transform.position + vec * _projectFlySpeed * UnityEngine.Time.deltaTime;  
             }
         }
 
@@ -542,7 +562,7 @@ namespace UnityMiniGameFramework
             proj.unityGameObject.transform.position = _gunPos.transform.position;
             proj.unityGameObject.transform.forward = _gunPos.transform.forward;
 
-            _currentProjectiles.Add(proj);
+            _currentProjectiles[proj] = _currentTarget.unityGameObject;
 
             return true;
         }
