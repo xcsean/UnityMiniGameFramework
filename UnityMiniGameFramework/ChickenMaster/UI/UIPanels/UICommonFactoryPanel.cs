@@ -82,9 +82,12 @@ namespace UnityMiniGameFramework
 
             // 产品图
             var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_{_factoryConf.outputProductName}");
-            sprChicken.style.backgroundImage = tx;
-            sprChicken.style.width = tx.width;
-            sprChicken.style.height = tx.height;
+            if (tx != null)
+            {
+                sprChicken.style.backgroundImage = tx;
+                sprChicken.style.width = tx.width;
+                sprChicken.style.height = tx.height;
+            }
         }
 
         /// <summary>

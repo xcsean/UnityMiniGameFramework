@@ -91,9 +91,12 @@ namespace UnityMiniGameFramework
 
             // 产品图
             var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_{_cmFactory.factoryConf.outputProductName}");
-            _sprProduceGoods.style.backgroundImage = tx;
-            _sprProduceGoods.style.width = tx.width / (tx.width / 40 + 1);
-            _sprProduceGoods.style.height = tx.width / (tx.height / 40 + 1);
+            if (tx != null)
+            {
+                _sprProduceGoods.style.backgroundImage = tx;
+                _sprProduceGoods.style.width = tx.width / (tx.width / 40 + 1);
+                _sprProduceGoods.style.height = tx.width / (tx.height / 40 + 1);
+            }
 
             DoUpdateInputStore(_CMFactory.currentProductInputStore, 0);
             DoUpdatePruduceGoods(_CMFactory.currentProductOutputStore, 0);
