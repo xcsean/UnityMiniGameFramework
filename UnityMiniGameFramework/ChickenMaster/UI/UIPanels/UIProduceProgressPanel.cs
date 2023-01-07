@@ -213,6 +213,8 @@ namespace UnityMiniGameFramework
         private float waitIconOpacityChange = 1;
         protected void OnUpdate()
         {
+            onUpdate_Popup();
+
             if (_CMFactory == null)
             {
                 return;
@@ -250,7 +252,6 @@ namespace UnityMiniGameFramework
             base.showUI();
 
             UnityGameApp.Inst.addUpdateCall(this.OnUpdate);
-            UnityGameApp.Inst.addUpdateCall(this.onUpdate_Popup);
         }
 
         public override void hideUI()
@@ -258,7 +259,6 @@ namespace UnityMiniGameFramework
             base.hideUI();
 
             UnityGameApp.Inst.removeUpdateCall(this.OnUpdate);
-            UnityGameApp.Inst.removeUpdateCall(this.onUpdate_Popup);
         }
     }
 }

@@ -188,11 +188,6 @@ namespace UnityMiniGameFramework
                 _labAttackNext.text = $"{0}";
 
                 refreshHeroAdvanced(0);
-
-                //for (int i = 0; i < _gunItemArr.Length; i++)
-                //{
-                //    _gunItemArr[i].style.display = DisplayStyle.None;
-                //}
             }
             else
             {
@@ -220,11 +215,12 @@ namespace UnityMiniGameFramework
                 _labAttackNext.text = StringUtil.StringNumFormat($"{nextConf.combatConf.attackBase}");
 
                 refreshHeroAdvanced(_hero.heroInfo.level);
-                // set gun info
-                RefreshGunInfo(_gun1Info, 0);
-                RefreshGunInfo(_gun2Info, 1);
-                RefreshGunInfo(_gun3Info, 2);
             }
+        
+            // set gun info
+            RefreshGunInfo(_gun1Info, 0);
+            RefreshGunInfo(_gun2Info, 1);
+            RefreshGunInfo(_gun3Info, 2);
         }
 
         protected void RefreshGunInfo(LocalWeaponInfo gunInfo, int gunIndex)
@@ -251,7 +247,7 @@ namespace UnityMiniGameFramework
             }
 
             // set gun icon
-            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"Weapon_Icon/wuqi_0{cmGunConf.id}");
+            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/weapons/{cmGunConf.weaponIcon}");
             gunItem.Q("sprGunIcon").style.backgroundImage = tx;
 
             if (gunInfo == null)
@@ -261,7 +257,7 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                gunItem.Q<Label>("labGunStar").text = $"{_gun1Info.level}";
+                gunItem.Q<Label>("labGunStar").text = $"{gunInfo.level}";
                 btnArmed.style.display = DisplayStyle.Flex;
             }
         }
