@@ -226,10 +226,13 @@ namespace UnityMiniGameFramework
             }
             VisualElement sprBoss = _bossInfo.Q<VisualElement>("bossHead");
             var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/boss/{bossIcon}");
-            sprBoss.style.backgroundImage = tx;
-            sprBoss.style.width = tx.width;
-            sprBoss.style.height = tx.height;
-            sprBoss.style.left = 48 - tx.width / 2;
+            if(tx != null)
+            {
+                sprBoss.style.backgroundImage = tx;
+                sprBoss.style.width = tx.width;
+                sprBoss.style.height = tx.height;
+                sprBoss.style.left = 48 - tx.width / 2;
+            }
         }
         public void refreshLevelInfo(CMShootingLevel lvl)
         {

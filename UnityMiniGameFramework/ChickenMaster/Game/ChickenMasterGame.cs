@@ -134,7 +134,7 @@ namespace UnityMiniGameFramework
                     currentLevel = 1,
                     selfHero = new LocalHeroInfo()
                     {
-                        mapHeroName = "testHero",
+                        mapHeroName = "zhujue",
                         holdWeaponId = 0,
                     },
                     egg = new LocalEggInfo()

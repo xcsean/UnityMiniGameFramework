@@ -574,7 +574,6 @@ namespace UnityMiniGameFramework
                     combComp.OnHitByWeapon(this);
                 }
 
-
                 if (hitVfx != null)
                 {
                     UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(hitVfx, ugbGameObj.mgGameObject);
