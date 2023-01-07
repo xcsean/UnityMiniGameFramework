@@ -353,7 +353,6 @@ namespace UnityMiniGameFramework
         {
             var putTf = spawnPos.spawnObject.transform;
             int childCount = putTf.childCount;
-            boxNum = 20;
             if (childCount == boxNum)
                 return;
             if (!boxObject)
