@@ -77,6 +77,10 @@ namespace UnityMiniGameFramework
                 }
             }
 
+            if(_conf == null)
+            {
+                return;
+            }
             AccSpeed = _conf.AccSpeed * (1 + speedMul);
             MaxSpeed = _conf.MaxSpeed * (1 + speedMul);
             MinSpeed = _conf.MinSpeed * (1 + speedMul);
