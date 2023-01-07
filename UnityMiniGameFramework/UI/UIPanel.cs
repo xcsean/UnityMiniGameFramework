@@ -35,6 +35,7 @@ namespace UnityMiniGameFramework
 
         public bool isShow => _unityUIDocument.rootVisualElement.style.display == DisplayStyle.Flex;
 
+        private List<Action> _updateCallList = new List<Action>();
         public UIPanel()
         {
             _uiObjects = new Dictionary<string, UIObject>();
@@ -100,8 +101,24 @@ namespace UnityMiniGameFramework
             _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.removeUI(this);
+            removeUpdate();
         }
 
+        protected void removeUpdate()
+        {
+            foreach (var callBack in _updateCallList)
+            {
+                UnityGameApp.Inst.addUpdateCall(callBack);    
+            }
+            _updateCallList.Clear();
+        }
+        
+        protected void addUpdate(Action callBack)
+        {
+            _updateCallList.Add(callBack);
+            UnityGameApp.Inst.addUpdateCall(callBack);
+        }
+        
         virtual public void showUI()
         {
             //_unityGameObject.SetActive(true);

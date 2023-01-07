@@ -171,7 +171,8 @@ namespace UnityMiniGameFramework
         public override void showUI()
         {
             base.showUI();
-            UnityGameApp.Inst.addUpdateCall(this.OnUpdatePlay);
+            //UnityGameApp.Inst.addUpdateCall(this.OnUpdatePlay);
+            addUpdate(OnUpdatePlay);
         }
 
         public override void hideUI()
