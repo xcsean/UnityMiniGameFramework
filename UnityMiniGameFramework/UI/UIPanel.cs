@@ -34,8 +34,8 @@ namespace UnityMiniGameFramework
         public int height => (int)_unityUIDocument.rootVisualElement.layout.height;
 
         public bool isShow => _unityUIDocument.rootVisualElement.style.display == DisplayStyle.Flex;
-
-        private List<Action> _updateCallList = new List<Action>();
+        
+        private Action _callBack = null;
         public UIPanel()
         {
             _uiObjects = new Dictionary<string, UIObject>();
@@ -106,16 +106,18 @@ namespace UnityMiniGameFramework
 
         protected void removeUpdate()
         {
-            foreach (var callBack in _updateCallList)
+            if (_callBack != null)
             {
-                UnityGameApp.Inst.addUpdateCall(callBack);    
+                UnityGameApp.Inst.removeUpdateCall(_callBack);
+                _callBack = null;
             }
-            _updateCallList.Clear();
         }
         
         protected void addUpdate(Action callBack)
         {
-            _updateCallList.Add(callBack);
+            if (_callBack != null)
+                removeUpdate();
+            _callBack = callBack;
             UnityGameApp.Inst.addUpdateCall(callBack);
         }
         
