@@ -310,6 +310,7 @@ namespace UnityMiniGameFramework
                 {
                     cmGame.Self.AddGold(goldAdd);
                     UpdateProductBox();
+                    _train.setBoxShow(true);
                 }
 
                 cmGame.baseInfo.markDirty();

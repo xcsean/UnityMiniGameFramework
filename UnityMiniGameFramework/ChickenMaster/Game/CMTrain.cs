@@ -22,6 +22,7 @@ namespace UnityMiniGameFramework
         protected float _onboardTimeLeft;
 
         protected bool _isInited;
+        private UnityEngine.GameObject _boxRoot;
 
         public bool Init(CMTrainStation s)
         {
@@ -56,6 +57,7 @@ namespace UnityMiniGameFramework
             }
 
             _trainNpcObj.moveAct.SetRotationAdd(new Vector3(0.0f, -90.0f, 0.0f));
+            _trainNpcObj.moveAct.setMoveType(true);
             _initTrain();
 
             // add train to scene
@@ -70,7 +72,8 @@ namespace UnityMiniGameFramework
         {
             var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
             _timeToTrainArrival = _station.trainStationInfo.NextTrainArrivalTime - nowTickMillsecond;
-
+            _boxRoot = _trainNpcObj.unityGameObject.transform.Find("Dummy002/Dummy005/boxes").gameObject;
+            setBoxShow(false);
             if (_timeToTrainArrival > 0)
             {
                 _trainNpcObj.unityGameObject.transform.forward = _station.trainStartPos.transform.forward;
@@ -95,6 +98,14 @@ namespace UnityMiniGameFramework
             }
 
         }
+
+        public void setBoxShow(bool isShow)
+        {
+            if(!_boxRoot)
+                return;
+            _boxRoot.SetActive(isShow);
+        }
+        
 
         public void OnUpdate()
         {
@@ -125,6 +136,7 @@ namespace UnityMiniGameFramework
                 // train move to stop
                 _trainNpcObj.moveAct.directSetPosition(_station.trainStartPos.transform.position); // set to start pos
                 _trainNpcObj.unityGameObject.SetActive(true); // show train
+                setBoxShow(false);
                 _trainNpcObj.moveAct.moveOn(new List<UnityEngine.Vector3>() { _station.trainStopPos.transform.position }, 0.1f); // move to stop
 
                 return;

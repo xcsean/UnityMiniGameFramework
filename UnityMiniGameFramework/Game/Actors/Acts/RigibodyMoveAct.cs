@@ -26,7 +26,8 @@ namespace UnityMiniGameFramework
         protected string _defaultAniName;
 
         protected string _movingAniName;
-        
+
+        private bool _isTrainMove = false;
         public RigibodyMoveAct(ActorObject actor) : base(actor)
         {
             _rigiBody = actor.unityGameObject.GetComponent<UnityEngine.Rigidbody>();
@@ -131,6 +132,11 @@ namespace UnityMiniGameFramework
             _movingAniName = movAni;
         }
 
+
+        public void setMoveType(bool isTrainMove)
+        {
+            _isTrainMove = isTrainMove;
+        }
         override public void Start()
         {
             base.Start();
@@ -249,8 +255,15 @@ namespace UnityMiniGameFramework
                 _updateTurning(rot.eulerAngles.y);
             }
 
-            
-            _rigiBody.MovePosition(_rigiBody.position + _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime); 
+            if (!_isTrainMove)
+            {
+                _rigiBody.MovePosition(_rigiBody.position + _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime); 
+            }
+            else
+            {
+                _rigiBody.gameObject.transform.position = _rigiBody.gameObject.transform.position +
+                                                          _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime;
+            }
         }
 
         void _updateTurning(float yRot)
