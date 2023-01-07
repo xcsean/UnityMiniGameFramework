@@ -67,6 +67,11 @@ namespace UnityMiniGameFramework
 
         public void onRecalcAttributes(ActBufAttrConfig[] bufAttrs)
         {
+            if (_conf == null)
+            {
+                return;
+            }
+
             float speedMul = 0;
 
             foreach (var bufAttr in bufAttrs)
@@ -77,10 +82,6 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            if(_conf == null)
-            {
-                return;
-            }
             AccSpeed = _conf.AccSpeed * (1 + speedMul);
             MaxSpeed = _conf.MaxSpeed * (1 + speedMul);
             MinSpeed = _conf.MinSpeed * (1 + speedMul);
