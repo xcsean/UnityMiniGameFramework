@@ -77,7 +77,7 @@ namespace UnityMiniGameFramework
             buffCfg = cmGame.gameConf.gameConfs.buffsConf.doubleAtk;
         }
 
-        private int onUpdate()
+        private void onUpdate()
         {
             long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
             if (buffTime > nowMillisecond)
@@ -100,23 +100,19 @@ namespace UnityMiniGameFramework
                 _timeLab.text = "REMAINING TIME: 00:00:00";
                 _dmgPb.style.width = new StyleLength(new Length(0f * 326));
             }
-
-            return 1;
         }
 
         public override void showUI()
         {
             base.showUI();
             setBuffTime();
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.addUpdateFunc(onUpdate);
+            UnityGameApp.Inst.addUpdateCall(onUpdate);
         }
 
         public override void hideUI()
         {
             base.hideUI();
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.removeUpdateFunc(onUpdate);
+            UnityGameApp.Inst.removeUpdateCall(onUpdate);
         }
     }
 }

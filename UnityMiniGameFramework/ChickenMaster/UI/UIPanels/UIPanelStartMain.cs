@@ -46,11 +46,10 @@ namespace UnityMiniGameFramework
             //barbg.visible = true;
             //time = (long)(DateTime.Now.Ticks / 10000);
 
-            //var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            //cmGame.addUpdateFunc(onUpdate);
+            //UnityGameApp.Inst.addUpdateCall(onUpdate);
         }
 
-        public int onUpdate()
+        public void onUpdate()
         {
             long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
             var t = (float)(nowMillisecond - time) / 1000;
@@ -60,12 +59,10 @@ namespace UnityMiniGameFramework
                 prog = 1.00f;
                 barbg.visible = false;
                 btnStart.visible = true;
-                var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-                cmGame.removeUpdateFunc(onUpdate);
+                UnityGameApp.Inst.removeUpdateCall(onUpdate);
             }
             bar.style.width = new StyleLength(new Length(prog * 334));
             barLabel.text = $"{Math.Floor(prog * 100)}%";
-            return 1;
         }
 
         public async void onEnterGameClick()
