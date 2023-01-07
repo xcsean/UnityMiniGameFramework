@@ -455,7 +455,8 @@ namespace UnityMiniGameFramework
 
                     continue;
                 }
-                var vec = (targetObject.transform.position - proj.unityGameObject.transform.position).normalized;
+                var tarPos = new UnityEngine.Vector3(targetObject.transform.position.x, targetObject.transform.position.y+0.5f, targetObject.transform.position.z);
+                var vec = (tarPos - proj.unityGameObject.transform.position).normalized;
                 proj.unityGameObject.transform.forward = vec;
                 proj.unityGameObject.transform.position = proj.unityGameObject.transform.position + vec * _projectFlySpeed * UnityEngine.Time.deltaTime;  
             }

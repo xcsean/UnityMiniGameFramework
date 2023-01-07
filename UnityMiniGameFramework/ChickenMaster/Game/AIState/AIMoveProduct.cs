@@ -34,6 +34,7 @@ namespace UnityMiniGameFramework
         protected Action _onUpdateWorker;
 
         protected bool _isPlayedActAni;
+        protected bool _isPlayingAni;
         protected CMFactory _targetFactory;
 
         public AIMoveProduct(ActorObject actor) : base(actor)
@@ -222,7 +223,7 @@ namespace UnityMiniGameFramework
                     _onUpdateWorker = _updateTrainStationPutting;
                     _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                     _isPlayedActAni = false;
-
+                    _isPlayingAni = false;
                 }
                 else
                 {
@@ -253,6 +254,7 @@ namespace UnityMiniGameFramework
                 _onUpdateWorker = _updateTrainStationFetching;
                 _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                 _isPlayedActAni = false;
+                _isPlayingAni = false;
             }
             else
             {
@@ -276,6 +278,7 @@ namespace UnityMiniGameFramework
             _onUpdateWorker = _updateTrainStationFetching;
             _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
             _isPlayedActAni = false;
+            _isPlayingAni = false;
         }
 
         protected void _updateTrainStationFetching()
@@ -291,9 +294,10 @@ namespace UnityMiniGameFramework
             // playing fetch animation
             if (!_isPlayedActAni)
             {
-                if (!_actor.animatorComponent.isCurrBaseAnimation(_worker.workerConf.fetchingAniName))
+                if (!_isPlayingAni)
                 {
                     _actor.animatorComponent.playAnimation(_worker.workerConf.fetchingAniName);
+                    _isPlayingAni = true;
                 }
                 else
                 {
@@ -341,6 +345,7 @@ namespace UnityMiniGameFramework
             _onUpdateWorker = _updateTrainStationPutting;
             _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
             _isPlayedActAni = false;
+            _isPlayingAni = false;
         }
 
         protected void _updateTrainStationPutting()
@@ -362,9 +367,10 @@ namespace UnityMiniGameFramework
             // playing putting animation
             if (!_isPlayedActAni)
             {
-                if (!_actor.animatorComponent.isCurrBaseAnimation(_worker.workerConf.putAniName))
+                if (!_isPlayingAni)
                 {
                     _actor.animatorComponent.playAnimation(_worker.workerConf.putAniName);
+                    _isPlayingAni = true;
                 }
                 else
                 {
@@ -412,6 +418,7 @@ namespace UnityMiniGameFramework
                     _onUpdateWorker = _updateStoreHouseFetching;
                     _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                     _isPlayedActAni = false;
+                    _isPlayingAni = false;
                 }
                 else
                 {
@@ -437,6 +444,7 @@ namespace UnityMiniGameFramework
             _onUpdateWorker = _updateStoreHouseFetching;
             _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
             _isPlayedActAni = false;
+            _isPlayingAni = false;
         }
 
         protected void _updateStoreHouseFetching()
@@ -454,9 +462,10 @@ namespace UnityMiniGameFramework
             // playing fetch animation
             if(!_isPlayedActAni)
             {
-                if(!_actor.animatorComponent.isCurrBaseAnimation(_worker.workerConf.fetchingAniName))
+                if(!_isPlayingAni)
                 {
                     _actor.animatorComponent.playAnimation(_worker.workerConf.fetchingAniName);
+                    _isPlayingAni = true;
                 }
                 else
                 {
@@ -516,6 +525,7 @@ namespace UnityMiniGameFramework
             _onUpdateWorker = _updateStoreHousePutting;
             _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
             _isPlayedActAni = false;
+            _isPlayingAni = false;
         }
 
         protected void _updateStoreHousePutting()
@@ -543,9 +553,10 @@ namespace UnityMiniGameFramework
             // playing putting animation
             if (!_isPlayedActAni)
             {
-                if (!_actor.animatorComponent.isCurrBaseAnimation(_worker.workerConf.putAniName))
+                if (!_isPlayingAni)
                 {
                     _actor.animatorComponent.playAnimation(_worker.workerConf.putAniName);
+                    _isPlayingAni = true;
                 }
                 else
                 {
