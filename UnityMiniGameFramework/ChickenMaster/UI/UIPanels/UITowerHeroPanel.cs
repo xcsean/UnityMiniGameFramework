@@ -20,9 +20,12 @@ namespace UnityMiniGameFramework
         protected Label _labHeroName;
         protected Label _labAttacked;
         protected Label _labUpgradeCoin;
+        protected Label _labHeroActCoin;
         protected Label _labAttackCur;
         protected Label _labAttackNext;
-        protected Button _btnAct;
+        protected Button _btnHeroAct;
+        protected Button _btnHeroUpgrade;
+        protected VisualElement _heroLockBg;
         protected VisualElement _sprHeroIcon;
         protected VisualElement _advanced;
         protected VisualElement _gunItem1;
@@ -41,19 +44,22 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
-            FindUi();
+            FindUI();
         }
 
-        protected void FindUi()
+        protected void FindUI()
         {
             _sprHeroIcon = this._uiObjects["sprHeroIcon"].unityVisualElement;
+            _heroLockBg = this._uiObjects["heroLockBg"].unityVisualElement;
             _labHeroName = this._uiObjects["labHeroName"].unityVisualElement as Label;
             _labUpgradeCoin = this._uiObjects["labUpgradeCoin"].unityVisualElement as Label;
+            _labHeroActCoin = this._uiObjects["labHeroActCoin"].unityVisualElement as Label;
             _labAttacked = this._uiObjects["labAttacked"].unityVisualElement as Label;
             _labAttackCur = this._uiObjects["labAttackCur"].unityVisualElement as Label;
             _labAttackNext = this._uiObjects["labAttackNext"].unityVisualElement as Label;
-            _btnAct = this._uiObjects["btnAct"].unityVisualElement as Button;
             _advanced = this._uiObjects["advanced"].unityVisualElement;
+            _btnHeroAct = this._uiObjects["btnHeroAct"].unityVisualElement as Button;
+            _btnHeroUpgrade = this._uiObjects["btnHeroUpgrade"].unityVisualElement as Button;
 
             _gunItem1 = this._uiObjects["gunItem1"].unityVisualElement;
             _gunItem2 = this._uiObjects["gunItem2"].unityVisualElement;
@@ -73,7 +79,8 @@ namespace UnityMiniGameFramework
             _gunItem2.Q<Button>("btnArmed").clicked += OnChangeGunBtnClick2;
             _gunItem3.Q<Button>("btnArmed").clicked += OnChangeGunBtnClick3;
 
-            _btnAct.clicked += OnActBtnClick;
+            _btnHeroAct.clicked += OnActBtnClick;
+            _btnHeroUpgrade.clicked += OnUpgradeBtnClick;
         }
 
         /// <summary>
@@ -113,7 +120,11 @@ namespace UnityMiniGameFramework
                     cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 }
             }
-            else
+        }
+
+        public void OnUpgradeBtnClick()
+        {
+            if (_hero != null)
             {
                 // upgrade
                 if (_hero.TryUpgrade())
@@ -122,7 +133,6 @@ namespace UnityMiniGameFramework
                     refreshGunUpgradeProgress();
                 }
             }
-
         }
 
         public void setHero(string name)
@@ -140,12 +150,9 @@ namespace UnityMiniGameFramework
 
             _labHeroName.text = _heroConf.mapHeroName;
 
-            if (_hero != null)
-            {
-                _gun1Info = cmGame.GetWeaponInfo(_heroConf.guns[0]);
-                _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
-                _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
-            }
+            _gun1Info = cmGame.GetWeaponInfo(_heroConf.guns[0]);
+            _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
+            _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
 
             // TO DO : set hero pic and gun pic
             //_HeadPic.style.backgroundImage = new StyleBackground(texture2d);
@@ -169,9 +176,12 @@ namespace UnityMiniGameFramework
             if (_hero == null)
             {
                 // not active
-                _btnAct.text = "ACTIVATE";
+                //_btnAct.text = "ACTIVATE";
+                _heroLockBg.style.display = DisplayStyle.Flex;
+
                 _labHeroName.text = $"{_heroConf.mapHeroName}";
-                _labUpgradeCoin.text = $"{_heroConf.activateGoldCost}";
+                _labHeroActCoin.text = $"{_heroConf.activateGoldCost}";
+                _labUpgradeCoin.text = $"{0}";
 
                 _labAttacked.text = $"0";
                 _labAttackCur.text = $"{0}";
@@ -179,13 +189,14 @@ namespace UnityMiniGameFramework
 
                 refreshHeroAdvanced(0);
 
-                for (int i = 0; i < _gunItemArr.Length; i++)
-                {
-                    _gunItemArr[i].style.display = DisplayStyle.None;
-                }
+                //for (int i = 0; i < _gunItemArr.Length; i++)
+                //{
+                //    _gunItemArr[i].style.display = DisplayStyle.None;
+                //}
             }
             else
             {
+                _heroLockBg.style.display = DisplayStyle.None;
                 // get attack info
                 int attack = 0;
                 var conf = _hero.getCurrentHeroLevelConf();
@@ -200,7 +211,7 @@ namespace UnityMiniGameFramework
                 }
                 int upgradeCost = _hero.getUpgradeGoldCost();
 
-                _btnAct.text = "UPGRADE";
+                //_btnAct.text = "UPGRADE";
                 _labHeroName.text = $"{_heroConf.mapHeroName}";
                 _labUpgradeCoin.text = $"{upgradeCost}";
 
@@ -299,9 +310,11 @@ namespace UnityMiniGameFramework
 
             var upgradeTip = gunItem.Q<VisualElement>("sprStarUpgrade");
             var btnActive = gunItem.Q<Button>("btnActive");
+            var btnArmed = gunItem.Q<Button>("btnArmed");
 
             btnActive.style.display = DisplayStyle.Flex;
             upgradeTip.style.display = DisplayStyle.None;
+            btnArmed.style.display = DisplayStyle.None;
 
             int gunId = _heroConf.guns[gunIndex];
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
@@ -332,6 +345,10 @@ namespace UnityMiniGameFramework
             if (_gun1Info != null)
             {
                 _refreshGunUpgrade(_gun1Info, 0);
+            }
+            else
+            {
+                _refreshGunActivate(0);
             }
 
             if (_gun2Info != null)

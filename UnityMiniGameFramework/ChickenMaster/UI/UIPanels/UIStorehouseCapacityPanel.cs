@@ -33,6 +33,9 @@ namespace UnityMiniGameFramework
         protected Label _labPopup;
         protected CapacityPopupNumber popupNumber;
 
+        protected Color _red = new Color(237, 77, 10);
+        protected Color _green = new Color(146, 234, 75);
+
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -59,7 +62,7 @@ namespace UnityMiniGameFramework
                 popupNumber = new CapacityPopupNumber()
                 {
                     Text = changeCnt > 0 ? $"+{changeCnt}" : $"{changeCnt}",
-                    TextColor = changeCnt > 0 ? Color.green : Color.red,
+                    TextColor = changeCnt > 0 ? _green : _red,
                     LifeTime = 1f,
                     UpPos = Vector3.zero,
                 };

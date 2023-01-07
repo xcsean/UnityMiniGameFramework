@@ -33,15 +33,22 @@ namespace UnityMiniGameFramework
         protected Label _labLeftPopup;
         protected Label _labRightPopup;
         protected Label _labStockCnt;
-        protected VisualElement _sprStockGoods;
         protected Label _labProduceCnt;
+        protected VisualElement _sprStockGoods;
         protected VisualElement _sprProduceGoods;
-        protected ProgressBar _progressBar;
+
+        protected VisualElement _barValue;
+        protected VisualElement _customerBar;
+        protected VisualElement _wait;
+        protected VisualElement _arrow;
 
         protected CMFactory _CMFactory;
         protected int _lastUpdateProduceVer;
         protected PopupNumber leftPopupNumber;
         protected PopupNumber rightPopupNumber;
+
+        protected Color _red = new Color(237, 77, 10);
+        protected Color _green = new Color(146, 234, 75);
 
         override public void Init(UIPanelConf conf)
         {
@@ -60,7 +67,10 @@ namespace UnityMiniGameFramework
             _sprStockGoods = this._uiObjects["sprStockGoods"].unityVisualElement;
             _labProduceCnt = this._uiObjects["labProduceCnt"].unityVisualElement as Label;
             _sprProduceGoods = this._uiObjects["sprProduceGoods"].unityVisualElement;
-            _progressBar = this._uiObjects["progressBar"].unityVisualElement as ProgressBar;
+            _barValue = this._uiObjects["barValue"].unityVisualElement;
+            _customerBar = this._uiObjects["customerBar"].unityVisualElement;
+            _wait = this._uiObjects["wait"].unityVisualElement;
+            _arrow = this._uiObjects["arrow"].unityVisualElement;
 
             _labLeftPopup.text = "";
             _labRightPopup.text = "";
@@ -95,13 +105,25 @@ namespace UnityMiniGameFramework
             // 库存
             _labStockCnt.text = $"{totalCnt}";
 
+            if (totalCnt == 0)
+            {
+                _wait.style.display = DisplayStyle.Flex;
+                _arrow.style.display = DisplayStyle.None;
+                _customerBar.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                _wait.style.display = DisplayStyle.None;
+                _arrow.style.display = DisplayStyle.Flex;
+                _customerBar.style.display = DisplayStyle.Flex;
+            }
 
             if (changeCnt != 0)
             {
                 leftPopupNumber = new PopupNumber()
                 {
                     Text = changeCnt > 0 ? $"+{changeCnt}" : $"{changeCnt}",
-                    TextColor = changeCnt > 0 ? Color.green : Color.red,
+                    TextColor = changeCnt > 0 ? _green : _red,
                     LifeTime = 1f,
                     UpPos = Vector3.zero,
                 };
@@ -120,7 +142,7 @@ namespace UnityMiniGameFramework
                 rightPopupNumber = new PopupNumber()
                 {
                     Text = $"+{changeCnt}",
-                    TextColor = Color.green,
+                    TextColor = _green,
                     LifeTime = 1f,
                     UpPos = Vector3.zero,
                 };
@@ -139,7 +161,7 @@ namespace UnityMiniGameFramework
                 rightPopupNumber = new PopupNumber()
                 {
                     Text = $"{changeCnt}",
-                    TextColor = Color.red,
+                    TextColor = _red,
                     LifeTime = 1f,
                     UpPos = Vector3.zero,
                 };
@@ -185,18 +207,35 @@ namespace UnityMiniGameFramework
             }
         }
 
+        private float waitIconOpacity = 1f;
+        private float waitIconOpacityChange = 1;
         protected void OnUpdate()
         {
             if (_CMFactory == null)
             {
                 return;
             }
+            // 叹号闪闪
+            if (_wait.style.display == DisplayStyle.Flex)
+            {
+                if (waitIconOpacity > 1f)
+                {
+                    waitIconOpacityChange = -1f;
+                }
+                else if (waitIconOpacity < 0f)
+                {
+                    waitIconOpacityChange = 1f;
+                }
+                waitIconOpacity += (0.05f * waitIconOpacityChange);
+                _wait.style.opacity = waitIconOpacity;
+            }
             if (_CMFactory.currentProductInputStore <= 0)
             {
-                _progressBar.value = 0.0f;
+                _barValue.style.width = new StyleLength(new Length(0f));
                 return;
             }
-            _progressBar.value = (1.0f - (_CMFactory.currentCD / _CMFactory.produceCD)) * 100;
+
+            _barValue.style.width = new StyleLength(new Length(58 * (1f - _CMFactory.currentCD / _CMFactory.produceCD)));
 
             if (_lastUpdateProduceVer != _CMFactory.produceVer)
             {
