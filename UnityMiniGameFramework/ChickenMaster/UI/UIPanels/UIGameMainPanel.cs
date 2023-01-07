@@ -190,10 +190,10 @@ namespace UnityMiniGameFramework
             string bossIcon = "Mob_boss_003";
             foreach (var lvlConf in cmGame.gameConf.gameConfs.defenseLevels)
             {
-                if (lvlConf.levelRangeMin == lvlConf.levelRangeMax && currentLevel <= lvlConf.levelRangeMin)
+                if (lvlConf.mapLevelName == "testLevelBigBoss")
                 {
-                    bossLevel = lvlConf.levelRangeMin;
-                    bossIcon = lvlConf.bossHead;
+                    bossLevel = (currentLevel / lvlConf.levelDivide + 1) * lvlConf.levelDivide;
+                    bossIcon = $"Mob_boss_00{(int)(bossLevel/ lvlConf.levelDivide)}";
                 }
             }
             for (int i = 0; i < 3; i++)

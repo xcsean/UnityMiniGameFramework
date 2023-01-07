@@ -47,7 +47,7 @@ namespace UnityMiniGameFramework
 
         public Texture2D LoadProductIcon(string iconName)
         {
-            string path = $"Product_Icon/{iconName}";
+            string path = $"icons/products/{iconName}";
             return LoadTexture(path);
         }
     }

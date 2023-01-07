@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +21,7 @@ namespace UnityMiniGameFramework
     public class CMGunConf
     {
         public int id { get; set; }
+        public string weaponIcon { get; set; }
         public string prefabName { get; set; }
 
         public string upgradeItemName { get; set; }
@@ -197,7 +198,6 @@ namespace UnityMiniGameFramework
         public Dictionary<string, CMDefenseLevelMonsterLvRange> monsterLvRanges { get; set; }
 
         public string mapLevelName { get; set; }
-        public string bossHead { get; set; }
         public Dictionary<string, int> passReward { get; set; }
     }
 

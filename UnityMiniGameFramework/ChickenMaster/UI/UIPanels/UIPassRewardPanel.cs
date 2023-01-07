@@ -106,7 +106,7 @@ namespace UnityMiniGameFramework
                             {
                                 if(gun.Value.upgradeItemName == rewardConf.items[i].itemName)
                                 {
-                                    var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"Weapon_Icon/wuqi_0{gun.Value.id}");
+                                    var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/weapons/{gun.Value.weaponIcon}");
                                     grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
                                     grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
                                     grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
