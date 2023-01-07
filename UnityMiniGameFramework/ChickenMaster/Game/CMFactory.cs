@@ -106,9 +106,11 @@ namespace UnityMiniGameFramework
 
             _currentCD = produceCD;
             _produceVer = 0;
-
+            
+            //todo:data与control需要分离
+            //todo:箱子初始化显示
+            
             InitProduceProgressUI();
-
             return true;
         }
 
@@ -351,6 +353,7 @@ namespace UnityMiniGameFramework
         {
             var putTf = spawnPos.spawnObject.transform;
             int childCount = putTf.childCount;
+            boxNum = 20;
             if (childCount == boxNum)
                 return;
             if (!boxObject)
@@ -371,20 +374,29 @@ namespace UnityMiniGameFramework
             {
                 var obj = GameObject.Instantiate(boxObject);
                 obj.transform.SetParent(putTf);
+                obj.transform.localEulerAngles = Vector3.zero;
             }
-
-            // setPos 先写死位置
-            Vector3 initPos = new Vector3(0.32f, 0, 0.32f);
+            var boxCollider = spawnPos.spawnObject.GetComponent<BoxCollider>();
+            if(!boxCollider)
+                return;
+            Vector3 size = boxCollider.size;
+            float boxLenght = 0.32f;
+            float length = size.x;
+            float width = size.z;
+            int colConst = (int) Math.Floor(length / boxLenght);
+            int rowConst = (int) Math.Floor(width / boxLenght);
+            int layerCount = colConst * rowConst;
+            Vector3 initPos = new Vector3(boxLenght, 0, boxLenght);
             for (int i = 0; i < putTf.childCount; i++)
             {
-                int height = i / 9;
-                int index = i % 9;
-                int row = index % 3;
-                int col = index / 3;
+                int height = i / layerCount;
+                int index = i % layerCount;
+                int row = index % rowConst;
+                int col = index / colConst;
                 Vector3 pos = Vector3.zero;
-                pos.x = initPos.x - 0.32f * row;
-                pos.y = initPos.y + 0.32f * height;
-                pos.z = initPos.z - 0.32f * col;
+                pos.x = initPos.x - boxLenght * row;
+                pos.y = initPos.y + boxLenght * height;
+                pos.z = initPos.z - boxLenght * col;
                 var childTf = putTf.GetChild(i);
                 childTf.localPosition = pos;
             }

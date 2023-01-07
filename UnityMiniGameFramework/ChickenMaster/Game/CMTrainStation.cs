@@ -48,6 +48,11 @@ namespace UnityMiniGameFramework
         protected UnityEngine.GameObject _trainMoveoutPos;
         public UnityEngine.GameObject trainMoveoutPos => _trainMoveoutPos;
         private UnityEngine.GameObject _productBoxGo;
+        private int _colConst;
+        private int _rowConst;
+        private int _layerCount;
+        private float _boxLenght = 0.32f;
+        private Vector3 _boxInitPos;
 
         public CMTrainStation()
         {
@@ -144,6 +149,17 @@ namespace UnityMiniGameFramework
             {
                 _currTotalStoreCount += prod.count;
             }
+            
+            var boxCollider = _storePosition.spawnObject.GetComponent<BoxCollider>();
+            if (!boxCollider)
+                return;
+            Vector3 size = boxCollider.size;
+            float length = size.x;
+            float width = size.z;
+            _colConst = (int) Math.Floor(length / _boxLenght);
+            _rowConst = (int) Math.Floor(width / _boxLenght);
+            _layerCount = _rowConst * _colConst;
+            _boxInitPos = new Vector3(_boxLenght * (_colConst / 2), 0, _boxLenght * (_rowConst / 2));
         }
 
         public void OnUpdate()
@@ -216,7 +232,7 @@ namespace UnityMiniGameFramework
             var storeTransform = _storePosition.spawnObject.transform;
             int boxNum = _trainStationInfo.storeProducts.Count;
             int childCount = storeTransform.childCount;
-            if(boxNum == childCount)
+            if (boxNum == childCount)
                 return;
             if (!_productBoxGo)
                 _productBoxGo = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject("box/OutputStoreProduct");
@@ -231,30 +247,19 @@ namespace UnityMiniGameFramework
             {
                 var obj = UnityEngine.GameObject.Instantiate(_productBoxGo);
                 obj.transform.SetParent(storeTransform);
+                obj.transform.localEulerAngles = Vector3.zero;
             }
 
-            var boxCollider = _storePosition.spawnObject.GetComponent<BoxCollider>();
-            if (!boxCollider)
-                return;
-            Vector3 size = boxCollider.size;
-            float boxLenght = 0.32f;
-            float length = size.x;
-            float width = size.z;
-            int colConst = (int) Math.Floor(length / boxLenght);
-            int rowConst = (int) Math.Floor(width / boxLenght);
-            int layerCount = rowConst * colConst;
-            Vector3 initPos = new Vector3(boxLenght * (colConst / 2), 0, boxLenght * (rowConst / 2));
-            
             for (int i = 0; i < storeTransform.childCount; i++)
             {
-                int height = i / layerCount;
-                int index = i % layerCount;
-                int row = index % rowConst;
-                int col = index / colConst;
+                int height = i / _layerCount;
+                int index = i % _layerCount;
+                int row = index % _rowConst;
+                int col = index / _colConst;
                 Vector3 pos = Vector3.zero;
-                pos.x = initPos.x - boxLenght * row;
-                pos.y = initPos.y + boxLenght * height;
-                pos.z = initPos.z - boxLenght * col;
+                pos.x = _boxInitPos.x - _boxLenght * row;
+                pos.y = _boxInitPos.y + _boxLenght * height;
+                pos.z = _boxInitPos.z - _boxLenght * col;
                 var childTf = storeTransform.GetChild(i);
                 childTf.localPosition = pos;
             }
