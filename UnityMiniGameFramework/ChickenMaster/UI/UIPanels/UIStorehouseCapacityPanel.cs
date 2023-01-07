@@ -33,8 +33,10 @@ namespace UnityMiniGameFramework
         protected Label _labPopup;
         protected CapacityPopupNumber popupNumber;
 
-        protected Color _red = new Color(237, 77, 10);
-        protected Color _green = new Color(146, 234, 75);
+        //protected Color _red = new Color(237f, 77f, 10f, 255f);
+        //protected Color _green = new Color(146f, 234f, 75f, 255f);
+        protected Color _red = Color.red;
+        protected Color _green = Color.green;
 
         override public void Init(UIPanelConf conf)
         {
