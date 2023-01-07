@@ -157,6 +157,7 @@ namespace UnityMiniGameFramework
         public void refreshInfo()
         {
             var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/heros/{_heroConf.halfHead}");
+
             if(tx != null)
             {
                 _sprHeroIcon.style.backgroundImage = tx;

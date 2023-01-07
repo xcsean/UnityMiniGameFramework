@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -53,6 +55,7 @@ namespace UnityMiniGameFramework
                 return false;
             }
 
+            _trainNpcObj.moveAct.SetRotationAdd(new Vector3(0.0f, -90.0f, 0.0f));
             _initTrain();
 
             // add train to scene

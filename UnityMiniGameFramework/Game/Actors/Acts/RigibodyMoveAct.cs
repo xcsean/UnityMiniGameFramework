@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -19,6 +20,7 @@ namespace UnityMiniGameFramework
 
         protected float _curSpeed;
         protected UnityEngine.Vector3? _movVec;
+        protected UnityEngine.Vector3? _RotationAdd;
         protected UnityEngine.Rigidbody _rigiBody;
 
         protected string _defaultAniName;
@@ -82,6 +84,11 @@ namespace UnityMiniGameFramework
         public void moveToward(UnityEngine.Vector3 to)
         {
             _movVec = to.normalized;
+        }
+
+        public void SetRotationAdd(UnityEngine.Vector3 to)
+        {
+            _RotationAdd = to;
         }
         public void moveOn(List<UnityEngine.Vector3> path, float nodeRadius)
         {
@@ -223,7 +230,13 @@ namespace UnityMiniGameFramework
                 actor.animatorComponent.playAnimation(_movingAniName);
             }
 
-            var rot = UnityEngine.Quaternion.FromToRotation(_rigiBody.transform.forward, _movVec.Value);
+            Vector3 forward = _rigiBody.transform.forward;
+            if (_RotationAdd != null)
+            {
+                forward = Matrix4x4.Rotate(UnityEngine.Quaternion.Euler(_RotationAdd.Value)).MultiplyVector(forward);
+            }
+            
+            var rot = UnityEngine.Quaternion.FromToRotation(forward, _movVec.Value);
             if(rot.eulerAngles.y < 1 && rot.eulerAngles.y > -1)
             {
                 _isTurning = false;
@@ -236,6 +249,7 @@ namespace UnityMiniGameFramework
                 _updateTurning(rot.eulerAngles.y);
             }
 
+            
             _rigiBody.MovePosition(_rigiBody.position + _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime); 
         }
 
