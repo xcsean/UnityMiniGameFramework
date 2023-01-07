@@ -224,13 +224,20 @@ namespace UnityMiniGameFramework
         override public void OnUpdate()
         {
             base.OnUpdate();
-
+            
             _vfxManager.OnUpdate(UnityEngine.Time.deltaTime);
             _weaponManager.OnUpdate(UnityEngine.Time.deltaTime);
 
-            foreach (var a in _updateCall)
+            // var list = _updateCall.ToArray();
+            // foreach (var a in list)
+            // {
+            //     a();
+            // }
+            var arry = _updateCall.ToArray();
+            
+            for (int i = arry.Length - 1; i >= 0; i--)
             {
-                a();
+                arry[i]();
             }
         }
 
