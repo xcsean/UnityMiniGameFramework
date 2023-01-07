@@ -129,7 +129,6 @@ namespace UnityMiniGameFramework
             }
             if (blackList.Count < 1)
             {
-                isEnd = true;
                 EndPlay();
                 return;
             }
@@ -151,6 +150,11 @@ namespace UnityMiniGameFramework
         /// </summary>
         public void EndPlay()
         {
+            if(isEnd)
+            {
+                return;
+            }
+            isEnd = true;
             UnityGameApp.Inst.removeUpdateCall(OnUpdatePlay);
             OnEnterGame();
             //hideUI();
@@ -187,7 +191,7 @@ namespace UnityMiniGameFramework
 
         private void onClickSkip()
         {
-            OnEnterGame();
+            EndPlay();
         }
     }
 }
