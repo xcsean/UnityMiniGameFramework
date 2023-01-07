@@ -30,6 +30,8 @@ namespace UnityMiniGameFramework
 
         protected VisualElement _page1;
         protected VisualElement _page2;
+        protected Button _fastBtn;
+        protected Button _skipBtn;
 
         protected List<BlackItem> blackList = new List<BlackItem>();
 
@@ -53,6 +55,11 @@ namespace UnityMiniGameFramework
         {
             _page1 = this._uiObjects["page1"].unityVisualElement;
             _page2 = this._uiObjects["page2"].unityVisualElement;
+            _fastBtn = this._uiObjects["FastButton"].unityVisualElement as Button;
+            _skipBtn = this._uiObjects["SkipButton"].unityVisualElement as Button;
+            _fastBtn.clicked += onClickFast;
+            _skipBtn.clicked += onClickSkip;
+            _skipBtn.visible = false;
         }
 
         protected void InitOpeningQueue()
@@ -136,6 +143,7 @@ namespace UnityMiniGameFramework
             _timeInterval = _curFadeItem.DelayTime;
             _time = 0;
             _curFadeOpacity = 100f;
+            _skipBtn.visible = true;
         }
 
         /// <summary>
@@ -143,6 +151,7 @@ namespace UnityMiniGameFramework
         /// </summary>
         public void EndPlay()
         {
+            UnityGameApp.Inst.removeUpdateCall(OnUpdatePlay);
             OnEnterGame();
             //hideUI();
         }
@@ -168,5 +177,17 @@ namespace UnityMiniGameFramework
             //UnityGameApp.Inst.removeUpdateCall(this.OnUpdatePlay);
         }
 
+        private void onClickFast()
+        {
+            if (_time != _timeInterval)
+            {
+                _time = _timeInterval;
+            }
+        }
+
+        private void onClickSkip()
+        {
+            OnEnterGame();
+        }
     }
 }
