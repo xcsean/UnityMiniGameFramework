@@ -70,11 +70,14 @@ namespace UnityMiniGameFramework
                         grid.Q<VisualElement>("weapon").visible = false;
                         grid.Q<Label>("have").visible = true;
                         var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/common/icon_jinbi");
-                        grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
-                        grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
-                        grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
-                        grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
-                        grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
+                        if (tx != null)
+                        {
+                            grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
+                            grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
+                            grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
+                            grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
+                            grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
+                        }
                         grid.visible = true;
                         index++;
                     }
@@ -104,14 +107,17 @@ namespace UnityMiniGameFramework
                             grid.Q<VisualElement>("RewardIcon").style.backgroundImage = null;
                             foreach (var gun in gunConf)
                             {
-                                if(gun.Value.upgradeItemName == rewardConf.items[i].itemName)
+                                if (gun.Value.upgradeItemName == rewardConf.items[i].itemName)
                                 {
                                     var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/weapons/{gun.Value.weaponIcon}");
-                                    grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
-                                    grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
-                                    grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
-                                    grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
-                                    grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
+                                    if (tx != null)
+                                    {
+                                        grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
+                                        grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
+                                        grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
+                                        grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
+                                        grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
+                                    }
                                 }
                             }
                             grid.visible = true;
