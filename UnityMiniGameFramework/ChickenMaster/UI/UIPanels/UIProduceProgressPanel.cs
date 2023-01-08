@@ -47,10 +47,8 @@ namespace UnityMiniGameFramework
         protected PopupNumber leftPopupNumber;
         protected PopupNumber rightPopupNumber;
 
-        //protected Color _red = new Color(237f, 77f, 10f, 255f);
-        //protected Color _green = new Color(146f, 234f, 75f, 255f);
-        protected Color _red = Color.red;
-        protected Color _green = Color.green;
+        protected Color _red = new Color(237f / 255f, 77f / 255f, 10f / 255f);
+        protected Color _green = new Color(146f / 255f, 234f / 255f, 75f / 255f);
 
         override public void Init(UIPanelConf conf)
         {

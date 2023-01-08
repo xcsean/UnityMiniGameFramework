@@ -1,4 +1,4 @@
-﻿using MiniGameFramework;
+using MiniGameFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -223,7 +223,7 @@ namespace UnityMiniGameFramework
 
             if (produceProgressPanel != null)
             {
-                produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingInputProduct.count, toFill);
+                produceProgressPanel.DoUpdateInputStore(currentProductInputStore, toFill);
             }
 
             _updateProductBox(factoryConf.inputStorePrefabPath, ref _inPutGo,
@@ -252,12 +252,14 @@ namespace UnityMiniGameFramework
 
             if (produceProgressPanel != null)
             {
-                produceProgressPanel.DoUpdateOutStore(_localFacInfo.buildingOutputProduct.count, -fetchCount);
+                produceProgressPanel.DoUpdateOutStore(currentProductOutputStore, -fetchCount);
             }
 
-            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{_localFacInfo.buildingOutputProduct.count}");
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{currentProductOutputStore}");
+           
             _updateProductBox(factoryConf.outputStorePrefabPath, ref _outPutGo,
                 currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
+            
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
 
@@ -305,9 +307,7 @@ namespace UnityMiniGameFramework
 
             if (produceProgressPanel != null)
             {
-                // 判空
-                if (_localFacInfo.buildingOutputProduct != null)
-                    produceProgressPanel.DoUpdateInputStore(_localFacInfo.buildingOutputProduct.count, -realCostInputCount);
+                    produceProgressPanel.DoUpdateInputStore(currentProductInputStore, -realCostInputCount);
             }
 
             if (_localFacInfo.buildingOutputProduct == null)
@@ -325,7 +325,7 @@ namespace UnityMiniGameFramework
 
             if (produceProgressPanel != null)
             {
-                produceProgressPanel.DoUpdatePruduceGoods(_localFacInfo.buildingOutputProduct.count, produceCount);
+                produceProgressPanel.DoUpdatePruduceGoods(currentProductOutputStore, produceCount);
             }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}，产出总数量：{currentProductOutputStore}");
