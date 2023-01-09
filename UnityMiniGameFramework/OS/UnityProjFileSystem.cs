@@ -36,33 +36,15 @@ namespace UnityMiniGameFramework
 
         public FileStream getFileReadBinaryStream(string filename)
         {
-            string path;
-            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
-            {
-                path = Application.persistentDataPath + filename;
-                createDir(path);    
-            }
-            else
-            {
-                path = _getFullPath(filename);
-            }
-            
+            string path = getLocalSaveFilePath(filename);
+            createDir(path);
             return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read);
         }
 
         public FileStream getFileWriteBinaryStream(string filename)
         {
-            string path;
-            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
-            {
-                path = Application.persistentDataPath + filename;
-                createDir(path);    
-            }
-            else
-            {
-                path = _getFullPath(filename);
-            }
-            
+            string path = getLocalSaveFilePath(filename);
+            createDir(path);
             return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
         }
         
@@ -80,6 +62,26 @@ namespace UnityMiniGameFramework
             string path = _getFullPath(filename);
             return File.Exists(path);
         }
+
+        private string getLocalSaveFilePath(string fileName)
+        {
+            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
+            {
+                return Application.persistentDataPath + fileName;
+                    
+            }
+            else
+            {
+                return Application.dataPath + fileName;
+            }
+        }
+
+        public bool isLocalSaveFileExist(string filename)
+        {
+            string path = getLocalSaveFilePath(filename);
+            return File.Exists(path);
+        }
+        
 
         public void delFile(string filename)
         {

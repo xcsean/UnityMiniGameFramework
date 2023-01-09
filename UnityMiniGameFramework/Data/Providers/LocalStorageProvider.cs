@@ -44,7 +44,7 @@ namespace UnityMiniGameFramework
             string fileName = _localFileName + dataName;
             var objects = new Dictionary<string, object>();
 
-            if (!UnityGameApp.Inst.File.isFileExist(fileName))
+            if (!UnityGameApp.Inst.File.isLocalSaveFileExist(fileName))
             {
                 // create file
             }

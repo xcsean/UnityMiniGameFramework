@@ -10,6 +10,7 @@ namespace MiniGameFramework
     public interface IFileSystem
     {
         bool isFileExist(string filename);
+        bool isLocalSaveFileExist(string filename);
         void delFile(string filename);
 
         StreamReader getFileReadStream(string filename);
