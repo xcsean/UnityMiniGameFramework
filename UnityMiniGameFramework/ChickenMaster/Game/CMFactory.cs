@@ -51,8 +51,6 @@ namespace UnityMiniGameFramework
 
         protected int _produceVer;
         public int produceVer => _produceVer;
-        private UnityEngine.GameObject _outPutGo;
-        private UnityEngine.GameObject _inPutGo;
 
         public bool Init(LocalFactoryInfo facInfo)
         {
@@ -226,9 +224,10 @@ namespace UnityMiniGameFramework
                 produceProgressPanel.DoUpdateInputStore(currentProductInputStore, toFill);
             }
 
-            _updateProductBox(factoryConf.inputStorePrefabPath, ref _inPutGo,
-                currentProductInputStore / ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse.currentLevelConf
-                .fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
+                                                                ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
+                                                                .currentLevelConf
+                                                                .fetchPackCount, _inputStorePosition);
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
             cmGame.baseInfo.markDirty();
@@ -256,8 +255,8 @@ namespace UnityMiniGameFramework
             }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{currentProductOutputStore}");
-           
-            _updateProductBox(factoryConf.outputStorePrefabPath, ref _outPutGo,
+
+            _updateProductBox(factoryConf.outputStorePrefabPath,
                 currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
@@ -330,10 +329,11 @@ namespace UnityMiniGameFramework
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}，产出总数量：{currentProductOutputStore}");
 
-            _updateProductBox(factoryConf.inputStorePrefabPath, ref _inPutGo,
-                currentProductInputStore / ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse.currentLevelConf
-                .fetchPackCount, _inputStorePosition);
-            _updateProductBox(factoryConf.outputStorePrefabPath, ref _outPutGo,
+            _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
+                                                                ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
+                                                                .currentLevelConf
+                                                                .fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.outputStorePrefabPath,
                 currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
@@ -349,29 +349,25 @@ namespace UnityMiniGameFramework
             }
         }
 
-        protected virtual void _updateProductBox(string boxPrefabPath, ref GameObject boxObject, int boxNum,SpawnPos spawnPos)
+        protected virtual void _updateProductBox(string boxPrefabPath, int boxNum,SpawnPos spawnPos)
         {
             var putTf = spawnPos.spawnObject.transform;
             int childCount = putTf.childCount;
             if (childCount == boxNum)
                 return;
-            if (!boxObject)
-            {
-                boxObject = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject(boxPrefabPath);
-            }
 
             // remove 
             for (int i = childCount - 1; i >= boxNum; i--)
             {
                 var box = putTf.GetChild(i).gameObject;
-                GameObject.Destroy(box);
+                UnityGameObjectPool.GetInstance().PutUnityPrefabObject(boxPrefabPath, box);
             }
 
             childCount = putTf.childCount;
             // add
             for (int i = childCount; i < boxNum; i++)
             {
-                var obj = GameObject.Instantiate(boxObject);
+                var obj = UnityGameObjectPool.GetInstance().GetUnityPrefabObject(boxPrefabPath);
                 obj.transform.SetParent(putTf);
                 obj.transform.localEulerAngles = Vector3.zero;
             }

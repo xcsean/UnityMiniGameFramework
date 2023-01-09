@@ -47,7 +47,6 @@ namespace UnityMiniGameFramework
         public UnityEngine.GameObject trainStopPos => _trainStopPos;
         protected UnityEngine.GameObject _trainMoveoutPos;
         public UnityEngine.GameObject trainMoveoutPos => _trainMoveoutPos;
-        private UnityEngine.GameObject _productBoxGo;
         private int _colConst;
         private int _rowConst;
         private int _layerCount;
@@ -234,18 +233,16 @@ namespace UnityMiniGameFramework
             int childCount = storeTransform.childCount;
             if (boxNum == childCount)
                 return;
-            if (!_productBoxGo)
-                _productBoxGo = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject("box/OutputStoreProduct");
             for (int i = childCount - 1; i >= boxNum; i--)
             {
                 var box = storeTransform.GetChild(i).gameObject;
-                UnityEngine.GameObject.Destroy(box);
+                UnityGameObjectPool.GetInstance().PutUnityPrefabObject("box/OutputStoreProduct", box);
             }
 
             childCount = storeTransform.childCount;
             for (int i = childCount; i < boxNum; i++)
             {
-                var obj = UnityEngine.GameObject.Instantiate(_productBoxGo);
+                var obj = UnityGameObjectPool.GetInstance().GetUnityPrefabObject("box/OutputStoreProduct");
                 obj.transform.SetParent(storeTransform);
                 obj.transform.localEulerAngles = Vector3.zero;
             }

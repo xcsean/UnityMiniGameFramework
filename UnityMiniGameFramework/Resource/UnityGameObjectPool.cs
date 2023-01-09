@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using MiniGameFramework;
 using UnityEngine;
+using Debug = MiniGameFramework.Debug;
+using GameObject = UnityEngine.GameObject;
 
 namespace UnityMiniGameFramework
 {
@@ -45,6 +48,11 @@ namespace UnityMiniGameFramework
 
         public void PutUnityPrefabObject(string nameKey, UnityEngine.GameObject go)
         {
+            if (go == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"PutUnityPrefabObject gameObject is null");
+                return;
+            }
             if(!m_Instance._dictionary.ContainsKey(nameKey))
                 m_Instance._dictionary.Add(nameKey,new List<GameObject>());
             var render = go.GetComponent<Renderer>();
