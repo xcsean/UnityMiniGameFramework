@@ -130,36 +130,36 @@ namespace UnityMiniGameFramework
 
         protected void RefreshInfo()
         {
-            if (_factory == null)
+            bool isMaxLV = false;
+            int curLv = _factory == null ? 0 : _factory.localFacInfo.level;
+            var _curLevelConf = _factory == null ? null : _factoryConf.levelConfs[curLv];
+            var _nextLevelConf = _curLevelConf;
+
+            if (_factoryConf.levelConfs.ContainsKey(curLv + 1))
+            {
+                _nextLevelConf = _factoryConf.levelConfs[curLv + 1];
+            }
+            else
+            {
+                isMaxLV = true;
+            }
+
+            if (_curLevelConf == null)
             {
                 //labProductDesc.text = $"";
                 labCostCoin.text = $"{_factoryConf.activateGoldCost}";
                 labLvCur.text = $"Lv.{0}";
                 labLvNext.text = $"Lv.{1}";
                 labCostCur.text = $"{0}";
-                labCostNext.text = $"{0}";
                 labGetCur.text = $"{0}";
-                labGetNext.text = $"{0}";
+                labCostNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxInputProductStore}");
+                labGetNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxOutputProductStore}");
                 labEfficiencyCur.text = $"{0}";
-                labEfficiencyNext.text = $"{0}";
+                labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}";
                 nBtnUpgrade.text = $"ACTIVATE";
             }
             else
             {
-                bool isMaxLV = false;
-                int curLv = _factory.localFacInfo.level;
-                var _curLevelConf = _factoryConf.levelConfs[curLv];
-                var _nextLevelConf = _curLevelConf;
-
-                if (_factoryConf.levelConfs.ContainsKey(curLv + 1))
-                {
-                    _nextLevelConf = _factoryConf.levelConfs[curLv + 1];
-                }
-                else
-                {
-                    isMaxLV = true;
-                }
-
                 //labProductDesc.text = $"";
                 labCostCoin.text = $"{_curLevelConf.upgradeGoldCost}";
                 labLvCur.text = $"Lv.{curLv}";

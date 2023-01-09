@@ -243,7 +243,7 @@ namespace UnityMiniGameFramework
             var bi = _baseInfo.getData() as LocalBaseInfo;
             for (int i = 0; i < bi.defenseHeros.Count; ++i)
             {
-                if(bi.defenseHeros[i] == null)
+                if (bi.defenseHeros[i] == null)
                 {
                     continue;
                 }
@@ -256,6 +256,11 @@ namespace UnityMiniGameFramework
             }
 
             // init factories
+            if (bi.factories.Count == 0)
+            {
+                // 默认解锁第一个
+                AddFactory("factoryBuilding1");
+            }
             for(int i=0;i< bi.factories.Count; ++i)
             {
                 if (bi.factories[i] == null)

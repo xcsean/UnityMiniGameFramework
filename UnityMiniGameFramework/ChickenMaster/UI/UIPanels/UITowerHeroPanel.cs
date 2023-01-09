@@ -97,7 +97,7 @@ namespace UnityMiniGameFramework
                     // TO DO : level require
 
                     // for Debug ...
-                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "User Level not reach !");
+                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "Game Level not reach !");
                 }
                 else if (cmGame.Self.TrySubGold(_heroConf.activateGoldCost))
                 {
