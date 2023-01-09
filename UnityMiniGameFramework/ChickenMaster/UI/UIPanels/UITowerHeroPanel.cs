@@ -92,7 +92,7 @@ namespace UnityMiniGameFramework
             {
                 // not activate
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-                if (_heroConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).level < _heroConf.userLevelRequire)
+                if (_heroConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).currentLevel < _heroConf.userLevelRequire)
                 {
                     // TO DO : level require
 
