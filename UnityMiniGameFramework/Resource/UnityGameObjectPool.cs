@@ -9,14 +9,48 @@ namespace UnityMiniGameFramework
     public class UnityGameObjectPool
     {
         private static UnityGameObjectPool m_Instance;
+        private const float m_ReleaseTime = 10f;
 
-        private Dictionary<string, List<UnityEngine.GameObject>> _dictionary =
-            new Dictionary<string, List<GameObject>>();
+        struct ObjectSaveInfo
+        {
+            public UnityEngine.GameObject go;
+            public float releaseCountDown;
+
+            public ObjectSaveInfo(GameObject Go, float Time)
+            {
+                go = Go;
+                releaseCountDown = Time;
+            }
+        }
+
+        private Dictionary<string, List<ObjectSaveInfo>> _dictionary = new Dictionary<string, List<ObjectSaveInfo>>();
+
         public static UnityGameObjectPool GetInstance()
         {
             if (m_Instance == null)
                 m_Instance = new UnityGameObjectPool();
             return m_Instance;
+        }
+
+        private UnityGameObjectPool()
+        {
+            UnityGameApp.Inst.addUpdateCall(onUpdate);
+        }
+
+        private void onUpdate()
+        {
+            foreach (var element in _dictionary.Values)
+            {
+                for (int i = element.Count - 1; i >= 0; i--)
+                {
+                    var info = element[i];
+                    if (Time.unscaledTime - info.releaseCountDown - m_ReleaseTime >= 0.0f)
+                    {
+                        element.RemoveAt(i);
+                        GameObject.Destroy(info.go);
+                    }
+                }
+            }
         }
 
         public UnityEngine.GameObject GetUnityPrefabObject(string nameKey)
@@ -35,9 +69,11 @@ namespace UnityMiniGameFramework
                     go = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject(nameKey);
                     return GameObject.Instantiate(go);
                 }
-                go = pool[pool.Count - 1];
+
+                ObjectSaveInfo info = pool[pool.Count - 1];
+                go = info.go;
                 pool.RemoveAt(pool.Count - 1);
-                var render = go.GetComponent<Renderer>();
+                var render = info.go.GetComponent<Renderer>();
                 if (render != null)
                     render.enabled = true;
                 else
@@ -53,14 +89,15 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"PutUnityPrefabObject gameObject is null");
                 return;
             }
-            if(!m_Instance._dictionary.ContainsKey(nameKey))
-                m_Instance._dictionary.Add(nameKey,new List<GameObject>());
+
+            if (!m_Instance._dictionary.ContainsKey(nameKey))
+                m_Instance._dictionary.Add(nameKey, new List<ObjectSaveInfo>());
             var render = go.GetComponent<Renderer>();
             if (render != null)
                 render.enabled = false;
             else
                 go.SetActive(false);
-            m_Instance._dictionary[nameKey].Add(go);
+            m_Instance._dictionary[nameKey].Add(new ObjectSaveInfo(go, Time.unscaledTime));
             go.transform.SetParent(UnityGameApp.Inst.CachePoolRoot.transform);
         }
     }
