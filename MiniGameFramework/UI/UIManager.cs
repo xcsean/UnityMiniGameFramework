@@ -76,7 +76,11 @@ namespace MiniGameFramework
 
         public IUIPanel getUIPanel(string panelName)
         {
-            if(_uiPanels.ContainsKey(panelName))
+            if (panelName == "preloader")
+            {
+                return _preloaderPanel;
+            }
+            if (_uiPanels.ContainsKey(panelName))
             {
                 return _uiPanels[panelName];
             }
@@ -86,6 +90,10 @@ namespace MiniGameFramework
 
         public IUIPanel createUIPanelByConf(UIPanelConf conf)
         {
+            if (getUIPanel(conf.name) != null)
+            {
+                return getUIPanel(conf.name);
+            }
             IUIPanel panel = _createUIPanelByType(conf.type);
             if (panel != null)
             {
