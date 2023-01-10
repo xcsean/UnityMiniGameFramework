@@ -34,7 +34,8 @@ namespace UnityMiniGameFramework
         public int height => (int)_unityUIDocument.rootVisualElement.layout.height;
 
         // 界面是否显示中
-        public bool isShow => _unityUIDocument.rootVisualElement.style.display == DisplayStyle.Flex;
+        protected bool _isShow = false;
+        public bool isShow => _isShow || _unityUIDocument.rootVisualElement.style.display == DisplayStyle.Flex;
 
         public Action onShowStartHandle { get; set; }
         public Action onHideEndHandle { get; set; }
@@ -55,6 +56,8 @@ namespace UnityMiniGameFramework
             _unityGameObject = new UnityEngine.GameObject($"UIPanel_{_name}");
             _unityUIDocument = _unityGameObject.AddComponent<UIDocument>();
             _unityUIDocument.sortingOrder = conf.sortOrder;
+
+            _isShow = true;
 
             //var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/MyCustomEditor.uxml");
             var visualTree = Resources.Load<VisualTreeAsset>(conf.uiFile); // TO DO : use resource manager
@@ -178,11 +181,16 @@ namespace UnityMiniGameFramework
         }
 
         /// <summary>
-        /// 绑定弹窗缩放对象
+        /// 绑定弹窗缩放对象，在ShowAction和HideAction之前执行
         /// </summary>
         public void BindShowActionVE(VisualElement showVE)
         {
             _showActionVE = showVE;
+            if (_showActionVE != null)
+            {
+                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0.3f, 0.3f, 1f)));
+                _showActionVE.style.opacity = 0f;
+            }
         }
 
         /// <summary>
@@ -199,9 +207,6 @@ namespace UnityMiniGameFramework
                     return;
                 }
                 _unityUIDocument.rootVisualElement.styleSheets.Add(uss);
-
-                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));
-                _showActionVE.style.opacity = 0f;
                 _showActionVE.AddToClassList("unity-scale-show");
             }
             if (_showActionVE != null && _showActionVE.ClassListContains("unity-scale-show"))
@@ -213,6 +218,7 @@ namespace UnityMiniGameFramework
             {
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
             }
+            _isShow = true;
         }
 
         /// <summary>
@@ -229,6 +235,7 @@ namespace UnityMiniGameFramework
             {
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
             }
+            _isShow = false;
         }
     }
 }
