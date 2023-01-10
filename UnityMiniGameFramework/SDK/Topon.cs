@@ -7,28 +7,6 @@ using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
-    public class SDKBehaviour : MonoBehaviour
-    {
-        protected virtual void Awake()
-        {
-            Topon sdk = new Topon();
-            sdk.Init(this);
-            SDKManager.InitSDK(sdk);
-        }
-
-        public virtual void initSDK()
-        {
-        }
-
-        public virtual void loadVideo()
-        {
-        }
-	
-        public virtual void showVideo()
-        {
-        }
-    }
-
     public class Topon : ISDK
     {
         private SDKBehaviour _topOn;
@@ -36,17 +14,21 @@ namespace UnityMiniGameFramework
         public void Init(SDKBehaviour sdk)
         {
             _topOn = sdk;
-            _topOn.initSDK();
         }
 
-        public void showVideo()
+        public void showVideo(Action<AdEventArgs> cb)
         {
-            _topOn.showVideo();
+            _topOn.showVideo(cb);
 	    }
 	
         public void loadVideo()
         {
             _topOn.loadVideo();
+        }
+
+        public void showAutoAd(Action<AdEventArgs> cb)
+        {
+            _topOn.showVideo(cb);
         }
     }
 }

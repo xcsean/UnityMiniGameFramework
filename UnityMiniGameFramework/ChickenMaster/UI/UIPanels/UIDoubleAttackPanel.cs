@@ -45,6 +45,14 @@ namespace UnityMiniGameFramework
 
         private void onClickVideo()
         {
+            SDKManager.sdk.showVideo((AdEventArgs args) =>
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+            });
+        }
+
+        private void onVideoCb()
+        {
             long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
             if (buffTime < nowMillisecond)
             {
@@ -109,6 +117,8 @@ namespace UnityMiniGameFramework
             base.showUI();
             setBuffTime();
             UnityGameApp.Inst.addUpdateCall(onUpdate);
+
+            SDKManager.sdk.loadVideo();
         }
 
         public override void hideUI()

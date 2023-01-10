@@ -90,6 +90,7 @@ namespace UnityMiniGameFramework
 
         protected virtual void Start()
         {
+            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"Game initialized.");
         }
 
         protected virtual void Update()
