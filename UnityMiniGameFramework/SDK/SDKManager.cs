@@ -32,10 +32,27 @@ namespace UnityMiniGameFramework
     public class SDKManager
     {
         protected static ISDK _sdk;
-        public static ISDK sdk => _sdk;
+        protected static ISDK sdk => _sdk;
         public static void InitSDK(ISDK s)
         {
             _sdk = s;
+        }
+
+        public static void showAutoAd(Action<AdEventArgs> cb)
+        {
+            if (SDKManager._sdk != null)
+            {
+                SDKManager._sdk.showAutoAd(cb);
+            }
+            else
+            {
+                cb(
+                    new AdEventArgs
+                    {
+                        type = VideoEvent.RewardEvent
+                    }
+                );
+            }
         }
     }
 }

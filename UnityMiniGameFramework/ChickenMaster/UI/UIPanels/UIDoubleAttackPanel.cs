@@ -45,9 +45,13 @@ namespace UnityMiniGameFramework
 
         private void onClickVideo()
         {
-            SDKManager.sdk.showVideo((AdEventArgs args) =>
+            SDKManager.showAutoAd((AdEventArgs args) =>
             {
-                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                if(args.type == VideoEvent.RewardEvent)
+                {
+                    //TODO 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                }
             });
         }
 
@@ -117,8 +121,6 @@ namespace UnityMiniGameFramework
             base.showUI();
             setBuffTime();
             UnityGameApp.Inst.addUpdateCall(onUpdate);
-
-            SDKManager.sdk.loadVideo();
         }
 
         public override void hideUI()
