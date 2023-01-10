@@ -34,6 +34,20 @@ namespace UnityMiniGameFramework
             Resources.UnloadAsset(o);
         }
 
+        /// <summary>
+        /// 加载USS文件
+        /// </summary>
+        public UnityEngine.UIElements.StyleSheet LoadStyleSheet(string ussName)
+        {
+            var uss = Resources.Load("Uss/" + ussName) as UnityEngine.UIElements.StyleSheet;
+            if (uss == null)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadStyleSheet {ussName} not exist");
+                return null;
+            }
+            return uss;
+        }
+
         public Texture2D LoadTexture(string iconName)
         {
             var t2d = Resources.Load(iconName) as Texture2D;

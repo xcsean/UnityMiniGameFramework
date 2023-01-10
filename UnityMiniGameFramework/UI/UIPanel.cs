@@ -33,6 +33,7 @@ namespace UnityMiniGameFramework
 
         public int height => (int)_unityUIDocument.rootVisualElement.layout.height;
 
+        // 界面是否显示中
         public bool isShow => _unityUIDocument.rootVisualElement.style.display == DisplayStyle.Flex;
 
         public Action onShowStartHandle { get; set; }
@@ -166,7 +167,14 @@ namespace UnityMiniGameFramework
 
         virtual public void display(bool b)
         {
-            _unityUIDocument.rootVisualElement.style.display = b ? DisplayStyle.Flex : DisplayStyle.None;
+            if (b)
+            {
+                ShowAction();
+            }
+            else
+            {
+                HideAction();
+            }
         }
 
         /// <summary>
@@ -184,7 +192,7 @@ namespace UnityMiniGameFramework
         {
             if (_showActionVE != null && !_showActionVE.ClassListContains("unity-scale-show"))
             {
-                var uss = Resources.Load("Uss/unity-scale-show") as StyleSheet;
+                var uss = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadStyleSheet($"unity-scale-show");
                 if (uss == null)
                 {
                     MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name}, uss[unity-scale-show] not exist");
