@@ -38,6 +38,18 @@ namespace UnityMiniGameFramework
                     case 2:
                         grid.Q<Button>("ChooseButton").clicked += onChose2;
                         break;
+                    case 3:
+                        grid.Q<Button>("ChooseButton").clicked += onChose3;
+                        break;
+                    case 4:
+                        grid.Q<Button>("ChooseButton").clicked += onChose4;
+                        break;
+                    case 5:
+                        grid.Q<Button>("ChooseButton").clicked += onChose5;
+                        break;
+                    case 6:
+                        grid.Q<Button>("ChooseButton").clicked += onChose6;
+                        break;
                 }
                 grid.visible = false;
             }
@@ -84,7 +96,11 @@ namespace UnityMiniGameFramework
         private List<Func<int>> funcList = new List<Func<int>>();
         private void onClickChoose(int id)
         {
-
+            for (int index = 1; index < content.childCount + 1; index++)
+            {
+                var grid = content.Q<VisualElement>($"grid{index}");
+                grid.Q<VisualElement>("armed").visible = index == id;
+            }
         }
 
         private void onChose1()
@@ -96,6 +112,24 @@ namespace UnityMiniGameFramework
         {
             onClickChoose(2);
         }
+        private void onChose3()
+        {
+            onClickChoose(3);
+        }
 
+        private void onChose4()
+        {
+            onClickChoose(4);
+        }
+
+        private void onChose5()
+        {
+            onClickChoose(5);
+        }
+
+        private void onChose6()
+        {
+            onClickChoose(6);
+        }
     }
 }

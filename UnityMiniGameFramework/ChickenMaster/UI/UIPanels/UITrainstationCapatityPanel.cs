@@ -10,13 +10,14 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    //public class CapacityPopupNumber
-    //{
-    //    public string Text;
-    //    public Color TextColor;
-    //    public float LifeTime;
-    //    public Vector3 UpPos;
-    //}
+
+    public class CapacityPopup
+    {
+        public string Text;
+        public Color TextColor;
+        public float LifeTime;
+        public Vector3 UpPos;
+    }
 
     /// <summary>
     /// 仓库容量
@@ -29,9 +30,10 @@ namespace UnityMiniGameFramework
             return new UITrainstationCapatityPanel();
         }
 
-        protected Label _labCapacity;
-        protected Label _labPopup;
-        protected CapacityPopupNumber popupNumber;
+        private VisualElement layout;
+        private Label _labCapacity;
+        private Label _labPopup;
+        public CapacityPopup popupNumber;
 
         protected Color _red = new Color(237f / 255f, 77f / 255f, 10f / 255f);
         protected Color _green = new Color(146f / 255f, 234f / 255f, 75f / 255f);
@@ -41,25 +43,28 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             FindUI();
-
-            DoUpdateInputStore(0, 0);
         }
 
         protected void FindUI()
         {
-            _labCapacity = this._uiObjects["labCapacity"].unityVisualElement as Label;
-            _labPopup = this._uiObjects["labPopup"].unityVisualElement as Label;
+            layout = _uiObjects["GridLayout"].unityVisualElement as VisualElement;
+            var grid = layout.Q<VisualElement>("grid");
+            _labCapacity = grid.Q<Label>("labCapacity");
+            _labPopup = grid.Q<Label>("labPopup");
+            popupNumber = null;
+
+            DoUpdateInputStore(0, 0);
         }
 
         public void DoUpdateInputStore(int totalCnt, int changeCnt)
         {
             // 库存
-            _labCapacity.text = $"{totalCnt}";
+            _labCapacity.text = $"x{totalCnt}";
             _labPopup.text = "";
 
             if (changeCnt != 0)
             {
-                popupNumber = new CapacityPopupNumber()
+                popupNumber = new CapacityPopup()
                 {
                     Text = changeCnt > 0 ? $"+{changeCnt}" : $"{changeCnt}",
                     TextColor = changeCnt > 0 ? _green : _red,
