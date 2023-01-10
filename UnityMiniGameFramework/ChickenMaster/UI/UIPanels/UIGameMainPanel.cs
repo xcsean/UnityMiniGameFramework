@@ -150,17 +150,11 @@ namespace UnityMiniGameFramework
             _ui.showUI();
         }
 
-        private int bossScale = 1;
         /// <summary>
         /// 设置
         /// </summary>
         protected void OnSettiingBtnClick()
         {
-            bossScale = -bossScale;
-            var scale = bossScale == 1 ? 1f : 0.4f;
-            _bossInfo.style.scale = new StyleScale(new Scale(new UnityEngine.Vector3(scale, scale, 1f)));
-            _bossInfo.style.opacity = scale;
-
         }
 
         public void refreshAll()

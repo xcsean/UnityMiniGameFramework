@@ -240,8 +240,23 @@ namespace UnityMiniGameFramework
             // init self
             _self.Init();
 
-            // init npc heros
             var bi = _baseInfo.getData() as LocalBaseInfo;
+
+            // init egg
+            _egg.Init(bi.egg);
+
+            // init storehouse
+            _storeHouse.Init(bi.storeHouse);
+
+            // init train station
+            _trainStation.Init(bi.trainStation);
+
+            // init npc heros
+            if (bi.defenseHeros.Count == 0)
+            {
+                // 默认解锁第一个角色
+                AddDefenseHero("Alice");
+            }
             for (int i = 0; i < bi.defenseHeros.Count; ++i)
             {
                 if (bi.defenseHeros[i] == null)
@@ -259,7 +274,7 @@ namespace UnityMiniGameFramework
             // init factories
             if (bi.factories.Count == 0)
             {
-                // 默认解锁第一个
+                // 默认解锁第一个工厂
                 AddFactory("factoryBuilding1");
             }
             for(int i=0;i< bi.factories.Count; ++i)
@@ -276,15 +291,6 @@ namespace UnityMiniGameFramework
                     _cmFactories[fac.factoryName] = fac;
                 }
             }
-
-            // init egg
-            _egg.Init(bi.egg);
-
-            // init storehouse
-            _storeHouse.Init(bi.storeHouse);
-
-            // init train station
-            _trainStation.Init(bi.trainStation);
 
             var tr = UnityGameApp.Inst.MainScene.mapRoot.transform.Find(_gameConf.gameConfs.levelCenterObjectName);
             if(tr == null)
