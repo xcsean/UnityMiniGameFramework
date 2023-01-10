@@ -11,27 +11,27 @@ namespace UnityMiniGameFramework
 {
     public class UnityRESTFulClient : RESTFulClient
     {
-        public void Login(C2S_LoginParam par, Action<S2C_LoginResult> cb)
+        public void Login(CS_LoginParam par, Action<SC_LoginResult> cb)
         {
-            this.DoAction<S2C_LoginResult, C2S_LoginParam>("login", par, (RCPostActResult res) =>
+            this.DoAction<SC_LoginResult, CS_LoginParam>("login", par, (RCPostActResult res) =>
             {
-                cb(res.content as S2C_LoginResult);
+                cb(res.content as SC_LoginResult);
             });
         }
 
-        public void Upload(BaseUserInfo par, Action<S2C_LoginResult> cb)
+        public void Upload(BaseUserInfo par, Action<SC_LoginResult> cb)
         {
-            this.DoAction<S2C_LoginResult, BaseUserInfo>("upload", par, (RCPostActResult res) =>
+            this.DoAction<SC_LoginResult, BaseUserInfo>("upload", par, (RCPostActResult res) =>
             {
-                cb(res.content as S2C_LoginResult);
+                cb(res.content as SC_LoginResult);
             });
         }
 
-        public void Report(ReportInfo par, Action<S2C_LoginResult> cb)
+        public void Report(CS_ReportParam par, Action<SC_Result> cb)
         {
-            this.DoAction<S2C_LoginResult, ReportInfo>("report", par, (RCPostActResult res) =>
+            this.DoAction<SC_Result, CS_ReportParam>("report", par, (RCPostActResult res) =>
             {
-                cb(res.content as S2C_LoginResult);
+                cb(res.content as SC_Result);
             });
         }
     }

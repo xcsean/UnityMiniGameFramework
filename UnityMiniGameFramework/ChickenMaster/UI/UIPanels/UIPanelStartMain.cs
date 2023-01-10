@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MiniGameFramework;
 using UnityEngine.UIElements;
+using UnityMiniGameFramework.RESTFulAPI;
 
 namespace UnityMiniGameFramework
 {
@@ -91,21 +92,21 @@ namespace UnityMiniGameFramework
             //        level = 10,
             //        vipLevel = 10
             //    },
-            //    (RESTFulAPI.S2C_LoginResult res) =>
+            //    (RESTFulAPI.SC_LoginResult res) =>
             //    {
             //        UnityGameApp.Inst.LoadMainScene();
             //    }
             //);
 
             //UnityGameApp.Inst.RESTFulClient.Report(
-            //     new ReportInfo()
+            //     new CS_ReportParam()
             //     {
             //         uid = "12314",
             //         type = 1,
             //         createtime = DateTime.Now,
             //         msg = "测试",
             //     },
-            //     (RESTFulAPI.S2C_LoginResult res) =>
+            //     (RESTFulAPI.SC_Result res) =>
             //     {
             //         UnityGameApp.Inst.LoadMainScene();
             //     }
