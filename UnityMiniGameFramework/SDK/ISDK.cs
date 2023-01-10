@@ -8,6 +8,12 @@ namespace UnityMiniGameFramework
 {
     public interface ISDK
     {
-        void Init();
+        void Init(SDKBehaviour sdk);
+        void showVideo();
+        void loadVideo();
+    }
+
+    public class AdVideoResult
+    {
     }
 }
