@@ -34,6 +34,7 @@ namespace UnityMiniGameFramework
             //UnityEngine.GameObject.Destroy(_barObject);
             UnityGameObjectPool.GetInstance().PutUnityPrefabObject("actor/HealthBar", _barObject);
         }
+        
         private static readonly int Fill = Shader.PropertyToID("_Fill");
 
         public void setHp(float per)
@@ -67,6 +68,14 @@ namespace UnityMiniGameFramework
         {
             //_barObject.SetActive(false);
             UnityGameObjectPool.GetInstance().PutUnityPrefabObject("actor/HealthBar", _barObject);
+            _barObject = null;
+        }
+
+        public void setPosition(Vector3 pos)
+        {
+            if(_barObject == null)
+                return;
+            _barObject.transform.position = pos;
         }
     }
 
@@ -127,10 +136,11 @@ namespace UnityMiniGameFramework
             base.OnUpdate(timeElasped);
 
             var mgGameObject = _gameObject as MGGameObject;
-            _hpBar.barObject.transform.position = new UnityEngine.Vector3(
-                mgGameObject.unityGameObject.transform.position.x, 
-                mgGameObject.unityGameObject.transform.position.y + 1.5f, 
-                mgGameObject.unityGameObject.transform.position.z);
+            var position = mgGameObject.unityGameObject.transform.position;
+            _hpBar.setPosition(new UnityEngine.Vector3(
+                position.x, 
+                position.y + 1.5f, 
+                position.z)) ;
         }
 
         virtual public void OnHitByWeapon(WeaponObject weapon)
