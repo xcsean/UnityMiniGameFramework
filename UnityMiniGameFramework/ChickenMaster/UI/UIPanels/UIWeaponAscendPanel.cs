@@ -34,6 +34,8 @@ namespace UnityMiniGameFramework
 
         protected void FindUI()
         {
+            BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
+
             _labDamage = this._uiObjects["labDamage"].unityVisualElement as Label;
             _labSpeed = this._uiObjects["labSpeed"].unityVisualElement as Label;
             _labRange = this._uiObjects["labRange"].unityVisualElement as Label;

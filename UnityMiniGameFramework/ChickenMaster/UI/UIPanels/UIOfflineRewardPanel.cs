@@ -27,6 +27,8 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
+            BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
+
             CloseButton = this._uiObjects["CloseButton"].unityVisualElement as Button;
             VideoGetButton = this._uiObjects["VideoGetButton"].unityVisualElement as Button;
             OfflineTimeLabel = this._uiObjects["OfflineTimeLabel"].unityVisualElement as Label;

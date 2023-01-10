@@ -26,10 +26,14 @@ namespace UnityMiniGameFramework
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
+
+            BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
+
             NormalGetButton = this._uiObjects["NormalGetButton"].unityVisualElement as Button;
             VideoGetButton = this._uiObjects["VideoGetButton"].unityVisualElement as Button;
             CloseButton = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            layoutGrid = this._uiObjects["layoutGrid"].unityVisualElement as VisualElement;
+            layoutGrid = this._uiObjects["layoutGrid"].unityVisualElement;
+
             NormalGetButton.clicked += onClickNormalGet;
             VideoGetButton.clicked += onClickVideoGet;
             CloseButton.clicked += onClickClose;

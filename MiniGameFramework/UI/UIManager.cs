@@ -11,6 +11,7 @@ namespace MiniGameFramework
         protected Dictionary<string, Func<IUIObject>> _uiObjectCreators;
         protected Dictionary<string, Func<IUIPanel>> _uiPanelCreators;
         protected Dictionary<string, IUIPanel> _uiPanels;
+        protected Dictionary<string, UIPanelConf> _uiPanelConfs;
 
         protected UIConfig _uiConf;
 
@@ -22,6 +23,7 @@ namespace MiniGameFramework
             _uiObjectCreators = new Dictionary<string, Func<IUIObject>>();
             _uiPanelCreators = new Dictionary<string, Func<IUIPanel>>();
             _uiPanels = new Dictionary<string, IUIPanel>();
+            _uiPanelConfs = new Dictionary<string, UIPanelConf>();
         }
 
         public void Init(string uiConfName)
@@ -99,6 +101,20 @@ namespace MiniGameFramework
             {
                 panel.Init(conf);
 
+                _uiPanelConfs[conf.name] = conf;
+
+                panel.onShowStartHandle = () =>
+                {
+                    if (conf.needMask)
+                    {
+                        showMask(conf);
+                    }
+                };
+                panel.onHideEndHandle = () =>
+                {
+                    closeMask(conf);
+                };
+
                 if (conf.name == "preloader")
                 {
                     _preloaderPanel = (IUIPreloaderPanel)panel;
@@ -114,7 +130,7 @@ namespace MiniGameFramework
 
         public IUIPanel createUIPanel(string panelName)
         {
-            if(!_uiConf.uiConf.UIPanels.ContainsKey(panelName))
+            if (!_uiConf.uiConf.UIPanels.ContainsKey(panelName))
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"createUIPanel ({panelName}) config not exist");
                 return null;
@@ -129,7 +145,7 @@ namespace MiniGameFramework
 
         public void DisposeUIPanel(IUIPanel p)
         {
-            if(_uiPanels.ContainsKey(p.name))
+            if (_uiPanels.ContainsKey(p.name))
             {
                 _uiPanels.Remove(p.name);
             }
@@ -150,6 +166,64 @@ namespace MiniGameFramework
             // TO DO : add other files, textures, etc.
 
             return listFiles;
+        }
+
+        protected List<string> maskList = new List<string>();
+        public IUIPanel _maskPanel = null;
+        public IUIPanel maskPanel => _maskPanel;
+        public void showMask(UIPanelConf conf)
+        {
+            var ve = getMaskUI();
+            ve.SetSortOrder(conf.sortOrder - 1);
+
+            if (maskList.Contains(conf.name))
+            {
+                maskList.Remove(conf.name);
+            }
+            else
+            {
+                //
+            }
+            maskList.Add(conf.name);
+        }
+
+        public void closeMask(UIPanelConf conf)
+        {
+            if (!conf.needMask)
+            {
+                return;
+            }
+            if (maskList.Count == 0)
+            {
+                return;
+            }
+            if (maskList.Contains(conf.name))
+            {
+                maskList.Remove(conf.name);
+            }
+            if (maskList.Count != 0)
+            {
+                string lastName = maskList[maskList.Count - 1];
+                showMask(_uiPanelConfs[lastName]);
+            }
+            else
+            {
+                if (_maskPanel != null)
+                {
+                    _maskPanel.hideUI();
+                }
+            }
+        }
+
+        public IUIPanel getMaskUI()
+        {
+            if (_maskPanel == null)
+            {
+                _maskPanel = createUIPanel("MaskUI");
+            }
+            _maskPanel.showUI();
+
+            return _maskPanel;
         }
 
     }

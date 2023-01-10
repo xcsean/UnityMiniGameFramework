@@ -34,8 +34,14 @@ namespace UnityMiniGameFramework
         public int height => (int)_unityUIDocument.rootVisualElement.layout.height;
 
         public bool isShow => _unityUIDocument.rootVisualElement.style.display == DisplayStyle.Flex;
-        
+
+        public Action onShowStartHandle { get; set; }
+        public Action onHideEndHandle { get; set; }
+
+        private VisualElement _showActionVE;
+
         private Action _callBack = null;
+
         public UIPanel()
         {
             _uiObjects = new Dictionary<string, UIObject>();
@@ -74,7 +80,12 @@ namespace UnityMiniGameFramework
 
                 _uiObjects[ctrlConf.name] = uiObj;
             }
+     
+        }
 
+        virtual public void SetSortOrder(int order)
+        {
+            _unityUIDocument.sortingOrder = order;
         }
 
         virtual public void Dispose()
@@ -90,18 +101,6 @@ namespace UnityMiniGameFramework
             }
 
             return _uiObjects[name];
-        }
-
-        virtual public void hideUI()
-        {
-            //_unityGameObject.SetActive(false);
-            //_unityUIDocument.rootVisualElement.SetEnabled(false);
-            //_unityUIDocument.rootVisualElement.style.visibility = Visibility.Hidden;
-            //_unityUIDocument.rootVisualElement.visible = false;
-            _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.removeUI(this);
-            removeUpdate();
         }
 
         protected void removeUpdate()
@@ -120,25 +119,108 @@ namespace UnityMiniGameFramework
             _callBack = callBack;
             UnityGameApp.Inst.addUpdateCall(callBack);
         }
-        
+
+        virtual public void hideUI()
+        {
+            //_unityGameObject.SetActive(false);
+            //_unityUIDocument.rootVisualElement.SetEnabled(false);
+            //_unityUIDocument.rootVisualElement.style.visibility = Visibility.Hidden;
+            //_unityUIDocument.rootVisualElement.visible = false;
+            //_unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
+            //_unityUIDocument.rootVisualElement.style.opacity = 0f;
+
+            if (onHideEndHandle != null)
+            {
+                onHideEndHandle();
+            }
+            HideAction();
+
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.removeUI(this);
+            removeUpdate();
+        }
+
         virtual public void showUI()
         {
             //_unityGameObject.SetActive(true);
             //_unityUIDocument.rootVisualElement.SetEnabled(true);
             //_unityUIDocument.rootVisualElement.style.visibility = Visibility.Visible;
             //_unityUIDocument.rootVisualElement.visible = true;
-            _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+            //_unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+            //_unityUIDocument.rootVisualElement.style.opacity = 1f;
+
+            if (onShowStartHandle != null)
+            {
+                onShowStartHandle();
+            }
+
+            ShowAction();
+
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.addUI(this);
         }
         public void setPoisition(int x, int y)
         {
-            _unityUIDocument.rootVisualElement.transform.position = new UnityEngine.Vector2(x, y);
+            _unityUIDocument.rootVisualElement.transform.position = new Vector2(x, y);
         }
 
         virtual public void display(bool b)
         {
             _unityUIDocument.rootVisualElement.style.display = b ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        /// <summary>
+        /// 绑定弹窗缩放对象
+        /// </summary>
+        public void BindShowActionVE(VisualElement showVE)
+        {
+            _showActionVE = showVE;
+        }
+
+        /// <summary>
+        /// 界面显示时缩放动画
+        /// </summary>
+        virtual public void ShowAction()
+        {
+            if (_showActionVE != null && !_showActionVE.ClassListContains("unity-scale-show"))
+            {
+                var uss = Resources.Load("Uss/unity-scale-show") as StyleSheet;
+                if (uss == null)
+                {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name}, uss[unity-scale-show] not exist");
+                    return;
+                }
+                _unityUIDocument.rootVisualElement.styleSheets.Add(uss);
+
+                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));
+                _showActionVE.style.opacity = 0f;
+                _showActionVE.AddToClassList("unity-scale-show");
+            }
+            if (_showActionVE != null && _showActionVE.ClassListContains("unity-scale-show"))
+            {
+                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));
+                _showActionVE.style.opacity = 1f;
+            }
+            else
+            {
+                _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+            }
+        }
+
+        /// <summary>
+        /// 界面隐藏时缩放动画
+        /// </summary>
+        virtual public void HideAction()
+        {
+            if (_showActionVE != null && _showActionVE.ClassListContains("unity-scale-show"))
+            {
+                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0.3f, 0.3f, 1f)));
+                _showActionVE.style.opacity = 0f;
+            }
+            else
+            {
+                _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
+            }
         }
     }
 }

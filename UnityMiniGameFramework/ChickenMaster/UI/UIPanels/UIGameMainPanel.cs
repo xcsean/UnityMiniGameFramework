@@ -80,6 +80,10 @@ namespace UnityMiniGameFramework
             _joystick.showUI();
             //_joystick = this._uiObjects["JoyStick"] as UIJoyStickControl;
 
+            UIMaskPanel mask = UnityGameApp.Inst.UI.getMaskUI() as UIMaskPanel;
+            mask.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            mask.hideUI();
+
             _meatNum = this._uiObjects["MeatNum"].unityVisualElement as Label;
             _goldNum = this._uiObjects["GoldNum"].unityVisualElement as Label;
             _level = this._uiObjects["Level"].unityVisualElement as Label;
@@ -146,11 +150,17 @@ namespace UnityMiniGameFramework
             _ui.showUI();
         }
 
+        private int bossScale = 1;
         /// <summary>
         /// 设置
         /// </summary>
         protected void OnSettiingBtnClick()
         {
+            bossScale = -bossScale;
+            var scale = bossScale == 1 ? 1f : 0.4f;
+            _bossInfo.style.scale = new StyleScale(new Scale(new UnityEngine.Vector3(scale, scale, 1f)));
+            _bossInfo.style.opacity = scale;
+
         }
 
         public void refreshAll()
@@ -193,7 +203,7 @@ namespace UnityMiniGameFramework
                 if (lvlConf.mapLevelName == "testLevelBigBoss")
                 {
                     bossLevel = (currentLevel / lvlConf.levelDivide + 1) * lvlConf.levelDivide;
-                    bossIcon = $"Mob_boss_00{(int)(bossLevel/ lvlConf.levelDivide)}";
+                    bossIcon = $"Mob_boss_00{(int)(bossLevel / lvlConf.levelDivide)}";
                 }
             }
             for (int i = 0; i < 3; i++)
@@ -226,7 +236,7 @@ namespace UnityMiniGameFramework
             }
             VisualElement sprBoss = _bossInfo.Q<VisualElement>("bossHead");
             var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/boss/{bossIcon}");
-            if(tx != null)
+            if (tx != null)
             {
                 sprBoss.style.backgroundImage = tx;
                 sprBoss.style.width = tx.width;

@@ -12,5 +12,10 @@ namespace MiniGameFramework
 
         void Init(UIPanelConf conf);
         void Dispose();
+        void SetSortOrder(int order);
+
+        Action onShowStartHandle { get; set; }
+        Action onHideEndHandle { get; set; }
+
     }
 }

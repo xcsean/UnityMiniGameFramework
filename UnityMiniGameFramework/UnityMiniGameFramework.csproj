@@ -121,6 +121,7 @@
     <Compile Include="ChickenMaster\Levels\CMShootingLevel.cs" />
     <Compile Include="ChickenMaster\UI\UIControls\UIFactoryControl.cs" />
     <Compile Include="ChickenMaster\UI\UIControls\UIHeroControl.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIMaskPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITrainstationCapatityPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UICommonFactoryPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIDoubleAttackPanel.cs" />

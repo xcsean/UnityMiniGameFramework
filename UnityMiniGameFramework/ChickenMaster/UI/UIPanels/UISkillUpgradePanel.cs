@@ -22,6 +22,8 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
+            BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
+
             _closeBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
             _closeBtn.clicked += onClickClose;
             content = this._uiObjects["unity-content-container"].unityVisualElement;

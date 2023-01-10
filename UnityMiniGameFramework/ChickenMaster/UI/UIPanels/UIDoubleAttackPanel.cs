@@ -34,6 +34,8 @@ namespace UnityMiniGameFramework
             _videoBtn.clicked += onClickVideo;
             _dmgPb = this._uiObjects["TimeProgressBar"].unityVisualElement;
             _timeLab = this._uiObjects["TimeLabel"].unityVisualElement as Label;
+
+            BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
         }
 
         private void onClickClose()

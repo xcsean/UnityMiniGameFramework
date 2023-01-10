@@ -26,6 +26,7 @@ namespace MiniGameFramework
         public string uiFile { get; set; }
 
         public int sortOrder { get; set; }
+        public bool needMask { get; set; }
 
         public List<UIControlConf> controls { get; set; }
 
