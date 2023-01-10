@@ -52,6 +52,7 @@ namespace UnityMiniGameFramework
         private int _layerCount;
         private float _boxLenght = 0.32f;
         private Vector3 _boxInitPos;
+        private UITrainstationCapatityPanel _uiTrainstationCapatityPanel;
 
         public CMTrainStation()
         {
@@ -159,11 +160,19 @@ namespace UnityMiniGameFramework
             _rowConst = (int) Math.Floor(width / _boxLenght);
             _layerCount = _rowConst * _colConst;
             _boxInitPos = new Vector3(_boxLenght * (_colConst / 2), 0, _boxLenght * (_rowConst / 2));
+
+            InitCapacityUI();
         }
 
         public void OnUpdate()
         {
             _train.OnUpdate();
+
+            if (_uiTrainstationCapatityPanel != null)
+            {
+                var screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(_mapBuildingObj.unityGameObject.transform.position));
+                _uiTrainstationCapatityPanel.setPoisition((int)screenPos.x - 190, (int)screenPos.y - 220);
+            }
         }
 
         public void SyncWorkerFactories()
@@ -207,6 +216,10 @@ namespace UnityMiniGameFramework
                 _trainStationInfo.storeProducts.Add(inputProd);
                 
                 _currTotalStoreCount += inputValue;
+                if (_uiTrainstationCapatityPanel != null)
+                {
+                    _uiTrainstationCapatityPanel.DoUpdateInputStore(_currTotalStoreCount, inputValue);
+                }
 
                 changed = true;
             }
@@ -294,6 +307,10 @@ namespace UnityMiniGameFramework
 
                     useSpace += putCount;
                     _currTotalStoreCount -= putCount;
+                    if (_uiTrainstationCapatityPanel != null)
+                    {
+                        _uiTrainstationCapatityPanel.DoUpdateInputStore(_currTotalStoreCount, putCount);
+                    }
 
                     goldAdd += putCount * prodConf.price;
 
@@ -385,6 +402,16 @@ namespace UnityMiniGameFramework
             // TO DO : call train by watch Ad.
 
             return true;
+        }
+
+        /// <summary>
+        /// 火车站建筑头顶容量显示
+        /// </summary>
+        protected void InitCapacityUI()
+        {
+            _uiTrainstationCapatityPanel = UnityGameApp.Inst.UI.createUIPanel("TrainstationCapacityUI") as UITrainstationCapatityPanel;
+            _uiTrainstationCapatityPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _uiTrainstationCapatityPanel.showUI();
         }
     }
 }
