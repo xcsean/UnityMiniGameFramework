@@ -37,6 +37,8 @@ namespace UnityMiniGameFramework
             _countLab = this._uiObjects["SkillCount"].unityVisualElement as Label;
             _skillLab = this._uiObjects["SkillTitle"].unityVisualElement as Label;
             _skillIcon = this._uiObjects["SkillIcon"].unityVisualElement;
+
+            BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
         }
 
         private void onClickClose()
