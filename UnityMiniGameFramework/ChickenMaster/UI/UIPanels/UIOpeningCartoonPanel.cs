@@ -59,7 +59,7 @@ namespace UnityMiniGameFramework
             _skipBtn = this._uiObjects["SkipButton"].unityVisualElement as Button;
             _fastBtn.clicked += onClickFast;
             _skipBtn.clicked += onClickSkip;
-            _skipBtn.visible = false;
+            _skipBtn.style.display = DisplayStyle.None;
         }
 
         protected void InitOpeningQueue()
@@ -142,7 +142,7 @@ namespace UnityMiniGameFramework
             _timeInterval = _curFadeItem.DelayTime;
             _time = 0;
             _curFadeOpacity = 100f;
-            _skipBtn.visible = true;
+            _skipBtn.style.display = DisplayStyle.Flex;
         }
 
         /// <summary>

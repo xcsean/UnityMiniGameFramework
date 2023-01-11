@@ -55,7 +55,7 @@ namespace UnityMiniGameFramework
             for(int i = 0; i < 6; i++)
             {
                 var grid = layoutGrid.Q<VisualElement>($"grid{i}");
-                grid.visible = false;
+                grid.style.display = DisplayStyle.None;
             }
 
             foreach (var lvlConf in _gameConf.gameConfs.defenseLevels)
@@ -71,8 +71,8 @@ namespace UnityMiniGameFramework
                         grid.Q<Label>("count").text = $"x{rewardConf.gold}";
                         grid.Q<Label>("have").text = $"OWNED: {StringUtil.StringNumFormat(bi.gold.ToString())}";
                         grid.Q<Label>("name").text = "GOLD";
-                        grid.Q<VisualElement>("weapon").visible = false;
-                        grid.Q<Label>("have").visible = true;
+                        grid.Q<VisualElement>("weapon").style.display = DisplayStyle.None;
+                        grid.Q<Label>("have").style.display = DisplayStyle.Flex;
                         var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/common/icon_jinbi");
                         if (tx != null)
                         {
@@ -82,7 +82,7 @@ namespace UnityMiniGameFramework
                             grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
                             grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
                         }
-                        grid.visible = true;
+                        grid.style.display = DisplayStyle.Flex;
                         index++;
                     }
 
@@ -92,9 +92,9 @@ namespace UnityMiniGameFramework
                     //    grid.Q<Label>("count").text = $"X{rewardConf.exp}";
                     //    grid.Q<Label>("have").text = $"OWNED: {bi.exp}";
                     //    grid.Q<Label>("name").text = "EXP";
-                    //    grid.Q<VisualElement>("weapon").visible = false;
-                    //    grid.Q<Label>("have").visible = true;
-                    //    grid.visible = true;
+                    //    grid.Q<VisualElement>("weapon").style.display = DisplayStyle.Flex;
+                    //    grid.Q<Label>("have").style.display = DisplayStyle.Flex;
+                    //    grid.style.display = DisplayStyle.Flex;
                     //    index++;
                     //}
 
@@ -106,8 +106,8 @@ namespace UnityMiniGameFramework
                             var grid = layoutGrid.Q<VisualElement>($"grid{index}");
                             grid.Q<Label>("count").text = $"X{rewardConf.items[i].count}";
                             grid.Q<Label>("name").text = $"{rewardConf.items[i].itemName}";
-                            grid.Q<VisualElement>("weapon").visible = true;
-                            grid.Q<Label>("have").visible = false;
+                            grid.Q<VisualElement>("weapon").style.display = DisplayStyle.None;
+                            grid.Q<Label>("have").style.display = DisplayStyle.None;
                             grid.Q<VisualElement>("RewardIcon").style.backgroundImage = null;
                             foreach (var gun in gunConf)
                             {
@@ -124,7 +124,7 @@ namespace UnityMiniGameFramework
                                     }
                                 }
                             }
-                            grid.visible = true;
+                            grid.style.display = DisplayStyle.Flex;
                             index++;
                         }
                     }
@@ -178,9 +178,9 @@ namespace UnityMiniGameFramework
             for (int i = 0; i < 6; i++)
             {
                 var grid = layoutGrid.Q<VisualElement>($"grid{i}");
-                grid.visible = false;
-                grid.Q<VisualElement>("weapon").visible = false;
-                grid.Q<Label>("have").visible = false;
+                grid.style.display = DisplayStyle.None;
+                grid.Q<VisualElement>("weapon").style.display = DisplayStyle.None;
+                grid.Q<Label>("have").style.display = DisplayStyle.None;
             }
             base.hideUI();
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;

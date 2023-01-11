@@ -330,7 +330,7 @@ namespace UnityMiniGameFramework
                 produceProgressPanel.DoUpdatePruduceGoods(currentProductOutputStore, produceCount);
             }
 
-            string haveBuff = checkBuff() ? "已翻倍" : "";
+            string haveBuff = checkBuff() ? "已翻倍" : "无增益";
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}({haveBuff})，产出总数量：{currentProductOutputStore}");
 
             _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /

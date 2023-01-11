@@ -51,7 +51,7 @@ namespace UnityMiniGameFramework
                         grid.Q<Button>("ChooseButton").clicked += onChose6;
                         break;
                 }
-                grid.visible = false;
+                grid.style.display = DisplayStyle.None;
             }
         }
 
@@ -73,7 +73,7 @@ namespace UnityMiniGameFramework
             for (int index = 1; index < content.childCount + 1; index++)
             {
                 var grid = content.Q<VisualElement>($"grid{index}");
-                grid.visible = false;
+                grid.style.display = DisplayStyle.None;
             }
             
             for (int index = 1; index <= cmGame.gameConf.gameConfs.skillsConf.Count; index++)
@@ -88,8 +88,8 @@ namespace UnityMiniGameFramework
                 grid.Q<Label>("curBuff").text = $"{cfg.levelsConf[skillLv].buff}";
                 grid.Q<Label>("nextBuff").text = $"{cfg.levelsConf[nextLv].buff}";
                 grid.Q<Label>("price").text = $"{StringUtil.StringNumFormat(cfg.levelsConf[skillLv].upgradeGold.ToString())}";
-                grid.Q<VisualElement>("armed").visible = false;
-                grid.visible = true;
+                grid.Q<VisualElement>("armed").style.display = DisplayStyle.None;
+                grid.style.display = DisplayStyle.Flex;
             }
         }
 
@@ -99,7 +99,7 @@ namespace UnityMiniGameFramework
             for (int index = 1; index < content.childCount + 1; index++)
             {
                 var grid = content.Q<VisualElement>($"grid{index}");
-                grid.Q<VisualElement>("armed").visible = index == id;
+                grid.Q<VisualElement>("armed").style.display = index == id ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }
 

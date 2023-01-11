@@ -35,16 +35,16 @@ namespace UnityMiniGameFramework
 
             // TO DO : unregister message
             btnStart.clicked += onEnterGameClick;
-            btnStart.visible = false;
-            barbg.visible = true;
+            btnStart.style.display = DisplayStyle.None;
+            barbg.style.display = DisplayStyle.Flex;
         }
 
         public void show()
         {
-            btnStart.visible = true;
-            barbg.visible = false;
-            //btnStart.visible = false;
-            //barbg.visible = true;
+            btnStart.style.display = DisplayStyle.Flex;
+            barbg.style.display = DisplayStyle.None;
+            //btnStart.style.display = DisplayStyle.None;
+            //barbg.style.display = DisplayStyle.Flex;
             //time = (long)(DateTime.Now.Ticks / 10000);
 
             //UnityGameApp.Inst.addUpdateCall(onUpdate);
@@ -58,8 +58,8 @@ namespace UnityMiniGameFramework
             if (prog > 1f)
             {
                 prog = 1.00f;
-                barbg.visible = false;
-                btnStart.visible = true;
+                barbg.style.display = DisplayStyle.None;
+                btnStart.style.display = DisplayStyle.Flex;
                 UnityGameApp.Inst.removeUpdateCall(onUpdate);
             }
             bar.style.width = new StyleLength(new Length(prog * 334));
