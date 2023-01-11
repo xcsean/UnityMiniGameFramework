@@ -188,7 +188,7 @@ namespace UnityMiniGameFramework
             _showActionVE = showVE;
             if (_showActionVE != null)
             {
-                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0.3f, 0.3f, 1f)));
+                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
                 _showActionVE.style.opacity = 0f;
             }
         }
@@ -211,6 +211,7 @@ namespace UnityMiniGameFramework
             }
             if (_showActionVE != null && _showActionVE.ClassListContains("unity-scale-show"))
             {
+                _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
                 _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));
                 _showActionVE.style.opacity = 1f;
             }
@@ -228,8 +229,10 @@ namespace UnityMiniGameFramework
         {
             if (_showActionVE != null && _showActionVE.ClassListContains("unity-scale-show"))
             {
-                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0.3f, 0.3f, 1f)));
+                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
                 _showActionVE.style.opacity = 0f;
+                // 隐藏不需要动画了
+                _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
             }
             else
             {

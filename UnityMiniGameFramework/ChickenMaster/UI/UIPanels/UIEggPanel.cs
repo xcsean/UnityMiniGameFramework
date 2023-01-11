@@ -20,7 +20,7 @@ namespace UnityMiniGameFramework
 
 
         protected Button _startBtn;
-        protected Button RecoverBtn;
+        protected Button _recoverBtn;
         protected VisualElement stars;
 
         private float _hp;
@@ -34,11 +34,11 @@ namespace UnityMiniGameFramework
             _recoveryTime = this._uiObjects["RecoverTime"].unityVisualElement as Label;
 
             _startBtn = this._uiObjects["StartBtn"].unityVisualElement as Button;
-            _startBtn.clicked += onStartLevelClick;
-            RecoverBtn = this._uiObjects["RecoverBtn"].unityVisualElement as Button;
-            _startBtn.clicked += onRecoverClick;
+            _recoverBtn = this._uiObjects["RecoverBtn"].unityVisualElement as Button;
             stars = this._uiObjects["stars"].unityVisualElement;
 
+            _startBtn.clicked += onStartLevelClick;
+            _recoverBtn.clicked += onRecoverClick;
             _recoveryTime.text = "ready";
         }
 
@@ -111,9 +111,9 @@ namespace UnityMiniGameFramework
         public void changeEggState(bool isFighting)
         {
             bool isDie = _hp <= 0;
-            _recoveryTime.visible = !isFighting;
-            _startBtn.visible = (!isFighting && !isDie);
-            RecoverBtn.visible = (!isFighting && isDie);
+            _recoveryTime.style.display = (!isFighting) ? DisplayStyle.Flex : DisplayStyle.None;
+            _startBtn.style.display = (!isFighting && !isDie) ? DisplayStyle.Flex : DisplayStyle.None;
+            _recoverBtn.style.display = (!isFighting && isDie) ? DisplayStyle.Flex : DisplayStyle.None;
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.uiMainPanel.ShowBattleStartInfo(isFighting && !isDie);
@@ -145,7 +145,7 @@ namespace UnityMiniGameFramework
             {
                 var star = stars.ElementAt(i);
                 float a = (float) i / stars.childCount;
-                star.visible = hp > a;
+                star.style.display = (hp > a) ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }
     }
