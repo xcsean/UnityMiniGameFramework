@@ -99,6 +99,7 @@ namespace UnityMiniGameFramework
                 go.SetActive(false);
             m_Instance._dictionary[nameKey].Add(new ObjectSaveInfo(go, Time.unscaledTime));
             go.transform.SetParent(UnityGameApp.Inst.CachePoolRoot.transform);
+            go.transform.localPosition = Vector3.zero;
         }
     }
 }

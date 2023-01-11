@@ -45,7 +45,7 @@ namespace UnityMiniGameFramework
 
         public void OnPlayEnd()
         {
-            Destroy(gameObject, 0.1f);
+            Destroy(gameObject.transform.parent.gameObject, 0.1f);
         }
     }
 }
