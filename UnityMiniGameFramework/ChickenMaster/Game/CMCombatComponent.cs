@@ -67,11 +67,16 @@ namespace UnityMiniGameFramework
         override protected void _onDamage(ActorObject actor, int dmg, bool critical)
         {
             // TO DO : show damage text
-
+            
             // perform onhit act
             if (_gameObject is MGGameObject mgGameObject)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_System,
+                    $" ({_actor.name}) 受到来自({(actor != null ? actor.name : string.Empty)})的({dmg}点伤害)");
                 BattleNumberEmitter.CreateNumAction.Invoke(mgGameObject.unityGameObject, dmg,
                     critical);
+            }
+                
         }
         override protected void _onDie(ActorObject actor)
         {
