@@ -53,6 +53,7 @@ namespace UnityMiniGameFramework
             foreach(var npcPair in (UnityGameApp.Inst.MainScene.map as Map).npcs)
             {
                 npcPair.Value.OnMapNPCTriggerEnter += _OnMapNPCTriggerEnter;
+                npcPair.Value.OnMapNPCTriggerStay += _OnMapNPCTriggerStay;
                 npcPair.Value.OnMapNPCTriggerExit += _OnMapNPCTriggerExit;
             }
         }
@@ -78,7 +79,54 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            _heroUI.ShowHero(npcObj.name);
+            // 主角移动中不触发打开界面
+            if (_mapHeroObj.moveAct.isMoving)
+            {
+                return;
+            }
+
+            //_heroUI.ShowHero(npcObj.name);
+        }
+
+        private void _OnMapNPCTriggerStay(string triggerObjectName, MapNPCObject npcObj, UnityEngine.Collider other)
+        {
+            var ugObj = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if (ugObj == null)
+            {
+                return;
+            }
+
+            var monObj = ugObj.mgGameObject as MapHeroObject;
+            if (monObj != _mapHeroObj)
+            {
+                // not self
+                return;
+            }
+
+            var heroConf = _cmGameConf.getCMHeroConf(npcObj.name);
+            if (heroConf == null)
+            {
+                return;
+            }
+
+            // 主角移动中不触发打开界面
+            if (_mapHeroObj.moveAct.isMoving)
+            {
+                return;
+            }
+
+            int nearState = 0;
+            _heroNearState.TryGetValue(npcObj.name, out nearState);
+            if (nearState == 0)
+            {
+                // last frame is nearby, enter nearby
+                _heroNearState[npcObj.name] = 1;
+
+                if (!_heroUI.isShow)
+                {
+                    _heroUI.ShowHero(npcObj.name);
+                }
+            }
         }
 
         private void _OnMapNPCTriggerExit(string triggerObjectName, MapNPCObject npcObj, UnityEngine.Collider other)
@@ -100,6 +148,14 @@ namespace UnityMiniGameFramework
             if (heroConf == null)
             {
                 return;
+            }
+
+            int nearState = 0;
+            _heroNearState.TryGetValue(npcObj.name, out nearState);
+            if (nearState != 0)
+            {
+                // last frame is nearby, exit nearby
+                _heroNearState[npcObj.name] = 0;
             }
 
             _heroUI.hideUI();
@@ -360,7 +416,14 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
+                    // 选中拖动中
                     if (heroPair.Value.isPicked)
+                    {
+                        continue;
+                    }
+
+                    // 主角移动中不触发打开界面
+                    if (_mapHeroObj.moveAct.isMoving)
                     {
                         continue;
                     }

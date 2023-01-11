@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
+    // UI层级记录：弹窗0、主界面-1、水晶蛋开始按钮-2、预留-3/-4、摇杆-5、建筑头顶UI-6
     public class UIPanel : IUIPanel
     {
         protected string _name;

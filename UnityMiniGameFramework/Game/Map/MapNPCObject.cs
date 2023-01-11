@@ -26,6 +26,15 @@ namespace UnityMiniGameFramework
 
             _mapNpc.OnTriggerEnter(this.gameObject.name, other);
         }
+        private void OnTriggerStay(UnityEngine.Collider other)
+        {
+            if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+            {
+                return;
+            }
+
+            _mapNpc.OnTriggerStay(this.gameObject.name, other);
+        }
         private void OnTriggerExit(UnityEngine.Collider other)
         {
             if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
@@ -50,6 +59,7 @@ namespace UnityMiniGameFramework
 
         public event Action<string, MapNPCObject, UnityEngine.Collider> OnMapNPCTriggerEnter;
         public event Action<string, MapNPCObject, UnityEngine.Collider> OnMapNPCTriggerExit;
+        public event Action<string, MapNPCObject, UnityEngine.Collider> OnMapNPCTriggerStay;
 
         override protected ActorObjectConfig _getActorConf(string confname)
         {
@@ -100,6 +110,12 @@ namespace UnityMiniGameFramework
             OnMapNPCTriggerEnter(triggerObjectName, this, other);
 
             (UnityGameApp.Inst.MainScene.map as Map).OnMapNPCTriggerEnter(triggerObjectName, this, other);
+        }
+        public void OnTriggerStay(string triggerObjectName, UnityEngine.Collider other)
+        {
+            OnMapNPCTriggerStay(triggerObjectName, this, other);
+
+            //(UnityGameApp.Inst.MainScene.map as Map).OnMapNPCTriggerEnter(triggerObjectName, this, other);
         }
         public void OnTriggerExit(string triggerObjectName, UnityEngine.Collider other)
         {
