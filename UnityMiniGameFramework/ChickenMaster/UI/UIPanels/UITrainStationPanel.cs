@@ -191,15 +191,41 @@ namespace UnityMiniGameFramework
         }
         public void onCallClick()
         {
+            SDKManager.showAutoAd((AdEventArgs args) =>
+            {
+                if (args.type == VideoEvent.RewardEvent)
+                {
+                    //TODO 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                    onCallVideoCb();
+                }
+            });
+        }
+        public void onSpeedUpClick()
+        {
+            SDKManager.showAutoAd((AdEventArgs args) =>
+            {
+                if (args.type == VideoEvent.RewardEvent)
+                {
+                    //TODO 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                    onSpeedUpVideoCb();
+                }
+            });
+        }
+
+        private void onSpeedUpVideoCb()
+        {
+
+        }
+
+        private void onCallVideoCb()
+        {
             // call
             if (_trainStation.CallTrainNow())
             {
                 refreshInfo();
             }
-        }
-        public void onSpeedUpClick()
-        {
-
         }
 
     }

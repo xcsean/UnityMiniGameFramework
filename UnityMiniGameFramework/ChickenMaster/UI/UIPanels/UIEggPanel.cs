@@ -89,10 +89,23 @@ namespace UnityMiniGameFramework
             //changeEggState(true);
         }
 
-        private void onRecoverClick()
+        private void onVideoCb()
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.Egg.recoverEgg();
+        }
+
+        private void onRecoverClick()
+        {
+            SDKManager.showAutoAd((AdEventArgs args) =>
+            {
+                if (args.type == VideoEvent.RewardEvent)
+                {
+                    //TODO 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                    onVideoCb();
+                }
+            });
         }
 
         public void changeEggState(bool isFighting)

@@ -139,6 +139,20 @@ namespace UnityMiniGameFramework
         private void onClickVideoGet()
         {
             collectRewards(true);
+            SDKManager.showAutoAd((AdEventArgs args) =>
+            {
+                if (args.type == VideoEvent.RewardEvent)
+                {
+                    //TODO 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                    onVideoCb();
+                }
+            });
+        }
+
+        private void onVideoCb()
+        {
+            collectRewards(true);
         }
 
         private void onClickClose()
@@ -152,7 +166,7 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.Self.AddGold(rewards.gold * triple);
             cmGame.Self.AddExp(rewards.exp * triple);
-            foreach(var reward in rewards.items)
+            foreach (var reward in rewards.items)
             {
                 cmGame.Self._RealAddBackpackItem(reward.itemName, reward.count * triple);
             }

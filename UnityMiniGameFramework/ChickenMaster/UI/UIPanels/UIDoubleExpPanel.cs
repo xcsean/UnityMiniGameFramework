@@ -43,9 +43,21 @@ namespace UnityMiniGameFramework
             hideUI();
         }
 
+
         private void onClickVideo()
         {
-            var _gameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
+            SDKManager.showAutoAd((AdEventArgs args) =>
+            {
+                if (args.type == VideoEvent.RewardEvent)
+                {
+                    //TODO 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                    onVideoCb();
+                }
+            });
+        }
+        private void onVideoCb()
+        {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
             if (buffTime < nowMillisecond)
