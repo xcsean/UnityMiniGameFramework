@@ -222,7 +222,6 @@
     <Compile Include="Game\Weapon\WeaponManager.cs" />
     <Compile Include="Game\Weapon\WeaponObject.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />
-    <Compile Include="Network\NetworkDatas\ReportInfo.cs" />
     <Compile Include="Network\NetworkDatas\UserDatas.cs" />
     <Compile Include="Network\RESTFulAPIStructs.cs" />
     <Compile Include="Network\UnityNetworkClient.cs" />
