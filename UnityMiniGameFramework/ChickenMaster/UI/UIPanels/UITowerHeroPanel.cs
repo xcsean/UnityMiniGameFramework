@@ -86,7 +86,7 @@ namespace UnityMiniGameFramework
         }
 
         /// <summary>
-        /// 英雄激活和升级
+        /// 英雄激活
         /// </summary>
         public void OnActBtnClick()
         {
@@ -124,6 +124,9 @@ namespace UnityMiniGameFramework
             }
         }
 
+        /// <summary>
+        /// 英雄升级
+        /// </summary>
         public void OnUpgradeBtnClick()
         {
             if (_hero != null)

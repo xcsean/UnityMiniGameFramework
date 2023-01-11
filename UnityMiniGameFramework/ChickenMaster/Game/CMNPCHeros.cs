@@ -68,10 +68,12 @@ namespace UnityMiniGameFramework
 
             if (cmGame.Self.TrySubGold(upgradeGold))
             {
+                // add level
+                _heroInfo.level = _heroInfo.level + 1;
+
                 // upgrade 
                 _recalcAttack();
 
-                _heroInfo.level = _heroInfo.level + 1;
                 cmGame.baseInfo.markDirty();
             }
             else

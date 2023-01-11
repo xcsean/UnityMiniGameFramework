@@ -101,6 +101,14 @@ namespace UnityMiniGameFramework
             if (_factory == null)
             {
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                // 依赖关卡激活
+                if (_factoryConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).currentLevel < _factoryConf.userLevelRequire)
+                {
+                    // for Debug ...
+                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "Game Level not reach !");
+                    return;
+                }
+
                 if (cmGame.Self.TrySubGold(_factoryConf.activateGoldCost))
                 {
                     _factory = cmGame.AddFactory(_factoryConf.mapBuildName);

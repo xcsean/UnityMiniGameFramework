@@ -63,7 +63,7 @@ namespace UnityMiniGameFramework
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
                 var gunConf = cmGame.gameConf.getCMGunConf(gunInfo.id);
 
-                _labDamage.text = "0";
+                _labDamage.text = $"{gunConf.gunLevelConf[gunInfo.level].attack.attackMin}";
                 _labSpeed.text = "0";
                 _labRange.text = "0";
 
