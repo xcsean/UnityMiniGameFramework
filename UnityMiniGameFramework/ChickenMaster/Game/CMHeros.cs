@@ -192,9 +192,20 @@ namespace UnityMiniGameFramework
             if (cmGunConf.gunLevelConf.TryGetValue(weaponInfo.level, out gunLevelConf))
             {
                 _gun.initAttack(gunLevelConf.attack);
-                if (gunLevelConf.rangeAdd > 0)
+                float addRangeSum = 0.0f;
+                CMGunLevelConf _levelConf = null;
+                // 攻击范围需求改成累加
+                for (int i = 1; i <= weaponInfo.level; i++)
                 {
-                    _gun.AddAttackRange(gunLevelConf.rangeAdd);
+                    if (cmGunConf.gunLevelConf.TryGetValue(i, out _levelConf))
+                    {
+                        addRangeSum += _levelConf.rangeAdd;
+                    }
+                }
+                
+                if (addRangeSum > 0)
+                {
+                    _gun.AddAttackRange(addRangeSum);
                 }
             }
             else

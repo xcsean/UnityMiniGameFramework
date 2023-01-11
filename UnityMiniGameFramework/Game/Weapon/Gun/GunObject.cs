@@ -99,7 +99,13 @@ namespace UnityMiniGameFramework
 
         public void AddAttackRange(float rangeAdd)
         {
+            _attackRange = GetBaseAttackRange();
             _attackRange += rangeAdd;
+        }
+
+        private float GetBaseAttackRange()
+        {
+            return _conf.FireConf.attackRange.HasValue ? _conf.FireConf.attackRange.Value : 5;
         }
 
         virtual protected GunConf _getGunConf(string confname)
@@ -140,7 +146,7 @@ namespace UnityMiniGameFramework
             _name = _conf.name;
 
             _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 0;
-            _attackRange = _conf.FireConf.attackRange.HasValue ? _conf.FireConf.attackRange.Value : 5;
+            _attackRange = GetBaseAttackRange();
 
             if (_conf.AnimatorConf != null)
             {
