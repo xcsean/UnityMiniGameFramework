@@ -166,6 +166,14 @@ namespace UnityMiniGameFramework
                     {
                         doubleExp = nowMillisecond,
                         doubleAtk = nowMillisecond,
+                        storehouseProterSpeed = nowMillisecond,
+                        trainProterSpeed = nowMillisecond,
+                        factory1Productivity = nowMillisecond,
+                        factory2Productivity = nowMillisecond,
+                        factory3Productivity = nowMillisecond,
+                        factory4Productivity = nowMillisecond,
+                        factory5Productivity = nowMillisecond,
+                        factory6Productivity = nowMillisecond,
                     }
                 };
                 _baseInfo = new DataObject(baseInfo);

@@ -1,4 +1,5 @@
-﻿using MiniGameFramework;
+﻿using System;
+using MiniGameFramework;
 using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
@@ -126,7 +127,88 @@ namespace UnityMiniGameFramework
         protected void OnEfficiencyBtnClick()
         {
             Debug.DebugOutput(DebugTraceType.DTT_Debug, "onEfficiencyBtnClick...");
+            SDKManager.showAutoAd((AdEventArgs args) =>
+            {
+                if (args.type == VideoEvent.RewardEvent)
+                {
+                    //TODO 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                    onVideoCb();
+                }
+            });
         }
+
+        private void onVideoCb()
+        {
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var bi = cmGame.baseInfo.getData() as LocalBaseInfo;
+            long buffTime;
+            CMSingleBuffConf buffCfg;
+            switch (_factoryConf.mapBuildName)
+            {
+                case "factoryBuilding1":
+                    buffTime = bi.buffs.factory1Productivity;
+                    buffCfg = cmGame.gameConf.gameConfs.buffsConf.factory1Productivity;
+                    buffTime = addBuff(buffTime, buffCfg);
+                    bi.buffs.factory1Productivity = buffTime;
+                    break;
+                case "factoryBuilding2":
+                    buffTime = bi.buffs.factory2Productivity;
+                    buffCfg = cmGame.gameConf.gameConfs.buffsConf.factory2Productivity;
+                    buffTime = addBuff(buffTime, buffCfg);
+                    bi.buffs.factory2Productivity = buffTime;
+                    break;
+                case "factoryBuilding3":
+                    buffTime = bi.buffs.factory3Productivity;
+                    buffCfg = cmGame.gameConf.gameConfs.buffsConf.factory3Productivity;
+                    buffTime = addBuff(buffTime, buffCfg);
+                    bi.buffs.factory3Productivity = buffTime;
+                    break;
+                case "factoryBuilding4":
+                    buffTime = bi.buffs.factory4Productivity;
+                    buffCfg = cmGame.gameConf.gameConfs.buffsConf.factory4Productivity;
+                    buffTime = addBuff(buffTime, buffCfg);
+                    bi.buffs.factory4Productivity = buffTime;
+                    break;
+                case "factoryBuilding5":
+                    buffTime = bi.buffs.factory5Productivity;
+                    buffCfg = cmGame.gameConf.gameConfs.buffsConf.factory5Productivity;
+                    buffTime = addBuff(buffTime, buffCfg);
+                    bi.buffs.factory5Productivity = buffTime;
+                    break;
+                case "factoryBuilding6":
+                    buffTime = bi.buffs.factory6Productivity;
+                    buffCfg = cmGame.gameConf.gameConfs.buffsConf.factory6Productivity;
+                    buffTime = addBuff(buffTime, buffCfg);
+                    bi.buffs.factory6Productivity = buffTime;
+                    break;
+
+                default:
+
+                    return;
+            }
+            cmGame.baseInfo.markDirty();
+        }
+
+        private long addBuff(long buffTime, CMSingleBuffConf buffCfg)
+        {
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            if (buffTime < nowMillisecond)
+            {
+                buffTime = nowMillisecond + buffCfg.videoGet * 1000;
+            }
+            else
+            {
+                buffTime += buffCfg.videoGet * 1000;
+                if (buffTime - nowMillisecond > buffCfg.maxBuff * 1000)
+                {
+                    buffTime = nowMillisecond + buffCfg.maxBuff * 1000;
+                }
+            }
+
+            return buffTime;
+        }
+
 
         protected void RefreshInfo()
         {

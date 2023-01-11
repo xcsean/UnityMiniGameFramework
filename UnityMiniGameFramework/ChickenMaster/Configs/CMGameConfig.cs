@@ -261,6 +261,14 @@ namespace UnityMiniGameFramework
     {
         public CMSingleBuffConf doubleExp { get; set; }
         public CMSingleBuffConf doubleAtk { get; set; }
+        public CMSingleBuffConf trainProterSpeed { get; set; }
+        public CMSingleBuffConf storehouseProterSpeed { get; set; }
+        public CMSingleBuffConf factory1Productivity { get; set; }
+        public CMSingleBuffConf factory2Productivity { get; set; }
+        public CMSingleBuffConf factory3Productivity { get; set; }
+        public CMSingleBuffConf factory4Productivity { get; set; }
+        public CMSingleBuffConf factory5Productivity { get; set; }
+        public CMSingleBuffConf factory6Productivity { get; set; }
     }
 
     public class CMSingleBuffConf

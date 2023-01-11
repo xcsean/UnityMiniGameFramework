@@ -309,6 +309,9 @@ namespace UnityMiniGameFramework
                     produceProgressPanel.DoUpdateInputStore(currentProductInputStore, -realCostInputCount);
             }
 
+            // 判断是否有增益加成
+            produceCount = checkBuff() ? produceCount * 2 : produceCount;
+
             if (_localFacInfo.buildingOutputProduct == null)
             {
                 _localFacInfo.buildingOutputProduct = new LocalPackProductInfo()
@@ -327,7 +330,8 @@ namespace UnityMiniGameFramework
                 produceProgressPanel.DoUpdatePruduceGoods(currentProductOutputStore, produceCount);
             }
 
-            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}，产出总数量：{currentProductOutputStore}");
+            string haveBuff = checkBuff() ? "已翻倍" : "";
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}({haveBuff})，产出总数量：{currentProductOutputStore}");
 
             _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
                                                                 ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
@@ -419,6 +423,48 @@ namespace UnityMiniGameFramework
             _currentCD = produceCD;
 
             _doProduce();
+        }
+
+        public bool checkBuff()
+        {
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var bi = cmGame.baseInfo.getData() as LocalBaseInfo;
+            long buffTime;
+            switch (_factoryConf.mapBuildName)
+            {
+                case "factoryBuilding1":
+                    buffTime = bi.buffs.factory1Productivity;
+                    break;
+                case "factoryBuilding2":
+                    buffTime = bi.buffs.factory2Productivity;
+                    break;
+                case "factoryBuilding3":
+                    buffTime = bi.buffs.factory3Productivity;
+                    break;
+                case "factoryBuilding4":
+                    buffTime = bi.buffs.factory4Productivity;
+                    break;
+                case "factoryBuilding5":
+                    buffTime = bi.buffs.factory5Productivity;
+                    break;
+                case "factoryBuilding6":
+                    buffTime = bi.buffs.factory6Productivity;
+                    break;
+
+                default:
+
+                    return false;
+            }
+
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            if (buffTime >= nowMillisecond)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

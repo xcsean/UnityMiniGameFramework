@@ -96,18 +96,6 @@ namespace UnityMiniGameFramework
         }
         public void onVideoClick()
         {
-            //long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
-            //foreach (var worker in _storeHouse.workers)
-            //{
-            //    if(worker.workerInfo.buffRecoveryTime > nowMillisecond)
-            //    {
-            //        worker.workerInfo.buffRecoveryTime += 60 * 1000;
-            //    }
-            //    else
-            //    {
-            //        worker.workerInfo.buffRecoveryTime = nowMillisecond + 60 * 1000;
-            //    }
-            //}
             SDKManager.showAutoAd((AdEventArgs args) =>
             {
                 if (args.type == VideoEvent.RewardEvent)
@@ -121,7 +109,23 @@ namespace UnityMiniGameFramework
 
         private void onVideoCb()
         {
+            //long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            //foreach (var worker in _storeHouse.workers)
+            //{
+            //    if(worker.workerInfo.buffRecoveryTime > nowMillisecond)
+            //    {
+            //        worker.workerInfo.buffRecoveryTime += 60 * 1000;
+            //    }
+            //    else
+            //    {
+            //        worker.workerInfo.buffRecoveryTime = nowMillisecond + 60 * 1000;
+            //    }
+            //}
 
+            foreach (var worker in _storeHouse.workers)
+            {
+                //worker.maxCarryCount *= 2;
+            }
         }
 
         public override void showUI()

@@ -91,6 +91,14 @@ namespace UnityMiniGameFramework
     {
         public long doubleExp { get; set; }
         public long doubleAtk { get; set; }
+        public long trainProterSpeed { get; set; }
+        public long storehouseProterSpeed { get; set; }
+        public long factory1Productivity { get; set; }
+        public long factory2Productivity { get; set; }
+        public long factory3Productivity { get; set; }
+        public long factory4Productivity { get; set; }
+        public long factory5Productivity { get; set; }
+        public long factory6Productivity { get; set; }
     }
 
     public class LocalBaseInfo
