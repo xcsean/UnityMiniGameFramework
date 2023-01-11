@@ -325,6 +325,8 @@ namespace UnityMiniGameFramework
                     cmGame.Self.AddGold(goldAdd);
                     UpdateProductBox();
                     _train.setBoxShow(true);
+
+                    showGetResInfoUI(goldAdd);
                 }
 
                 cmGame.baseInfo.markDirty();
@@ -413,6 +415,20 @@ namespace UnityMiniGameFramework
             _uiTrainstationCapatityPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _uiTrainstationCapatityPanel.RefreshInfo(this);
             _uiTrainstationCapatityPanel.showUI();
+        }
+        
+        /// <summary>
+        /// 售卖金币飘字动效
+        /// </summary>
+        protected void showGetResInfoUI(int count)
+        {
+            if (count <= 0)
+            {
+                return;
+            }
+            var resPopup = UnityGameApp.Inst.UI.createUIPanel("ResPopupUI") as UIResPopupPanel;
+            resPopup.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            resPopup.SetResInfo(count, 0, _storePosition.spawnObject.transform);
         }
     }
 }
