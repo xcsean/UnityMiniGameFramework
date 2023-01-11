@@ -11,6 +11,7 @@ namespace UnityMiniGameFramework
     {
         protected virtual void Awake()
         {
+            SDKManager.setSdkBehaviour(this);
         }
 
         public virtual void loadVideo()

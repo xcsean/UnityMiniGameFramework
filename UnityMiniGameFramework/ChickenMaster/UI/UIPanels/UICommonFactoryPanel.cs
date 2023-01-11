@@ -129,9 +129,9 @@ namespace UnityMiniGameFramework
         protected void OnEfficiencyBtnClick()
         {
             Debug.DebugOutput(DebugTraceType.DTT_Debug, "onEfficiencyBtnClick...");
-            SDKManager.showAutoAd((AdEventArgs args) =>
+            SDKManager.showAutoAd((SdkEvent args) =>
             {
-                if (args.type == VideoEvent.RewardEvent)
+                if (args.type == AdEventType.RewardEvent)
                 {
                     //TODO 看完视频下发奖励
                     MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
