@@ -67,6 +67,8 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
+            BindMoveActionVE(this._uiObjects["Content"].unityVisualElement);
+
             _Level = this._uiObjects["level"].unityVisualElement as Label;
             _CurLv = this._uiObjects["curLv"].unityVisualElement as Label;
             _CurCapacity = this._uiObjects["curCapacity"].unityVisualElement as Label;

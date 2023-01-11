@@ -50,6 +50,8 @@ namespace UnityMiniGameFramework
 
         private void FindUI()
         {
+            BindMoveActionVE(this._uiObjects["Content"].unityVisualElement);
+
             sprChicken = this._uiObjects["sprChicken"].unityVisualElement;
             labProductDesc = this._uiObjects["labProductDesc"].unityVisualElement as Label;
             labLvCur = this._uiObjects["labLvCur"].unityVisualElement as Label;

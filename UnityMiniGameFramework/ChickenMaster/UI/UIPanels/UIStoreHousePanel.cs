@@ -38,6 +38,8 @@ namespace UnityMiniGameFramework
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
+            
+            BindMoveActionVE(this._uiObjects["Content"].unityVisualElement);
 
             level = this._uiObjects["Level"].unityVisualElement as Label;
             storage = this._uiObjects["Storage"].unityVisualElement as Label;

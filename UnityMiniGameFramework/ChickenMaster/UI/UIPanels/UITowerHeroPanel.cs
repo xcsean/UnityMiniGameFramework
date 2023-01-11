@@ -49,6 +49,8 @@ namespace UnityMiniGameFramework
 
         protected void FindUI()
         {
+            BindMoveActionVE(this._uiObjects["Content"].unityVisualElement);
+
             _sprHeroIcon = this._uiObjects["sprHeroIcon"].unityVisualElement;
             _heroLockBg = this._uiObjects["heroLockBg"].unityVisualElement;
             _labHeroName = this._uiObjects["labHeroName"].unityVisualElement as Label;

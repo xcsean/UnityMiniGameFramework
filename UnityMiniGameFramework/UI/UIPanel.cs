@@ -187,34 +187,62 @@ namespace UnityMiniGameFramework
         public void BindShowActionVE(VisualElement showVE)
         {
             _showActionVE = showVE;
-            if (_showActionVE != null)
+            string ussName = "unity-move-show";
+            if (_showActionVE != null && !_showActionVE.ClassListContains(ussName))
             {
-                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
-                _showActionVE.style.opacity = 0f;
+                var uss = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadStyleSheet(ussName);
+                if (uss == null)
+                {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name}, uss[{ussName}] not exist");
+                    return;
+                }
+                _unityUIDocument.rootVisualElement.styleSheets.Add(uss);
+                _showActionVE.AddToClassList(ussName);
+
+                //_showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
+                //_showActionVE.style.opacity = 0f;
             }
         }
 
         /// <summary>
+        /// 绑定弹窗移动对象，在ShowAction和HideAction之前执行
+        /// </summary>
+        public void BindMoveActionVE(VisualElement showVE)
+        {
+            _showActionVE = showVE;
+            string ussName = "unity-move-show";
+            if (_showActionVE != null && !_showActionVE.ClassListContains(ussName))
+            {
+                var uss = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadStyleSheet(ussName);
+                if (uss == null)
+                {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name}, uss[{ussName}] not exist");
+                    return;
+                }
+                _unityUIDocument.rootVisualElement.styleSheets.Add(uss);
+                _showActionVE.AddToClassList(ussName);
+
+                //_showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
+                //_showActionVE.style.opacity = 0f;
+            }
+        }
+
+        /// <summary>
+        /// TODO 首次加载显示，无法看到动画
         /// 界面显示时缩放动画
         /// </summary>
         virtual public void ShowAction()
         {
-            if (_showActionVE != null && !_showActionVE.ClassListContains("unity-scale-show"))
-            {
-                var uss = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadStyleSheet($"unity-scale-show");
-                if (uss == null)
-                {
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"UIPanel {_name}, uss[unity-scale-show] not exist");
-                    return;
-                }
-                _unityUIDocument.rootVisualElement.styleSheets.Add(uss);
-                _showActionVE.AddToClassList("unity-scale-show");
-            }
             if (_showActionVE != null && _showActionVE.ClassListContains("unity-scale-show"))
             {
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
                 _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));
                 _showActionVE.style.opacity = 1f;
+            }
+            else if (_showActionVE != null && _showActionVE.ClassListContains("unity-move-show"))
+            {
+                _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+                _showActionVE.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0), 0));
             }
             else
             {
@@ -224,6 +252,7 @@ namespace UnityMiniGameFramework
         }
 
         /// <summary>
+        /// TODO 隐藏时立即执行，无法看到动画
         /// 界面隐藏时缩放动画
         /// </summary>
         virtual public void HideAction()
@@ -234,6 +263,12 @@ namespace UnityMiniGameFramework
                 _showActionVE.style.opacity = 0f;
                 // 隐藏不需要动画了
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
+            }
+            else if (_showActionVE != null && _showActionVE.ClassListContains("unity-move-show"))
+            {
+                // 界面底部对齐，Position-bottom
+                _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
+                _showActionVE.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(750f), 0));
             }
             else
             {
