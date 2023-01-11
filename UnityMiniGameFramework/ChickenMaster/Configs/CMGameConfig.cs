@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+//using System.Text.Json;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -285,6 +286,7 @@ namespace UnityMiniGameFramework
         public Dictionary<int, CMSkillLevelConf> levelsConf { get; set; }
     }
 
+    [Serializable]
     public class CMGameConf
     {
         public string levelCenterObjectName { get; set; }
@@ -354,7 +356,8 @@ namespace UnityMiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<CMGameConf>(confStr);
+            //return JsonSerializer.Deserialize<CMGameConf>(confStr);
+            return JsonUtil.FromJson<CMGameConf>(confStr);
         }
 
         public CMGunConf getCMGunConf(int cmGunID)

@@ -61,7 +61,8 @@ namespace MiniGameFramework
                     object retObj = null;
                     try
                     {
-                        string contentStr = JsonSerializer.Serialize(actAry[i].content, actAry[i].contentType);
+                        //string contentStr = JsonSerializer.Serialize(actAry[i].content, actAry[i].contentType);
+                        string contentStr = JsonUtil.ToJson(actAry[i].content, actAry[i].contentType);
                         string cmdUrl = _url + actAry[i].cmd;
 
                         Debug.DebugOutput(DebugTraceType.DTT_Detail, $"requsting RESTFul API [{cmdUrl}] with content [{contentStr}]...");
@@ -70,7 +71,8 @@ namespace MiniGameFramework
 
                         Debug.DebugOutput(DebugTraceType.DTT_Detail, $"RESTFul API [{cmdUrl}] returns [{resStr}] ");
 
-                        retObj = JsonSerializer.Deserialize(resStr, actAry[i].resultType);
+                        //retObj = JsonSerializer.Deserialize(resStr, actAry[i].resultType);
+                        retObj = JsonUtil.FromJson(resStr, actAry[i].resultType);
                     }
                     catch(Exception e)
                     {

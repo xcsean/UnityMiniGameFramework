@@ -1,4 +1,4 @@
-namespace UnityMiniGameFramework
+namespace MiniGameFramework
 {
     public enum PlatformEnum
     {

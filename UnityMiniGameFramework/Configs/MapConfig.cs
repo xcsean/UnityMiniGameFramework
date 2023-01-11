@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+//using System.Text.Json;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -78,6 +79,7 @@ namespace UnityMiniGameFramework
         public List<MapLevelKMWinCheckConf> kmWinCheck { get; set; }
     }
 
+    [Serializable]
     public class MapConfs
     {
         public Dictionary<string, MapConf> maps { get; set; }
@@ -107,7 +109,8 @@ namespace UnityMiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<MapConfs>(confStr);
+            //return JsonSerializer.Deserialize<MapConfs>(confStr);
+            return JsonUtil.FromJson<MapConfs>(confStr);
         }
 
         public MapConf getMapConf(string mapName)

@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+//using System.Text.Json;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -24,6 +25,7 @@ namespace UnityMiniGameFramework
         public float? uvSpeed { get; set; }
     }
 
+    [Serializable]
     public class VFXConfs
     {
         public Dictionary<string, VFXConf> vfxs { get; set; }
@@ -41,7 +43,8 @@ namespace UnityMiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<VFXConfs>(confStr);
+            //return JsonSerializer.Deserialize<VFXConfs>(confStr);
+            return JsonUtil.FromJson<VFXConfs>(confStr);
         }
 
         public VFXConf getVFXConfig(string vfxName)

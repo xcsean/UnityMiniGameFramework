@@ -47,7 +47,8 @@ namespace MiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<SceneManagerConf>(confStr);
+            //return JsonSerializer.Deserialize<SceneManagerConf>(confStr);
+            return JsonUtil.FromJson<SceneManagerConf>(confStr);
         }
 
         public SceneConf getStartSceneConf()

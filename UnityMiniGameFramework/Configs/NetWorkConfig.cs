@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+//using System.Text.Json;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -28,6 +29,7 @@ namespace UnityMiniGameFramework
         public string url { get; set; }
     }
 
+    [Serializable]
     public class NetConfig
     {
         public ConnectorConf webSockConn { get; set; }
@@ -47,7 +49,8 @@ namespace UnityMiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<NetConfig>(confStr);
+            //return JsonSerializer.Deserialize<NetConfig>(confStr);
+            return JsonUtil.FromJson<NetConfig>(confStr);
         }
     }
 }

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
+//using System.Text.Json;
 
 using MiniGameFramework;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -47,6 +48,7 @@ namespace UnityMiniGameFramework
         public AvatarConfig AvatarConf { get; set; }
     }
 
+    [Serializable]
     public class CharacterConf
     {
         public Dictionary<string, ActorObjectConfig> Actors { get; set; }
@@ -66,7 +68,8 @@ namespace UnityMiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<CharacterConf>(confStr);
+            //return JsonSerializer.Deserialize<CharacterConf>(confStr);
+            return JsonUtil.FromJson<CharacterConf>(confStr);
         }
 
         public ActorObjectConfig getActorConf(string actorName)

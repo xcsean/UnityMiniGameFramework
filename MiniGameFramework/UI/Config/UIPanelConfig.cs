@@ -46,7 +46,8 @@ namespace MiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<UIPanelConf>(confStr);
+            //return JsonSerializer.Deserialize<UIPanelConf>(confStr);
+            return JsonUtil.FromJson<UIPanelConf>(confStr);
         }
     }
 }

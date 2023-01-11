@@ -26,7 +26,8 @@ namespace MiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<MainUIConfig>(confStr);
+            //return JsonSerializer.Deserialize<MainUIConfig>(confStr);
+            return JsonUtil.FromJson<MainUIConfig>(confStr);
         }
     }
 }

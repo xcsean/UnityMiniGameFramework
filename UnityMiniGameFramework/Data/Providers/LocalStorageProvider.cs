@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
+//using System.Text.Json;
 using System.IO;
-
 using MiniGameFramework;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -36,7 +37,7 @@ namespace UnityMiniGameFramework
         override public IData CreateData(string dataName)
         {
             IData data = base.CreateData(dataName);
-            if(data == null)
+            if (data == null)
             {
                 return null;
             }
@@ -57,7 +58,7 @@ namespace UnityMiniGameFramework
                     BinaryReader reader = new BinaryReader(readStream, Encoding.UTF8);
                     int objectCount = reader.ReadInt32();
 
-                    for(int i=0; i< objectCount; ++i)
+                    for (int i = 0; i < objectCount; ++i)
                     {
                         string key = reader.ReadString();
                         string clsName = reader.ReadString();
@@ -66,13 +67,14 @@ namespace UnityMiniGameFramework
                         Type t = Type.GetType(clsName);
                         if (t != null)
                         {
-                            var obj = JsonSerializer.Deserialize(jsonStr, t);
-
+                            //var obj = JsonSerializer.Deserialize(jsonStr, t);
+                            var obj = JsonUtil.FromJson(jsonStr, t);
                             objects[key] = obj;
                         }
                         else
                         {
-                            Debug.DebugOutput(DebugTraceType.DTT_Error, $"LocalStorageProvider CreateData [{fileName}] class [{clsName}] not exist");
+                            Debug.DebugOutput(DebugTraceType.DTT_Error,
+                                $"LocalStorageProvider CreateData [{fileName}] class [{clsName}] not exist");
                         }
                     }
                 }
@@ -91,14 +93,16 @@ namespace UnityMiniGameFramework
         {
             if (!_fileWriters.ContainsKey(dataName))
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"LocalStorageProvider _readSingleData ({dataName}) not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"LocalStorageProvider _readSingleData ({dataName}) not exist");
                 return null;
             }
 
             var fw = _fileWriters[dataName];
             if (!fw.objects.ContainsKey(key))
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"LocalStorageProvider _readSingleData ({dataName}) key ({key}) not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"LocalStorageProvider _readSingleData ({dataName}) key ({key}) not exist");
                 return null;
             }
 
@@ -112,16 +116,15 @@ namespace UnityMiniGameFramework
 
         override public Task<object> ReadSingleDataAsync(string dataName, string key)
         {
-            return Task.Run(()=> {
-                return _readSingleData(dataName, key);
-            });
+            return Task.Run(() => { return _readSingleData(dataName, key); });
         }
 
         protected object _writeSingleData(string dataName, string key, object obj)
         {
             if (!_fileWriters.ContainsKey(dataName))
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"LocalStorageProvider _writeSingleData ({dataName}) not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"LocalStorageProvider _writeSingleData ({dataName}) not exist");
                 return null;
             }
 
@@ -136,9 +139,7 @@ namespace UnityMiniGameFramework
 
         override public Task WriteSingleDataAsync(string dataName, string key, object obj)
         {
-            return Task.Run(() => {
-                _writeSingleData(dataName, key, obj);
-            });
+            return Task.Run(() => { _writeSingleData(dataName, key, obj); });
         }
 
         public void writeFile(string dataName)
@@ -148,9 +149,8 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"LocalStorageProvider writeFile ({dataName}) not exist");
                 return;
             }
-            
-            _writeFile(_fileWriters[dataName]);
 
+            _writeFile(_fileWriters[dataName]);
         }
 
         protected void _writeFile(storeFile fw)
@@ -168,8 +168,8 @@ namespace UnityMiniGameFramework
                 {
                     writer.Write(objPair.Key);
                     writer.Write(objPair.Value.GetType().FullName);
-                    var jsonStr = JsonSerializer.Serialize(objPair.Value, objPair.Value.GetType());
-
+                    //var jsonStr = JsonSerializer.Serialize(objPair.Value, objPair.Value.GetType());
+                    var jsonStr = JsonUtil.ToJson(objPair.Value, objPair.Value.GetType());
                     writer.Write(jsonStr);
                 }
             }
@@ -192,8 +192,8 @@ namespace UnityMiniGameFramework
 
         override public async Task WritebackAllAsync()
         {
-            await Task.Run(async () => {
-
+            await Task.Run(async () =>
+            {
                 await base.WritebackAllAsync();
 
                 _writeFiles();

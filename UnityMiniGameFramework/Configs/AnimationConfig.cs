@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+//using System.Text.Json;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -33,6 +34,7 @@ namespace UnityMiniGameFramework
         // TO DO : add configs
     }
 
+    [Serializable]
     public class AnimationsConf
     {
         public Dictionary<string, AnimatorConf> Animators { get; set; }
@@ -49,7 +51,8 @@ namespace UnityMiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<AnimationsConf>(confStr);
+            //return JsonSerializer.Deserialize<AnimationsConf>(confStr);
+            return JsonUtil.FromJson<AnimationsConf>(confStr);
         }
 
 

@@ -39,7 +39,8 @@ namespace MiniGameFramework
             {
                 string jsonStr = await res.Content.ReadAsStringAsync();
 
-                return JsonSerializer.Deserialize<T>(jsonStr);
+                //return JsonSerializer.Deserialize<T>(jsonStr);
+                return JsonUtil.FromJson<T>(jsonStr);
             }
             else
             {

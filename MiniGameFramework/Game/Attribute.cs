@@ -22,11 +22,13 @@ namespace MiniGameFramework
 
         public string toJson()
         {
-            return JsonSerializer.Serialize(_data, typeof(T));
+            //return JsonSerializer.Serialize(_data, typeof(T));
+            return JsonUtil.ToJson(_data, typeof(T));
         }
         public void fromJson(string jsonStr)
         {
-            _data = (T)JsonSerializer.Deserialize(jsonStr, typeof(T));
+            //_data = (T)JsonSerializer.Deserialize(jsonStr, typeof(T));
+            _data = (T) JsonUtil.FromJson(jsonStr, typeof(T));
         }
 
         public virtual void cloneTo<U>(U toObj)

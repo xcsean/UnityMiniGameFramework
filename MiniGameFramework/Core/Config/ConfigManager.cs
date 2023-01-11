@@ -49,7 +49,8 @@ namespace MiniGameFramework
             Debug.DebugOutput(DebugTraceType.DTT_System, $"Init App Config from ({appConfigName})");
             string confStr = GameApp.Inst.File.readStringFromStreamPath(appConfigName);
 
-            AppConfigs appConfs = JsonSerializer.Deserialize<AppConfigs>(confStr);
+            //AppConfigs appConfs = JsonSerializer.Deserialize<AppConfigs>(confStr);
+            AppConfigs appConfs = JsonUtil.FromJson<AppConfigs>(confStr);
 
             foreach(var conf in appConfs.configFiles)
             {

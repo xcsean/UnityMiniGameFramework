@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+//using System.Text.Json;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -59,6 +60,7 @@ namespace UnityMiniGameFramework
         public GunFireConf FireConf { get; set; }
     }
 
+    [Serializable]
     public class WeaponConfs
     {
         public Dictionary<string, GunConf> guns { get; set; }
@@ -76,7 +78,8 @@ namespace UnityMiniGameFramework
 
         override protected object _JsonDeserialize(string confStr)
         {
-            return JsonSerializer.Deserialize<WeaponConfs>(confStr);
+            //return JsonSerializer.Deserialize<WeaponConfs>(confStr);
+            return JsonUtil.FromJson<WeaponConfs>(confStr);
         }
 
         public GunConf getGunConf(string gunName)
