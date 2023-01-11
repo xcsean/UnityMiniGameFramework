@@ -411,6 +411,7 @@ namespace UnityMiniGameFramework
         {
             _uiTrainstationCapatityPanel = UnityGameApp.Inst.UI.createUIPanel("TrainstationCapacityUI") as UITrainstationCapatityPanel;
             _uiTrainstationCapatityPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _uiTrainstationCapatityPanel.RefreshInfo(this);
             _uiTrainstationCapatityPanel.showUI();
         }
     }

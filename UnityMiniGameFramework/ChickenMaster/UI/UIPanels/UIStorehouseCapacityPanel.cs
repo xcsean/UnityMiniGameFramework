@@ -29,6 +29,8 @@ namespace UnityMiniGameFramework
             return new UIStorehouseCapacityPanel();
         }
 
+        private CMStoreHouse _CMStoreHouse;
+
         protected Label _labCapacity;
         protected Label _labPopup;
         protected CapacityPopupNumber popupNumber;
@@ -42,13 +44,25 @@ namespace UnityMiniGameFramework
 
             FindUI();
 
-            DoUpdateInputStore(0, 0);
+            RefreshInfo(null);
         }
 
         protected void FindUI()
         {
             _labCapacity = this._uiObjects["labCapacity"].unityVisualElement as Label;
             _labPopup = this._uiObjects["labPopup"].unityVisualElement as Label;
+        }
+
+        public void RefreshInfo(CMStoreHouse _cmStoreHouse)
+        {
+            _CMStoreHouse = _cmStoreHouse;
+            if (_CMStoreHouse == null)
+            {
+                DoUpdateInputStore(0, 0);
+
+                return;
+            }
+            DoUpdateInputStore(_CMStoreHouse.storeHouseInfo.storeCount, 0);
         }
 
         public void DoUpdateInputStore(int totalCnt, int changeCnt)

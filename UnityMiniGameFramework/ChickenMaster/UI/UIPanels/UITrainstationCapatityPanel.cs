@@ -30,6 +30,8 @@ namespace UnityMiniGameFramework
             return new UITrainstationCapatityPanel();
         }
 
+        private CMTrainStation _CMTrainStation;
+
         private VisualElement layout;
         private Label _labCapacity;
         private Label _labPopup;
@@ -43,6 +45,8 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             FindUI();
+
+            RefreshInfo(null);
         }
 
         protected void FindUI()
@@ -52,8 +56,18 @@ namespace UnityMiniGameFramework
             _labCapacity = grid.Q<Label>("labCapacity");
             _labPopup = grid.Q<Label>("labPopup");
             popupNumber = null;
+        }
 
-            DoUpdateInputStore(0, 0);
+        public void RefreshInfo(CMTrainStation _cmTrainStation)
+        {
+            _CMTrainStation = _cmTrainStation;
+            if (_CMTrainStation == null)
+            {
+                DoUpdateInputStore(0, 0);
+
+                return;
+            }
+            DoUpdateInputStore(_CMTrainStation.trainStationInfo.storeProducts.Count, 0);
         }
 
         public void DoUpdateInputStore(int totalCnt, int changeCnt)
