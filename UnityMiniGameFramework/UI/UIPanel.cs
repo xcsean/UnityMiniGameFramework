@@ -187,7 +187,7 @@ namespace UnityMiniGameFramework
         public void BindShowActionVE(VisualElement showVE)
         {
             _showActionVE = showVE;
-            string ussName = "unity-move-show";
+            string ussName = "unity-scale-show";
             if (_showActionVE != null && !_showActionVE.ClassListContains(ussName))
             {
                 var uss = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadStyleSheet(ussName);
@@ -238,6 +238,7 @@ namespace UnityMiniGameFramework
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
                 _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));
                 _showActionVE.style.opacity = 1f;
+
             }
             else if (_showActionVE != null && _showActionVE.ClassListContains("unity-move-show"))
             {
@@ -252,7 +253,6 @@ namespace UnityMiniGameFramework
         }
 
         /// <summary>
-        /// TODO 隐藏时立即执行，无法看到动画
         /// 界面隐藏时缩放动画
         /// </summary>
         virtual public void HideAction()
@@ -261,14 +261,17 @@ namespace UnityMiniGameFramework
             {
                 _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
                 _showActionVE.style.opacity = 0f;
-                // 隐藏不需要动画了
+
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
             }
             else if (_showActionVE != null && _showActionVE.ClassListContains("unity-move-show"))
             {
                 // 界面底部对齐，Position-bottom
-                _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
                 _showActionVE.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(750f), 0));
+
+                _showActionVE.schedule.Execute(() => {
+                    _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
+                }).StartingIn(300);
             }
             else
             {
@@ -276,5 +279,6 @@ namespace UnityMiniGameFramework
             }
             _isShow = false;
         }
+
     }
 }
