@@ -15,6 +15,7 @@ namespace UnityMiniGameFramework.RESTFulAPI
     public class CS_LoginParam
     {
         public string uid { get; set; }
+
         public string token { get; set; }
     }
 
@@ -26,8 +27,11 @@ namespace UnityMiniGameFramework.RESTFulAPI
     public class CS_ReportParam
     {
         public string uid { get; set; }
+
         public int type { get; set; }
+
         public DateTime createtime { get; set; }
+
         public string msg { get; set; }
     }
 }

@@ -71,12 +71,12 @@ namespace UnityMiniGameFramework
             // 初始化游戏信息
             await UnityGameApp.Inst.Game.InitAsync();
 
-            // login
+            //login
             //UnityGameApp.Inst.RESTFulClient.Login(
             //    new RESTFulAPI.C2S_LoginParam()
             //    {
-            //        uid="",
-            //        token=""
+            //        uid = "",
+            //        token = ""
             //    },
             //    (RESTFulAPI.S2C_LoginResult res) =>
             //    {
@@ -108,7 +108,7 @@ namespace UnityMiniGameFramework
             //     },
             //     (RESTFulAPI.SC_Result res) =>
             //     {
-            //         UnityGameApp.Inst.LoadMainScene();
+
             //     }
             //);
 

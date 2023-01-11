@@ -11,6 +11,7 @@ namespace UnityMiniGameFramework
         public string uid { get; set; }
 
         public byte vipLevel { get; set; }
+
         public byte level { get; set; }
     }
 }
