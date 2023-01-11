@@ -4,54 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    public class SDKBehaviour : MonoBehaviour
-    {
-        protected virtual void Awake()
-        {
-            Topon sdk = new Topon();
-            sdk.Init(this);
-            SDKManager.InitSDK(sdk);
-        }
-
-        public virtual void loadVideo()
-        {
-        }
-
-        public virtual void showVideo(Action<AdEventArgs> cb)
-        {
-        }
-
-        public virtual void showAutoAd(Action<AdEventArgs> cb)
-        {
-        }
-    }
-
     public class SDKManager
     {
         protected static ISDK _sdk;
-        protected static ISDK sdk => _sdk;
+
+        public static ISDK sdk => _sdk;
+
+        protected static SDKBehaviour _sdkBehaviour;
+
+        public static SDKBehaviour sdkBehaviour => _sdkBehaviour;
+
         public static void InitSDK(ISDK s)
         {
             _sdk = s;
+            _sdk.Init(_sdkBehaviour);
         }
 
-        public static void showAutoAd(Action<AdEventArgs> cb)
+        public static void setSdkBehaviour(SDKBehaviour s)
+        {
+            _sdkBehaviour = s;
+        }
+
+        public static void showAutoAd(Action<SdkEvent> callball)
         {
             if (SDKManager._sdk != null)
             {
-                SDKManager._sdk.showAutoAd(cb);
+                SDKManager._sdk.showAutoAd(callball);
             }
             else
             {
-                cb(
-                    new AdEventArgs
-                    {
-                        type = VideoEvent.RewardEvent
-                    }
-                );
+                callball(new SdkEvent(AdEventType.RewardEvent));
             }
         }
     }

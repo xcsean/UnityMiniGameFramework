@@ -190,6 +190,8 @@ namespace UnityMiniGameFramework
             }
 
             _lastSaveTime = nowMillisecond;
+
+            SDKManager.InitSDK(new CMToponSDK());
         }
 
         public void OnStartSceneLoaded()
