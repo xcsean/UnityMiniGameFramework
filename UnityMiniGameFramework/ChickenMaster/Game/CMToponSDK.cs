@@ -28,7 +28,7 @@ namespace UnityMiniGameFramework
 
         public void showAutoAd(Action<SdkEvent> cb)
         {
-            _topOn.showVideo(cb);
+            _topOn.showAutoAd(cb);
         }
 
         public void onAdVideoPlayFail(string placementId)
