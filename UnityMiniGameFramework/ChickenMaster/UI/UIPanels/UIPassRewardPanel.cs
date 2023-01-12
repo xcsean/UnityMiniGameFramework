@@ -158,6 +158,15 @@ namespace UnityMiniGameFramework
                             index++;
                         }
                     }
+
+                    for (var i = 0; i < index; i++)
+                    {
+                        var grid = layoutGrid.Q<VisualElement>($"grid{i}");
+                        var y = index < 3 ? 135 : i > 3 ? 270 : 0;
+                        var x = index == 1 ? 210 : index == 2 ? 105 : 0;
+                        grid.style.left = x;
+                        grid.style.top = y;
+                    }
                 }
             }
             showAni(2);
@@ -234,9 +243,6 @@ namespace UnityMiniGameFramework
                 if (prog.cur >= prog.end)
                 {
                     prog.cur = prog.end;
-                    //int cur = aniType == 3 ? prog.video : aniType == 2 ? prog.normal : prog.have;
-                    //cur = cur > prog.total ? prog.total : cur;
-                    //grid.Q<Label>("progress").text = $"{cur}/{prog.total}";
 
                     if (aniType == 3)
                     {
