@@ -31,7 +31,7 @@ namespace UnityMiniGameFramework
 
         public static void showAutoAd(Action<SdkEvent> callball)
         {
-            if (SDKManager._sdk != null)
+            if (!SDKManager._sdk.isNull())
             {
                 SDKManager._sdk.showAutoAd(callball);
             }

@@ -245,24 +245,24 @@ namespace UnityMiniGameFramework
                 _mainUI.refreshCurrentLevel(bi.currentLevel);
             }
 
-            if(bi.currentFetchedAwardLevel < bi.currentLevel)
-            {
-                // first complete, give award
-                if (_levelFisrtCompleteAward != null)
-                {
-                    cmGame.Self.AddGold(_levelFisrtCompleteAward.gold);
-                    cmGame.Self.AddExp(_levelFisrtCompleteAward.exp);
+            //if(bi.currentFetchedAwardLevel < bi.currentLevel)
+            //{
+            //    // first complete, give award
+            //    if (_levelFisrtCompleteAward != null)
+            //    {
+            //        cmGame.Self.AddGold(_levelFisrtCompleteAward.gold);
+            //        cmGame.Self.AddExp(_levelFisrtCompleteAward.exp);
 
-                    foreach(var item in _levelFisrtCompleteAward.items)
-                    {
-                        cmGame.Self.AddBackpackItem(item.itemName, item.count);
-                    }
-                }
+            //        foreach(var item in _levelFisrtCompleteAward.items)
+            //        {
+            //            cmGame.Self.AddBackpackItem(item.itemName, item.count);
+            //        }
+            //    }
 
-                bi.currentFetchedAwardLevel = bi.currentLevel;
-            }
+            //    bi.currentFetchedAwardLevel = bi.currentLevel;
+            //}
 
-            cmGame.baseInfo.markDirty();
+            //cmGame.baseInfo.markDirty();
 
             // for Debug ...
             cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level Win !");

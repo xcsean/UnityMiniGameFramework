@@ -10,6 +10,11 @@ namespace UnityMiniGameFramework
     public class CMToponSDK : ISDK
     {
         private SDKBehaviour _topOn;
+        
+        public bool isNull()
+        {
+            return _topOn == null;
+        }
 
         public void Init(SDKBehaviour sdk)
         {

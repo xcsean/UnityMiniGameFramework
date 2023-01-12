@@ -10,6 +10,8 @@ namespace UnityMiniGameFramework
     {
         void Init(SDKBehaviour sdkb);
 
+        bool isNull();
+
         void showVideo(Action<SdkEvent> callback);
 
         void showAutoAd(Action<SdkEvent> callback);
