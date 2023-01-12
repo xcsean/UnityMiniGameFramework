@@ -337,8 +337,6 @@ namespace UnityMiniGameFramework
             var bi = _baseInfo.getData() as LocalBaseInfo;
 
             var offLineMillisecond = nowMillisecond - _lastOnlineTime;
-            UnityEngine.Debug.LogError("offLineMillisecond=" + offLineMillisecond);
-            UnityEngine.Debug.LogError("offLineMillisecond=" + offLineMillisecond/1000);
             if (offLineMillisecond < _offlineAwardMinTime)
             {
                 return;
