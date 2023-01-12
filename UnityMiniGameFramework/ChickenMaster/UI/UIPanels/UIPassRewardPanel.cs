@@ -10,6 +10,7 @@ namespace UnityMiniGameFramework
 {
     public class ProgressAniParams
     {
+        public string type;
         public int id;
         public float cur;
         public float end;
@@ -100,11 +101,28 @@ namespace UnityMiniGameFramework
                     {
                         var grid = layoutGrid.Q<VisualElement>($"grid{index}");
                         grid.Q<Label>("count").text = $"X{rewardConf.exp}";
+                        grid.Q<Label>("count").style.display = DisplayStyle.None;
                         grid.Q<Label>("have").text = $"OWNED: {bi.exp}";
-                        grid.Q<Label>("name").text = "EXP";
-                        grid.Q<VisualElement>("weapon").style.display = DisplayStyle.None;
-                        grid.Q<Label>("have").style.display = DisplayStyle.Flex;
+                        grid.Q<Label>("name").text = $"EXP +{rewardConf.exp}";
+                        grid.Q<Label>("lv").text = $"{bi.level}";
+                        grid.Q<VisualElement>("weapon").style.display = DisplayStyle.Flex;
+                        grid.Q<Label>("have").style.display = DisplayStyle.None;
                         grid.style.display = DisplayStyle.Flex;
+                        int upgradeNeed = cmGame.gameConf.getLevelUpExpRequire(bi.level);
+                        grid.Q<Label>("progress").text = $"0/{upgradeNeed}";
+                        float prog = bi.exp > upgradeNeed ? 1f : ((float)bi.exp / upgradeNeed);
+                        grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93));
+                        progs.Add(new ProgressAniParams()
+                        {
+                            type = "exp",
+                            id = index,
+                            cur = 0f,
+                            end = prog,
+                            have = bi.exp,
+                            normal = bi.exp + rewardConf.exp,
+                            video = bi.exp + rewardConf.exp * 3,
+                            total = upgradeNeed
+                        });
                         var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/common/icon_exp");
                         if (tx != null)
                         {
@@ -125,7 +143,8 @@ namespace UnityMiniGameFramework
                             var grid = layoutGrid.Q<VisualElement>($"grid{index}");
                             int rewardCount = rewardConf.items[i].count;
                             grid.Q<Label>("count").text = $"X{rewardCount}";
-                            grid.Q<Label>("name").text = $"{rewardConf.items[i].itemName}";
+                            grid.Q<Label>("count").style.display = DisplayStyle.None;
+                            grid.Q<Label>("name").text = $"piece x{rewardCount}";//$"{rewardConf.items[i].itemName}";
                             grid.Q<VisualElement>("weapon").style.display = DisplayStyle.Flex;
                             grid.Q<Label>("have").style.display = DisplayStyle.None;
                             grid.Q<VisualElement>("RewardIcon").style.backgroundImage = null;
@@ -141,8 +160,10 @@ namespace UnityMiniGameFramework
                                     grid.Q<Label>("progress").text = $"0/{upgradeNeed}";
                                     grid.Q<Label>("lv").text = $"{lv}";
                                     float prog = (float)have / gun.Value.gunLevelConf[lv].upgrageCostItemCost;
+                                    grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93));
                                     progs.Add(new ProgressAniParams()
                                     {
+                                        type = "gunpiece",
                                         id = index,
                                         cur = 0f,
                                         end = prog,
@@ -178,8 +199,24 @@ namespace UnityMiniGameFramework
                     }
                 }
             }
-            showAni(2);
-            UnityGameApp.Inst.addUpdateCall(onUpdate);
+            UnityGameApp.Inst.addUpdateCall(startDelay);
+        }
+
+        private void startDelay()
+        {
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            if (lastMillisecond == 0)
+            {
+                lastMillisecond = nowMillisecond;
+                return;
+            }
+            if (nowMillisecond - lastMillisecond > 500)
+            {
+                lastMillisecond = 0;
+                showAni(2);
+                UnityGameApp.Inst.addUpdateCall(onUpdate);
+                UnityGameApp.Inst.removeUpdateCall(startDelay);
+            }
         }
 
         private void onClickVideoGet()
@@ -230,6 +267,21 @@ namespace UnityMiniGameFramework
                 VisualElement grid = layoutGrid.Q<VisualElement>($"grid{prog.id}");
                 grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog.cur * 93));
                 grid.Q<Label>("progress").text = $"{end}/{prog.total}";
+                if (type == 3)
+                {
+                    if (prog.type == "exp")
+                    {
+                        grid.Q<Label>("name").text = $"EXP +{prog.video - prog.have}";
+                    }
+                    else if (prog.type == "gunpiece")
+                    {
+                        grid.Q<Label>("name").text = $"piece x{prog.video - prog.have}";
+                    }
+                    else
+                    {
+                        grid.Q<Label>("count").text = $"X{prog.video - prog.have}";
+                    }
+                }
             }
             aniType = type;
         }
@@ -261,7 +313,7 @@ namespace UnityMiniGameFramework
                             lastMillisecond = nowMillisecond;
                             return;
                         }
-                        if (nowMillisecond - lastMillisecond > 1000)
+                        if (nowMillisecond - lastMillisecond > 500)
                         {
                             collectRewards(true);
                             aniType = 0;
