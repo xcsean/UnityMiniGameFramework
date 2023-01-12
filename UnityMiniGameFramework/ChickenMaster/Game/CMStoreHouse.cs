@@ -34,7 +34,7 @@ namespace UnityMiniGameFramework
 
         private UIStorehouseCapacityPanel _uiStorehouseCapacityPanel;
 
-        public void Init(LocalStoreHouseInfo info)
+        public void InitConfig(LocalStoreHouseInfo info)
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             _storeHouseInfo = info;
@@ -45,7 +45,12 @@ namespace UnityMiniGameFramework
                 return;
             }
             _currentLevelConf = _conf.levelConfs[_storeHouseInfo.level];
-
+        }
+        
+        public void Init(LocalStoreHouseInfo info)
+        {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            
             _mapBuildingObj = null;
             var map = (UnityGameApp.Inst.MainScene.map as Map);
             map.buildings.TryGetValue(_conf.mapBuildName, out _mapBuildingObj);
@@ -65,7 +70,7 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
-
+            
             InitCapacityUI();
 
             if (info.storeHouseWorkers.Count <= 0)

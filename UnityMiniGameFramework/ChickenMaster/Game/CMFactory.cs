@@ -107,7 +107,12 @@ namespace UnityMiniGameFramework
             
             //todo:data与control需要分离
             //todo:箱子初始化显示
-            
+            _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
+                                                                ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
+                                                                .currentLevelConf
+                                                                .fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.outputStorePrefabPath,
+                currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             InitProduceProgressUI();
             return true;
         }

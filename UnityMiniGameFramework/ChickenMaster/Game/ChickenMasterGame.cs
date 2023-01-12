@@ -252,6 +252,8 @@ namespace UnityMiniGameFramework
             _self.Init();
 
             var bi = _baseInfo.getData() as LocalBaseInfo;
+            // init storehouse config
+            _storeHouse.InitConfig(bi.storeHouse);
 
             // init npc heros
             for (int i = 0; i < bi.defenseHeros.Count; ++i)
