@@ -103,6 +103,9 @@ namespace UnityMiniGameFramework
 
         public Dictionary<int, int> levelCarryCount { get; set; }
 
+        public string productBone { get; set; }
+        public JsonConfVector3 productPos { get; set; }
+        public string productPrefab { get; set; }
     }
 
     public class CMStoreHouseLevelConf

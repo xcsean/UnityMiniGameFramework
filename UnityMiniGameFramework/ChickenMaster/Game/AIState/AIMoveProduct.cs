@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -36,6 +37,9 @@ namespace UnityMiniGameFramework
         protected bool _isPlayedActAni;
         protected bool _isPlayingAni;
         protected CMFactory _targetFactory;
+        protected Transform _productBone;
+        protected GameObject _productGameObject;
+        protected string _productPrefabName = string.Empty;
 
         public AIMoveProduct(ActorObject actor) : base(actor)
         {
@@ -77,6 +81,7 @@ namespace UnityMiniGameFramework
         public void SetWorker(CMWorker worker)
         {
             _worker = worker;
+            _productBone = _actor.unityGameObject.transform.Find(_worker.workerConf.productBone);
         }
 
         public void SyncFactories()
@@ -228,6 +233,7 @@ namespace UnityMiniGameFramework
                 else
                 {
                     _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
+                    addProductGo(_worker.workerConf.productPrefab);
                     _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.TrainStation.putPosition.randSpawnPos() }, 0.5f);
                     _onUpdateWorker = _updateTrainStationMovingToPut;
                 }
@@ -261,6 +267,7 @@ namespace UnityMiniGameFramework
                 // go to fetching position
 
                 _movAct.setMovingAni(ActAnis.RunAni);
+                removeProductGo();
                 _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.outputFetchPosition.randSpawnPos() }, 0.5f);
                 _onUpdateWorker = _updateTrainStationMovingToFetching;
             }
@@ -277,6 +284,7 @@ namespace UnityMiniGameFramework
 
             _onUpdateWorker = _updateTrainStationFetching;
             _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
+            removeProductGo();
             _isPlayedActAni = false;
             _isPlayingAni = false;
         }
@@ -297,6 +305,7 @@ namespace UnityMiniGameFramework
                 if (!_isPlayingAni)
                 {
                     _actor.animatorComponent.playAnimation(_worker.workerConf.fetchingAniName);
+                    addProductGo(_worker.workerConf.productPrefab);
                     _isPlayingAni = true;
                 }
                 else
@@ -329,6 +338,7 @@ namespace UnityMiniGameFramework
 
                 var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
                 _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
+                addProductGo(_worker.workerConf.productPrefab);
                 _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.TrainStation.putPosition.randSpawnPos() }, 0.5f);
                 _onUpdateWorker = _updateTrainStationMovingToPut;
             }
@@ -426,6 +436,7 @@ namespace UnityMiniGameFramework
 
                     _movAct.setMovingAni(ActAnis.RunAni);
                     _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.StoreHouse.fetchPosition.randSpawnPos() }, 0.5f);
+                    removeProductGo();
                     _onUpdateWorker = _updateStoreHouseMovingToFetching;
                 }
 
@@ -466,6 +477,7 @@ namespace UnityMiniGameFramework
                 {
                     _actor.animatorComponent.playAnimation(_worker.workerConf.fetchingAniName);
                     _isPlayingAni = true;
+                    addProductGo(_worker.workerConf.productPrefab);
                 }
                 else
                 {
@@ -512,6 +524,7 @@ namespace UnityMiniGameFramework
                 else
                 {
                     _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
+                    addProductGo(_worker.workerConf.productPrefab);
                     _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.inputPutPosition.randSpawnPos() }, 0.5f);
                 }
             }
@@ -528,6 +541,32 @@ namespace UnityMiniGameFramework
             _isPlayingAni = false;
         }
 
+        protected void addProductGo(string _prefab)
+        {
+            if (_productPrefabName == _prefab)
+                return;
+            if (_productGameObject != null) 
+                removeProductGo();
+            _productGameObject = UnityGameObjectPool.GetInstance().GetUnityPrefabObject(_prefab);
+            _productPrefabName = _prefab;
+            if (_productGameObject != null)
+            {
+                _productGameObject.transform.SetParent(_productBone);
+                var pos = _worker.workerConf.productPos;
+                _productGameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
+            }
+                
+        }
+
+        protected void removeProductGo()
+        {
+            if (_productPrefabName == string.Empty || _productGameObject == null)
+                return;
+            UnityGameObjectPool.GetInstance().PutUnityPrefabObject(_productPrefabName, _productGameObject);
+            _productGameObject = null;
+            _productPrefabName = string.Empty;
+        }
+        
         protected void _updateStoreHousePutting()
         {
             if(_targetFactory == null)
