@@ -208,6 +208,8 @@ namespace UnityMiniGameFramework
                 {
                     _gun.AddAttackRange(addRangeSum);
                 }
+
+                _gun.UpdateFireCd(gunLevelConf.IncreasedAttackSpeed);
             }
             else
             {

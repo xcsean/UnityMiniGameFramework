@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine.Profiling;
 
 namespace UnityMiniGameFramework
 {
@@ -88,6 +89,9 @@ namespace UnityMiniGameFramework
         protected float _attackRange;
         public float attackRange => _attackRange;
 
+        protected float _fireCd;
+        protected float _baseAttackSpeedRate;
+
         protected static string[] _layers = new string[] { "Hitable", "Default", "Ground" };
 
         public GunObject()
@@ -142,12 +146,17 @@ namespace UnityMiniGameFramework
             }
             
             _projectFlySpeed = _conf.FireConf.projectileFlySpeed.HasValue ? _conf.FireConf.projectileFlySpeed.Value : 10;
+            
             _gunPos = tr.gameObject;
             _name = _conf.name;
 
             _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 0;
             _attackRange = GetBaseAttackRange();
-
+            _baseAttackSpeedRate = _conf.FireConf.baseattackspeedrate.HasValue
+                ? _conf.FireConf.baseattackspeedrate.Value
+                : 100.0f;
+            //默认初始值，最后由UpdateFireCd负责更新
+            _fireCd = _conf.FireConf.fireCdTime;
             if (_conf.AnimatorConf != null)
             {
                 _animatorComponent = (AnimatorComponent)GameObjectManager.createGameObjectComponent(_conf.AnimatorConf.componentType);
@@ -159,7 +168,12 @@ namespace UnityMiniGameFramework
 
         }
 
-        virtual public void Fire(ActorObject target)
+        public void UpdateFireCd(int weaponLevelAttackSpeed)
+        {
+            _fireCd = _baseAttackSpeedRate * 1.0f / weaponLevelAttackSpeed;
+        }
+        
+        public virtual void Fire(ActorObject target)
         {
             _currentTarget = target;
 
@@ -303,7 +317,7 @@ namespace UnityMiniGameFramework
 
             if(_doFire())
             {
-                _currCD = _conf.FireConf.fireCdTime;
+                _currCD = _fireCd;
             }
 
         }
@@ -515,7 +529,7 @@ namespace UnityMiniGameFramework
                 }
 
                 var value = _emmiterHitObjectsTime[key];
-                if (UnityEngine.Time.time - value < _conf.FireConf.fireCdTime)
+                if (UnityEngine.Time.time - value < _fireCd)
                 {
                     continue;
                 }

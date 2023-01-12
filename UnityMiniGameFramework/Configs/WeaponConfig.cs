@@ -40,6 +40,8 @@ namespace UnityMiniGameFramework
 
         public float? hitForce { get; set; }
 
+        public float? baseattackspeedrate { get; set; }
+
         public ExplosiveConf collideExplosive { get; set; }
 
         public string collideBuf { get; set; } // give dot or other buf to target

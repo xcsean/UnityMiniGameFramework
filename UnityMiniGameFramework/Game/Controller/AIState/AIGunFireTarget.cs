@@ -74,7 +74,7 @@ namespace UnityMiniGameFramework
         }
 
 
-        override public void OnUpdate()
+        public override void OnUpdate()
         {
             if (_actor.actionComponent.hasState(ActStates.STATE_KEY_DIE))
             {

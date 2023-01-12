@@ -17,6 +17,8 @@ namespace UnityMiniGameFramework
         public AttackConf attack { get; set; }
 
         public float rangeAdd { get; set; }
+
+        public int IncreasedAttackSpeed { get; set; }
     }
 
     public class CMGunConf

@@ -64,7 +64,7 @@ namespace UnityMiniGameFramework
                 var gunConf = cmGame.gameConf.getCMGunConf(gunInfo.id);
 
                 _labDamage.text = $"{gunConf.gunLevelConf[gunInfo.level].attack.attackMin}";
-                _labSpeed.text = "0";
+                _labSpeed.text = $"{gunConf.gunLevelConf[gunInfo.level].IncreasedAttackSpeed}";
                 _labRange.text = "0";
 
                 _labGunName.text = $"{gunConf.id}";
