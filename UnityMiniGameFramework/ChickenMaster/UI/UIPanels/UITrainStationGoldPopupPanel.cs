@@ -12,12 +12,12 @@ namespace UnityMiniGameFramework
     /// <summary>
     /// 获得金币 飘字动效
     /// </summary>
-    public class UIResPopupPanel : UIPanel
+    public class UITrainStationGoldPopupPanel : UIPanel
     {
-        override public string type => "UIResPopupPanel";
-        public static UIResPopupPanel create()
+        override public string type => "UITrainStationGoldPopupPanel";
+        public static UITrainStationGoldPopupPanel create()
         {
-            return new UIResPopupPanel();
+            return new UITrainStationGoldPopupPanel();
         }
 
         protected VisualElement _popup;

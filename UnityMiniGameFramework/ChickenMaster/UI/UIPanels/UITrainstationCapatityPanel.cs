@@ -113,15 +113,9 @@ namespace UnityMiniGameFramework
         {
             base.showUI();
 
-            UnityGameApp.Inst.addUpdateCall(this.OnUpdatePopup);
+            addUpdate(this.OnUpdatePopup);
         }
 
-        public override void hideUI()
-        {
-            base.hideUI();
-
-            UnityGameApp.Inst.removeUpdateCall(this.OnUpdatePopup);
-        }
     }
 }
 
