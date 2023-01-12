@@ -254,7 +254,7 @@ namespace UnityMiniGameFramework
 
             if (_currentPickAreaName == null)
             {
-                _atkRangeCircleVFX.SetColor(1, 0, 1, 1); // can't put
+                _atkRangeCircleVFX.ShowAttackRange(false); // can't put
 
                 // pick ground position
                 hitInfos = UnityEngine.Physics.RaycastAll(
@@ -273,7 +273,7 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                _atkRangeCircleVFX.SetColor(0, 1, 0, 1); // can put
+                _atkRangeCircleVFX.ShowAttackRange(false); // can put
 
                 _currentPickNPCHero.mapHero.unityGameObject.transform.position = new UnityEngine.Vector3(
                     _currentPickPosition.x,

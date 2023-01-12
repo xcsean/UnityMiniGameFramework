@@ -48,6 +48,18 @@ namespace UnityMiniGameFramework
             return uss;
         }
 
+        public Sprite LoadSprite(string spritePath)
+        {
+            var sp = Resources.Load<Sprite>(spritePath);
+            if (sp == null)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadTexture {spritePath} not exist");
+                return null;
+            }
+
+            return sp;
+        }
+        
         public Texture2D LoadTexture(string iconName)
         {
             var t2d = Resources.Load(iconName) as Texture2D;

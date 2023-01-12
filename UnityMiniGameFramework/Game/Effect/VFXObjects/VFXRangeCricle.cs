@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
@@ -26,10 +27,21 @@ namespace UnityMiniGameFramework
             _unityGameObject.transform.localScale = new UnityEngine.Vector3(range, range, range);
         }
 
-        public void SetColor(float r, float g, float b, float a)
+        public void ShowAttackRange(bool isCanPut)
         {
-            var mr = _unityGameObject.GetComponent<UnityEngine.MeshRenderer>();
-            mr.material.color = new UnityEngine.Color(r, g, b, a);
+            var spriteRenderer = _unityGameObject.GetComponent<SpriteRenderer>();
+            string spPath; 
+            if (isCanPut)
+            {
+                spPath = "Battle/HeroAttackRange/Textures/aq_lv";
+            }
+            else
+            {
+                spPath = "Battle/HeroAttackRange/Textures/aq_lan";
+            }
+            var sp = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadSprite(spPath);
+            if (sp)
+                spriteRenderer.sprite = sp;
         }
     }
 }
