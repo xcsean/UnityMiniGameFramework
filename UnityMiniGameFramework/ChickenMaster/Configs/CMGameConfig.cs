@@ -24,6 +24,7 @@ namespace UnityMiniGameFramework
         public int id { get; set; }
         public string weaponIcon { get; set; }
         public string prefabName { get; set; }
+        public string name { get; set; }
 
         public string upgradeItemName { get; set; }
         public int activateItemCost { get; set; }

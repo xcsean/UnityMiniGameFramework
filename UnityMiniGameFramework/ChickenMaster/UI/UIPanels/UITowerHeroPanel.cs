@@ -239,7 +239,8 @@ namespace UnityMiniGameFramework
             var btnArmed = gunItem.Q<Button>("btnArmed");
 
             // TODO gun name
-            gunItem.Q<Label>("labGunName").text = $"Gun{cmGunConf.id}";
+            var cmGameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
+            gunItem.Q<Label>("labGunName").text = $"{cmGameConf.gameConfs.gunConfs[cmGunConf.id].name}";
 
             // 切换武器
             if (_hero != null && _hero.heroInfo.holdWeaponId == gunId)
