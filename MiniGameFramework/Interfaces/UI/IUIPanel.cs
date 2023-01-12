@@ -9,13 +9,10 @@ namespace MiniGameFramework
     public interface IUIPanel : IUIObject
     {
         IUIObject getUIObject(string name);
-
         void Init(UIPanelConf conf);
         void Dispose();
-        void SetSortOrder(int order);
-
+        void setSortOrder(int order);
         Action onShowStartHandle { get; set; }
         Action onHideEndHandle { get; set; }
-
     }
 }

@@ -88,7 +88,7 @@ namespace UnityMiniGameFramework
      
         }
 
-        virtual public void SetSortOrder(int order)
+        virtual public void setSortOrder(int order)
         {
             _unityUIDocument.sortingOrder = order;
         }

@@ -545,6 +545,8 @@ namespace UnityMiniGameFramework
         /// </summary>
         private void GunAscendSuccess(LocalWeaponInfo gunInfo)
         {
+            (UnityGameApp.Inst.Game as ChickenMasterGame).hideAllUI();
+
             UIWeaponAscendPanel _ui = UnityGameApp.Inst.UI.createUIPanel("WeaponAscendUI") as UIWeaponAscendPanel;
             _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _ui.SetWeaponInfo(gunInfo);

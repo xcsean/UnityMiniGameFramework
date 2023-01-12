@@ -187,7 +187,7 @@ namespace MiniGameFramework
         public void showMask(UIPanelConf conf)
         {
             var ve = getMaskUI();
-            ve.SetSortOrder(conf.sortOrder - 1);
+            ve.setSortOrder(conf.sortOrder - 1);
 
             if (maskList.Contains(conf.name))
             {

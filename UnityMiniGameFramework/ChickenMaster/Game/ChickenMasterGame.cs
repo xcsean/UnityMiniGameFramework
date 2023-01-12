@@ -208,6 +208,7 @@ namespace UnityMiniGameFramework
                 || ui.type == "UITrainstationCapacityPanel"
                 || ui.type == "UIProduceProgressPanel"
                 || ui.type == "UIOpeningCartoonPanel"
+                || ui.type == "UIResPopupPanel"
                 )
             {
                 return;

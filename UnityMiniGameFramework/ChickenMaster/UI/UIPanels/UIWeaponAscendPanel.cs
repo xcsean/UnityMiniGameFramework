@@ -74,5 +74,12 @@ namespace UnityMiniGameFramework
             showUI();
         }
 
+        public override void hideUI()
+        {
+            base.hideUI();
+
+            (UnityGameApp.Inst.Game as ChickenMasterGame).reshowAllUI();
+        }
+
     }
 }
