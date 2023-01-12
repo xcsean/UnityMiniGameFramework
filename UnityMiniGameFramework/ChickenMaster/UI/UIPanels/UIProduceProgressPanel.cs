@@ -72,6 +72,8 @@ namespace UnityMiniGameFramework
             _wait = this._uiObjects["wait"].unityVisualElement;
             _arrow = this._uiObjects["arrow"].unityVisualElement;
 
+            _sprStockGoods.style.backgroundImage = null;
+            _sprProduceGoods.style.backgroundImage = null;
             _labLeftPopup.text = "";
             _labRightPopup.text = "";
         }
@@ -87,17 +89,26 @@ namespace UnityMiniGameFramework
             }
             _lastUpdateProduceVer = _CMFactory.produceVer;
 
-            // 产品图
-            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_{_cmFactory.factoryConf.outputProductName}");
-            if (tx != null)
-            {
-                _sprProduceGoods.style.backgroundImage = tx;
-                _sprProduceGoods.style.width = tx.width / (tx.width / 40 + 1);
-                _sprProduceGoods.style.height = tx.width / (tx.height / 40 + 1);
-            }
-
             DoUpdateInputStore(_CMFactory.currentProductInputStore, 0);
             DoUpdatePruduceGoods(_CMFactory.currentProductOutputStore, 0);
+
+            // 产品图
+            if (_sprStockGoods.style.backgroundImage == StyleKeyword.Null)
+            {
+                var outTx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_{_cmFactory.factoryConf.inputProductName}");
+                if (outTx != null)
+                {
+                    _sprStockGoods.style.backgroundImage = outTx;
+                }
+            }
+            if (_sprProduceGoods.style.backgroundImage == StyleKeyword.Null)
+            {
+                var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadProductIcon($"icon_{_cmFactory.factoryConf.outputProductName}");
+                if (tx != null)
+                {
+                    _sprProduceGoods.style.backgroundImage = tx;
+                }
+            }
         }
 
         /// <summary>

@@ -118,7 +118,7 @@ namespace UnityMiniGameFramework
         protected void InitProduceProgressUI()
         {
             // init produce progress UI
-            _produceProgressPanel = UnityGameApp.Inst.UI.createUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
+            _produceProgressPanel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
             _produceProgressPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _produceProgressPanel.RefreshInfo(this);
             _produceProgressPanel.showUI();

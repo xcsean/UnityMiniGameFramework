@@ -198,9 +198,6 @@ namespace UnityMiniGameFramework
                 }
                 _unityUIDocument.rootVisualElement.styleSheets.Add(uss);
                 _showActionVE.AddToClassList(ussName);
-
-                //_showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
-                //_showActionVE.style.opacity = 0f;
             }
         }
 
@@ -221,9 +218,6 @@ namespace UnityMiniGameFramework
                 }
                 _unityUIDocument.rootVisualElement.styleSheets.Add(uss);
                 _showActionVE.AddToClassList(ussName);
-
-                //_showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
-                //_showActionVE.style.opacity = 0f;
             }
         }
 

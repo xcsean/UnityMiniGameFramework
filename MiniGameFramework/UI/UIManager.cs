@@ -92,10 +92,6 @@ namespace MiniGameFramework
 
         public IUIPanel createUIPanelByConf(UIPanelConf conf)
         {
-            if (getUIPanel(conf.name) != null)
-            {
-                return getUIPanel(conf.name);
-            }
             IUIPanel panel = _createUIPanelByType(conf.type);
             if (panel != null)
             {
@@ -128,7 +124,10 @@ namespace MiniGameFramework
             return panel;
         }
 
-        public IUIPanel createUIPanel(string panelName)
+        /// <summary>
+        /// 每次都新建一个界面
+        /// </summary>
+        public IUIPanel createNewUIPanel(string panelName)
         {
             if (!_uiConf.uiConf.UIPanels.ContainsKey(panelName))
             {
@@ -141,6 +140,20 @@ namespace MiniGameFramework
             panelConf.Init(panelFile, panelName);
 
             return createUIPanelByConf(panelConf.uiPanelConf);
+        }
+
+        /// <summary>
+        /// 显示一个界面 唯一的
+        /// </summary>
+        public IUIPanel createUIPanel(string panelName)
+        {
+            if (getUIPanel(panelName) != null)
+            {
+                // 显示之前创建界面
+                return getUIPanel(panelName);
+            }
+
+            return createNewUIPanel(panelName);
         }
 
         public void DisposeUIPanel(IUIPanel p)

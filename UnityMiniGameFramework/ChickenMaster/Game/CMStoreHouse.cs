@@ -245,7 +245,7 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void InitCapacityUI()
         {
-            _uiStorehouseCapacityPanel = UnityGameApp.Inst.UI.createUIPanel("StorehouseCapacityUI") as UIStorehouseCapacityPanel;
+            _uiStorehouseCapacityPanel = UnityGameApp.Inst.UI.createNewUIPanel("StorehouseCapacityUI") as UIStorehouseCapacityPanel;
             _uiStorehouseCapacityPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _uiStorehouseCapacityPanel.RefreshInfo(this);
             _uiStorehouseCapacityPanel.showUI();
