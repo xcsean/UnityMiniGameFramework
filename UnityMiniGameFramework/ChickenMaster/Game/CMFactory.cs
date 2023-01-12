@@ -125,7 +125,8 @@ namespace UnityMiniGameFramework
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             if (cmGame.mainSceneHUDs.ContainsKey(_factoryConf.mapBuildName))
             {
-                (cmGame.mainSceneHUDs[_factoryConf.mapBuildName] as UIProduceProgressPanel).RefreshInfo(this);
+                _produceProgressPanel = (cmGame.mainSceneHUDs[_factoryConf.mapBuildName] as UIProduceProgressPanel);
+                _produceProgressPanel.RefreshInfo(this);
             }
         }
 

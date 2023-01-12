@@ -60,6 +60,8 @@ namespace UnityMiniGameFramework
             FindUI();
 
             RefreshInfo(null);
+
+            WaitAction();
         }
 
         protected void FindUI()
@@ -207,6 +209,27 @@ namespace UnityMiniGameFramework
             }).Every(20);
         }
 
+        private float waitIconOpacity = 1f;
+        private float waitIconOpacityChange = 1;
+        private void WaitAction()
+        {
+            unityUIDocument.rootVisualElement.schedule.Execute(() => {
+                if (_wait.style.display == DisplayStyle.Flex)
+                {
+                    if (waitIconOpacity > 1f)
+                    {
+                        waitIconOpacityChange = -1f;
+                    }
+                    else if (waitIconOpacity < 0f)
+                    {
+                        waitIconOpacityChange = 1f;
+                    }
+                    waitIconOpacity += (0.05f * waitIconOpacityChange);
+                    _wait.style.opacity = waitIconOpacity;
+                }
+            }).Every(30);
+        }
+
         // 飘字
         protected void onUpdate_Popup()
         {
@@ -246,8 +269,6 @@ namespace UnityMiniGameFramework
             }
         }
 
-        private float waitIconOpacity = 1f;
-        private float waitIconOpacityChange = 1;
         protected void OnUpdate()
         {
             onUpdate_Popup();
