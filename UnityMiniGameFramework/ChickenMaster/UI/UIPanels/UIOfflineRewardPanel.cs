@@ -47,13 +47,13 @@ namespace UnityMiniGameFramework
         {
             _offlineReward = offlineReward;
             RewardLabel.text = $"{_offlineReward.gold}";
-            int second = (int)(offLineMillisecond / 1000);
+            int second = (int)(offLineMillisecond / 1000 / 60) * 60; // 分钟向下取整
             var hours = second / (60 * 60);
             var mins = (second - hours * 60 * 60) / 60;
             var secs = second - hours * 60 * 60 - mins * 60;
             var str = hours >= 10 ? hours.ToString() : "0" + hours.ToString();
             str += mins >= 10 ? ":" + mins.ToString() : ":0" + mins.ToString();
-            str += secs >= 10 ? ":" + secs.ToString() : ":0" + secs.ToString();
+            //str += secs >= 10 ? ":" + secs.ToString() : ":0" + secs.ToString();
             OfflineTimeLabel.text = $"OFF-LINE TIME: {str}";
 
             this.showUI();

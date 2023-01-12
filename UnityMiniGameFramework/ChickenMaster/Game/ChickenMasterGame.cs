@@ -332,13 +332,20 @@ namespace UnityMiniGameFramework
         protected void _checkOfflineAwards()
         {
             // check offline award
-            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);// 单位0.1纳秒转毫秒
             var userInfo = (_userInfo.getData() as LocalUserInfo);
             var bi = _baseInfo.getData() as LocalBaseInfo;
 
             var offLineMillisecond = nowMillisecond - _lastOnlineTime;
+            UnityEngine.Debug.LogError("offLineMillisecond=" + offLineMillisecond);
+            UnityEngine.Debug.LogError("offLineMillisecond=" + offLineMillisecond/1000);
             if (offLineMillisecond < _offlineAwardMinTime)
             {
+                return;
+            }
+            if (offLineMillisecond < 60 * 1000)
+            {
+                // 离线奖励按分钟计算
                 return;
             }
 
@@ -349,6 +356,11 @@ namespace UnityMiniGameFramework
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"user level [{bi.level}] offline award config not exist");
                 return;
+            }
+            // 离线最大时间奖励【maxTime单位分钟】
+            if (offLineMillisecond > offlineAwardConf.maxTime * 60 * 1000)
+            {
+                offLineMillisecond = offlineAwardConf.maxTime * 60 * 1000;
             }
 
             if (bi.unfetchedOfflineAward == null)
@@ -392,16 +404,12 @@ namespace UnityMiniGameFramework
 
             LocalAwardInfo offlineAward = new LocalAwardInfo()
             {
-                gold = (int)(offlineAwardConf.goldPerSec * offLineMillisecond / 1000),
-                exp = (int)(offlineAwardConf.expPerSec * offLineMillisecond / 1000),
+                gold = (int)(offlineAwardConf.goldPerM * offLineMillisecond / 1000 / 60),
+                exp = (int)(offlineAwardConf.expPerM * offLineMillisecond / 1000 / 60),
                 items = new Dictionary<string, int>(),
                 products = new Dictionary<string, int>()
             };
 
-            if(offlineAwardConf.items != null)
-            {
-                offlineAwardConf.items = new List<CMOfflineItemAward>();
-            }
             if (offlineAwardConf.products != null)
             {
                 offlineAwardConf.products = new List<CMOfflineProductAward>();
@@ -419,7 +427,7 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            //// TO DO : show offline award ui
+            // show offline award ui
             UIOfflineRewardPanel _ui = UnityGameApp.Inst.UI.createUIPanel("OfflineRewardUI") as UIOfflineRewardPanel;
             _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _ui.showReward(offlineAward, offLineMillisecond);

@@ -250,10 +250,9 @@ namespace UnityMiniGameFramework
 
     public class CMOfflineAwardConf
     {
-        public float goldPerSec { get; set; }
-        public float expPerSec { get; set; }
-
-        public List<CMOfflineItemAward> items { get; set; }
+        public float goldPerM { get; set; }
+        public float expPerM { get; set; }
+        public int maxTime { get; set; }
         public List<CMOfflineProductAward> products { get; set; }
     }
 
