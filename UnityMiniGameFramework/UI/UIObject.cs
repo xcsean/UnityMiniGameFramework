@@ -39,12 +39,12 @@ namespace UnityMiniGameFramework
 
         virtual public void hideUI()
         {
-            _unityVE.style.visibility = Visibility.Hidden;
+            _unityVE.style.display = DisplayStyle.None;
         }
 
         virtual public void showUI()
         {
-            _unityVE.style.visibility = Visibility.Visible;
+            _unityVE.style.display = DisplayStyle.Flex;
         }
 
         virtual public void onInit(UIControlConf c, VisualElement o)

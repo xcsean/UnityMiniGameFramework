@@ -138,6 +138,7 @@ namespace UnityMiniGameFramework
             {
                 onHideEndHandle();
             }
+
             HideAction();
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
@@ -230,14 +231,24 @@ namespace UnityMiniGameFramework
             if (_showActionVE != null && _showActionVE.ClassListContains("unity-scale-show"))
             {
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));
-                _showActionVE.style.opacity = 1f;
 
+                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0.1f, 0.1f, 1f)));
+                _showActionVE.style.opacity = 0f;
+                // delay处理首次加载无法执行过渡动画问题,使用delay后scale不能调为0，用到ScrollView无法显示
+                _showActionVE.schedule.Execute(() =>
+                {
+                    _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));
+                    _showActionVE.style.opacity = 1f;
+                }).StartingIn(30);
             }
             else if (_showActionVE != null && _showActionVE.ClassListContains("unity-move-show"))
             {
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-                _showActionVE.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0), 0));
+                _showActionVE.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(750f), 0));
+                // delay处理首次加载无法执行过渡动画问题
+                _showActionVE.schedule.Execute(() => {
+                    _showActionVE.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0), 0));
+                }).StartingIn(30);
             }
             else
             {
@@ -253,7 +264,7 @@ namespace UnityMiniGameFramework
         {
             if (_showActionVE != null && _showActionVE.ClassListContains("unity-scale-show"))
             {
-                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0f, 0f, 1f)));
+                _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0.1f, 0.1f, 1f)));
                 _showActionVE.style.opacity = 0f;
 
                 _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
@@ -265,7 +276,7 @@ namespace UnityMiniGameFramework
 
                 _showActionVE.schedule.Execute(() => {
                     _unityUIDocument.rootVisualElement.style.display = DisplayStyle.None;
-                }).StartingIn(300);
+                }).StartingIn(400);
             }
             else
             {

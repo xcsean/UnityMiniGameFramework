@@ -214,13 +214,13 @@ namespace UnityMiniGameFramework
                     {
                         labLevel.text = "Max";
                     }
-                    sprIcon.style.visibility = currentLevel == bossLevel ? Visibility.Visible : Visibility.Hidden;
-                    labLevel.style.visibility = currentLevel == bossLevel ? Visibility.Hidden : Visibility.Visible;
+                    sprIcon.style.display = currentLevel == bossLevel ? DisplayStyle.Flex : DisplayStyle.None;
+                    labLevel.style.display = currentLevel == bossLevel ? DisplayStyle.None : DisplayStyle.Flex;
                 }
                 else
                 {
-                    sprIcon.style.visibility = Visibility.Visible;
-                    labLevel.style.visibility = Visibility.Visible;
+                    sprIcon.style.display = DisplayStyle.Flex;
+                    labLevel.style.display = DisplayStyle.Flex;
                 }
             }
             var labBoss = _bossInfo.Q<Label>("labLevel");

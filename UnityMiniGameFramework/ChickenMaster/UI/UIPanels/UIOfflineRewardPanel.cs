@@ -53,7 +53,7 @@ namespace UnityMiniGameFramework
             var secs = second - hours * 60 * 60 - mins * 60;
             var str = hours >= 10 ? hours.ToString() : "0" + hours.ToString();
             str += mins >= 10 ? ":" + mins.ToString() : ":0" + mins.ToString();
-            //str += secs >= 10 ? ":" + secs.ToString() : ":0" + secs.ToString();
+            str += secs >= 10 ? ":" + secs.ToString() : ":0" + secs.ToString();
             OfflineTimeLabel.text = $"OFF-LINE TIME: {str}";
 
             this.showUI();
