@@ -73,6 +73,8 @@ namespace UnityMiniGameFramework
     public class CMFactoryConf
     {
         public string mapBuildName { get; set; }
+        public string factoryText { get; set; }
+        public string factoryName { get; set; }
         public int userLevelRequire { get; set; }
 
         public int activateGoldCost { get; set; }

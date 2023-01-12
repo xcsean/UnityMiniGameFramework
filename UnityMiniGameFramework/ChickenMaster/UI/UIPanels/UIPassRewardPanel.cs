@@ -96,17 +96,26 @@ namespace UnityMiniGameFramework
                     //    index++;
                     //}
 
-                    //if (rewardConf.exp > 0)
-                    //{
-                    //    var grid = layoutGrid.Q<VisualElement>($"grid{index}");
-                    //    grid.Q<Label>("count").text = $"X{rewardConf.exp}";
-                    //    grid.Q<Label>("have").text = $"OWNED: {bi.exp}";
-                    //    grid.Q<Label>("name").text = "EXP";
-                    //    grid.Q<VisualElement>("weapon").style.display = DisplayStyle.Flex;
-                    //    grid.Q<Label>("have").style.display = DisplayStyle.Flex;
-                    //    grid.style.display = DisplayStyle.Flex;
-                    //    index++;
-                    //}
+                    if (rewardConf.exp > 0)
+                    {
+                        var grid = layoutGrid.Q<VisualElement>($"grid{index}");
+                        grid.Q<Label>("count").text = $"X{rewardConf.exp}";
+                        grid.Q<Label>("have").text = $"OWNED: {bi.exp}";
+                        grid.Q<Label>("name").text = "EXP";
+                        grid.Q<VisualElement>("weapon").style.display = DisplayStyle.None;
+                        grid.Q<Label>("have").style.display = DisplayStyle.Flex;
+                        grid.style.display = DisplayStyle.Flex;
+                        var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/common/icon_exp");
+                        if (tx != null)
+                        {
+                            grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
+                            grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
+                            grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
+                            grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
+                            grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
+                        }
+                        index++;
+                    }
 
                     var gunConf = _gameConf.gameConfs.gunConfs;
                     for (var i = 0; i < rewardConf.items.Count; i++)
@@ -159,12 +168,12 @@ namespace UnityMiniGameFramework
                         }
                     }
 
+                    var x = index == 1 ? 210 : index == 2 ? 105 : 0;
                     for (var i = 0; i < index; i++)
                     {
                         var grid = layoutGrid.Q<VisualElement>($"grid{i}");
                         var y = index < 3 ? 135 : i > 3 ? 270 : 0;
-                        var x = index == 1 ? 210 : index == 2 ? 105 : 0;
-                        grid.style.left = x;
+                        grid.style.left = x + 210 * (i % 3);
                         grid.style.top = y;
                     }
                 }

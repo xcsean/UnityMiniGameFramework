@@ -238,7 +238,6 @@ namespace UnityMiniGameFramework
 
             if (_curLevelConf == null)
             {
-                //labProductDesc.text = $"";
                 labCostCoin.text = $"{_factoryConf.activateGoldCost}";
                 labLvCur.text = $"Lv.{0}";
                 labLvNext.text = $"Lv.{1}";
@@ -252,7 +251,6 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                //labProductDesc.text = $"";
                 labCostCoin.text = $"{_curLevelConf.upgradeGoldCost}";
                 labLvCur.text = $"Lv.{curLv}";
                 labLvNext.text = isMaxLV ? $"Lv.Max" : $"Lv.{ curLv + 1}";
@@ -264,6 +262,7 @@ namespace UnityMiniGameFramework
                 labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}";
                 nBtnUpgrade.text = $"UPGRADE";
             }
+            labProductDesc.text = $"{_factoryConf.factoryName}\n{_factoryConf.factoryText}";
         }
 
         public override void showUI()
