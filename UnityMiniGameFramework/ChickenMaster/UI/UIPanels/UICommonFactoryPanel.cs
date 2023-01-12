@@ -24,6 +24,7 @@ namespace UnityMiniGameFramework
         protected string _factoryName = "factoryBuilding1";
 
         protected Label labProductDesc;
+        protected Label labProductTitle;
         protected Label labLvCur;
         protected Label labLvNext;
         protected Label labCostCur;
@@ -54,6 +55,7 @@ namespace UnityMiniGameFramework
 
             sprChicken = this._uiObjects["sprChicken"].unityVisualElement;
             labProductDesc = this._uiObjects["labProductDesc"].unityVisualElement as Label;
+            labProductTitle = this._uiObjects["labProductTitle"].unityVisualElement as Label;
             labLvCur = this._uiObjects["labLvCur"].unityVisualElement as Label;
             labLvNext = this._uiObjects["labLvNext"].unityVisualElement as Label;
             labCostCur = this._uiObjects["labCostResCur"].unityVisualElement as Label;
@@ -262,7 +264,8 @@ namespace UnityMiniGameFramework
                 labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}";
                 nBtnUpgrade.text = $"UPGRADE";
             }
-            labProductDesc.text = $"{_factoryConf.factoryName}\n{_factoryConf.factoryText}";
+            labProductTitle.text = $"{_factoryConf.factoryName}";
+            labProductDesc.text = $"{_factoryConf.factoryText}";
         }
 
         public override void showUI()
