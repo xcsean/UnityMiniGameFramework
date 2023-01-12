@@ -122,11 +122,11 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void InitProduceProgressUI()
         {
-            // init produce progress UI
-            _produceProgressPanel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
-            _produceProgressPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
-            _produceProgressPanel.RefreshInfo(this);
-            _produceProgressPanel.showUI();
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            if (cmGame.mainSceneHUDs.ContainsKey(_factoryConf.mapBuildName))
+            {
+                (cmGame.mainSceneHUDs[_factoryConf.mapBuildName] as UIProduceProgressPanel).RefreshInfo(this);
+            }
         }
 
         public int getUpgradeGoldCost()
@@ -408,12 +408,6 @@ namespace UnityMiniGameFramework
         
         public void OnUpdate()
         {
-            if (_produceProgressPanel != null)
-            {
-                var screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(_mapBuildingObj.unityGameObject.transform.position));
-                _produceProgressPanel.setPoisition((int)screenPos.x, (int)screenPos.y - 200); // todo offsetY, set to config
-            }
-
             if (currentProductInputStore <= 0)
             {
                 return;

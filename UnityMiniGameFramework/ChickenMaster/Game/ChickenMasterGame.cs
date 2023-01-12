@@ -36,6 +36,8 @@ namespace UnityMiniGameFramework
         protected CMTrainStation _trainStation;
         public CMTrainStation TrainStation => _trainStation;
 
+        protected Dictionary<string, UIPanel> _mainSceneHUDs;
+        public Dictionary<string, UIPanel> mainSceneHUDs => _mainSceneHUDs;
 
         protected Dictionary<string, CMNPCHeros> _cmNPCHeros;
         public Dictionary<string, CMNPCHeros> cmNPCHeros => _cmNPCHeros;
@@ -67,6 +69,7 @@ namespace UnityMiniGameFramework
             _trainStation = new CMTrainStation();
             _cmNPCHeros = new Dictionary<string, CMNPCHeros>();
             _cmFactories = new Dictionary<string, CMFactory>();
+            _mainSceneHUDs = new Dictionary<string, UIPanel>();
         }
 
         public async Task InitAsync()
@@ -208,7 +211,7 @@ namespace UnityMiniGameFramework
                 || ui.type == "UITrainstationCapacityPanel"
                 || ui.type == "UIProduceProgressPanel"
                 || ui.type == "UIOpeningCartoonPanel"
-                || ui.type == "UIResPopupPanel"
+                || ui.type == "UITrainStationGoldPopupPanel"
                 )
             {
                 return;
@@ -247,6 +250,9 @@ namespace UnityMiniGameFramework
         {
             // init ui
             _uiMainPanel = UnityGameApp.Inst.UI.getUIPanel("GameMainUI") as UIGameMainPanel;
+
+            // init hud
+            CreateMainSceneHUD();
 
             // init self
             _self.Init();
@@ -634,6 +640,59 @@ namespace UnityMiniGameFramework
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// 创建3d场景物体2d ui
+        /// </summary>
+        public void CreateMainSceneHUD()
+        {
+            var map = (UnityGameApp.Inst.MainScene.map as Map);
+            foreach (var building in map.buildings)
+            {
+               createBuildingsHUD(building.Value, building.Key);
+            }
+        }
+
+        /// <summary>
+        /// 建筑头顶ui
+        /// </summary>
+        protected void createBuildingsHUD(MapBuildingObject mbo, string buildingName)
+        {
+            if (mbo == null)
+            {
+                return;
+            }
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            // 展示未解锁ui
+            if (buildingName.Contains("factoryBuilding"))
+            {
+                var _factoryConf = cmGame.gameConf.getCMFactoryConf(buildingName);
+                if (_factoryConf == null)
+                {
+                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{buildingName}] init config not exist");
+                    return;
+                }
+
+                CMFactory cmFac = null;
+                _cmFactories.TryGetValue(buildingName, out cmFac);
+
+                var panel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
+                panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+                panel.SetFollowTarget(mbo.unityGameObject.transform);
+                panel.RefreshInfo(cmFac == null ? null : cmFac, _factoryConf.userLevelRequire);
+                panel.showUI();
+
+                _mainSceneHUDs[buildingName] = panel;
+            }
+            else if (buildingName.Contains("storeHouse"))
+            {
+                //
+            }
+            else if (buildingName.Contains("trainStation"))
+            {
+                //
+            }
         }
     }
 }

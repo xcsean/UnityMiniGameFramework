@@ -10,7 +10,6 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-
     public class PopupNumber
     {
         public string Text;
@@ -34,6 +33,7 @@ namespace UnityMiniGameFramework
         protected Label _labRightPopup;
         protected Label _labStockCnt;
         protected Label _labProduceCnt;
+        protected Label _labLockTip;
         protected VisualElement _sprStockGoods;
         protected VisualElement _sprProduceGoods;
 
@@ -41,6 +41,7 @@ namespace UnityMiniGameFramework
         protected VisualElement _customerBar;
         protected VisualElement _wait;
         protected VisualElement _arrow;
+        protected VisualElement _unlock;
 
         protected CMFactory _CMFactory;
         protected int _lastUpdateProduceVer;
@@ -49,6 +50,8 @@ namespace UnityMiniGameFramework
 
         protected Color _red = new Color(237f / 255f, 77f / 255f, 10f / 255f);
         protected Color _green = new Color(146f / 255f, 234f / 255f, 75f / 255f);
+
+        protected Transform followTrans;
 
         override public void Init(UIPanelConf conf)
         {
@@ -61,6 +64,7 @@ namespace UnityMiniGameFramework
 
         protected void FindUI()
         {
+            _labLockTip = this._uiObjects["labLockTip"].unityVisualElement as Label;
             _labLeftPopup = this._uiObjects["labLeftPopup"].unityVisualElement as Label;
             _labRightPopup = this._uiObjects["labRightPopup"].unityVisualElement as Label;
             _labStockCnt = this._uiObjects["labStockCnt"].unityVisualElement as Label;
@@ -71,6 +75,7 @@ namespace UnityMiniGameFramework
             _customerBar = this._uiObjects["customerBar"].unityVisualElement;
             _wait = this._uiObjects["wait"].unityVisualElement;
             _arrow = this._uiObjects["arrow"].unityVisualElement;
+            _unlock = this._uiObjects["unlock"].unityVisualElement;
 
             _sprStockGoods.style.backgroundImage = null;
             _sprProduceGoods.style.backgroundImage = null;
@@ -78,15 +83,21 @@ namespace UnityMiniGameFramework
             _labRightPopup.text = "";
         }
 
-        public void RefreshInfo(CMFactory _cmFactory)
+        public void RefreshInfo(CMFactory _cmFactory, int activeLv = 0)
         {
             _CMFactory = _cmFactory;
             if (_CMFactory == null)
             {
+                _labLockTip.text = $"Unlock at\r\nbattle level {activeLv}";
+                _labLockTip.style.display = DisplayStyle.Flex;
+                _unlock.style.display = DisplayStyle.None;
                 DoUpdateInputStore(0, 0);
                 DoUpdatePruduceGoods(0, 0);
                 return;
             }
+            _labLockTip.style.display = DisplayStyle.None;
+            _unlock.style.display = DisplayStyle.Flex;
+
             _lastUpdateProduceVer = _CMFactory.produceVer;
 
             DoUpdateInputStore(_CMFactory.currentProductInputStore, 0);
@@ -182,6 +193,20 @@ namespace UnityMiniGameFramework
             }
         }
 
+        private Vector2 screenPos;
+        public void SetFollowTarget(Transform trans)
+        {
+            followTrans = trans;
+
+            unityUIDocument.rootVisualElement.schedule.Execute(() => {
+                if (followTrans != null)
+                {
+                    screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(followTrans.position));
+                    setPoisition((int)screenPos.x, (int)screenPos.y - 200);
+                }
+            }).Every(20);
+        }
+
         // 飘字
         protected void onUpdate_Popup()
         {
@@ -263,14 +288,12 @@ namespace UnityMiniGameFramework
         {
             base.showUI();
 
-            UnityGameApp.Inst.addUpdateCall(this.OnUpdate);
+            addUpdate(this.OnUpdate);
         }
 
         public override void hideUI()
         {
             base.hideUI();
-
-            UnityGameApp.Inst.removeUpdateCall(this.OnUpdate);
         }
     }
 }

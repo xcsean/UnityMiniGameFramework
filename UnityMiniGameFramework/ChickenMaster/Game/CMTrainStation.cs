@@ -426,7 +426,7 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
-            var resPopup = UnityGameApp.Inst.UI.createUIPanel("ResPopupUI") as UIResPopupPanel;
+            var resPopup = UnityGameApp.Inst.UI.createUIPanel("TrainStationGoldPopupUI") as UITrainStationGoldPopupPanel;
             resPopup.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             resPopup.SetResInfo(count, 0, _storePosition.spawnObject.transform);
         }
