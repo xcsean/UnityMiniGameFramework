@@ -475,6 +475,11 @@ namespace UnityMiniGameFramework
             _cmGame.baseInfo.markDirty();
 
             _cmGame.uiMainPanel.refreshMeat();
+
+            if(name == "meat")
+            {
+                _cmGame.uiMainPanel.addMeat(count);
+            }
         }
 
         public int SubBackpackProduct(string name, int count)
@@ -639,6 +644,7 @@ namespace UnityMiniGameFramework
             _cmGame.baseInfo.markDirty();
 
             _cmGame.uiMainPanel.refreshGold(_baseInfo.gold);
+            _cmGame.uiMainPanel.addGold(gold);
         }
 
         public void AddExp(int exp)

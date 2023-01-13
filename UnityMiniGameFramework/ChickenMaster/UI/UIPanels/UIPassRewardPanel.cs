@@ -18,6 +18,7 @@ namespace UnityMiniGameFramework
         public int normal;
         public int video;
         public int total;
+        public int temp;
     }
     public class UIPassRewardPanel : UIPanel
     {
@@ -121,7 +122,8 @@ namespace UnityMiniGameFramework
                             have = bi.exp,
                             normal = bi.exp + rewardConf.exp,
                             video = bi.exp + rewardConf.exp * 3,
-                            total = upgradeNeed
+                            total = upgradeNeed,
+                            temp = bi.level
                         });
                         var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/common/icon_exp");
                         if (tx != null)
@@ -261,11 +263,13 @@ namespace UnityMiniGameFramework
             foreach (var prog in progs)
             {
                 int cur = type == 3 ? prog.normal : type == 2 ? prog.have : 0;
-                prog.cur = type == 1f ? 0f : ((float)cur / prog.total);
+                prog.cur = type == 1 ? 0f : ((float)cur / prog.total);
                 int end = type == 3 ? prog.video : type == 2 ? prog.normal : prog.have;
-                prog.end = end > prog.total ? 1f :((float)end / prog.total);
+                prog.end = end > prog.total ? 1f : ((float)end / prog.total);
                 VisualElement grid = layoutGrid.Q<VisualElement>($"grid{prog.id}");
-                grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog.cur * 93));
+
+                float progress = prog.cur > 1f ? 1f : prog.cur;
+                grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(progress * 93));
                 grid.Q<Label>("progress").text = $"{end}/{prog.total}";
                 if (type == 3)
                 {
@@ -295,36 +299,60 @@ namespace UnityMiniGameFramework
                 return;
             }
 
+            bool isEnd = true;
             foreach (var prog in progs)
             {
                 prog.cur += 0.01f;
                 VisualElement grid = layoutGrid.Q<VisualElement>($"grid{prog.id}");
-                grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog.cur * 93));
+                float progress = prog.cur > 1f ? (prog.cur / 1f) : prog.cur;
+                grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(progress * 93));
 
                 if (prog.cur >= prog.end)
                 {
                     prog.cur = prog.end;
 
-                    if (aniType == 3)
+                    if(prog.end == 1f && prog.type == "exp")
                     {
-                        long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
-                        if (lastMillisecond == 0)
-                        {
-                            lastMillisecond = nowMillisecond;
-                            return;
-                        }
-                        if (nowMillisecond - lastMillisecond > 500)
-                        {
-                            collectRewards(true);
-                            aniType = 0;
-                            lastMillisecond = 0;
-                        }
+                        isEnd = false;
+                        prog.cur = 0f;
+                        prog.video -= prog.total;
+                        prog.normal -= prog.total;
+                        prog.temp += 1;
+                        var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                        prog.total = cmGame.gameConf.getLevelUpExpRequire(prog.temp);
+                        var end = aniType == 2 ? prog.normal : aniType == 3 ? prog.video : prog.have;
+                        prog.end = end > prog.total ? 1f : (float)end / prog.total;
+                        grid.Q<Label>("lv").text = $"{prog.temp}";
+                        grid.Q<Label>("progress").text = $"{end}/{prog.total}";
                     }
-                    else
+                }
+                else
+                {
+                    isEnd = false;
+                }
+            }
+
+            if (isEnd)
+            {
+                if (aniType == 3)
+                {
+                    long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+                    if (lastMillisecond == 0)
                     {
+                        lastMillisecond = nowMillisecond;
+                        return;
+                    }
+                    if (nowMillisecond - lastMillisecond > 500)
+                    {
+                        collectRewards(true);
                         aniType = 0;
                         lastMillisecond = 0;
                     }
+                }
+                else
+                {
+                    aniType = 0;
+                    lastMillisecond = 0;
                 }
             }
         }
