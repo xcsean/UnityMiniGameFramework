@@ -51,6 +51,7 @@ namespace UnityMiniGameFramework
         public string uiConfigName;
         public string preloaderUIConfName;
         public UnityEngine.GameObject GameObjectCachePool;
+        public UnityEngine.GameObject AudioSourceRoot;
         public PanelSettings unityUIPanelSettings;
 
         static void dbgOutput(string msg)
@@ -69,6 +70,7 @@ namespace UnityMiniGameFramework
             UnityGameApp.setInst(new UnityGameApp());
             initGameAppPlatform();
             UnityEngine.GameObject.DontDestroyOnLoad(GameObjectCachePool);
+            DontDestroyOnLoad(AudioSourceRoot);
             UnityGameApp.Inst.unityUIPanelSettings = unityUIPanelSettings;
             UnityGameApp.Inst.CachePoolRoot = GameObjectCachePool;
             GameAPPInitParameter InitParameter = new GameAPPInitParameter

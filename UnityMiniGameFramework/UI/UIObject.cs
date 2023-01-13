@@ -47,10 +47,20 @@ namespace UnityMiniGameFramework
             _unityVE.style.display = DisplayStyle.Flex;
         }
 
+        protected virtual void onClickBtnAudio()
+        {
+            UnityGameApp.Inst.AudioManager.PlaySFX("");
+        }
+
         virtual public void onInit(UIControlConf c, VisualElement o)
         {
             _name = c.name;
             _unityVE = o;
+            var btn = _unityVE as Button;
+            if (btn != null)
+            {
+                btn.clicked += onClickBtnAudio;
+            }
 
             if(c.subControls != null)
             {
