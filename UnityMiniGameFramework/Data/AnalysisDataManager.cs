@@ -65,7 +65,7 @@ namespace UnityMiniGameFramework
             {
                 type = id,
                 point = $"{GetPointMsg(id)}",
-                msg = "测试1",
+                msg = _msg,
             };
         }
 
@@ -78,7 +78,7 @@ namespace UnityMiniGameFramework
             return new CS_ReportParam() {
                 type = id,
                 point = $"{GetPointMsg(id)}",
-                msg = "测试1",
+                msg = _msg,
             };
         }
 

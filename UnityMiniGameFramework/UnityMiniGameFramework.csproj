@@ -121,7 +121,7 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UIMaskPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITowerHeroLockHudPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationGoldPopupPanel.cs" />
-    <Compile Include="ChickenMaster\UI\UIPanels\UITrainstationCapatityPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationCapatityPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UICommonFactoryPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIDoubleAttackPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIDoubleExpPanel.cs" />

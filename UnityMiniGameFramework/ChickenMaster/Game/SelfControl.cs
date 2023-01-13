@@ -475,7 +475,7 @@ namespace UnityMiniGameFramework
 
             _cmGame.baseInfo.markDirty();
 
-            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData4($"鸡肉数量：{totalCount}，增加鸡肉：{count}"));
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData4($"鸡肉数量：{totalCount}，获得鸡肉：{count}"));
 
             _cmGame.uiMainPanel.refreshMeat();
 
@@ -690,7 +690,7 @@ namespace UnityMiniGameFramework
         protected void _OnLevelUp()
         {
             _cmGame.uiMainPanel.refreshLevel(_baseInfo.level);
-            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData2($"当前等级{_baseInfo.level}"));
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData2($"用户等级：{_baseInfo.level}"));
             // TO DO : Level up
         }
     }

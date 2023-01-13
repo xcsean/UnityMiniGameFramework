@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -236,6 +236,8 @@ namespace UnityMiniGameFramework
                 }
 
                 cmGame.baseInfo.markDirty();
+
+                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData12($"建筑[{_conf.mapBuildName}]等级{_storeHouseInfo.level}"));
             }
             else
             {

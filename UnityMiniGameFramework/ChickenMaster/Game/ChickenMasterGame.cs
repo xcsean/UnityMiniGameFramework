@@ -123,6 +123,7 @@ namespace UnityMiniGameFramework
                 _isNewUser = false;
             }
 
+            (_userInfo.getData() as LocalUserInfo).lastLoginTime = nowMillisecond;
             _lastOnlineTime = (_userInfo.getData() as LocalUserInfo).lastOnlineTime;
 
             _baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo");

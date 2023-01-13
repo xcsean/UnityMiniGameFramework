@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -547,6 +547,10 @@ namespace UnityMiniGameFramework
         private void GunAscendSuccess(LocalWeaponInfo gunInfo)
         {
             (UnityGameApp.Inst.Game as ChickenMasterGame).hideAllUI();
+
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var cmGunConf = cmGame.gameConf.getCMGunConf(gunInfo.id);
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData7($"武器[{cmGunConf.name}]，星级[{gunInfo.level}]"));
 
             UIWeaponAscendPanel _ui = UnityGameApp.Inst.UI.createUIPanel("WeaponAscendUI") as UIWeaponAscendPanel;
             _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
