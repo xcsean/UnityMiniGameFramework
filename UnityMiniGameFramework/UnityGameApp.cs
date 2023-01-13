@@ -395,6 +395,7 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UIJoyStickPanel", UIJoyStickPanel.create);
             _ui.regUIPanelCreator("UIMaskPanel", UIMaskPanel.create);
             _ui.regUIPanelCreator("UITrainStationGoldPopupPanel", UITrainStationGoldPopupPanel.create);
+            _ui.regUIPanelCreator("UITowerHeroLockHudPanel", UITowerHeroLockHudPanel.create);
             
             _ui.regUIPanelCreator("UIDoubleAttackPanel", UIDoubleAttackPanel.create);
             _ui.regUIPanelCreator("UIDoubleExpPanel", UIDoubleExpPanel.create);

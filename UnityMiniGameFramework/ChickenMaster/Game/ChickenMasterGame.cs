@@ -652,14 +652,18 @@ namespace UnityMiniGameFramework
             {
                createBuildingsHUD(building.Value, building.Key);
             }
+            foreach (var npc in map.npcs)
+            {
+                createNpcHeroHud(npc.Value, npc.Key);
+            }
         }
 
         /// <summary>
         /// 建筑头顶ui
         /// </summary>
-        protected void createBuildingsHUD(MapBuildingObject mbo, string buildingName)
+        protected void createBuildingsHUD(MapBuildingObject gObj, string buildingName)
         {
-            if (mbo == null)
+            if (gObj == null)
             {
                 return;
             }
@@ -680,7 +684,7 @@ namespace UnityMiniGameFramework
                 var panel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
                 panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
                 panel.RefreshInfo(cmFac == null ? null : cmFac, _factoryConf);
-                panel.SetFollowTarget(mbo.unityGameObject.transform);
+                panel.SetFollowTarget(gObj.unityGameObject.transform);
                 panel.showUI();
 
                 _mainSceneHUDs[buildingName] = panel;
@@ -693,6 +697,36 @@ namespace UnityMiniGameFramework
             {
                 //
             }
+        }
+
+        /// <summary>
+        /// 未解锁英雄头顶提示
+        /// </summary>
+        protected void createNpcHeroHud(MapNPCObject gObj, string npcName)
+        {
+            if (gObj == null)
+            {
+                return;
+            }
+            if (_mainSceneHUDs.ContainsKey(npcName))
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{npcName}] create hud already exist");
+                return;
+            }
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var _conf = cmGame.gameConf.getCMHeroConf(npcName);
+            if (_conf == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{npcName}] init config not exist");
+                return;
+            }
+            var panel = UnityGameApp.Inst.UI.createNewUIPanel("TowerHeroLockHudUI") as UITowerHeroLockHudPanel;
+            panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            panel.RefreshInfo(_conf);
+            panel.SetFollowTarget(gObj.unityGameObject.transform);
+            panel.showUI();
+
+            _mainSceneHUDs[npcName] = panel;
         }
     }
 }

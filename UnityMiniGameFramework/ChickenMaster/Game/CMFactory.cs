@@ -225,9 +225,9 @@ namespace UnityMiniGameFramework
                 _localFacInfo.buildingInputProduct.count += toFill;
             }
 
-            if (produceProgressPanel != null)
+            if (_produceProgressPanel != null)
             {
-                produceProgressPanel.DoUpdateInputStore(currentProductInputStore, toFill);
+                _produceProgressPanel.DoUpdateInputStore(currentProductInputStore, toFill);
             }
 
             _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
@@ -255,9 +255,9 @@ namespace UnityMiniGameFramework
 
             _localFacInfo.buildingOutputProduct.count -= fetchCount;
 
-            if (produceProgressPanel != null)
+            if (_produceProgressPanel != null)
             {
-                produceProgressPanel.DoUpdateOutStore(currentProductOutputStore, -fetchCount);
+                _produceProgressPanel.DoUpdateOutStore(currentProductOutputStore, -fetchCount);
             }
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{currentProductOutputStore}");
@@ -310,9 +310,9 @@ namespace UnityMiniGameFramework
                 _localFacInfo.buildingInputProduct.count -= realCostInputCount;
             }
 
-            if (produceProgressPanel != null)
+            if (_produceProgressPanel != null)
             {
-                    produceProgressPanel.DoUpdateInputStore(currentProductInputStore, -realCostInputCount);
+                _produceProgressPanel.DoUpdateInputStore(currentProductInputStore, -realCostInputCount);
             }
 
             // 判断是否有增益加成
@@ -331,9 +331,9 @@ namespace UnityMiniGameFramework
                 _localFacInfo.buildingOutputProduct.count += produceCount;
             }
 
-            if (produceProgressPanel != null)
+            if (_produceProgressPanel != null)
             {
-                produceProgressPanel.DoUpdatePruduceGoods(currentProductOutputStore, produceCount);
+                _produceProgressPanel.DoUpdatePruduceGoods(currentProductOutputStore, produceCount);
             }
 
             string haveBuff = checkBuff() ? "已翻倍" : "无增益";

@@ -75,6 +75,8 @@ namespace UnityMiniGameFramework
             onChangeGun();
 
             _initAdditionalComponent();
+
+            RefreshLockHudUI();
         }
 
         protected virtual void _initAdditionalComponent()
@@ -233,6 +235,19 @@ namespace UnityMiniGameFramework
 
             // calc speed
             _mapHeroObj.moveAct.onRecalcAttributes(bufAttrs);
+        }
+
+        /// <summary>
+        /// 头顶未解锁提示
+        /// </summary>
+        protected void RefreshLockHudUI()
+        {
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            if (cmGame.mainSceneHUDs.ContainsKey(heroInfo.mapHeroName))
+            {
+                var panel = cmGame.mainSceneHUDs[heroInfo.mapHeroName] as UITowerHeroLockHudPanel;
+                panel.hideUI();
+            }
         }
     }
 }
