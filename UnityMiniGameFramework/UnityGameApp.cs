@@ -272,7 +272,7 @@ namespace UnityMiniGameFramework
             // new managers
             _datamanager = new DataManager();
             _aniManager = new AnimationManager();
-            _audManager = new AudioManager();
+            _audManager = AudioManager.Instance;
             _vfxManager = new VFXManager();
             _chaManager = new CharacterManager();
             _sceneManager = new UnitySceneManager();

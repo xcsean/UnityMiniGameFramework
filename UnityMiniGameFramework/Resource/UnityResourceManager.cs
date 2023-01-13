@@ -53,7 +53,7 @@ namespace UnityMiniGameFramework
             var sp = Resources.Load<Sprite>(spritePath);
             if (sp == null)
             {
-                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadTexture {spritePath} not exist");
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadSprite {spritePath} not exist");
                 return null;
             }
 
@@ -75,6 +75,18 @@ namespace UnityMiniGameFramework
         {
             string path = $"icons/products/{iconName}";
             return LoadTexture(path);
+        }
+
+        public AudioClip LoadAudioClip(string path)
+        {
+            var clip = Resources.Load<AudioClip>(path);
+            if (clip == null)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadAudioClip {path} not exist");
+                return null;
+            }
+
+            return clip;
         }
     }
 }
