@@ -35,4 +35,9 @@ namespace UnityMiniGameFramework.RESTFulAPI
         public string point { get; set; }
         public string msg { get; set; }
     }
+
+    public class CS_ReportParamList
+    {
+        public CS_ReportParam[] list { get; set; }
+    }
 }
