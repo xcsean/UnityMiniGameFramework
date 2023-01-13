@@ -72,11 +72,15 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 在线时长
         /// </summary>
-        public CS_ReportParam GetPointData1(string _msg = "")
+        /// <param name="_msg"></param>
+        /// <param name="_subType">1登录 2切后台 3切前台 4退出</param>
+        /// <returns></returns>
+        public CS_ReportParam GetPointData1(string _msg = "", int _subType = 0)
         {
             int id = 1;
             return new CS_ReportParam() {
                 type = id,
+                subType = _subType,
                 point = $"{GetPointMsg(id)}",
                 msg = _msg,
             };

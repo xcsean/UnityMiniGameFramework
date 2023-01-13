@@ -122,6 +122,8 @@ namespace UnityMiniGameFramework
             {
                 _isNewUser = false;
             }
+            // 在线时长打点
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData1($"登录时间", 1));
 
             (_userInfo.getData() as LocalUserInfo).lastLoginTime = nowMillisecond;
             _lastOnlineTime = (_userInfo.getData() as LocalUserInfo).lastOnlineTime;

@@ -30,6 +30,9 @@ namespace UnityMiniGameFramework.RESTFulAPI
 
         public int type { get; set; }
 
+        public int subType { get; set; }
+
+
         public DateTime createtime { get; set; }
 
         public string point { get; set; }
