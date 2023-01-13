@@ -248,7 +248,7 @@ namespace UnityMiniGameFramework
                 labCostNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxInputProductStore}");
                 labGetNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxOutputProductStore}");
                 labEfficiencyCur.text = $"{0}";
-                labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}";
+                labEfficiencyNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.produceOutputCount}");
                 nBtnUpgrade.text = $"ACTIVATE";
             }
             else
@@ -260,8 +260,8 @@ namespace UnityMiniGameFramework
                 labCostNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxInputProductStore}");
                 labGetCur.text = StringUtil.StringNumFormat($"{_curLevelConf.maxOutputProductStore}");
                 labGetNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.maxOutputProductStore}");
-                labEfficiencyCur.text = $"{_curLevelConf.produceOutputCount}";
-                labEfficiencyNext.text = $"{_nextLevelConf.produceOutputCount}";
+                labEfficiencyCur.text = StringUtil.StringNumFormat($"{_curLevelConf.produceOutputCount}");
+                labEfficiencyNext.text = StringUtil.StringNumFormat($"{_nextLevelConf.produceOutputCount}");
                 nBtnUpgrade.text = $"UPGRADE";
             }
             labProductTitle.text = $"{_factoryConf.factoryName}";

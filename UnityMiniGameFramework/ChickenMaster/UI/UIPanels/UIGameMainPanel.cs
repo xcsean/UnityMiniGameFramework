@@ -197,7 +197,8 @@ namespace UnityMiniGameFramework
                 if (lvlConf.mapLevelName == "testLevelBigBoss")
                 {
                     bossLevel = (currentLevel / lvlConf.levelDivide + 1) * lvlConf.levelDivide;
-                    bossIcon = $"Mob_boss_00{(int)(bossLevel / lvlConf.levelDivide)}";
+                    int num = bossLevel / lvlConf.levelDivide;
+                    bossIcon = "Mob_boss_0" +(num > 9 ? num.ToString() : ("0" + num.ToString()));
                 }
             }
             for (int i = 0; i < 3; i++)

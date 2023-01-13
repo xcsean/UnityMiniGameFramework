@@ -44,6 +44,7 @@ namespace UnityMiniGameFramework
         protected VisualElement _unlock;
 
         protected CMFactory _CMFactory;
+        protected CMFactoryConf _factoryConf;
         protected int _lastUpdateProduceVer;
         protected PopupNumber leftPopupNumber;
         protected PopupNumber rightPopupNumber;
@@ -58,8 +59,6 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             FindUI();
-
-            RefreshInfo(null);
 
             WaitAction();
         }
@@ -85,12 +84,16 @@ namespace UnityMiniGameFramework
             _labRightPopup.text = "";
         }
 
-        public void RefreshInfo(CMFactory _cmFactory, int activeLv = 0)
+        public void RefreshInfo(CMFactory _cmFactory, CMFactoryConf conf)
         {
+            if (conf != null)
+            {
+                _factoryConf = conf;
+            }
             _CMFactory = _cmFactory;
             if (_CMFactory == null)
             {
-                _labLockTip.text = $"Unlock at\r\nbattle level {activeLv}";
+                _labLockTip.text = $"Unlock at\r\nbattle level {_factoryConf.userLevelRequire}";
                 _labLockTip.style.display = DisplayStyle.Flex;
                 _unlock.style.display = DisplayStyle.None;
                 DoUpdateInputStore(0, 0);
@@ -201,10 +204,10 @@ namespace UnityMiniGameFramework
             followTrans = trans;
 
             unityUIDocument.rootVisualElement.schedule.Execute(() => {
-                if (followTrans != null)
+                if (followTrans != null && _factoryConf != null)
                 {
                     screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(followTrans.position));
-                    setPoisition((int)screenPos.x, (int)screenPos.y - 200);
+                    setPoisition((int)screenPos.x + (int)_factoryConf.TopUIOffset.x, (int)screenPos.y + (int)_factoryConf.TopUIOffset.y);
                 }
             }).Every(20);
         }
@@ -301,7 +304,7 @@ namespace UnityMiniGameFramework
 
             if (_lastUpdateProduceVer != _CMFactory.produceVer)
             {
-                RefreshInfo(_CMFactory);
+                RefreshInfo(_CMFactory, _factoryConf);
             }
         }
 

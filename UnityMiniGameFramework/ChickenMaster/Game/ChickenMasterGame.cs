@@ -679,8 +679,8 @@ namespace UnityMiniGameFramework
 
                 var panel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
                 panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+                panel.RefreshInfo(cmFac == null ? null : cmFac, _factoryConf);
                 panel.SetFollowTarget(mbo.unityGameObject.transform);
-                panel.RefreshInfo(cmFac == null ? null : cmFac, _factoryConf.userLevelRequire);
                 panel.showUI();
 
                 _mainSceneHUDs[buildingName] = panel;

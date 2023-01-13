@@ -126,7 +126,7 @@ namespace UnityMiniGameFramework
             if (cmGame.mainSceneHUDs.ContainsKey(_factoryConf.mapBuildName))
             {
                 _produceProgressPanel = (cmGame.mainSceneHUDs[_factoryConf.mapBuildName] as UIProduceProgressPanel);
-                _produceProgressPanel.RefreshInfo(this);
+                _produceProgressPanel.RefreshInfo(this, _factoryConf);
             }
         }
 
