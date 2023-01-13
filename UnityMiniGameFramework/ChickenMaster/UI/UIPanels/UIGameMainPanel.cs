@@ -191,14 +191,14 @@ namespace UnityMiniGameFramework
             int maxLevel = cmGame.gameConf.maxDefenseLevelCount;
             int firstNum = Math.Max(0, currentLevel - 1);
             int bossLevel = 10000;
-            string bossIcon = "Mob_boss_003";
+            string bossIcon = "Mob_boss_1";
             foreach (var lvlConf in cmGame.gameConf.gameConfs.defenseLevels)
             {
                 if (lvlConf.mapLevelName == "testLevelBigBoss")
                 {
                     bossLevel = (currentLevel / lvlConf.levelDivide + 1) * lvlConf.levelDivide;
                     int num = bossLevel / lvlConf.levelDivide;
-                    bossIcon = "Mob_boss_0" +(num > 9 ? num.ToString() : ("0" + num.ToString()));
+                    bossIcon = $"Mob_boss_{num}";
                 }
             }
             for (int i = 0; i < 3; i++)
