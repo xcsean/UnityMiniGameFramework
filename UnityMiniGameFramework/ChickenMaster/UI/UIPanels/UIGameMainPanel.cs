@@ -61,6 +61,7 @@ namespace UnityMiniGameFramework
 
         protected Label _NotifyText;
         public Label NotifyText => _NotifyText;
+        public VisualElement _NotifyBg;
 
         protected Button _btnUseSkill;
         protected Button _btnDoubleExp;
@@ -103,6 +104,7 @@ namespace UnityMiniGameFramework
             _TrainTime = this._uiObjects["TrainTime"].unityVisualElement as Label;
             _clickableArea = this._uiObjects["Clickable"].unityVisualElement;
             _expBar = this._uiObjects["ExpBar"].unityVisualElement;
+            _NotifyBg = this._uiObjects["NotifyBg"].unityVisualElement;
             _btnUseSkill = this._uiObjects["BtnUseSkill"].unityVisualElement as Button;
             _btnDoubleExp = this._uiObjects["BtnDoubleExp"].unityVisualElement as Button;
             _btnDoubleAtt = this._uiObjects["BtnDoubleAtt"].unityVisualElement as Button;
@@ -122,6 +124,7 @@ namespace UnityMiniGameFramework
 
             _LevelInfo.text = "Not Start";
             _NotifyText.text = "";
+            _NotifyBg.style.display = DisplayStyle.None;
 
             _notifyMessages = new List<NotifyMessage>();
             vts = Resources.Load<VisualTreeAsset>("UI/Controls/FlyNumIcon");
@@ -236,7 +239,7 @@ namespace UnityMiniGameFramework
                 }
 
                 var tx2 = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/products/icon_meat");
-                for (var i = 0; i < 5; i++)
+                for (var i = 5; i < 10; i++)
                 {
                     TemplateContainer temp = vts.CloneTree();
                     _meatNum.Add(temp);
@@ -264,6 +267,10 @@ namespace UnityMiniGameFramework
                     {
                         string sign = n > 0 ? "+" : "";
                         var _add = ani.obj.Q<Label>("numLabel");
+                        var color = n > 0 ? new Color(141f / 255, 229f / 255,70f / 255) : new Color(235f / 255, 76f / 255, 14f / 255);
+                        _add.style.color = new StyleColor(color);
+                        //var color = n > 0 ? "#8DE847FF" : "#E34A18FF";
+                        //_add.text = $"<color={color}>{sign}{StringUtil.StringNumFormat(n.ToString())}</color><br>";
                         _add.text = $"{sign}{StringUtil.StringNumFormat(n.ToString())}";
                         ani.obj.transform.position = new Vector3(0, 0);
                         ani.obj.style.display = DisplayStyle.Flex;
@@ -407,13 +414,19 @@ namespace UnityMiniGameFramework
             }
 
             _NotifyText.text = msg;
+            _NotifyBg.style.display = _notifyMessages.Count == 0 ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_notifyMessages.Count > 0)
+            {
+                _NotifyBg.style.height = new StyleLength(50f + 20f * _notifyMessages.Count);
+                _NotifyBg.style.top = new StyleLength(275f - 10f * _notifyMessages.Count);
+            }
         }
 
         private void onUpdateAni()
         {
             foreach (var ani in flyAnis)
             {
-                if (ani.num > 0)
+                if (ani.num != 0)
                 {
                     ani.obj.transform.position -= new Vector3(0, Time.deltaTime * 50);
                     if (ani.obj.transform.position.y <= -50f)

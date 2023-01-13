@@ -189,6 +189,10 @@ namespace UnityMiniGameFramework
 
             cmGame.baseInfo.markDirty();
             cmGame.uiMainPanel.refreshMeat();
+            if (info.productName == "meat")
+            {
+                cmGame.uiMainPanel.addMeat(-toFill);
+            }
         }
 
         public bool TryUpgrade()
