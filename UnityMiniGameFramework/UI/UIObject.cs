@@ -49,7 +49,7 @@ namespace UnityMiniGameFramework
 
         protected virtual void onClickBtnAudio()
         {
-            UnityGameApp.Inst.AudioManager.PlaySFX("");
+            UnityGameApp.Inst.AudioManager.PlaySFX("Audio/SFX/Common/sfx_click");
         }
 
         virtual public void onInit(UIControlConf c, VisualElement o)

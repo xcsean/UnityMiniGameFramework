@@ -78,6 +78,7 @@ namespace UnityMiniGameFramework
                 m_CachedAudioAssets.Add(clipName, clip);
             }
             AudioSource source = GetOneAudioSource();
+            m_activeAduioSources.Add(source);
             source.clip = clip;
             source.loop = looping;
             source.Play();

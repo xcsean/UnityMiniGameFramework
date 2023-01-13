@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +26,7 @@ namespace UnityMiniGameFramework
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
-
+            UnityGameApp.Inst.AudioManager.PlayBGM("Audio/BGM/bgm_home");
             btnStart = this._uiObjects["enterGameButton"].unityVisualElement as Button;
             bar = _uiObjects["Bar"].unityVisualElement;
             barbg = _uiObjects["Progress"].unityVisualElement;
