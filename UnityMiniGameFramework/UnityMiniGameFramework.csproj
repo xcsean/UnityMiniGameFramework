@@ -145,12 +145,14 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UITowerHeroPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIWeaponAscendPanel.cs" />
+    <Compile Include="Configs\AnalysisConfig.cs" />
     <Compile Include="Configs\CharacterConfig.cs" />
     <Compile Include="Configs\MapActorObjectConfigs.cs" />
     <Compile Include="Configs\MapConfig.cs" />
     <Compile Include="Configs\NetWorkConfig.cs" />
     <Compile Include="Configs\VFXConfig.cs" />
     <Compile Include="Configs\WeaponConfig.cs" />
+    <Compile Include="Data\AnalysisDataManager.cs" />
     <Compile Include="Data\DataManager.cs" />
     <Compile Include="ChickenMaster\Data\LocalUserData.cs" />
     <Compile Include="ChickenMaster\Data\NetPackageData.cs" />

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -241,6 +241,8 @@ namespace UnityMiniGameFramework
                     // max level reached
                     bi.currentLevel = cmGame.gameConf.maxDefenseLevelCount;
                 }
+
+                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData3($"当前关卡：{bi.currentLevel}"));
 
                 _mainUI.refreshCurrentLevel(bi.currentLevel);
             }
