@@ -35,14 +35,14 @@ namespace UnityMiniGameFramework
             float defAdd = 0;
             float defMul = 0;
 
-            foreach(var bufAttr in _bufAttrs)
+            foreach (var bufAttr in _bufAttrs)
             {
-                if(bufAttr.name == "HP")
+                if (bufAttr.name == "HP")
                 {
                     hpAdd += bufAttr.addValue;
                     hpMul += bufAttr.mulValue;
                 }
-                else if(bufAttr.name == "DEF")
+                else if (bufAttr.name == "DEF")
                 {
                     defAdd += bufAttr.addValue;
                     defMul += bufAttr.mulValue;
@@ -52,13 +52,23 @@ namespace UnityMiniGameFramework
             int prevHP = _HP;
             int prevMaxHP = _maxHP;
 
-            _maxHP = (int)(_ccConf.hpMax * (1+hpMul) + hpAdd);
-            _Def = (int)(_ccConf.def * (1+defMul) + defAdd);
+            _maxHP = (int)(_ccConf.hpMax * (1 + hpMul) + hpAdd);
+            _Def = (int)(_ccConf.def * (1 + defMul) + defAdd);
 
             _HP = prevHP * _maxHP / prevMaxHP;
 
             OnRecalcAttributes();
         }
+        override public void OnHitByWeapon(WeaponObject weapon)
+        {
+            base.OnHitByWeapon(weapon);
+
+            // TO DO : add ActBuf to actor from weapon config
+            if(weapon.actBuf != null)
+            {
+                //_actor.actionComponent.AddBuf(weapon.actBuf);
+            }
+        } 
 
         override protected void _onHitMissed(ActorObject actor)
         {

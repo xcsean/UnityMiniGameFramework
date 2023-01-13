@@ -203,6 +203,9 @@ namespace UnityMiniGameFramework
                 case "emmiter":
                     _onOpenfireEmmiter();
                     break;
+                case "multiprojectile":
+                    _onOpenfireMultiProjectile();
+                    break;
             }
         }
 
@@ -235,6 +238,9 @@ namespace UnityMiniGameFramework
                     break;
                 case "emmiter":
                     _onStopfireEmmiter();
+                    break;
+                case "multiprojectile":
+                    _onStopfireMultiProjectile();
                     break;
             }
         }
@@ -294,6 +300,7 @@ namespace UnityMiniGameFramework
             switch (_conf.FireConf.fireType)
             {
                 case "projectile":
+                case "multiprojectile":
                     _updateProjectile();
                     break;
                 case "ray":
@@ -466,18 +473,32 @@ namespace UnityMiniGameFramework
                 }
 
                 var targetObject = _currentProjectiles[proj];
-                if(targetObject == null)
+                //if(targetObject == null)
+                //{
+                //    _currentProjectiles.Remove(proj);
+                //    UnityGameApp.Inst.VFXManager.onVFXDestory(proj);
+
+                //    // TO DO : try explosive
+
+                //    continue;
+                //}
+
+                // 判断projectile是否追踪
+                UnityEngine.Vector3 vec;
+                if (targetObject != null)
                 {
-                    _currentProjectiles.Remove(proj);
-                    UnityGameApp.Inst.VFXManager.onVFXDestory(proj);
-
-                    // TO DO : try explosive
-
-                    continue;
+                    var tarPos = new UnityEngine.Vector3(targetObject.transform.position.x, targetObject.transform.position.y + 0.5f, targetObject.transform.position.z);
+                    vec = (tarPos - proj.unityGameObject.transform.position).normalized;
+                    proj.unityGameObject.transform.forward = vec;
                 }
-                var tarPos = new UnityEngine.Vector3(targetObject.transform.position.x, targetObject.transform.position.y+0.5f, targetObject.transform.position.z);
-                var vec = (tarPos - proj.unityGameObject.transform.position).normalized;
-                proj.unityGameObject.transform.forward = vec;
+                else
+                {
+                    vec = proj.unityGameObject.transform.forward;
+                }
+
+                //var tarPos = new UnityEngine.Vector3(targetObject.transform.position.x, targetObject.transform.position.y+0.5f, targetObject.transform.position.z);
+                //var vec = (tarPos - proj.unityGameObject.transform.position).normalized;
+                //proj.unityGameObject.transform.forward = vec;
                 proj.unityGameObject.transform.position = proj.unityGameObject.transform.position + vec * _projectFlySpeed * UnityEngine.Time.deltaTime;  
             }
         }
@@ -549,6 +570,8 @@ namespace UnityMiniGameFramework
                     return _dofireRay();
                 case "emmiter":
                     return _dofireEmmiter();
+                case "multiprojectile":
+                    return _dofireMultiProjectile();
             }
 
             return true;
@@ -556,6 +579,14 @@ namespace UnityMiniGameFramework
 
         virtual protected bool _dofireProjectile()
         {
+            if (_animatorComponent != null)
+            {
+                if (_animatorComponent.currBaseAnimation.aniName != "Fire")
+                {
+                    _animatorComponent.playAnimation("Fire");
+                }
+            }
+
             if (_conf.FireConf.shootVFX != null)
             {
                 var shootVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.shootVFX);
@@ -584,6 +615,54 @@ namespace UnityMiniGameFramework
             proj.unityGameObject.transform.forward = _gunPos.transform.forward;
 
             _currentProjectiles[proj] = _currentTarget.unityGameObject;
+
+            return true;
+        }
+
+        virtual protected bool _dofireMultiProjectile()
+        {
+            if (_animatorComponent != null)
+            {
+                if (_animatorComponent.currBaseAnimation.aniName != "Fire")
+                {
+                    _animatorComponent.playAnimation("Fire");
+                }
+            }
+
+            if (_conf.FireConf.shootVFX != null)
+            {
+                var shootVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.shootVFX);
+                if (shootVfx != null)
+                {
+                    shootVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                    shootVfx.unityGameObject.transform.position = _gunPos.transform.position;
+                    shootVfx.unityGameObject.transform.rotation = _gunPos.transform.rotation;
+                }
+            }
+
+            //for(uint i=0; i< projectTileCount; ++i)
+            //{
+            var proj = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.bulletVFX);
+            if (proj == null)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Gun ({_name}) create projectile ({_conf.FireConf.bulletVFX}) failed.");
+                return false;
+            }
+
+            proj.unityGameObject.layer = UnityEngine.LayerMask.NameToLayer("Self");
+            var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
+            collider.gunObject = this;
+            collider.projVfxObj = proj;
+
+            proj.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+            proj.unityGameObject.transform.position = _gunPos.transform.position;
+            proj.unityGameObject.transform.forward = _gunPos.transform.forward;
+
+            // TO DO : 根据i计算朝向
+
+            _currentProjectiles[proj] = null;
+
+            //}
 
             return true;
         }
@@ -639,6 +718,10 @@ namespace UnityMiniGameFramework
         {
 
         }
+        virtual protected void _onOpenfireMultiProjectile()
+        {
+
+        }
         virtual protected void _onOpenfireRay()
         {
             _rayVFX = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.bulletVFX) as VFXLinerObject;
@@ -685,6 +768,10 @@ namespace UnityMiniGameFramework
             _emmiterHitObjectsTime = new Dictionary<UnityEngine.GameObject, float>();
         }
         virtual protected void _onStopfireProjectile()
+        {
+
+        }
+        virtual protected void _onStopfireMultiProjectile()
         {
 
         }

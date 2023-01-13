@@ -24,6 +24,10 @@ namespace UnityMiniGameFramework
         protected WeaponAttack _attackInfo;
         public WeaponAttack attackInfo => _attackInfo;
 
+
+        protected ActBufConfig _actBuf;
+        public ActBufConfig actBuf => _actBuf;
+
         public void initAttack(AttackConf conf)
         {
             _attackInfo = new WeaponAttack()
@@ -34,6 +38,17 @@ namespace UnityMiniGameFramework
                 criticalHitRate = conf.criticalHitRate.HasValue ? conf.criticalHitRate.Value : 0,
                 criticalHitPer = conf.criticalHitPer.HasValue ? conf.criticalHitPer.Value : 1
             };
+        }
+
+        public void initActBuf(ActBufConfig actBuf, float actbufMul)
+        {
+            if(actBuf == null)
+            {
+                return;
+            }
+            // TO DO : init actbuf
+
+            _actBuf = new ActBufConfig();
         }
 
         public void addAttackInfo(WeaponAttack atkAdd)
