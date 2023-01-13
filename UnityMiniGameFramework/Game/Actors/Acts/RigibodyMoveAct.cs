@@ -16,6 +16,8 @@ namespace UnityMiniGameFramework
         public float MaxSpeed = 3.0f;
         public float MinSpeed = 1.0f;
 
+        public float AniDefMoveSpeed = 1.5f;
+
         public float curSpeed => _curSpeed;
 
         protected float _curSpeed;
@@ -236,9 +238,19 @@ namespace UnityMiniGameFramework
                 return;
             }
 
+            float aniPlaySpeed = _curSpeed / AniDefMoveSpeed;
+            if(aniPlaySpeed < 1.0f)
+            {
+                aniPlaySpeed = 1.0f;
+            }
+
             if(!actor.animatorComponent.isCurrBaseAnimation(_movingAniName))
             {
-                actor.animatorComponent.playAnimation(_movingAniName);
+                actor.animatorComponent.playAnimation(_movingAniName, aniPlaySpeed);
+            }
+            else
+            {
+                actor.animatorComponent.playSpeed = aniPlaySpeed;
             }
 
             Vector3 forward = _rigiBody.transform.forward;

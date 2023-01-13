@@ -49,6 +49,18 @@ namespace UnityMiniGameFramework
             }
         }
 
+        public float playSpeed
+        {
+            get
+            {
+                return _unityAnimator.speed;
+            }
+            set
+            {
+                _unityAnimator.speed = value;
+            }
+        }
+
         public bool isCurrBaseAnimation(string aniName)
         {
             return currBaseAnimation?.aniName == aniName;
@@ -63,7 +75,7 @@ namespace UnityMiniGameFramework
             return null;
         }
 
-        public Animation playAnimation(string aniName)
+        public Animation playAnimation(string aniName, float speed = 1.0f)
         {
             if(!_anis.ContainsKey(aniName))
             {
@@ -81,6 +93,7 @@ namespace UnityMiniGameFramework
             }
 
             _unityAnimator.Play(ani.aniClipName);
+            _unityAnimator.speed = speed;
 
             _currAnis[ani.aniSlotName] = ani;
 
