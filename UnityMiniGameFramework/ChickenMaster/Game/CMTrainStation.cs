@@ -1,4 +1,4 @@
-﻿using MiniGameFramework;
+using MiniGameFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +52,7 @@ namespace UnityMiniGameFramework
         private int _layerCount;
         private float _boxLenght = 0.32f;
         private Vector3 _boxInitPos;
-        private UITrainstationCapatityPanel _uiTrainstationCapatityPanel;
+        private UITrainStationCapatityPanel _uiTrainstationCapatityPanel;
 
         public CMTrainStation()
         {
@@ -386,6 +386,8 @@ namespace UnityMiniGameFramework
                 }
 
                 cmGame.baseInfo.markDirty();
+
+                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData12($"建筑[{_conf.mapBuildName}]等级{_trainStationInfo.level}"));
             }
             else
             {
@@ -411,7 +413,7 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void InitCapacityUI()
         {
-            _uiTrainstationCapatityPanel = UnityGameApp.Inst.UI.createNewUIPanel("TrainstationCapacityUI") as UITrainstationCapatityPanel;
+            _uiTrainstationCapatityPanel = UnityGameApp.Inst.UI.createNewUIPanel("TrainStationCapacityUI") as UITrainStationCapatityPanel;
             _uiTrainstationCapatityPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _uiTrainstationCapatityPanel.RefreshInfo(this);
             _uiTrainstationCapatityPanel.showUI();

@@ -1,4 +1,4 @@
-﻿using MiniGameFramework;
+using MiniGameFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +70,8 @@ namespace UnityMiniGameFramework
             {
                 // add level
                 _heroInfo.level = _heroInfo.level + 1;
+
+                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData6($"英雄[{_heroInfo.mapHeroName}]等级{_heroInfo.level}"));
 
                 // upgrade 
                 _recalcAttack();

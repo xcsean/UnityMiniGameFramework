@@ -108,7 +108,7 @@ namespace UnityMiniGameFramework
                 var userInfo = new LocalUserInfo()
                 {
                     uid = "test",
-                    uuid = "test",
+                    uuid = $"{nowMillisecond/1000}",
                     lastLoginTime = nowMillisecond,
                     lastOnlineTime = nowMillisecond
                 };
@@ -123,6 +123,7 @@ namespace UnityMiniGameFramework
                 _isNewUser = false;
             }
 
+            (_userInfo.getData() as LocalUserInfo).lastLoginTime = nowMillisecond;
             _lastOnlineTime = (_userInfo.getData() as LocalUserInfo).lastOnlineTime;
 
             _baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo");
@@ -532,6 +533,8 @@ namespace UnityMiniGameFramework
             // modify data
             (_baseInfo.getData() as LocalBaseInfo).defenseHeros.Add(cmHero.heroInfo);
             _baseInfo.markDirty();
+
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData6($"解锁英雄[{heroInfo.mapHeroName}]"));
 
             return cmHero;
         }

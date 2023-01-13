@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +32,7 @@ namespace UnityMiniGameFramework.RESTFulAPI
 
         public DateTime createtime { get; set; }
 
+        public string point { get; set; }
         public string msg { get; set; }
     }
 }

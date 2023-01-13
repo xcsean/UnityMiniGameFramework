@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,6 +51,7 @@ namespace UnityMiniGameFramework
         public string uiConfigName;
         public string preloaderUIConfName;
         public UnityEngine.GameObject GameObjectCachePool;
+        public UnityEngine.GameObject AudioSourceRoot;
         public PanelSettings unityUIPanelSettings;
 
         static void dbgOutput(string msg)
@@ -69,6 +70,7 @@ namespace UnityMiniGameFramework
             UnityGameApp.setInst(new UnityGameApp());
             initGameAppPlatform();
             UnityEngine.GameObject.DontDestroyOnLoad(GameObjectCachePool);
+            DontDestroyOnLoad(AudioSourceRoot);
             UnityGameApp.Inst.unityUIPanelSettings = unityUIPanelSettings;
             UnityGameApp.Inst.CachePoolRoot = GameObjectCachePool;
             GameAPPInitParameter InitParameter = new GameAPPInitParameter
@@ -153,6 +155,8 @@ namespace UnityMiniGameFramework
         protected WeaponManager _weaponManager;
         public WeaponManager WeaponManager => _weaponManager;
 
+        protected AnalysisDataManager _analysisMgr;
+        public AnalysisDataManager AnalysisMgr => _analysisMgr;
         protected DataManager _datamanager;
         public DataManager Datas => _datamanager;
 
@@ -270,6 +274,7 @@ namespace UnityMiniGameFramework
             base._createManagers();
 
             // new managers
+            _analysisMgr = new AnalysisDataManager();
             _datamanager = new DataManager();
             _aniManager = new AnimationManager();
             _audManager = AudioManager.Instance;
@@ -297,6 +302,7 @@ namespace UnityMiniGameFramework
             _conf.regConfigCreator("VFXConfig", VFXConfig.create);
             _conf.regConfigCreator("WeaponConfig", WeaponConfig.create);
             _conf.regConfigCreator("CMGameConfig", CMGameConfig.create);
+            _conf.regConfigCreator("AnalysisConfig", AnalysisConfig.create);
 
             // reg component
             GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
@@ -355,6 +361,7 @@ namespace UnityMiniGameFramework
         {
             base._initManagers();
 
+            _analysisMgr.Init();
             _datamanager.Init();
             _aniManager.Init();
             _chaManager.Init();
@@ -391,7 +398,7 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UITowerHeroPanel", UITowerHeroPanel.create);
             _ui.regUIPanelCreator("UIWeaponAscendPanel", UIWeaponAscendPanel.create);
             _ui.regUIPanelCreator("UIStorehouseCapacityPanel", UIStorehouseCapacityPanel.create);
-            _ui.regUIPanelCreator("UITrainstationCapatityPanel", UITrainstationCapatityPanel.create);
+            _ui.regUIPanelCreator("UITrainStationCapatityPanel", UITrainStationCapatityPanel.create);
             _ui.regUIPanelCreator("UIJoyStickPanel", UIJoyStickPanel.create);
             _ui.regUIPanelCreator("UIMaskPanel", UIMaskPanel.create);
             _ui.regUIPanelCreator("UITrainStationGoldPopupPanel", UITrainStationGoldPopupPanel.create);

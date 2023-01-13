@@ -44,6 +44,8 @@ namespace UnityMiniGameFramework
 
         public void PlayBGM(string clipName)
         {
+            if(string.IsNullOrEmpty(clipName))
+                return;
             if (m_bgmSource.isPlaying && m_lastBGMName == clipName)
                 return;
             AudioClip clip;
@@ -63,6 +65,8 @@ namespace UnityMiniGameFramework
 
         public void PlaySFX(string clipName, bool looping = false)
         {
+            if(string.IsNullOrEmpty(clipName))
+                return;
             AudioClip clip;
             if (m_CachedAudioAssets.TryGetValue(clipName, out clip))
             {

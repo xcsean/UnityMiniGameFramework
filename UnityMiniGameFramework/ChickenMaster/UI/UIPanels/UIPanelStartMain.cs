@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,7 +62,7 @@ namespace UnityMiniGameFramework
                 btnStart.style.display = DisplayStyle.Flex;
                 UnityGameApp.Inst.removeUpdateCall(onUpdate);
             }
-            bar.style.width = new StyleLength(new Length(prog * 334));
+            bar.style.width = new StyleLength(new Length(prog * 518));
             barLabel.text = $"{Math.Floor(prog * 100)}%";
         }
 

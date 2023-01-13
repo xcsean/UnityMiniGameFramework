@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,12 +22,12 @@ namespace UnityMiniGameFramework
     /// <summary>
     /// 仓库容量
     /// </summary>
-    public class UITrainstationCapatityPanel : UIPanel
+    public class UITrainStationCapatityPanel : UIPanel
     {
-        override public string type => "UITrainstationCapatityPanel";
-        public static UITrainstationCapatityPanel create()
+        override public string type => "UITrainStationCapatityPanel";
+        public static UITrainStationCapatityPanel create()
         {
-            return new UITrainstationCapatityPanel();
+            return new UITrainStationCapatityPanel();
         }
 
         private CMTrainStation _CMTrainStation;

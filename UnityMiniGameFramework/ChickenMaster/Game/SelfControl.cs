@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -458,10 +458,11 @@ namespace UnityMiniGameFramework
                     break;
                 }
             }
-
+            int totalCount = count;
             if(toAddItem != null)
             {
                 toAddItem.count += count;
+                totalCount = toAddItem.count;
             }
             else
             {
@@ -474,7 +475,14 @@ namespace UnityMiniGameFramework
 
             _cmGame.baseInfo.markDirty();
 
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData4($"鸡肉数量：{totalCount}，获得鸡肉：{count}"));
+
             _cmGame.uiMainPanel.refreshMeat();
+
+            if(name == "meat")
+            {
+                _cmGame.uiMainPanel.addMeat(count);
+            }
         }
 
         public int SubBackpackProduct(string name, int count)
@@ -621,8 +629,9 @@ namespace UnityMiniGameFramework
             }
 
             _baseInfo.gold -= gold;
-
             _cmGame.baseInfo.markDirty();
+
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData13($"总金币：{_baseInfo.gold}，消耗金币：{gold}"));
 
             _cmGame.uiMainPanel.refreshGold(_baseInfo.gold);
 
@@ -638,7 +647,10 @@ namespace UnityMiniGameFramework
             _baseInfo.gold += gold;
             _cmGame.baseInfo.markDirty();
 
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData3($"总金币：{_baseInfo.gold}，获得金币：{gold}"));
+
             _cmGame.uiMainPanel.refreshGold(_baseInfo.gold);
+            _cmGame.uiMainPanel.addGold(gold);
         }
 
         public void AddExp(int exp)
@@ -678,7 +690,7 @@ namespace UnityMiniGameFramework
         protected void _OnLevelUp()
         {
             _cmGame.uiMainPanel.refreshLevel(_baseInfo.level);
-
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData2($"用户等级：{_baseInfo.level}"));
             // TO DO : Level up
         }
     }
