@@ -223,11 +223,13 @@ namespace UnityMiniGameFramework
 
         private void onClickVideoGet()
         {
+            VideoGetButton.clicked -= onClickVideoGet;
             SDKManager.showAutoAd(onVideoCb, "pass_reward");
         }
 
         private void onClickNormalGet()
         {
+            NormalGetButton.clicked -= onClickNormalGet;
             collectRewards();
             //showAni(2);
         }

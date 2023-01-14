@@ -20,6 +20,7 @@ namespace UnityMiniGameFramework
             public CMGNotifyType t;
             public string msg;
             public float timeLeft;
+            public TemplateContainer tipObj;
         }
         public class FlyNumParam
         {
@@ -79,6 +80,8 @@ namespace UnityMiniGameFramework
         protected VisualTreeAsset vts_tips;
 
         protected List<NotifyMessage> _notifyMessages;
+        private List<FlyNumParam> flyAnis = new List<FlyNumParam>() { };
+        private List<TemplateContainer> tipObjs = new List<TemplateContainer>() { };
         // TO DO 做成一个通用组件
 
         override public void Init(UIPanelConf conf)
@@ -125,7 +128,7 @@ namespace UnityMiniGameFramework
 
             _LevelInfo.text = "Not Start";
             _NotifyText.text = "";
-            _NotifyBg.style.display = DisplayStyle.None;
+            _NotifyBg.style.display = DisplayStyle.Flex;
 
             _notifyMessages = new List<NotifyMessage>();
             vts = Resources.Load<VisualTreeAsset>("UI/Controls/FlyNumIcon");
@@ -200,7 +203,6 @@ namespace UnityMiniGameFramework
             _expBar.style.width = new StyleLength(new Length(_expBarWidth * exp / nextLevelExp));
         }
 
-        private List<FlyNumParam> flyAnis = new List<FlyNumParam>() { };
         public void addGold(int n)
         {
             if (n != 0)
@@ -283,19 +285,47 @@ namespace UnityMiniGameFramework
                 }
             }
         }
+        public void setTips(int index, string tip)
+        {
+            if (tipObjs.Count == 0)
+            {
+                for (var i = 0; i < 10; i++)
+                {
+                    var tipsObj = vts_tips.CloneTree();
+                    _NotifyBg.Add(tipsObj);
+                    tipsObj.transform.position = new Vector3(0, 0);
+                    tipsObj.style.display = DisplayStyle.None;
+                    tipObjs.Add(tipsObj);
+                }
+            }
 
-        //private List<TemplateContainer> tipObjs = new List<TemplateContainer>() { };
-        //public void playTips(string tip)
-        //{
-        //    if(tipObjs.Count == 0)
-        //    {
-        //        for(var i = 0;i < 5; i++)
-        //        {
-        //            var tipsObj = vts_tips.CloneTree();
+            var obj = tipObjs[index];
+            if(obj!= null)
+            {
+                obj.Q<Label>("tipLabel").text = $"{tip}";
+                obj.transform.position = new Vector3(0, 0);
+                obj.style.display = DisplayStyle.Flex;
+            }
+        }
 
-        //        }
-        //    }
-        //}
+        private TemplateContainer getTipsObj(string tip)
+        {
+            TemplateContainer tipsObj;
+            if (tipObjs.Count == 0)
+            {
+                tipsObj = vts_tips.CloneTree();
+                _NotifyBg.Add(tipsObj);
+            }
+            else
+            {
+                tipsObj = tipObjs[0];
+                tipObjs.RemoveAt(0);
+            }
+            tipsObj.transform.position = new Vector3(0, 0);
+            tipsObj.style.display = DisplayStyle.Flex;
+            tipsObj.Q<Label>("tipLabel").text = $"{tip}";
+            return tipsObj;
+        }
         /// <summary>
         /// 当前关卡
         /// </summary>
@@ -400,17 +430,20 @@ namespace UnityMiniGameFramework
             {
                 t = t,
                 msg = msg,
-                timeLeft = 3.0f // 3 seconds
+                tipObj = getTipsObj(msg),
+                timeLeft = 1.0f // 3 seconds
             };
 
             _notifyMessages.Add(notify);
-            if (_notifyMessages.Count > 3)
+            if (_notifyMessages.Count > 7)
             {
+                TemplateContainer obj = _notifyMessages[0].tipObj;
+                obj.style.display = DisplayStyle.None;
+                tipObjs.Add(obj);
                 _notifyMessages.RemoveAt(0);
             }
 
-            _refreshNotifyMessages();
-            //playTips(msg);
+            //_refreshNotifyMessages();
         }
 
         protected void _refreshNotifyMessages()
@@ -470,16 +503,22 @@ namespace UnityMiniGameFramework
 
                 if (notify.timeLeft <= 0)
                 {
+                    notify.tipObj.style.display = DisplayStyle.None;
+                    tipObjs.Add(notify.tipObj);
                     _notifyMessages.RemoveAt(i);
                     --i;
                     changed = true;
                 }
+                else if(notify.timeLeft >= 0.8f)
+                {
+                    notify.tipObj.transform.position -= new Vector3(0, Time.deltaTime * 200);
+                }
             }
 
-            if (changed)
-            {
-                _refreshNotifyMessages();
-            }
+            //if (changed)
+            //{
+            //    _refreshNotifyMessages();
+            //}
         }
     }
 }
