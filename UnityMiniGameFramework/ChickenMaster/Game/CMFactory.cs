@@ -73,7 +73,7 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory map building [{_factoryConf.mapBuildName}] not exist");
                 return false;
             }
-
+            
             _inputPutPosition = map.getSpawnPosByObjectName(_factoryConf.inputPutPosName);
             if (_inputPutPosition == null)
             {
@@ -369,6 +369,7 @@ namespace UnityMiniGameFramework
             {
                 _produceVer++;
             }
+            
         }
 
         protected virtual void _updateProductBox(string boxPrefabPath, int boxNum,SpawnPos spawnPos)
@@ -426,7 +427,18 @@ namespace UnityMiniGameFramework
             
             if (currentProductInputStore <= 0)
             {
+                if (_mapBuildingObj.animatorComponent.currBaseAnimation != null && _mapBuildingObj.animatorComponent.currBaseAnimation.aniName == ActAnis.BuildWorking)
+                {
+                    _mapBuildingObj.animatorComponent.stopAnimation(ActAnis.BuildWorking);
+                }
+                
                 return;
+            }
+            
+
+            if (_mapBuildingObj.animatorComponent.currBaseAnimation ==null ||_mapBuildingObj.animatorComponent.currBaseAnimation.aniName != ActAnis.BuildWorking)
+            {
+                _mapBuildingObj.animatorComponent.playAnimation(ActAnis.BuildWorking);
             }
 
             _currentCD -= UnityEngine.Time.deltaTime;
