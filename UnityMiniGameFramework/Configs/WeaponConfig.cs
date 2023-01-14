@@ -42,6 +42,9 @@ namespace UnityMiniGameFramework
 
         public int? Multiple { get; set; }
 
+        public float? shootOffsetAngleBegin { get; set; }
+
+        public float? shootOffsetAngleEnd { get; set; }
         public float? baseattackspeedrate { get; set; }
 
         public ExplosiveConf collideExplosive { get; set; }

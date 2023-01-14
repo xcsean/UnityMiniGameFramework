@@ -89,6 +89,8 @@ namespace UnityMiniGameFramework
 
         protected float _hitForce;
         protected int _Multiple;
+        protected float _shootOffsetAngleBegin;
+        protected float _shootOffsetAngleEnd;
         
         protected float _attackRange;
         public float attackRange => _attackRange;
@@ -155,7 +157,15 @@ namespace UnityMiniGameFramework
             _name = _conf.name;
 
             _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 0;
-            _Multiple = _conf.FireConf.Multiple.HasValue ? _conf.FireConf.Multiple.Value : 1;            
+            _Multiple = _conf.FireConf.Multiple.HasValue ? _conf.FireConf.Multiple.Value : 1;
+            _shootOffsetAngleBegin = _conf.FireConf.shootOffsetAngleBegin.HasValue
+                ? _conf.FireConf.shootOffsetAngleBegin.Value
+                : 0;
+            
+            _shootOffsetAngleEnd = _conf.FireConf.shootOffsetAngleEnd.HasValue
+                ? _conf.FireConf.shootOffsetAngleEnd.Value
+                : 0;
+            
             _attackRange = GetBaseAttackRange();
             _baseAttackSpeedRate = _conf.FireConf.baseattackspeedrate.HasValue
                 ? _conf.FireConf.baseattackspeedrate.Value
@@ -652,9 +662,9 @@ namespace UnityMiniGameFramework
             // }
             
             gunForward = (new Vector3(gunForward.x, 0, gunForward.z)).normalized;
-            
-            float _base = -90;
-            float _add = 180 * 1.0f / _Multiple;
+
+            float _base = _shootOffsetAngleBegin;
+            float _add = Math.Abs(_shootOffsetAngleEnd - _shootOffsetAngleBegin) * 1.0f / _Multiple;
             Vector3 rotationAddVec = Vector3.zero;
             for (uint i = 0; i < _Multiple; ++i)
             {
