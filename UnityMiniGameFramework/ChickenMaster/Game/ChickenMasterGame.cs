@@ -336,11 +336,11 @@ namespace UnityMiniGameFramework
             }
 
             // 默认解锁第一个工厂
-            if (bi.factories.Count == 0)
+            if (GetFactories().Count == 0)
             {
                 AddFactory("factoryBuilding1");
             }
-            
+
             // 默认解锁第一个角色
             if (bi.defenseHeros.Count == 0)
             {
@@ -713,8 +713,7 @@ namespace UnityMiniGameFramework
                     return;
                 }
 
-                CMFactory cmFac = null;
-                _cmFactories.TryGetValue(buildingName, out cmFac);
+                CMFactory cmFac = GetFactory(buildingName);
 
                 var panel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
                 panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);

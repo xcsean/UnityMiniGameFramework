@@ -121,9 +121,13 @@ namespace UnityMiniGameFramework
                                                                 .fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
                 currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
-            InitProduceProgressUI();
             setBuildGray(false);
+
             _init = true;
+
+            // 需要IsActive
+            InitProduceProgressUI();
+
             return true;
         }
 

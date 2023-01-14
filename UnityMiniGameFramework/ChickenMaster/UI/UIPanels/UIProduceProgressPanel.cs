@@ -91,7 +91,7 @@ namespace UnityMiniGameFramework
                 _factoryConf = conf;
             }
             _CMFactory = _cmFactory;
-            if (_CMFactory == null)
+            if (_CMFactory == null || !_CMFactory.IsActive)
             {
                 _labLockTip.text = $"Unlock at\r\nbattle level {_factoryConf.userLevelRequire}";
                 _labLockTip.style.display = DisplayStyle.Flex;
@@ -274,7 +274,7 @@ namespace UnityMiniGameFramework
                 setPoisition(screenPos.x + _factoryConf.TopUIOffset.x, screenPos.y + _factoryConf.TopUIOffset.y);
             }
 
-            if (_CMFactory == null)
+            if (_CMFactory == null || ! _CMFactory.IsActive)
             {
                 return;
             }
