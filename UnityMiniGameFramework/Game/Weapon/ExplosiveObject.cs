@@ -64,7 +64,7 @@ namespace UnityMiniGameFramework
             col.explosiveObj = this;
 
             _startTime = UnityEngine.Time.time + (conf.startTime.HasValue ? conf.startTime.Value : 0);
-            _endTime = UnityEngine.Time.time + (conf.keepTime.HasValue ? conf.keepTime.Value : 1);
+            _endTime = UnityEngine.Time.time + (conf.keepTime.HasValue ? conf.keepTime.Value : 0.1f);
 
             return true;
         }
@@ -90,6 +90,11 @@ namespace UnityMiniGameFramework
 
         public void onHitEnter(UnityEngine.Collider other)
         {
+            if (UnityEngine.Time.time > _endTime)
+            {
+                return;
+            }
+
             var rigibody = other.gameObject.GetComponent<UnityEngine.Rigidbody>();
             if(rigibody == null)
             {

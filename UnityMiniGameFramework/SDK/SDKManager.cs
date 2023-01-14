@@ -31,19 +31,17 @@ namespace UnityMiniGameFramework
 
         public static void showAutoAd(Action callball, string eventName = "")
         {
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.sendVideoEvent(0, eventName);
 
             if (!SDKManager._sdk.isNull())
             {
+                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{eventName}"));
                 SDKManager._sdk.showAutoAd((SdkEvent args) =>
                 {
                     if (args.type == AdEventType.RewardEvent)
                     {
                         //TODO 看完视频下发奖励
                         MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                        cmGame.sendVideoEvent(1, eventName);
-                        callball();
+                        UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
                     }
                 });
             }
