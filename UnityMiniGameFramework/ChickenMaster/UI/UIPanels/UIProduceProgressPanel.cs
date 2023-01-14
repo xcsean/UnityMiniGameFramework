@@ -207,7 +207,7 @@ namespace UnityMiniGameFramework
                 if (followTrans != null && _factoryConf != null)
                 {
                     screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(followTrans.position));
-                    setPoisition((int)screenPos.x + (int)_factoryConf.TopUIOffset.x, (int)screenPos.y + (int)_factoryConf.TopUIOffset.y);
+                    setPoisition(screenPos.x + _factoryConf.TopUIOffset.x, screenPos.y + _factoryConf.TopUIOffset.y);
                 }
             }).Every(20);
         }

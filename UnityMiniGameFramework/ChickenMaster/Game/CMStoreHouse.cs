@@ -112,7 +112,7 @@ namespace UnityMiniGameFramework
             if (_uiStorehouseCapacityPanel != null)
             {
                 var screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(_mapBuildingObj.unityGameObject.transform.position));
-                _uiStorehouseCapacityPanel.setPoisition((int)screenPos.x, (int)screenPos.y - 200);
+                _uiStorehouseCapacityPanel.setPoisition(screenPos.x, screenPos.y - 200);
             }
         }
 

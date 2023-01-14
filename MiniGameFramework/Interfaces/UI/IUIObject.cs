@@ -17,7 +17,7 @@ namespace MiniGameFramework
         int width { get; }
         int height { get; }
 
-        void setPoisition(int x, int y);
+        void setPoisition(float x, float y);
 
         void showUI();
         void hideUI();
