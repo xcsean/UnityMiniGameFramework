@@ -252,7 +252,7 @@ namespace UnityMiniGameFramework
 
                     _atkRangeCircleVFX.unityGameObject.SetActive(true);
                     _atkRangeCircleVFX.unityGameObject.transform.SetParent(_currentPickNPCHero.mapHero.unityGameObject.transform);
-                    _atkRangeCircleVFX.unityGameObject.transform.localPosition = new UnityEngine.Vector3(0, -0.5f, 0);
+                    _atkRangeCircleVFX.unityGameObject.transform.localPosition = new UnityEngine.Vector3(0, 0.5f, 0);
 
                     _atkRangeCircleVFX.SetCircleRange(_currentPickNPCHero.gun.attackRange);
 
