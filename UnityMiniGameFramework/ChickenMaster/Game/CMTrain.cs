@@ -23,7 +23,8 @@ namespace UnityMiniGameFramework
 
         protected bool _isInited;
         private UnityEngine.GameObject _boxRoot;
-
+        
+        
         public bool Init(CMTrainStation s)
         {
             _station = s;
@@ -72,7 +73,7 @@ namespace UnityMiniGameFramework
         {
             var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
             _timeToTrainArrival = _station.trainStationInfo.NextTrainArrivalTime - nowTickMillsecond;
-            _boxRoot = _trainNpcObj.unityGameObject.transform.Find("Dummy002/Dummy005/boxes").gameObject;
+            _boxRoot = _trainNpcObj.unityGameObject.transform.Find("CarriageNode/Carriage/Dummy005/Bone002/boxes").gameObject;
             setBoxShow(false);
             if (_timeToTrainArrival > 0)
             {
