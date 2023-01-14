@@ -100,7 +100,7 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnUpgradeBtnClick()
         {
-            if (_factory == null)
+            if (_factory == null || !_factory.IsActive)
             {
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
                 // 依赖关卡激活
