@@ -32,11 +32,13 @@ namespace UnityMiniGameFramework.RESTFulAPI
 
         public int subType { get; set; }
 
-
         public DateTime createtime { get; set; }
 
         public string point { get; set; }
+
         public string msg { get; set; }
+
+        public BaseUserInfo userInfo { get; set; }
     }
 
     public class CS_ReportParamList

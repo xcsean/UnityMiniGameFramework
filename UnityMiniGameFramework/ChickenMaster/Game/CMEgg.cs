@@ -192,7 +192,7 @@ namespace UnityMiniGameFramework
             _updateHpBar();
 
             int curLv = (cmGame.baseInfo.getData() as LocalBaseInfo).currentLevel;
-            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData11($"当前关卡[{curLv}]，水晶HP[{_eggInfo.hp}]"));
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData11($"{curLv}"));
 
             // TO DO : show effect
         }
