@@ -68,6 +68,9 @@ namespace UnityMiniGameFramework
         protected Button _btnDoubleExp;
         protected Button _btnDoubleAtt;
         protected Button _btnSetting;
+        protected Button _btnStart;
+        protected Button _btnRecover;
+        protected VisualElement _battleStartBtn;
         protected VisualElement _levelsNodes;
         protected VisualElement _bossInfo;
         protected VisualElement _battleStartInfo;
@@ -113,14 +116,23 @@ namespace UnityMiniGameFramework
             _btnDoubleExp = this._uiObjects["BtnDoubleExp"].unityVisualElement as Button;
             _btnDoubleAtt = this._uiObjects["BtnDoubleAtt"].unityVisualElement as Button;
             _btnSetting = this._uiObjects["BtnSetting"].unityVisualElement as Button;
+            _btnStart = this._uiObjects["StartBtn"].unityVisualElement as Button;
+            _btnRecover = this._uiObjects["RecoverBtn"].unityVisualElement as Button;
             _levelsNodes = this._uiObjects["LevelsNodes"].unityVisualElement;
             _bossInfo = this._uiObjects["BossInfo"].unityVisualElement;
             _battleStartInfo = this._uiObjects["BattleStartInfo"].unityVisualElement;
+            _battleStartBtn = this._uiObjects["BattleStartBtn"].unityVisualElement;
+
+            // 实现中 先隐藏
+            _battleStartBtn.style.display = DisplayStyle.None;
 
             _btnUseSkill.clicked += OnUseSkillBtnClick;
             _btnDoubleExp.clicked += OnDoubleExpBtnClick;
             _btnDoubleAtt.clicked += OnDoubleAttBtnClick;
             _btnSetting.clicked += OnSettiingBtnClick;
+
+            _btnStart.clicked += onStartLevelClick;
+            _btnRecover.clicked += onRecoverClick;
 
             // TODO 动态获取一直是0
             //_expBarWidth = _expBar.style.width.value.value;
@@ -135,6 +147,82 @@ namespace UnityMiniGameFramework
             vts_tips = Resources.Load<VisualTreeAsset>("UI/Controls/Tips");
 
             ShowBattleStartInfo(false);
+        }
+
+        /// <summary>
+        /// 开始关卡
+        /// </summary>
+        protected void onStartLevelClick()
+        {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
+
+            if (bi.egg.hp <= 0)
+            {
+                // can't start level
+                return;
+            }
+
+            var lvlConf = cmGame.GetCurrentDefenseLevelConf();
+            if (lvlConf == null)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"GetCurrentDefenseLevelConf [{bi.currentLevel}] not exist");
+                return;
+            }
+
+            if (UnityGameApp.Inst.MainScene.map.currentLevel == null)
+            {
+                var level = UnityGameApp.Inst.MainScene.map.CreateLevel(lvlConf.mapLevelName);
+                if (level != null)
+                {
+                    (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
+
+                    level.Start();
+                    // todo 
+                    //_recoveryTime.text = "";
+                    cmGame.Egg.eggUI.clearRecoverTime();
+                }
+            }
+            else if (!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
+            {
+                var level = UnityGameApp.Inst.MainScene.map.CreateLevel(lvlConf.mapLevelName);
+                if (level != null)
+                {
+                    (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
+
+                    level.Start();
+                    // todo 
+                    //_recoveryTime.text = "";
+                    cmGame.Egg.eggUI.clearRecoverTime();
+                }
+            }
+        }
+        
+        public void changeEggState(bool isFighting, float _hp)
+        {
+            bool isDie = _hp <= 0;
+            //_recoveryTime.style.display = (!isFighting) ? DisplayStyle.Flex : DisplayStyle.None;
+
+            _btnStart.style.display = (!isFighting && !isDie) ? DisplayStyle.Flex : DisplayStyle.None;
+            _btnRecover.style.display = (!isFighting && isDie) ? DisplayStyle.Flex : DisplayStyle.None;
+
+            //var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            //cmGame.uiMainPanel.ShowBattleStartInfo(isFighting && !isDie);
+            ShowBattleStartInfo(isFighting && !isDie);
+        }
+
+        private void onVideoCb()
+        {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.Egg.recoverEgg();
+        }
+
+        /// <summary>
+        /// 复活水晶蛋
+        /// </summary>
+        protected void onRecoverClick()
+        {
+            SDKManager.showAutoAd(onVideoCb, "recover_egg");
         }
 
         /// <summary>
@@ -411,6 +499,7 @@ namespace UnityMiniGameFramework
             _TrainTime.text = $"{t.Minutes}:{t.Seconds}";
         }
 
+        // 战斗开始提示图标
         public void ShowBattleStartInfo(bool isShow = true)
         {
             if (isShow)

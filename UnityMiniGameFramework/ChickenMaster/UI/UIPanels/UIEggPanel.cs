@@ -108,7 +108,8 @@ namespace UnityMiniGameFramework
             _recoverBtn.style.display = (!isFighting && isDie) ? DisplayStyle.Flex : DisplayStyle.None;
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.uiMainPanel.ShowBattleStartInfo(isFighting && !isDie);
+            //cmGame.uiMainPanel.ShowBattleStartInfo(isFighting && !isDie);
+            cmGame.uiMainPanel.changeEggState(isFighting, _hp);
         }
 
         public void onEggDie()
@@ -121,6 +122,11 @@ namespace UnityMiniGameFramework
             //changeEggState(false);
             _recoveryTime.text = "ready";
             // TO DO : show start button
+        }
+
+        public void clearRecoverTime()
+        {
+            _recoveryTime.text = "";
         }
 
         public void refreshRecoveryTime(long time)
