@@ -165,7 +165,7 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.addUI(this);
         }
-        public void setPoisition(int x, int y)
+        public void setPoisition(float x, float y)
         {
             _unityUIDocument.rootVisualElement.transform.position = new Vector2(x, y);
         }

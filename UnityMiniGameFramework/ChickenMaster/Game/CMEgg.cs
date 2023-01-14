@@ -127,7 +127,7 @@ namespace UnityMiniGameFramework
             if(_eggUI != null)
             {
                 var screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(_eggObject.transform.position));
-                _eggUI.setPoisition((int)screenPos.x + (int)_conf.EggUIOffset.x, (int)screenPos.y + (int)_conf.EggUIOffset.y);
+                _eggUI.setPoisition(screenPos.x + _conf.EggUIOffset.x, screenPos.y + _conf.EggUIOffset.y);
             }
 
             long nowTickMilliseconds = DateTime.Now.Ticks / 10000;

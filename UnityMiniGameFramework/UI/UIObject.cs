@@ -89,7 +89,7 @@ namespace UnityMiniGameFramework
         }
 
 
-        public void setPoisition(int x, int y)
+        public void setPoisition(float x, float y)
         {
             _unityVE.transform.position = new UnityEngine.Vector2(x, y);
         }

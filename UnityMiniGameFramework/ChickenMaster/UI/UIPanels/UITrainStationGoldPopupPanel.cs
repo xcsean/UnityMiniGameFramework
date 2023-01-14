@@ -55,7 +55,7 @@ namespace UnityMiniGameFramework
                 var screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera)
                     .worldToScreenPos(_trans.position));
 
-                setPoisition((int)screenPos.x, (int)screenPos.y);
+                setPoisition(screenPos.x, screenPos.y);
             }
 
             if (popupY < -150f)

@@ -41,7 +41,7 @@ namespace UnityMiniGameFramework
                 {
                     screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera)
                         .worldToScreenPos(followTrans.position));
-                    setPoisition((int)screenPos.x, (int)screenPos.y - 150);
+                    setPoisition(screenPos.x, screenPos.y - 150);
                 }
             }).Every(20);
         }
