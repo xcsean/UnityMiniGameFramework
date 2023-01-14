@@ -217,8 +217,8 @@ namespace UnityMiniGameFramework
         protected void RefreshInfo()
         {
             bool isMaxLV = false;
-            int curLv = _factory == null ? 0 : _factory.localFacInfo.level;
-            var _curLevelConf = _factory == null ? null : _factoryConf.levelConfs[curLv];
+            int curLv = (_factory == null || _factory.localFacInfo == null) ? 0 : _factory.localFacInfo.level;
+            var _curLevelConf = (_factory == null || _factory.localFacInfo == null) ? null : _factoryConf.levelConfs[curLv];
             var _nextLevelConf = _curLevelConf;
 
             if (_factoryConf.levelConfs.ContainsKey(curLv + 1))
