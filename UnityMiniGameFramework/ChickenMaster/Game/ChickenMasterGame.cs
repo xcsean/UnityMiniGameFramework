@@ -733,5 +733,32 @@ namespace UnityMiniGameFramework
 
             _mainSceneHUDs[npcName] = panel;
         }
+
+        public void sendVideoEvent(int type, string en = "")
+        {
+            var bi = _baseInfo.getData() as LocalBaseInfo;
+            if (type == 0) // 打开视频
+            {
+                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"show video {++bi.videoLog.openAd} times"));
+                if (en.Length > 0) // 分类广告
+                {
+                    if (!bi.videoLog.adEvents.ContainsKey(en))
+                    {
+                        bi.videoLog.adEvents.Add(en, 1);
+                    }
+                    else
+                    {
+                        bi.videoLog.adEvents[en] += 1;
+                    }
+                    UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"show {en} video {bi.videoLog.adEvents[en]} times"));
+                }
+            }
+            else if (type == 1) // 看完视频
+            {
+                //UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"show video {++bi.videoLog.openAd} times"));
+            }
+
+            _baseInfo.markDirty();
+        }
     }
 }

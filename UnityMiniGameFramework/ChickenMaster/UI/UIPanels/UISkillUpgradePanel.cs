@@ -134,15 +134,7 @@ namespace UnityMiniGameFramework
 
         private void onClickVideo()
         {
-            SDKManager.showAutoAd((SdkEvent args) =>
-            {
-                if (args.type == AdEventType.RewardEvent)
-                {
-                    //TODO 看完视频下发奖励
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                    onVideoCb();
-                }
-            });
+            SDKManager.showAutoAd(onVideoCb, "upgrade_skill");
         }
 
         private void onVideoCb()

@@ -139,15 +139,7 @@ namespace UnityMiniGameFramework
         protected void OnEfficiencyBtnClick()
         {
             Debug.DebugOutput(DebugTraceType.DTT_Debug, "onEfficiencyBtnClick...");
-            SDKManager.showAutoAd((SdkEvent args) =>
-            {
-                if (args.type == AdEventType.RewardEvent)
-                {
-                    //TODO 看完视频下发奖励
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                    onVideoCb();
-                }
-            });
+            SDKManager.showAutoAd(onVideoCb, "factory_productivity_x2");
         }
 
         private void onVideoCb()

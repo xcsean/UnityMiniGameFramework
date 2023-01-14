@@ -76,6 +76,7 @@ namespace UnityMiniGameFramework
 
         protected VisualElement _clickableArea;
         protected VisualTreeAsset vts;
+        protected VisualTreeAsset vts_tips;
 
         protected List<NotifyMessage> _notifyMessages;
         // TO DO 做成一个通用组件
@@ -128,6 +129,7 @@ namespace UnityMiniGameFramework
 
             _notifyMessages = new List<NotifyMessage>();
             vts = Resources.Load<VisualTreeAsset>("UI/Controls/FlyNumIcon");
+            vts_tips = Resources.Load<VisualTreeAsset>("UI/Controls/Tips");
 
             ShowBattleStartInfo(false);
         }
@@ -281,6 +283,19 @@ namespace UnityMiniGameFramework
                 }
             }
         }
+
+        //private List<TemplateContainer> tipObjs = new List<TemplateContainer>() { };
+        //public void playTips(string tip)
+        //{
+        //    if(tipObjs.Count == 0)
+        //    {
+        //        for(var i = 0;i < 5; i++)
+        //        {
+        //            var tipsObj = vts_tips.CloneTree();
+
+        //        }
+        //    }
+        //}
         /// <summary>
         /// 当前关卡
         /// </summary>
@@ -395,6 +410,7 @@ namespace UnityMiniGameFramework
             }
 
             _refreshNotifyMessages();
+            //playTips(msg);
         }
 
         protected void _refreshNotifyMessages()

@@ -29,15 +29,27 @@ namespace UnityMiniGameFramework
             _sdkBehaviour = s;
         }
 
-        public static void showAutoAd(Action<SdkEvent> callball)
+        public static void showAutoAd(Action callball, string eventName = "")
         {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.sendVideoEvent(0, eventName);
+
             if (!SDKManager._sdk.isNull())
             {
-                SDKManager._sdk.showAutoAd(callball);
+                SDKManager._sdk.showAutoAd((SdkEvent args) =>
+                {
+                    if (args.type == AdEventType.RewardEvent)
+                    {
+                        //TODO 看完视频下发奖励
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                        cmGame.sendVideoEvent(1, eventName);
+                        callball();
+                    }
+                });
             }
             else
             {
-                callball(new SdkEvent(AdEventType.RewardEvent));
+                callball();
             }
         }
     }

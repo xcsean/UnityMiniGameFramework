@@ -223,20 +223,7 @@ namespace UnityMiniGameFramework
 
         private void onClickVideoGet()
         {
-            SDKManager.showAutoAd((SdkEvent args) =>
-            {
-                switch (args.type)
-                {
-                    case AdEventType.RewardEvent:
-                        //TODO 看完视频下发奖励
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                        onVideoCb();
-                        break;
-
-                    default:
-                        break;
-                }
-            });
+            SDKManager.showAutoAd(onVideoCb, "pass_reward");
         }
 
         private void onClickNormalGet()

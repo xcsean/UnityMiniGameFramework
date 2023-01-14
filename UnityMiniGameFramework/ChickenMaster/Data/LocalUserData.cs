@@ -101,6 +101,13 @@ namespace UnityMiniGameFramework
         public long factory6Productivity { get; set; }
     }
 
+    public class VideoLog
+    {
+        public int openAd { get; set; }
+        public int showAd { get; set; }
+        public Dictionary<string, int> adEvents { get; set; }
+    }
+
     public class LocalBaseInfo
     {
         public int gold { get; set; }
@@ -130,6 +137,7 @@ namespace UnityMiniGameFramework
         public LocalTrainStationInfo trainStation { get; set; }
 
         public LocalBuffInfo buffs { get; set; }
+        public VideoLog videoLog { get; set; }
     }
 
     public class LocalUserInfo
