@@ -228,7 +228,14 @@ namespace UnityMiniGameFramework
             if(i == _monSpawns.Count)
             {
                 // all monster spawned and cleared
-                _OnWin();
+                if(_conf.kmWinCheck != null && _conf.kmWinCheck.Count > 0)
+                {
+                    _OnLose();
+                }
+                else
+                {
+                    _OnWin();
+                }
                 return true;
             }
 
