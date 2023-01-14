@@ -252,6 +252,7 @@ namespace UnityMiniGameFramework
             {
                 _datamanager.localUserData.writeBack();
             }
+            UnityEngine.Debug.Log("--OnAppSuspended----------------" + DateTime.Now);
             if ((Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
             {
                 // 在线时间打点
@@ -260,6 +261,7 @@ namespace UnityMiniGameFramework
         }
         override public void OnAppResume()
         {
+            UnityEngine.Debug.Log("--OnAppResume----------------" + DateTime.Now);
             if ((Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
             {
                 // 在线时间打点
@@ -269,6 +271,7 @@ namespace UnityMiniGameFramework
 
         override public void OnAppExit()
         {
+            UnityEngine.Debug.Log("--OnAppExit----------------" + DateTime.Now);
             if (_datamanager != null)
             {
                 _datamanager.localUserData.writeBack();
