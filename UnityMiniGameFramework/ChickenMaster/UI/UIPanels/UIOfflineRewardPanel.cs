@@ -88,7 +88,6 @@ namespace UnityMiniGameFramework
 
         private void onVideoClick()
         {
-            VideoGetButton.clicked -= onVideoClick;
             SDKManager.showAutoAd(onVideoCb, "offline_reward");
         }
 
@@ -135,6 +134,7 @@ namespace UnityMiniGameFramework
             _cmGame.uiMainPanel.refreshAll();
 
             _baseInfo.markDirty();
+            _offlineReward = new LocalAwardInfo();
         }
     }
 }

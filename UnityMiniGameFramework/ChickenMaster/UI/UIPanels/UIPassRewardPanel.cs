@@ -34,6 +34,7 @@ namespace UnityMiniGameFramework
         private VisualElement layoutGrid;
         private CMDefenseLevelAward rewards;
 
+        private bool bReceived = false;
         private readonly Vec2 gridSize = new Vec2(210, 270);
         override public void Init(UIPanelConf conf)
         {
@@ -202,6 +203,7 @@ namespace UnityMiniGameFramework
                 }
             }
             UnityGameApp.Inst.addUpdateCall(startDelay);
+            bReceived = false;
         }
 
         private void startDelay()
@@ -223,19 +225,27 @@ namespace UnityMiniGameFramework
 
         private void onClickVideoGet()
         {
-            VideoGetButton.clicked -= onClickVideoGet;
+            if (bReceived)
+            {
+                return;
+            }
             SDKManager.showAutoAd(onVideoCb, "pass_reward");
         }
 
         private void onClickNormalGet()
         {
-            NormalGetButton.clicked -= onClickNormalGet;
+            if (bReceived)
+            {
+                return;
+            }
+            bReceived = true;
             collectRewards();
             //showAni(2);
         }
 
         private void onVideoCb()
         {
+            bReceived = true;
             showAni(3);
             //collectRewards(true);
         }
