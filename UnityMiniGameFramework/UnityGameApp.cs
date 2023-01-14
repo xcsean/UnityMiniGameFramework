@@ -253,7 +253,7 @@ namespace UnityMiniGameFramework
                 _datamanager.localUserData.writeBack();
             }
             UnityEngine.Debug.Log("--OnAppSuspended----------------" + DateTime.Now);
-            if ((Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
+            if (Game != null && (Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
             {
                 // 在线时间打点
                 RESTFulClient.Report(AnalysisMgr.GetPointData1($"切后台时间", 2));
@@ -262,7 +262,7 @@ namespace UnityMiniGameFramework
         override public void OnAppResume()
         {
             UnityEngine.Debug.Log("--OnAppResume----------------" + DateTime.Now);
-            if ((Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
+            if (Game != null && (Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
             {
                 // 在线时间打点
                 RESTFulClient.Report(AnalysisMgr.GetPointData1($"切前台时间", 3));
@@ -276,7 +276,7 @@ namespace UnityMiniGameFramework
             {
                 _datamanager.localUserData.writeBack();
             }
-            if ((Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
+            if (Game != null && (Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
             {
                 // 在线时间打点
                 RESTFulClient.Report(AnalysisMgr.GetPointData1($"退出时间", 4));

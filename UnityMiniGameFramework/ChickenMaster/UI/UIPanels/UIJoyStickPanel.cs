@@ -252,7 +252,7 @@ namespace UnityMiniGameFramework
 
                     _atkRangeCircleVFX.unityGameObject.SetActive(true);
                     _atkRangeCircleVFX.unityGameObject.transform.SetParent(_currentPickNPCHero.mapHero.unityGameObject.transform);
-                    _atkRangeCircleVFX.unityGameObject.transform.localPosition = new UnityEngine.Vector3(0, -0.5f, 0);
+                    _atkRangeCircleVFX.unityGameObject.transform.localPosition = new UnityEngine.Vector3(0, 0.5f, 0);
 
                     _atkRangeCircleVFX.SetCircleRange(_currentPickNPCHero.gun.attackRange);
 
@@ -324,16 +324,13 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                _defAreaHeros.Remove(_currentPickNPCHero.heroInfo.defAreaName);
+                // 未解锁英雄区域不能摆放
+                _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
+                _currentPickNPCHero = null;
 
-                _currentPickNPCHero.heroInfo.defAreaName = _currentPickAreaName;
-                _defAreaHeros[_currentPickNPCHero.heroInfo.defAreaName] = _currentPickNPCHero;
-                _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickPosition;
-                _currentPickNPCHero.heroInfo.position.x = _currentPickPosition.x;
-                _currentPickNPCHero.heroInfo.position.y = _currentPickPosition.y;
-                _currentPickNPCHero.heroInfo.position.z = _currentPickPosition.z;
+                return;
             }
-
+            
             _currentPickNPCHero = null;
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
@@ -383,7 +380,7 @@ namespace UnityMiniGameFramework
                 break;
             }
 
-            if (_currentPickAreaName == null)
+            if (_currentPickAreaName == null || !_defAreaHeros.ContainsKey(_currentPickAreaName))
             {
                 _atkRangeCircleVFX.ShowAttackRange(false); // can't put
 
