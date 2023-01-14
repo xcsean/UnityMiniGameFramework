@@ -51,26 +51,20 @@ namespace UnityMiniGameFramework
 
         protected int _produceVer;
         public int produceVer => _produceVer;
+        private bool _init = false;
+        public bool IsActive => _init;
 
-        public bool Init(LocalFactoryInfo facInfo)
+        public bool InitConfig(CMFactoryConf factoryConf)
         {
-            _factoryName = facInfo.mapBuildName;
-            _localFacInfo = facInfo;
-
-            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
-            _factoryConf = cmGame.gameConf.getCMFactoryConf(_factoryName);
-            if (_factoryConf == null)
+            _init = false;
+            if (factoryConf == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory [{_factoryName}] init config not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory  init config not exist");
                 return false;
             }
-
-            if (!_factoryConf.levelConfs.TryGetValue(_localFacInfo.level, out _factoryLevelConf))
-            {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory [{_factoryName}] level [{_localFacInfo.level}] config not exist");
-                return false;
-            }
-
+                
+            _factoryConf = factoryConf;
+            _factoryName = _factoryConf.mapBuildName;
             _mapBuildingObj = null;
             var map = (UnityGameApp.Inst.MainScene.map as Map);
             map.buildings.TryGetValue(_factoryConf.mapBuildName, out _mapBuildingObj);
@@ -102,11 +96,25 @@ namespace UnityMiniGameFramework
                 return false;
             }
 
+            setBuildGray(true);
+            return true;
+        }
+        
+        
+        public bool Init(LocalFactoryInfo facInfo)
+        {
+            _localFacInfo = facInfo;
+            
+            if (!_factoryConf.levelConfs.TryGetValue(_localFacInfo.level, out _factoryLevelConf))
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory [{_factoryName}] level [{_localFacInfo.level}] config not exist");
+                return false;
+            }
+            
             _currentCD = produceCD;
             _produceVer = 0;
             
             //todo:data与control需要分离
-            //todo:箱子初始化显示
             _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
                                                                 ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
                                                                 .currentLevelConf
@@ -114,6 +122,8 @@ namespace UnityMiniGameFramework
             _updateProductBox(factoryConf.outputStorePrefabPath,
                 currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             InitProduceProgressUI();
+            setBuildGray(false);
+            _init = true;
             return true;
         }
 
@@ -411,6 +421,9 @@ namespace UnityMiniGameFramework
         
         public void OnUpdate()
         {
+            if(!_init)
+                return;
+            
             if (currentProductInputStore <= 0)
             {
                 return;
@@ -427,6 +440,18 @@ namespace UnityMiniGameFramework
             _doProduce();
         }
 
+
+        private void setBuildGray(bool isGray)
+        {
+            var acquirer = _mapBuildingObj.unityGameObject.GetComponent<BuildMeshRendererAcquirer>();
+            if (!acquirer)
+                return;
+            if (acquirer.BuildMeshRender == null)
+                return;
+            acquirer.BuildMeshRender.material.SetColor("_MainColor",
+                isGray ? Color.gray : new Color(176.0f / 255, 176.0f / 255, 176.0f / 255));
+
+        }
         public bool checkBuff()
         {
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);

@@ -201,6 +201,7 @@
     <Compile Include="Game\Effect\VFXObjects\VFXFootprintObject.cs" />
     <Compile Include="Game\Effect\VFXObjects\VFXLinerObject.cs" />
     <Compile Include="Game\Effect\VFXObjects\VFXObjectBase.cs" />
+    <Compile Include="Game\Map\BuildMeshRendererAcquirer.cs" />
     <Compile Include="Game\Map\MapActorObject.cs" />
     <Compile Include="Game\Map\MapBuildingObject.cs" />
     <Compile Include="Game\Map\MapHeroObject.cs" />

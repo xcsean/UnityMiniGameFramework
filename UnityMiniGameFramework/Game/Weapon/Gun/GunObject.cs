@@ -644,9 +644,15 @@ namespace UnityMiniGameFramework
                     shootVfx.unityGameObject.transform.rotation = _gunPos.transform.rotation;
                 }
             }
-
-            //Matrix4x4.Rotate(UnityEngine.Quaternion.Euler(_RotationAdd.Value)).MultiplyVector(forward)
+            
             Vector3 gunForward = _gunPos.transform.forward;
+            // if (_currentTarget != null)
+            // {
+            //     gunForward = _currentTarget.unityGameObject.transform.position - _gunPos.transform.position;
+            // }
+            
+            gunForward = (new Vector3(gunForward.x, 0, gunForward.z)).normalized;
+            
             float _base = -90;
             float _add = 180 * 1.0f / _Multiple;
             Vector3 rotationAddVec = Vector3.zero;

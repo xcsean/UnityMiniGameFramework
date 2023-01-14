@@ -263,6 +263,15 @@ namespace UnityMiniGameFramework
             var bi = _baseInfo.getData() as LocalBaseInfo;
             // init storehouse config
             _storeHouse.InitConfig(bi.storeHouse);
+            // init factory config 
+            foreach (var factoryConfig in gameConf.gameConfs.factories.Values)
+            {
+                CMFactory fac = new CMFactory();
+                if (fac.InitConfig(factoryConfig))
+                {
+                    _cmFactories[fac.factoryName] = fac;
+                }
+            }
 
             // init npc heros
             for (int i = 0; i < bi.defenseHeros.Count; ++i)
@@ -280,18 +289,22 @@ namespace UnityMiniGameFramework
             }
 
             // init factories
-            for(int i=0;i< bi.factories.Count; ++i)
+            for (int i = 0; i < bi.factories.Count; ++i)
             {
-                if (bi.factories[i] == null)
+                var factorySaveData = bi.factories[i];
+                if (factorySaveData == null)
                 {
                     continue;
                 }
 
-                // create factory
-                CMFactory fac = new CMFactory();
-                if(fac.Init(bi.factories[i]))
+                // init factory
+                var fac = GetFactory(factorySaveData.mapBuildName);
+                if (fac != null)
                 {
-                    _cmFactories[fac.factoryName] = fac;
+                    if(!fac.Init(factorySaveData))
+                    {
+                        _cmFactories.Remove(factorySaveData.mapBuildName);
+                    }
                 }
             }
 
@@ -572,14 +585,24 @@ namespace UnityMiniGameFramework
             return fac;
         }
 
+        private List<CMFactory> _activeFactories = new List<CMFactory>();
+
         public List<CMFactory> GetFactories()
         {
-            return _cmFactories.Values.ToList();
+            _activeFactories.Clear();
+            //return _cmFactories.Values.ToList();
+            foreach (var fac in _cmFactories.Values)
+            {
+                if (fac.IsActive)
+                    _activeFactories.Add(fac);
+            }
+            
+            return _activeFactories;
         }
 
         public CMFactory AddFactory(string factoryName)
         {
-            CMFactory fac = new CMFactory();
+            //CMFactory fac = new CMFactory();
 
             // new Factory
             var localFacInfo = new LocalFactoryInfo()
@@ -589,11 +612,18 @@ namespace UnityMiniGameFramework
                 buildingInputProduct = null,
                 buildingOutputProduct = null
             };
-
-            if (!fac.Init(localFacInfo))
+            var fac = GetFactory(factoryName);
+            if (fac == null)
             {
                 return null;
             }
+
+            if (!fac.Init(localFacInfo))
+            {
+                _cmFactories.Remove(factoryName);
+                return null;
+            }
+                
 
             _cmFactories[factoryName] = fac;
 
