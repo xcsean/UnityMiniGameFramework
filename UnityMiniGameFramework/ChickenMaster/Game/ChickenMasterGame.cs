@@ -763,17 +763,5 @@ namespace UnityMiniGameFramework
 
             _mainSceneHUDs[npcName] = panel;
         }
-
-        public void sendVideoEvent(int type, string en = "")
-        {
-            if (type == 0) // 打开视频
-            {
-                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{en}"));
-            }
-            else if (type == 1) // 看完视频
-            {
-                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{en}"));
-            }
-        }
     }
 }
