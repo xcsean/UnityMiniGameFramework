@@ -41,7 +41,6 @@ namespace UnityMiniGameFramework
                     {
                         //TODO 看完视频下发奖励
                         MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                        cmGame.sendVideoEvent(1, eventName);
                         UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
                     }
                 });
