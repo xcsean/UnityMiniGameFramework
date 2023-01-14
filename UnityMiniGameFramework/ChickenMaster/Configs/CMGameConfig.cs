@@ -113,6 +113,7 @@ namespace UnityMiniGameFramework
 
         public string productBone { get; set; }
         public JsonConfVector3 productPos { get; set; }
+        public JsonConfVector3 productRotation { get; set; }
         public string productPrefab { get; set; }
     }
 

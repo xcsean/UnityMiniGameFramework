@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiniGameFramework;
 using UnityEngine;
+using GameObject = UnityEngine.GameObject;
 
 namespace UnityMiniGameFramework
 {
@@ -554,6 +556,12 @@ namespace UnityMiniGameFramework
                 _productGameObject.transform.SetParent(_productBone);
                 var pos = _worker.workerConf.productPos;
                 _productGameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
+                var rotation = _worker.workerConf.productRotation;
+                if (rotation != null)
+                {
+                    _productGameObject.transform.localRotation =
+                        UnityEngine.Quaternion.Euler(rotation.x, rotation.y, rotation.z);
+                }
             }
                 
         }

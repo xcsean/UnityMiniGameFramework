@@ -14,6 +14,6 @@ namespace UnityMiniGameFramework
         public static string FireAni = "Fire";
         public static string DieAni = "Die";
         public static string JumpAni = "Jump";
-
+        public static string BuildWorking = "Working";
     }
 }
