@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Profiling;
+using GameObject = MiniGameFramework.GameObject;
+using Matrix4x4 = UnityEngine.Matrix4x4;
 
 namespace UnityMiniGameFramework
 {
@@ -85,7 +88,8 @@ namespace UnityMiniGameFramework
         protected ActorObject _currentTarget;
 
         protected float _hitForce;
-
+        protected int _Multiple;
+        
         protected float _attackRange;
         public float attackRange => _attackRange;
 
@@ -151,6 +155,7 @@ namespace UnityMiniGameFramework
             _name = _conf.name;
 
             _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 0;
+            _Multiple = _conf.FireConf.Multiple.HasValue ? _conf.FireConf.Multiple.Value : 1;            
             _attackRange = GetBaseAttackRange();
             _baseAttackSpeedRate = _conf.FireConf.baseattackspeedrate.HasValue
                 ? _conf.FireConf.baseattackspeedrate.Value
@@ -640,29 +645,34 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            //for(uint i=0; i< projectTileCount; ++i)
-            //{
-            var proj = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.bulletVFX);
-            if (proj == null)
+            //Matrix4x4.Rotate(UnityEngine.Quaternion.Euler(_RotationAdd.Value)).MultiplyVector(forward)
+            Vector3 gunForward = _gunPos.transform.forward;
+            float _base = -90;
+            float _add = 180 * 1.0f / _Multiple;
+            Vector3 rotationAddVec = Vector3.zero;
+            for (uint i = 0; i < _Multiple; ++i)
             {
-                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Gun ({_name}) create projectile ({_conf.FireConf.bulletVFX}) failed.");
-                return false;
+                var proj = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.bulletVFX);
+                if (proj == null)
+                {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                        $"Gun ({_name}) create projectile ({_conf.FireConf.bulletVFX}) failed.");
+                    return false;
+                }
+
+                proj.unityGameObject.layer = UnityEngine.LayerMask.NameToLayer("Self");
+                var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
+                collider.gunObject = this;
+                collider.projVfxObj = proj;
+
+                proj.unityGameObject.transform.SetParent(((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj)
+                    .unityGameObject.transform);
+                proj.unityGameObject.transform.position = _gunPos.transform.position;
+                rotationAddVec.y = _base + _add;
+                proj.unityGameObject.transform.forward = Matrix4x4.Rotate(UnityEngine.Quaternion.Euler(rotationAddVec)).MultiplyVector(gunForward);
+                _base += _add;
+                _currentProjectiles[proj] = null;
             }
-
-            proj.unityGameObject.layer = UnityEngine.LayerMask.NameToLayer("Self");
-            var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
-            collider.gunObject = this;
-            collider.projVfxObj = proj;
-
-            proj.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-            proj.unityGameObject.transform.position = _gunPos.transform.position;
-            proj.unityGameObject.transform.forward = _gunPos.transform.forward;
-
-            // TO DO : 根据i计算朝向
-
-            _currentProjectiles[proj] = null;
-
-            //}
 
             return true;
         }
