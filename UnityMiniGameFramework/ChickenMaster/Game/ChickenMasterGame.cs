@@ -433,13 +433,13 @@ namespace UnityMiniGameFramework
                 products = new Dictionary<string, int>()
             };
 
-            if (offlineAwardConf.products != null)
-            {
-                offlineAwardConf.products = new List<CMOfflineProductAward>();
-            }
+            //if (offlineAwardConf.products != null)
+            //{
+            //    offlineAwardConf.products = new List<CMOfflineProductAward>();
+            //}
             foreach (var prodAwd in offlineAwardConf.products)
             {
-                int count = (int)(prodAwd.countPerSec * offLineMillisecond / 1000);
+                int count = (int)(prodAwd.countPerM * offLineMillisecond / 1000 / 60);
                 if (offlineAward.products.ContainsKey(prodAwd.productName))
                 {
                     offlineAward.products[prodAwd.productName] += count;
@@ -766,29 +766,14 @@ namespace UnityMiniGameFramework
 
         public void sendVideoEvent(int type, string en = "")
         {
-            var bi = _baseInfo.getData() as LocalBaseInfo;
             if (type == 0) // 打开视频
             {
-                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"show video {++bi.videoLog.openAd} times"));
-                if (en.Length > 0) // 分类广告
-                {
-                    if (!bi.videoLog.adEvents.ContainsKey(en))
-                    {
-                        bi.videoLog.adEvents.Add(en, 1);
-                    }
-                    else
-                    {
-                        bi.videoLog.adEvents[en] += 1;
-                    }
-                    UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"show {en} video {bi.videoLog.adEvents[en]} times"));
-                }
+                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{en}"));
             }
             else if (type == 1) // 看完视频
             {
-                //UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"show video {++bi.videoLog.openAd} times"));
+                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{en}"));
             }
-
-            _baseInfo.markDirty();
         }
     }
 }

@@ -253,12 +253,12 @@ namespace UnityMiniGameFramework
     public class CMOfflineItemAward
     {
         public string itemName { get; set; }
-        public float countPerSec { get; set; }
+        public float countPerM { get; set; }
     }
     public class CMOfflineProductAward
     {
         public string productName { get; set; }
-        public float countPerSec { get; set; }
+        public float countPerM { get; set; }
     }
 
     public class CMOfflineAwardConf
