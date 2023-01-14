@@ -35,15 +35,6 @@ namespace UnityMiniGameFramework
         public void SetFollowTarget(Transform trans)
         {
             followTrans = trans;
-
-            unityUIDocument.rootVisualElement.schedule.Execute(() => {
-                if (followTrans != null)
-                {
-                    screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera)
-                        .worldToScreenPos(followTrans.position));
-                    setPoisition(screenPos.x, screenPos.y - 150);
-                }
-            }).Every(20);
         }
 
         public void RefreshInfo(CMHeroConf conf)
@@ -52,6 +43,23 @@ namespace UnityMiniGameFramework
             {
                 _labLockTip.text = $"Unlock at\r\nbattle level {conf.userLevelRequire}";
             }
+        }
+
+        protected void onUpdate()
+        {
+            if (followTrans != null)
+            {
+                screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera)
+                    .worldToScreenPos(followTrans.position));
+                setPoisition(screenPos.x, screenPos.y - 150);
+            }
+        }
+
+        public override void showUI()
+        {
+            base.showUI();
+
+            addUpdate(onUpdate);
         }
     }
 }

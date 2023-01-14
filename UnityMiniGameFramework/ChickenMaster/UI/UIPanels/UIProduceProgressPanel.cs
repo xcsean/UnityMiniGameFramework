@@ -202,14 +202,6 @@ namespace UnityMiniGameFramework
         public void SetFollowTarget(Transform trans)
         {
             followTrans = trans;
-
-            unityUIDocument.rootVisualElement.schedule.Execute(() => {
-                if (followTrans != null && _factoryConf != null)
-                {
-                    screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(followTrans.position));
-                    setPoisition(screenPos.x + _factoryConf.TopUIOffset.x, screenPos.y + _factoryConf.TopUIOffset.y);
-                }
-            }).Every(20);
         }
 
         private float waitIconOpacity = 1f;
@@ -275,6 +267,12 @@ namespace UnityMiniGameFramework
         protected void OnUpdate()
         {
             onUpdate_Popup();
+
+            if (followTrans != null && _factoryConf != null)
+            {
+                screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(followTrans.position));
+                setPoisition(screenPos.x + _factoryConf.TopUIOffset.x, screenPos.y + _factoryConf.TopUIOffset.y);
+            }
 
             if (_CMFactory == null)
             {

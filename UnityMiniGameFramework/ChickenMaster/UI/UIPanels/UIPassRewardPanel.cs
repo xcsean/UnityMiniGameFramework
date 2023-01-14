@@ -161,7 +161,7 @@ namespace UnityMiniGameFramework
                                     int upgradeNeed = gun.Value.gunLevelConf[lv].upgrageCostItemCost;
                                     grid.Q<Label>("progress").text = $"0/{upgradeNeed}";
                                     grid.Q<Label>("lv").text = $"{lv}";
-                                    float prog = (float)have / gun.Value.gunLevelConf[lv].upgrageCostItemCost;
+                                    float prog = have > upgradeNeed ? 1f : ((float)have / upgradeNeed);
                                     grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93));
                                     progs.Add(new ProgressAniParams()
                                     {
@@ -350,10 +350,14 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.Self.AddGold(rewards.gold * triple);
             cmGame.Self.AddExp(rewards.exp * triple);
+
+            List<string> list = new List<string>();
             foreach (var reward in rewards.items)
             {
                 cmGame.Self._RealAddBackpackItem(reward.itemName, reward.count * triple);
+                list.Add(reward.itemName);
             }
+            UnityGameApp.Inst.RESTFulClient.ReportList(UnityGameApp.Inst.AnalysisMgr.GetPointData8(), list);
             hideUI();
         }
 

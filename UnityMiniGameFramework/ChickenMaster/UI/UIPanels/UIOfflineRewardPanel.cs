@@ -19,7 +19,9 @@ namespace UnityMiniGameFramework
         public Button CloseButton;
         public Button VideoGetButton;
         public Label OfflineTimeLabel;
-        public Label RewardLabel;
+        public VisualElement coinGrid;
+        public VisualElement expGrid;
+        public VisualElement meatGrid;
 
         private LocalAwardInfo _offlineReward;
 
@@ -32,7 +34,9 @@ namespace UnityMiniGameFramework
             CloseButton = this._uiObjects["CloseButton"].unityVisualElement as Button;
             VideoGetButton = this._uiObjects["VideoGetButton"].unityVisualElement as Button;
             OfflineTimeLabel = this._uiObjects["OfflineTimeLabel"].unityVisualElement as Label;
-            RewardLabel = this._uiObjects["RewardLabel"].unityVisualElement as Label;
+            coinGrid = this._uiObjects["coinGrid"].unityVisualElement;
+            expGrid = this._uiObjects["expGrid"].unityVisualElement;
+            meatGrid = this._uiObjects["meatGrid"].unityVisualElement;
 
             CloseButton.clicked += onCloseClick;
             VideoGetButton.clicked += onVideoClick;
@@ -46,7 +50,6 @@ namespace UnityMiniGameFramework
         public void showReward(LocalAwardInfo offlineReward, long offLineMillisecond)
         {
             _offlineReward = offlineReward;
-            RewardLabel.text = $"{_offlineReward.gold}";
             int second = (int)(offLineMillisecond / 1000 / 60) * 60; // 分钟向下取整
             var hours = second / (60 * 60);
             var mins = (second - hours * 60 * 60) / 60;
@@ -55,6 +58,24 @@ namespace UnityMiniGameFramework
             str += mins >= 10 ? ":" + mins.ToString() : ":0" + mins.ToString();
             str += secs >= 10 ? ":" + secs.ToString() : ":0" + secs.ToString();
             OfflineTimeLabel.text = $"OFF-LINE TIME: {str}";
+
+            coinGrid.style.display = offlineReward.gold > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            coinGrid.Q<Label>("count").text = $"x{_offlineReward.gold}";
+            expGrid.style.display = offlineReward.exp > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            expGrid.Q<Label>("count").text = $"x{_offlineReward.exp}";
+            meatGrid.style.display = DisplayStyle.None;
+            foreach (var pro in offlineReward.products)
+            {
+                if(pro.Value <= 0)
+                {
+                    continue;
+                }
+                if (pro.Key == "meat")
+                {
+                    meatGrid.style.display = DisplayStyle.Flex;
+                    meatGrid.Q<Label>("count").text = $"x{pro.Value}";
+                }
+            }
 
             this.showUI();
         }
