@@ -77,6 +77,7 @@ namespace UnityMiniGameFramework
             _clickArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             _clickArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
             _clickArea.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
+
         }
 
         protected UnityEngine.Vector2 _transMousePosition(VisualElement ve, UnityEngine.Vector2 mousePos)
@@ -180,6 +181,10 @@ namespace UnityMiniGameFramework
 
         public void OnMouseUp(MouseUpEvent e)
         {
+            if (!_click)
+            {
+                return;
+            }
             _content.transform.position = _panelInitPos;
             _btn.transform.position = _btnInitPos;
 
@@ -194,6 +199,29 @@ namespace UnityMiniGameFramework
             _back.style.visibility = Visibility.Hidden;
 
             _clickArea.ReleaseMouse();
+        }
+
+        /// <summary>
+        /// 处理真机环境 滑动到按钮松手收不到MouseUpEvent事件
+        /// </summary>
+        protected void OnCheckTouchUp()
+        {
+            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
+            {
+                if (UnityEngine.Input.touchCount == 0)
+                {
+                    // mouse up
+                    OnMouseUp(null);
+                }
+            }
+            else
+            {
+                if (!UnityEngine.Input.GetMouseButton(0))
+                {
+                    // mouse up
+                    OnMouseUp(null);
+                }
+            }
         }
 
         /// <summary>
@@ -330,7 +358,7 @@ namespace UnityMiniGameFramework
 
                 return;
             }
-            
+
             _currentPickNPCHero = null;
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
@@ -339,6 +367,8 @@ namespace UnityMiniGameFramework
 
         protected void OnUpdate()
         {
+            OnCheckTouchUp();
+
             // 处理英雄拖动摆放
             if (_currentPickNPCHero == null)
             {
