@@ -232,7 +232,7 @@ namespace UnityMiniGameFramework
 
             if (_curLevelConf == null)
             {
-                labCostCoin.text = $"{_factoryConf.activateGoldCost}";
+                labCostCoin.text = StringUtil.StringNumFormat($"{_factoryConf.activateGoldCost}");
                 labLvCur.text = $"Lv.{0}";
                 labLvNext.text = $"Lv.{1}";
                 labCostCur.text = $"{0}";
@@ -245,7 +245,7 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                labCostCoin.text = $"{_curLevelConf.upgradeGoldCost}";
+                labCostCoin.text = StringUtil.StringNumFormat($"{_curLevelConf.upgradeGoldCost}");
                 labLvCur.text = $"Lv.{curLv}";
                 labLvNext.text = isMaxLV ? $"Lv.Max" : $"Lv.{ curLv + 1}";
                 labCostCur.text = StringUtil.StringNumFormat($"{_curLevelConf.maxInputProductStore}");
