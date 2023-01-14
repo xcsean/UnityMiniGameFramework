@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -173,9 +173,9 @@ namespace UnityMiniGameFramework
         public UnityRESTFulClient RESTFulClient => _restfulClient;
 
         protected Queue<Action> _nextFramePostUpdateCall;
-        
+
         protected HashSet<Action> _updateCall;
-        
+
         public UnityEngine.GameObject CachePoolRoot;
 
         protected float _panelScale;
@@ -229,7 +229,7 @@ namespace UnityMiniGameFramework
         override public void OnUpdate()
         {
             base.OnUpdate();
-            
+
             _vfxManager.OnUpdate(UnityEngine.Time.deltaTime);
             _weaponManager.OnUpdate(UnityEngine.Time.deltaTime);
 
@@ -239,13 +239,12 @@ namespace UnityMiniGameFramework
             //     a();
             // }
             var arry = _updateCall.ToArray();
-            
+
             for (int i = arry.Length - 1; i >= 0; i--)
             {
                 arry[i]();
             }
         }
-
 
         override public void OnAppSuspended()
         {
@@ -253,26 +252,35 @@ namespace UnityMiniGameFramework
             {
                 _datamanager.localUserData.writeBack();
             }
-
-            // 在线时长打点
-            RESTFulClient.Report(AnalysisMgr.GetPointData1($"切后台时间", 2));
+            UnityEngine.Debug.Log("--OnAppSuspended----------------" + DateTime.Now);
+            if ((Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
+            {
+                // 在线时间打点
+                RESTFulClient.Report(AnalysisMgr.GetPointData1($"切后台时间", 2));
+            }
         }
-
         override public void OnAppResume()
         {
-            // 在线时长打点
-            RESTFulClient.Report(AnalysisMgr.GetPointData1($"切前台时间", 3));
+            UnityEngine.Debug.Log("--OnAppResume----------------" + DateTime.Now);
+            if ((Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
+            {
+                // 在线时间打点
+                RESTFulClient.Report(AnalysisMgr.GetPointData1($"切前台时间", 3));
+            }
         }
 
         override public void OnAppExit()
         {
+            UnityEngine.Debug.Log("--OnAppExit----------------" + DateTime.Now);
             if (_datamanager != null)
             {
                 _datamanager.localUserData.writeBack();
             }
-
-            // 在线时长打点
-            RESTFulClient.Report(AnalysisMgr.GetPointData1($"退出时间", 4));
+            if ((Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
+            {
+                // 在线时间打点
+                RESTFulClient.Report(AnalysisMgr.GetPointData1($"退出时间", 4));
+            }
         }
 
         override protected void _createManagers()
@@ -409,7 +417,7 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UIMaskPanel", UIMaskPanel.create);
             _ui.regUIPanelCreator("UITrainStationGoldPopupPanel", UITrainStationGoldPopupPanel.create);
             _ui.regUIPanelCreator("UITowerHeroLockHudPanel", UITowerHeroLockHudPanel.create);
-            
+
             _ui.regUIPanelCreator("UIDoubleAttackPanel", UIDoubleAttackPanel.create);
             _ui.regUIPanelCreator("UIDoubleExpPanel", UIDoubleExpPanel.create);
             _ui.regUIPanelCreator("UIGetSkillPanel", UIGetSkillPanel.create);

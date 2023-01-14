@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -122,7 +122,7 @@ namespace UnityMiniGameFramework
             {
                 _isNewUser = false;
             }
-            // 在线时长打点
+            // 在线时间打点
             UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData1($"登录时间", 1));
 
             (_userInfo.getData() as LocalUserInfo).lastLoginTime = nowMillisecond;
