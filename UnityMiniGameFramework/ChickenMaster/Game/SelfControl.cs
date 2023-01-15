@@ -50,7 +50,7 @@ namespace UnityMiniGameFramework
             _heroUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _heroUI.hideUI();
 
-            foreach(var npcPair in (UnityGameApp.Inst.MainScene.map as Map).npcs)
+            foreach (var npcPair in (UnityGameApp.Inst.MainScene.map as Map).npcs)
             {
                 npcPair.Value.OnMapNPCTriggerEnter += _OnMapNPCTriggerEnter;
                 npcPair.Value.OnMapNPCTriggerStay += _OnMapNPCTriggerStay;
@@ -361,12 +361,12 @@ namespace UnityMiniGameFramework
 
         public void OnUpdate()
         {
-            if(!_isInited)
+            if (!_isInited)
             {
                 return;
             }
 
-            if(_cmGame.uiMainPanel.Joystick.isMoving)
+            if (_cmGame.uiMainPanel.Joystick.isMoving)
             {
                 // TO DO : use rigibody mov
                 //_movAct.moveTo(_selfMapHeroObj.unityGameObject.transform.position + _uiMainPanel.Joystick.movVector3 * 10.0f);
@@ -384,7 +384,7 @@ namespace UnityMiniGameFramework
                 //    _gun.Fire();
                 //}
             }
-            else if(_mapHeroObj.moveAct.isMoving)
+            else if (_mapHeroObj.moveAct.isMoving)
             {
                 _mapHeroObj.moveAct.stop();
 
@@ -408,7 +408,7 @@ namespace UnityMiniGameFramework
                         // last frame is nearby, exit nearby
                         _heroNearState[heroPair.Key] = 0;
 
-                        if(_heroUI.isShow)
+                        if (_heroUI.isShow)
                         {
                             _heroUI.hideUI();
                         }
@@ -449,7 +449,7 @@ namespace UnityMiniGameFramework
         public void AddBackpackProduct(string name, int count)
         {
             LocalPackProductInfo toAddItem = null;
-            for(int i=0; i< _baseInfo.backPackProds.Count; ++i)
+            for (int i = 0; i < _baseInfo.backPackProds.Count; ++i)
             {
                 var item = _baseInfo.backPackProds[i];
                 if (item.productName == name)
@@ -459,7 +459,7 @@ namespace UnityMiniGameFramework
                 }
             }
             int totalCount = count;
-            if(toAddItem != null)
+            if (toAddItem != null)
             {
                 toAddItem.count += count;
                 totalCount = toAddItem.count;
@@ -470,7 +470,7 @@ namespace UnityMiniGameFramework
                 {
                     productName = name,
                     count = count
-                }); 
+                });
             }
 
             _cmGame.baseInfo.markDirty();
@@ -479,7 +479,7 @@ namespace UnityMiniGameFramework
 
             _cmGame.uiMainPanel.refreshMeat();
 
-            if(name == "meat")
+            if (name == "meat")
             {
                 _cmGame.uiMainPanel.addMeat(count);
             }
@@ -498,7 +498,7 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            if(toSubItem == null)
+            if (toSubItem == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"SubBackpackProduct [{name}] not exist");
                 return 0;
@@ -618,12 +618,12 @@ namespace UnityMiniGameFramework
 
         public bool TrySubGold(int gold)
         {
-            if(gold<=0)
+            if (gold <= 0)
             {
                 return false;
             }
 
-            if(_baseInfo.gold < gold)
+            if (_baseInfo.gold < gold)
             {
                 return false;
             }
@@ -639,7 +639,7 @@ namespace UnityMiniGameFramework
         }
         public void AddGold(int gold)
         {
-            if(gold <= 0)
+            if (gold <= 0)
             {
                 return;
             }
@@ -670,9 +670,9 @@ namespace UnityMiniGameFramework
             _baseInfo.exp += exp;
 
             int levelUpExp = _cmGame.gameConf.getLevelUpExpRequire(_baseInfo.level);
-            if(levelUpExp > 0)
+            if (levelUpExp > 0)
             {
-                if(_baseInfo.exp >= levelUpExp)
+                if (_baseInfo.exp >= levelUpExp)
                 {
                     // level up
                     _baseInfo.exp = _baseInfo.exp - levelUpExp;
@@ -685,6 +685,50 @@ namespace UnityMiniGameFramework
             _cmGame.baseInfo.markDirty();
 
             _cmGame.uiMainPanel.refreshExp(_baseInfo.exp, levelUpExp);
+        }
+
+        /// <summary>
+        ///  GM测试
+        /// </summary>
+        public void AddTestLevel(int lv)
+        {
+            if (lv <= 0)
+            {
+                return;
+            }
+
+            int curLv = _baseInfo.level;
+            int curExp = _baseInfo.exp;
+            int addLv = lv;
+
+            var lvConfs = _cmGame.gameConf.gameConfs.levelUpExpRequire;
+            if (lvConfs == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"SelfControl levelUpExpRequire config not exist");
+                return;
+            }
+            while (!lvConfs.ContainsKey(curLv + addLv))
+            {
+                addLv--;
+            }
+            if (addLv <= 0)
+            {
+                return;
+            }
+
+            int needUpExp = _cmGame.gameConf.getLevelUpExpRequire(curLv + addLv - 1);
+            if (needUpExp > 0)
+            {
+                // level up
+                _baseInfo.exp += (needUpExp - curExp);
+                _baseInfo.level = _baseInfo.level + 1;
+
+                // 测试用 刷新ui就行了
+                //_OnLevelUp();
+                _cmGame.uiMainPanel.refreshLevel(_baseInfo.level);
+                _cmGame.uiMainPanel.refreshExp(_baseInfo.exp, needUpExp - curExp);
+                _cmGame.baseInfo.markDirty();
+            }
         }
 
         protected void _OnLevelUp()

@@ -70,6 +70,7 @@ namespace UnityMiniGameFramework
         protected Button _btnSetting;
         protected Button _btnStart;
         protected Button _btnRecover;
+        protected Button _btnGm;
         protected VisualElement _battleStartBtn;
         protected VisualElement _levelsNodes;
         protected VisualElement _bossInfo;
@@ -122,6 +123,7 @@ namespace UnityMiniGameFramework
             _bossInfo = this._uiObjects["BossInfo"].unityVisualElement;
             _battleStartInfo = this._uiObjects["BattleStartInfo"].unityVisualElement;
             _battleStartBtn = this._uiObjects["BattleStartBtn"].unityVisualElement;
+            _btnGm = this._uiObjects["BtnGm"].unityVisualElement as Button;
 
             // 实现中 先隐藏
             _battleStartBtn.style.display = DisplayStyle.None;
@@ -130,6 +132,7 @@ namespace UnityMiniGameFramework
             _btnDoubleExp.clicked += OnDoubleExpBtnClick;
             _btnDoubleAtt.clicked += OnDoubleAttBtnClick;
             _btnSetting.clicked += OnSettiingBtnClick;
+            _btnGm.clicked += OnGmBtnClick;
 
             _btnStart.clicked += onStartLevelClick;
             _btnRecover.clicked += onRecoverClick;
@@ -197,7 +200,7 @@ namespace UnityMiniGameFramework
                 }
             }
         }
-        
+
         public void changeEggState(bool isFighting, float _hp)
         {
             bool isDie = _hp <= 0;
@@ -261,8 +264,19 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnSettiingBtnClick()
         {
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.Self.AddGold(10);
+        }
+
+        /// <summary>
+        /// GM 工具界面
+        /// </summary>
+        protected void OnGmBtnClick()
+        {
+            if (UnityGameApp.Inst.Datas.GetLocalUserConfig().ShowGm)
+            {
+                var _ui = UnityGameApp.Inst.UI.createUIPanel("GMUI") as UIGMPanel;
+                _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+                _ui.showUI();
+            }
         }
 
         public void refreshAll()
@@ -359,7 +373,7 @@ namespace UnityMiniGameFramework
                     {
                         string sign = n > 0 ? "+" : "";
                         var _add = ani.obj.Q<Label>("numLabel");
-                        var color = n > 0 ? new Color(141f / 255, 229f / 255,70f / 255) : new Color(235f / 255, 76f / 255, 14f / 255);
+                        var color = n > 0 ? new Color(141f / 255, 229f / 255, 70f / 255) : new Color(235f / 255, 76f / 255, 14f / 255);
                         _add.style.color = new StyleColor(color);
                         //var color = n > 0 ? "#8DE847FF" : "#E34A18FF";
                         //_add.text = $"<color={color}>{sign}{StringUtil.StringNumFormat(n.ToString())}</color><br>";
@@ -388,7 +402,7 @@ namespace UnityMiniGameFramework
             }
 
             var obj = tipObjs[index];
-            if(obj!= null)
+            if (obj != null)
             {
                 obj.Q<Label>("tipLabel").text = $"{tip}";
                 obj.transform.position = new Vector3(0, 0);
@@ -476,6 +490,7 @@ namespace UnityMiniGameFramework
             //DateTime t = new DateTime((long)(lvl.timeLeft * 1000));
             var t = new TimeSpan((long)(lvl.timeLeft * 10000000));
             string info = $"Time: {t.Minutes}:{t.Seconds}:{t.Milliseconds}";
+            info += $"\r\nGameLevel: {lvl.level}";
             foreach (var kmPair in lvl.kmCount)
             {
                 info += $"\r\n{kmPair.Key} : {kmPair.Value}";
@@ -584,7 +599,7 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            bool changed = false;
+            //bool changed = false;
             for (int i = 0; i < _notifyMessages.Count; ++i)
             {
                 var notify = _notifyMessages[i];
@@ -596,9 +611,9 @@ namespace UnityMiniGameFramework
                     tipObjs.Add(notify.tipObj);
                     _notifyMessages.RemoveAt(i);
                     --i;
-                    changed = true;
+                    //changed = true;
                 }
-                else if(notify.timeLeft >= 0.8f)
+                else if (notify.timeLeft >= 0.8f)
                 {
                     notify.tipObj.transform.position -= new Vector3(0, Time.deltaTime * 200);
                 }

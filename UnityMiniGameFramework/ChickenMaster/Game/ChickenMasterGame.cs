@@ -76,7 +76,7 @@ namespace UnityMiniGameFramework
         {
             _gameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
 
-            if(_gameConf.gameConfs.autoSaveTime <= 0)
+            if (_gameConf.gameConfs.autoSaveTime <= 0)
             {
                 _autoSaveTime = 10000; // auto save per 10 sec 
             }
@@ -85,7 +85,7 @@ namespace UnityMiniGameFramework
                 _autoSaveTime = (long)(_gameConf.gameConfs.autoSaveTime * 1000);
             }
 
-            if(_gameConf.gameConfs.offlineAwardMinTime <= 0)
+            if (_gameConf.gameConfs.offlineAwardMinTime <= 0)
             {
                 _offlineAwardMinTime = 60000; // offline award min time
             }
@@ -108,7 +108,7 @@ namespace UnityMiniGameFramework
                 var userInfo = new LocalUserInfo()
                 {
                     uid = "test",
-                    uuid = $"{nowMillisecond/1000}",
+                    uuid = $"{nowMillisecond / 1000}",
                     lastLoginTime = nowMillisecond,
                     lastOnlineTime = nowMillisecond
                 };
@@ -189,7 +189,7 @@ namespace UnityMiniGameFramework
                 newDataAdded = true;
             }
 
-            if(newDataAdded)
+            if (newDataAdded)
             {
                 // write back
                 await UnityGameApp.Inst.Datas.localUserData.writeBackAsync();
@@ -235,7 +235,7 @@ namespace UnityMiniGameFramework
 
         public void hideAllUI()
         {
-            foreach(var ui in panels)
+            foreach (var ui in panels)
             {
                 ui.display(false);
             }
@@ -301,7 +301,7 @@ namespace UnityMiniGameFramework
                 var fac = GetFactory(factorySaveData.mapBuildName);
                 if (fac != null)
                 {
-                    if(!fac.Init(factorySaveData))
+                    if (!fac.Init(factorySaveData))
                     {
                         _cmFactories.Remove(factorySaveData.mapBuildName);
                     }
@@ -318,14 +318,14 @@ namespace UnityMiniGameFramework
             _trainStation.Init(bi.trainStation);
 
             var tr = UnityGameApp.Inst.MainScene.mapRoot.transform.Find(_gameConf.gameConfs.levelCenterObjectName);
-            if(tr == null)
+            if (tr == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"Main Scene [{UnityGameApp.Inst.MainScene.name}] map root without level center object [{_gameConf.gameConfs.levelCenterObjectName}]");
             }
             else
             {
                 var comp = tr.gameObject.GetComponent<UnityGameObjectBehaviour>();
-                if(comp == null)
+                if (comp == null)
                 {
                     Debug.DebugOutput(DebugTraceType.DTT_Error, $"Main Scene [{UnityGameApp.Inst.MainScene.name}] level center object [{_gameConf.gameConfs.levelCenterObjectName}] without UnityGameObjectBehaviour ");
                 }
@@ -465,7 +465,7 @@ namespace UnityMiniGameFramework
         {
             _self.OnUpdate();
 
-            foreach(var fac in _cmFactories)
+            foreach (var fac in _cmFactories)
             {
                 fac.Value.OnUpdate();
             }
@@ -476,7 +476,7 @@ namespace UnityMiniGameFramework
 
             _trainStation.OnUpdate();
 
-            if(_uiMainPanel != null)
+            if (_uiMainPanel != null)
             {
                 _uiMainPanel.refreshTrainTime(_trainStation.train.timeToTrainArrival);
 
@@ -526,7 +526,7 @@ namespace UnityMiniGameFramework
         public CMNPCHeros AddDefenseHero(string mapHeroName)
         {
             var heroConf = _gameConf.getCMHeroConf(mapHeroName);
-            if(heroConf == null)
+            if (heroConf == null)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"AddDefenseHero [{mapHeroName}] config not exist");
                 return null;
@@ -596,7 +596,7 @@ namespace UnityMiniGameFramework
                 if (fac.IsActive)
                     _activeFactories.Add(fac);
             }
-            
+
             return _activeFactories;
         }
 
@@ -623,7 +623,7 @@ namespace UnityMiniGameFramework
                 _cmFactories.Remove(factoryName);
                 return null;
             }
-                
+
 
             _cmFactories[factoryName] = fac;
 
@@ -640,27 +640,36 @@ namespace UnityMiniGameFramework
 
         public CMDefenseLevelConf GetCurrentDefenseLevelConf()
         {
-            var divideList = new List<CMDefenseLevelConf>();
             var bi = (_baseInfo.getData() as LocalBaseInfo);
-            foreach(var lvlConf in _gameConf.gameConfs.defenseLevels)
+            return GetDefenseLevelConf(bi.currentLevel);
+        }
+
+        /// <summary>
+        /// 关卡配置
+        /// </summary>
+        public CMDefenseLevelConf GetDefenseLevelConf(int level)
+        {
+            var divideList = new List<CMDefenseLevelConf>();
+            int _currentLevel = level;
+            foreach (var lvlConf in _gameConf.gameConfs.defenseLevels)
             {
                 // 配置level的，指定该关卡为大Boss关
-                if (lvlConf.level == bi.currentLevel)
+                if (lvlConf.level == _currentLevel)
                 {
                     return lvlConf;
                 }
                 // 配置levelDivide的，指定间隔关卡为小Boss关，比如每5关和每10关一个小boss，优先第一个满足条件的
-                if (lvlConf.levelDivide > 0 && bi.currentLevel % lvlConf.levelDivide == 0)
+                if (lvlConf.levelDivide > 0 && _currentLevel % lvlConf.levelDivide == 0)
                 {
                     divideList.Add(lvlConf);
                 }
             }
 
-            if(divideList.Count >  0)
+            if (divideList.Count > 0)
             {
                 foreach (var lvlConf in divideList)
                 {
-                    if (bi.currentLevel >= lvlConf.levelRangeMin && bi.currentLevel <= lvlConf.levelRangeMax)
+                    if (_currentLevel >= lvlConf.levelRangeMin && _currentLevel <= lvlConf.levelRangeMax)
                     {
                         return lvlConf;
                     }
@@ -669,7 +678,7 @@ namespace UnityMiniGameFramework
 
             foreach (var lvlConf in _gameConf.gameConfs.defenseLevels)
             {
-                if (bi.currentLevel >= lvlConf.levelRangeMin && bi.currentLevel <= lvlConf.levelRangeMax)
+                if (_currentLevel >= lvlConf.levelRangeMin && _currentLevel <= lvlConf.levelRangeMax)
                 {
                     return lvlConf;
                 }
@@ -685,7 +694,7 @@ namespace UnityMiniGameFramework
             var map = (UnityGameApp.Inst.MainScene.map as Map);
             foreach (var building in map.buildings)
             {
-               createBuildingsHUD(building.Value, building.Key);
+                createBuildingsHUD(building.Value, building.Key);
             }
             foreach (var npc in map.npcs)
             {

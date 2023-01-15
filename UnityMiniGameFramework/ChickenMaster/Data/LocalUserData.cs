@@ -101,6 +101,11 @@ namespace UnityMiniGameFramework
         public long factory6Productivity { get; set; }
     }
 
+    public class LocalUserConfig
+    {
+        public bool ShowGm { get; set; }
+    }
+
     public class LocalBaseInfo
     {
         public int gold { get; set; }
@@ -167,7 +172,7 @@ namespace UnityMiniGameFramework
         override public async Task writeBackAsync()
         {
             await base.writeBackAsync();
-            
+
             localProvider.writeFile(this.name);
         }
     }

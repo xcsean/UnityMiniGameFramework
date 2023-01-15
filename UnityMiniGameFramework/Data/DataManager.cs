@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MiniGameFramework;
+
 namespace UnityMiniGameFramework
 {
     public class DataManager
@@ -36,7 +38,7 @@ namespace UnityMiniGameFramework
         public async Task CreateLocalUserDataAsync()
         {
             _localUserData = _localDataProvider.CreateData("user") as LocalUserData;
-            if(_localUserData == null)
+            if (_localUserData == null)
             {
                 return;
             }
@@ -62,5 +64,22 @@ namespace UnityMiniGameFramework
             }
             await _netPackageData.initFromProviderAsync();
         }
+
+        private LocalUserConfig _localUserConfig;
+        public LocalUserConfig GetLocalUserConfig()
+        {
+            if (_localUserConfig == null)
+            {
+                string jsonStr = GameApp.Inst.File.readStringFrom("/localStorage/UserConfig.json");
+                var jsonObj = JsonUtil.FromJson<LocalUserConfig>(jsonStr);
+                if (jsonObj != null)
+                {
+                    _localUserConfig = jsonObj;
+                }
+            }
+
+            return _localUserConfig;
+        }
+
     }
 }

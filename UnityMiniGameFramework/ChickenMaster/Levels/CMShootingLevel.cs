@@ -18,7 +18,9 @@ namespace UnityMiniGameFramework
         CMDefenseLevelAward _levelFisrtCompleteAward;
         UILevelMainPanel _levelUI;
         UIGameMainPanel _mainUI;
+
         int _level;
+        public int level => _level;
 
         public static CMShootingLevel create()
         {
@@ -40,17 +42,17 @@ namespace UnityMiniGameFramework
             _level = level;
             int levelRange = defLevelConf.levelRangeMax - defLevelConf.levelRangeMin;
 
-            for(int i=0; i< _monSpawns.Count; ++i)
+            for (int i = 0; i < _monSpawns.Count; ++i)
             {
                 var sp = _monSpawns[i];
-                if(defLevelConf.monsterLvRanges != null && defLevelConf.monsterLvRanges.ContainsKey(sp.mapMonSpawn.conf.monsterConfName))
+                if (defLevelConf.monsterLvRanges != null && defLevelConf.monsterLvRanges.ContainsKey(sp.mapMonSpawn.conf.monsterConfName))
                 {
                     var monLvRange = defLevelConf.monsterLvRanges[sp.mapMonSpawn.conf.monsterConfName];
                     int monLv = monLvRange.levelRangeMin;
                     if (levelRange > 0)
                     {
                         // calc monster level
-                        monLv = monLvRange.levelRangeMin + (monLvRange.levelRangeMax - monLvRange.levelRangeMin) * (level-1) / levelRange;
+                        monLv = monLvRange.levelRangeMin + (monLvRange.levelRangeMax - monLvRange.levelRangeMin) * (level - 1) / levelRange;
                     }
                     sp.mapMonSpawn.SetSpawnMonsterLevel(monLv);
                 }
@@ -74,7 +76,7 @@ namespace UnityMiniGameFramework
         protected int _dropRoll(CMDropRoll r)
         {
             var j = UnityGameApp.Inst.Rand.RandomBetween(0, 100000000);
-            if(j < r.rate)
+            if (j < r.rate)
             {
                 return UnityGameApp.Inst.Rand.RandomBetween(r.min, r.max);
             }
@@ -85,7 +87,7 @@ namespace UnityMiniGameFramework
         protected CMNamedDrop _dropSet(List<CMNamedDropSet> list)
         {
             int rateTotal = 0;
-            foreach(var d in list)
+            foreach (var d in list)
             {
                 rateTotal += d.rate;
             }
@@ -96,7 +98,7 @@ namespace UnityMiniGameFramework
             foreach (var d in list)
             {
                 curRate += d.rate;
-                if(j < curRate)
+                if (j < curRate)
                 {
                     return new CMNamedDrop()
                     {
@@ -119,7 +121,7 @@ namespace UnityMiniGameFramework
 
             // read drop from config and do drop
             var drop = (UnityGameApp.Inst.Game as ChickenMasterGame).gameConf.getMonsterDrops(mon.name, mon.level);
-            if(drop == null)
+            if (drop == null)
             {
                 return;
             }
@@ -131,21 +133,21 @@ namespace UnityMiniGameFramework
                 exp = _dropRoll(drop.exp);
             }
             int gold = 0;
-            if(drop.gold != null)
-            { 
+            if (drop.gold != null)
+            {
                 gold = _dropRoll(drop.gold);
-            }    
+            }
 
-            if(gold > 0)
+            if (gold > 0)
             {
                 (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddGold(gold);
             }
-            if(exp > 0)
+            if (exp > 0)
             {
                 (UnityGameApp.Inst.Game as ChickenMasterGame).Self.AddExp(exp);
             }
 
-            if(drop.product != null)
+            if (drop.product != null)
             {
                 var prodDrop = _dropSet(drop.product);
                 if (prodDrop.count > 0)
@@ -154,7 +156,7 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            if(drop.item != null)
+            if (drop.item != null)
             {
                 var itemDrop = _dropSet(drop.item);
                 if (itemDrop.count > 0)
@@ -173,7 +175,7 @@ namespace UnityMiniGameFramework
 
         public override void OnMapLevelTriggerEnter(string triggerObjName, UnityEngine.Collider other)
         {
-            if(triggerObjName == "EggTrigger")
+            if (triggerObjName == "EggTrigger")
             {
                 _OnEggTriggerEnter(other);
             }
@@ -185,7 +187,7 @@ namespace UnityMiniGameFramework
         protected void _OnEggTriggerEnter(UnityEngine.Collider other)
         {
             var ugObj = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
-            if(ugObj == null)
+            if (ugObj == null)
             {
                 return;
             }
@@ -209,7 +211,7 @@ namespace UnityMiniGameFramework
 
         protected override bool _checkFinish()
         {
-            if((UnityGameApp.Inst.Game as ChickenMasterGame).Egg.HP <= 0)
+            if ((UnityGameApp.Inst.Game as ChickenMasterGame).Egg.HP <= 0)
             {
                 // egg hp <= 0, failed
                 _OnLose();
@@ -233,7 +235,7 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
 
-            if(bi.currentLevel == _level)
+            if (bi.currentLevel == _level)
             {
                 bi.currentLevel++;
                 if (bi.currentLevel > cmGame.gameConf.maxDefenseLevelCount)
