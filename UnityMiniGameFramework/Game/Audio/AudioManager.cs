@@ -12,8 +12,10 @@ namespace UnityMiniGameFramework
     {
         public static AudioManager Instance => _instance;
         private static AudioManager _instance;
-        public AudioSource m_bgmSource;
-        public GameObject m_audioObjOrigin;
+        [SerializeField]
+        private AudioSource m_bgmSource;
+        [SerializeField]
+        private GameObject m_audioObjOrigin;
 
         private List<AudioSource> m_activeAduioSources = new List<AudioSource>(20);
         private Stack<AudioSource> m_sfxSourcePool = new Stack<AudioSource>(30);

@@ -26,6 +26,7 @@ namespace UnityMiniGameFramework
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
+            UnityGameApp.Inst.AudioManager.PlayBGM("Audio/BGM/ui_bg");
             btnStart = this._uiObjects["enterGameButton"].unityVisualElement as Button;
             bar = _uiObjects["Bar"].unityVisualElement;
             barbg = _uiObjects["Progress"].unityVisualElement;
