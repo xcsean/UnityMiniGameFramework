@@ -57,9 +57,6 @@ namespace UnityMiniGameFramework
 
         public void PlayBGM(string clipName)
         {
-            if(true)
-                return;
-            
             if(string.IsNullOrEmpty(clipName))
                 return;
             if (m_bgmSource.isPlaying && m_lastBGMName == clipName)
