@@ -10,6 +10,7 @@ namespace UnityMiniGameFramework
     public class CMNPCHeros : CMHeros
     {
         protected CMHeroConf _conf;
+        public CMHeroConf conf => _conf;
         protected AIGunFireTarget _fireTargetAI;
         // 选中拖动
         public bool isPicked;
@@ -302,6 +303,41 @@ namespace UnityMiniGameFramework
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// GM工具 修改武器等级
+        /// </summary>
+        public void GM_TryUpgradeWeapon(int weaponId, int level)
+        {
+            var _cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var gunInfo = _cmGame.GetWeaponInfo(weaponId);
+            if (gunInfo == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error, $"GM_TryUpgradeWeapon [{weaponId}] not exist");
+                return;
+            }
+            var cmGunConf = _cmGame.gameConf.getCMGunConf(weaponId);
+            
+            int setLv = level;
+            while (level >= 0 && !cmGunConf.gunLevelConf.ContainsKey(setLv))
+            {
+                setLv--;
+            }
+            if (setLv <= 0)
+            {
+                return;
+            }
+            if (gunInfo.level == setLv)
+            {
+                return;
+            }
+            gunInfo.level = setLv;
+
+            if (weaponId == heroInfo.holdWeaponId)
+            {
+                _recalcAttack();
+            }
         }
     }
 }

@@ -235,19 +235,23 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
 
-            if (bi.currentLevel == _level)
+            // 配合GM工具挑战任意关卡
+            bool hasPassReward = _level > bi.currentLevel;
+            bi.currentLevel = bi.currentLevel == _level ? (_level + 1) : _level;
+
+            //if (bi.currentLevel == _level)
+            //{
+            //bi.currentLevel++;
+            if (bi.currentLevel > cmGame.gameConf.maxDefenseLevelCount)
             {
-                bi.currentLevel++;
-                if (bi.currentLevel > cmGame.gameConf.maxDefenseLevelCount)
-                {
-                    // max level reached
-                    bi.currentLevel = cmGame.gameConf.maxDefenseLevelCount;
-                }
-
-                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData3($"当前关卡：{bi.currentLevel}"));
-
-                _mainUI.refreshCurrentLevel(bi.currentLevel);
+                // max level reached
+                bi.currentLevel = cmGame.gameConf.maxDefenseLevelCount;
             }
+
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData3($"当前关卡：{bi.currentLevel}"));
+
+            _mainUI.refreshCurrentLevel(bi.currentLevel);
+            //}
 
             //if(bi.currentFetchedAwardLevel < bi.currentLevel)
             //{
@@ -271,10 +275,13 @@ namespace UnityMiniGameFramework
             // for Debug ...
             cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level Win !");
 
-            // show pass-reward
-            UIPassRewardPanel _passUI = UnityGameApp.Inst.UI.createUIPanel("PassRewardUI") as UIPassRewardPanel;
-            _passUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
-            _passUI.showUI();
+            if (hasPassReward)
+            {
+                // show pass-reward
+                UIPassRewardPanel _passUI = UnityGameApp.Inst.UI.createUIPanel("PassRewardUI") as UIPassRewardPanel;
+                _passUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+                _passUI.showUI();
+            }
         }
 
         protected override void _OnLose()

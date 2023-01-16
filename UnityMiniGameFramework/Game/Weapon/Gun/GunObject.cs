@@ -112,6 +112,11 @@ namespace UnityMiniGameFramework
             _attackRange = GetBaseAttackRange();
             _attackRange += rangeAdd;
         }
+        
+        public void SetAttackRange(float range)
+        {
+            _attackRange = range;
+        }
 
         private float GetBaseAttackRange()
         {
@@ -186,6 +191,16 @@ namespace UnityMiniGameFramework
         public void UpdateFireCd(int weaponLevelAttackSpeed)
         {
             _fireCd = _baseAttackSpeedRate * 1.0f / weaponLevelAttackSpeed;
+        }
+        
+        /// <summary>
+        /// GM工具
+        /// </summary>
+        /// <param name="weaponLevelAttackSpeed"></param>
+        public void GM_UpdateFireCd(int weaponLevelAttackSpeed)
+        {
+            UpdateFireCd(weaponLevelAttackSpeed);
+            _currCD = _fireCd;
         }
         
         public virtual void Fire(ActorObject target)
