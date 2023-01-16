@@ -32,7 +32,7 @@ namespace UnityMiniGameFramework
         public static void showAutoAd(Action callball, string eventName = "")
         {
 
-            if (SDKManager._sdk != null)
+            if (!SDKManager._sdk.isNull())
             {
                 //UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{eventName}"));
                 SDKManager._sdk.showAutoAd((SdkEvent args) =>

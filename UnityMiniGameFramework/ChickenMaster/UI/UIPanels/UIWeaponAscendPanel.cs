@@ -57,6 +57,7 @@ namespace UnityMiniGameFramework
 
                 _labGunName.text = "";
                 _labGunStar.text = "0";
+                _sprGunIcon.style.backgroundImage = null;
             }
             else
             {
@@ -69,6 +70,14 @@ namespace UnityMiniGameFramework
 
                 _labGunName.text = $"{gunConf.id}";
                 _labGunStar.text = $"{gunInfo.level}";
+
+                var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/weapons/{gunConf.weaponIcon}");
+                if (tx != null)
+                {
+                    _sprGunIcon.style.backgroundImage = tx;
+                    _sprGunIcon.style.width = tx.width;
+                    _sprGunIcon.style.height = tx.height;
+                }
             }
 
             showUI();
