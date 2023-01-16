@@ -54,7 +54,8 @@ namespace UnityMiniGameFramework
                 new GMItem(){ name = "挑战关卡", resID = "", count = 100 },
                 new GMItem(){ name = "武器等级", resID = "", count = 5 },
                 new GMItem(){ name = "武器攻速", resID = "", count = 400 },
-                new GMItem(){ name = "武器范围", resID = "", count = 10 }
+                new GMItem(){ name = "武器范围", resID = "", count = 10 },
+                new GMItem(){ name = "Log", resID = "", count = 10 }
              };
 
             FindUI();
@@ -204,6 +205,11 @@ namespace UnityMiniGameFramework
                     int weaponId3 = int.Parse(GetItemID());
                     logStr = $"GM工具，设置{gmName},ID:{weaponId3},数量:{amount}";
                     modifyWeaponRange(weaponId3, amount);
+                    break;
+                case "Log":
+                    var _ui = UnityGameApp.Inst.UI.createUIPanel("GMLogUI") as UIGMLogPanel;
+                    _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+                    _ui.showUI();
                     break;
                 default:
                     isPrint = false;
