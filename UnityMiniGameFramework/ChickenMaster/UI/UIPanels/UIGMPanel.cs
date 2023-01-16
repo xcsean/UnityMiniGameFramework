@@ -50,11 +50,11 @@ namespace UnityMiniGameFramework
             {
                 new GMItem(){ name = "金币", resID = "", count = 1000 },
                 new GMItem(){ name = "鸡肉", resID = "", count = 1000 },
-                new GMItem(){ name = "等级", resID = "", count = 1 },
-                new GMItem(){ name = "挑战关卡", resID = "", count = 1 },
-                new GMItem(){ name = "武器等级", resID = "", count = 1 },
-                new GMItem(){ name = "武器攻速", resID = "", count = 100 },
-                new GMItem(){ name = "武器范围", resID = "", count = 5 }
+                new GMItem(){ name = "等级", resID = "", count = 10 },
+                new GMItem(){ name = "挑战关卡", resID = "", count = 100 },
+                new GMItem(){ name = "武器等级", resID = "", count = 5 },
+                new GMItem(){ name = "武器攻速", resID = "", count = 400 },
+                new GMItem(){ name = "武器范围", resID = "", count = 10 }
              };
 
             FindUI();

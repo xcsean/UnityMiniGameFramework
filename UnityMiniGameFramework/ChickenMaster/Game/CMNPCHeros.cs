@@ -314,8 +314,7 @@ namespace UnityMiniGameFramework
             var gunInfo = _cmGame.GetWeaponInfo(weaponId);
             if (gunInfo == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"GM_TryUpgradeWeapon [{weaponId}] not exist");
-                return;
+                gunInfo = _cmGame.AddNewWeaponInfo(weaponId);
             }
             var cmGunConf = _cmGame.gameConf.getCMGunConf(weaponId);
             

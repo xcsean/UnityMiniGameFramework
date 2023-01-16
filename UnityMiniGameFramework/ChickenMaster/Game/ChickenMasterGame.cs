@@ -717,16 +717,16 @@ namespace UnityMiniGameFramework
         public CMDefenseLevelConf GetDefenseLevelConf(int level)
         {
             var divideList = new List<CMDefenseLevelConf>();
-            int _currentLevel = level;
+            int _curLevel = level;
             foreach (var lvlConf in _gameConf.gameConfs.defenseLevels)
             {
                 // 配置level的，指定该关卡为大Boss关
-                if (lvlConf.level == _currentLevel)
+                if (lvlConf.level == _curLevel)
                 {
                     return lvlConf;
                 }
                 // 配置levelDivide的，指定间隔关卡为小Boss关，比如每5关和每10关一个小boss，优先第一个满足条件的
-                if (lvlConf.levelDivide > 0 && _currentLevel % lvlConf.levelDivide == 0)
+                if (lvlConf.levelDivide > 0 && _curLevel % lvlConf.levelDivide == 0)
                 {
                     divideList.Add(lvlConf);
                 }
@@ -736,7 +736,7 @@ namespace UnityMiniGameFramework
             {
                 foreach (var lvlConf in divideList)
                 {
-                    if (_currentLevel >= lvlConf.levelRangeMin && _currentLevel <= lvlConf.levelRangeMax)
+                    if (_curLevel >= lvlConf.levelRangeMin && _curLevel <= lvlConf.levelRangeMax)
                     {
                         return lvlConf;
                     }
@@ -745,7 +745,7 @@ namespace UnityMiniGameFramework
 
             foreach (var lvlConf in _gameConf.gameConfs.defenseLevels)
             {
-                if (_currentLevel >= lvlConf.levelRangeMin && _currentLevel <= lvlConf.levelRangeMax)
+                if (_curLevel >= lvlConf.levelRangeMin && _curLevel <= lvlConf.levelRangeMax)
                 {
                     return lvlConf;
                 }
