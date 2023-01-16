@@ -66,15 +66,32 @@ namespace UnityMiniGameFramework
         }
 
         private LocalUserConfig _localUserConfig;
+        /// <summary>
+        /// 改配置开发时使用
+        /// </summary>
+        public LocalUserConfig localUserConfig => _localUserConfig;
         public LocalUserConfig GetLocalUserConfig()
         {
             if (_localUserConfig == null)
             {
-                string jsonStr = GameApp.Inst.File.readStringFrom("/StreamingAssets/Config/UserConfig.json");
-                var jsonObj = JsonUtil.FromJson<LocalUserConfig>(jsonStr);
-                if (jsonObj != null)
+#if UNITY_ANDROID || UNITY_IPHONE
+                // 手动拷贝
+                string fileName = "/UserConfig.json";
+#else
+                string fileName = "/StreamingAssets/Config/UserConfig.json";
+#endif
+                if (GameApp.Inst.File.isFileExist(fileName))
                 {
-                    _localUserConfig = jsonObj;
+                    string jsonStr = GameApp.Inst.File.readStringFrom(fileName);
+                    var jsonObj = JsonUtil.FromJson<LocalUserConfig>(jsonStr);
+                    if (jsonObj != null)
+                    {
+                        _localUserConfig = jsonObj;
+                    }
+                }
+                else
+                {
+                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"GetLocalUserConfig {fileName} not exist");
                 }
             }
 

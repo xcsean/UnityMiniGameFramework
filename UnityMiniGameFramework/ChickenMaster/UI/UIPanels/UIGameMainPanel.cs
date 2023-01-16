@@ -271,7 +271,7 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnGmBtnClick()
         {
-            if (UnityGameApp.Inst.Datas.GetLocalUserConfig().ShowGm)
+            if (UnityGameApp.Inst.Datas.localUserConfig != null && UnityGameApp.Inst.Datas.localUserConfig.ShowGm)
             {
                 var _ui = UnityGameApp.Inst.UI.createUIPanel("GMUI") as UIGMPanel;
                 _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);

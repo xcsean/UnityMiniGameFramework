@@ -97,6 +97,7 @@ namespace UnityMiniGameFramework
             long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
 
             await UnityGameApp.Inst.Datas.CreateLocalUserDataAsync();
+            UnityGameApp.Inst.Datas.GetLocalUserConfig();
 
             bool newDataAdded = false;
             _userInfo = UnityGameApp.Inst.Datas.localUserData.getData("userInfo");
