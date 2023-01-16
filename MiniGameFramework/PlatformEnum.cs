@@ -6,5 +6,6 @@ namespace MiniGameFramework
         PlatformEditor = 1,
         PlatformAndroid = 2,
         PlatformIPhone = 3,
+        PlatformEditorMac = 5,
     }
 }

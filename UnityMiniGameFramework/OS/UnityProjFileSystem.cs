@@ -106,6 +106,10 @@ namespace UnityMiniGameFramework
         public string readStringFromStreamPath(string filename)
         {
             string path = Application.streamingAssetsPath + filename;
+            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformEditorMac)
+            {
+                path = "file://" + path;
+            }
             WWW www = new WWW(path);
             while (!www.isDone)
             {

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{38696FFD-A74A-4B69-A44B-79E528B660AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UnityMiniGameFramework</RootNamespace>
+    <AssemblyName>UnityMiniGameFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.7.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.7.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChickenMaster\Configs\CMGameConfig.cs" />
+    <Compile Include="ChickenMaster\Game\AIState\AIMoveProduct.cs" />
+    <Compile Include="ChickenMaster\Game\ChickenMasterGame.cs" />
+    <Compile Include="ChickenMaster\Game\CMEgg.cs" />
+    <Compile Include="ChickenMaster\Game\CMFactory.cs" />
+    <Compile Include="ChickenMaster\Game\CMCombatComponent.cs" />
+    <Compile Include="ChickenMaster\Game\CMHeros.cs" />
+    <Compile Include="ChickenMaster\Game\CMNPCHeros.cs" />
+    <Compile Include="ChickenMaster\Game\CMPackage.cs" />
+    <Compile Include="ChickenMaster\Game\CMStoreHouse.cs" />
+    <Compile Include="ChickenMaster\Game\CMTrain.cs" />
+    <Compile Include="ChickenMaster\Game\CMTrainStation.cs" />
+    <Compile Include="ChickenMaster\Game\CMWeapon.cs" />
+    <Compile Include="ChickenMaster\Game\CMWorker.cs" />
+    <Compile Include="ChickenMaster\Levels\CMShootingLevel.cs" />
+    <Compile Include="ChickenMaster\UI\UIControls\UIFactoryControl.cs" />
+    <Compile Include="ChickenMaster\UI\UIControls\UIHeroControl.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIGMPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIMaskPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UITowerHeroLockHudPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationGoldPopupPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationCapatityPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UICommonFactoryPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIDoubleAttackPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIDoubleExpPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIEggPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIFactoryPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIGameMainPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIGetSkillPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIHeroPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIJoyStickPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UILevelEntryPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIControls\UILevelStateControl.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIFlagMainPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UILevelMainPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIOfflineRewardPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIOpeningCartoonPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIPassRewardPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIProduceProgressPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UISkillUpgradePanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIStorehouseCapacityPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIStoreHousePanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UITowerHeroPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIWeaponAscendPanel.cs" />
+    <Compile Include="Configs\AnalysisConfig.cs" />
+    <Compile Include="Configs\CharacterConfig.cs" />
+    <Compile Include="Configs\MapActorObjectConfigs.cs" />
+    <Compile Include="Configs\MapConfig.cs" />
+    <Compile Include="Configs\NetWorkConfig.cs" />
+    <Compile Include="Configs\VFXConfig.cs" />
+    <Compile Include="Configs\WeaponConfig.cs" />
+    <Compile Include="Data\AnalysisDataManager.cs" />
+    <Compile Include="Data\DataManager.cs" />
+    <Compile Include="ChickenMaster\Data\LocalUserData.cs" />
+    <Compile Include="ChickenMaster\Data\NetPackageData.cs" />
+    <Compile Include="ChickenMaster\Data\NetUserData.cs" />
+    <Compile Include="Data\Providers\LocalStorageProvider.cs" />
+    <Compile Include="Data\Providers\RESTFulDataProvider.cs" />
+    <Compile Include="Game\Actors\ActBuf.cs" />
+    <Compile Include="Game\Actors\Action.cs" />
+    <Compile Include="Game\Actors\ActionComponent.cs" />
+    <Compile Include="Game\Actors\ActorObject.cs" />
+    <Compile Include="Game\Actors\Acts\ActAnis.cs" />
+    <Compile Include="Game\Actors\Acts\ActStates.cs" />
+    <Compile Include="Game\Actors\Acts\AniVanishAct.cs" />
+    <Compile Include="Game\Actors\Acts\AttackAct.cs" />
+    <Compile Include="Game\Actors\Acts\MoveAct.cs" />
+    <Compile Include="Game\Actors\Acts\RigibodyDieAct.cs" />
+    <Compile Include="Game\Actors\Acts\RigibodyMoveAct.cs" />
+    <Compile Include="Game\Actors\Acts\RigibodyOnHitAct.cs" />
+    <Compile Include="Game\Actors\CharacterManager.cs" />
+    <Compile Include="Game\Animation\Animation.cs" />
+    <Compile Include="Game\Animation\AnimationManager.cs" />
+    <Compile Include="Configs\AnimationConfig.cs" />
+    <Compile Include="Game\Animation\AnimatorComponent.cs" />
+    <Compile Include="Game\Animation\Skelton.cs" />
+    <Compile Include="Game\Actors\Avatar.cs" />
+    <Compile Include="Game\Actors\AvatarParts.cs" />
+    <Compile Include="Game\Actors\CharacterObject.cs" />
+    <Compile Include="Game\Audio\Audio.cs" />
+    <Compile Include="Game\Audio\AudioManager.cs" />
+    <Compile Include="Game\Battle\BattleUI\BattleNumberEmitter.cs" />
+    <Compile Include="Game\Camera\UnityGameCamera.cs" />
+    <Compile Include="Game\Controller\ActorControllerComponent.cs" />
+    <Compile Include="Game\Controller\AIState\AIGunFireTarget.cs" />
+    <Compile Include="Game\Controller\AIState\AIMoveOnPath.cs" />
+    <Compile Include="Game\Controller\AIState\AIState.cs" />
+    <Compile Include="Game\Controller\AIState\AIStateManager.cs" />
+    <Compile Include="Game\Controller\AIState\AITrace.cs" />
+    <Compile Include="Game\Controller\AIState\AITryAttack.cs" />
+    <Compile Include="Game\Controller\InputActorControllerComp.cs" />
+    <Compile Include="Game\Controller\AIActorControllerComp.cs" />
+    <Compile Include="Game\Controller\NetworkActorControllerComp.cs" />
+    <Compile Include="Game\Effect\VFXObjects\VFXRangeCricle.cs" />
+    <Compile Include="Game\Effect\FootPrint.cs" />
+    <Compile Include="Game\Effect\QuadBatch.cs" />
+    <Compile Include="Game\Effect\VFXManager.cs" />
+    <Compile Include="Game\Effect\VFXObjects\VFXFootprintObject.cs" />
+    <Compile Include="Game\Effect\VFXObjects\VFXLinerObject.cs" />
+    <Compile Include="Game\Effect\VFXObjects\VFXObjectBase.cs" />
+    <Compile Include="Game\Map\BuildMeshRendererAcquirer.cs" />
+    <Compile Include="Game\Map\MapActorObject.cs" />
+    <Compile Include="Game\Map\MapBuildingObject.cs" />
+    <Compile Include="Game\Map\MapHeroObject.cs" />
+    <Compile Include="Game\Map\MapLevel.cs" />
+    <Compile Include="Game\Map\MapManager.cs" />
+    <Compile Include="Game\Map\MapMonsterSpawn.cs" />
+    <Compile Include="Game\Map\MapNPCObject.cs" />
+    <Compile Include="Game\Map\Map.cs" />
+    <Compile Include="Game\Map\MapItemComponent.cs" />
+    <Compile Include="Game\Map\MapMonsterObject.cs" />
+    <Compile Include="Game\Map\MapRoleObject.cs" />
+    <Compile Include="Game\Map\MapVehicleObject.cs" />
+    <Compile Include="Game\Scene\Scene.cs" />
+    <Compile Include="Game\Scene\UnitySceneManager.cs" />
+    <Compile Include="ChickenMaster\Game\SelfControl.cs" />
+    <Compile Include="Game\UnityGameObject.cs" />
+    <Compile Include="Game\Weapon\CombatComponent.cs" />
+    <Compile Include="Game\Weapon\ExplosiveObject.cs" />
+    <Compile Include="Game\Weapon\Gun\GunObject.cs" />
+    <Compile Include="Game\Weapon\WeaponManager.cs" />
+    <Compile Include="Game\Weapon\WeaponObject.cs" />
+    <Compile Include="Interface\Game\IHeightMap.cs" />
+    <Compile Include="Network\NetworkDatas\UserDatas.cs" />
+    <Compile Include="Network\RESTFulAPIStructs.cs" />
+    <Compile Include="Network\UnityNetworkClient.cs" />
+    <Compile Include="Network\UnityRESTFulClient.cs" />
+    <Compile Include="OS\Randomness.cs" />
+    <Compile Include="OS\UnityProjFileSystem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\UnityGameObjectPool.cs" />
+    <Compile Include="Resource\UnityResourceManager.cs" />
+    <Compile Include="SDK\SDKBehaviour.cs" />
+    <Compile Include="SDK\ISDK.cs" />
+    <Compile Include="SDK\SDKManager.cs" />
+    <Compile Include="ChickenMaster\Game\CMToponSDK.cs" />
+    <Compile Include="SDK\SDKStructs.cs" />
+    <Compile Include="UI\UIInputManager.cs" />
+    <Compile Include="UI\UIObject.cs" />
+    <Compile Include="UI\UIPanel.cs" />
+    <Compile Include="UI\Controls\UIJoyStickControl.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIMainPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIPanelStartMain.cs" />
+    <Compile Include="UI\UIPanels\UIPreloaderPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UIPanels\UIUpgradePanel.cs" />
+    <Compile Include="UI\UITemplatePanels\UIPopupPanel.cs" />
+    <Compile Include="UI\DragManipulator.cs" />
+    <Compile Include="UI\UIWidget\UIImageNumText.cs" />
+    <Compile Include="UI\UIWidget\UIImageText.cs" />
+    <Compile Include="UnityGameApp.cs" />
+    <Compile Include="Utility\StringUtil.cs" />
+    <Compile Include="Utility\TransformHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MiniGameFramework\MiniGameFramework.csproj">
+      <Project>{7b1cef1e-f39a-4e1d-a7a3-0e9e8d83a24a}</Project>
+      <Name>MiniGameFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\Datas\" />
+    <Folder Include="Game\Projectile\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cp $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
+cp $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
+  </PropertyGroup>
+</Project>
