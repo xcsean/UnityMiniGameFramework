@@ -586,6 +586,20 @@ namespace UnityMiniGameFramework
             return fac;
         }
 
+        /// <summary>
+        /// 工厂是否激活
+        /// </summary>
+        public bool GetFactoryIsActive(string factoryName)
+        {
+            CMFactory fac = null;
+            _cmFactories.TryGetValue(factoryName, out fac);
+            if (fac != null && fac.IsActive)
+            {
+                return true;
+            }
+            return false;
+        }
+
         private List<CMFactory> _activeFactories = new List<CMFactory>();
 
         public List<CMFactory> GetFactories()
@@ -723,13 +737,12 @@ namespace UnityMiniGameFramework
                     return;
                 }
 
-                CMFactory cmFac = GetFactory(buildingName);
-
                 var panel = UnityGameApp.Inst.UI.createNewUIPanel("TowerHeroLockHudUI") as UITowerHeroLockHudPanel;
                 panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
                 panel.RefreshInfo(_factoryConf.userLevelRequire);
                 panel.SetFollowTarget(gObj.unityGameObject.transform);
                 panel.showUI();
+                panel.activeLabLock(false);
 
                 _mainSceneHUDs[buildingName] = panel;
             }
@@ -769,6 +782,7 @@ namespace UnityMiniGameFramework
             panel.RefreshInfo(_conf.userLevelRequire);
             panel.SetFollowTarget(gObj.unityGameObject.transform);
             panel.showUI();
+            panel.activeSprLock(false);
 
             _mainSceneHUDs[npcName] = panel;
         }

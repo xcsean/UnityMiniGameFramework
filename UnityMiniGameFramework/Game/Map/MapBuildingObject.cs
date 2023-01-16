@@ -117,27 +117,15 @@ namespace UnityMiniGameFramework
             var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
             if(comp != null && comp.mgGameObject.type == "MapHeroObject" && (comp.mgGameObject as MapHeroObject).isSelf)
             {
-                // player
-
-                //if (_mapBuildingConf.uiPanelName != null)
-                //{
-                //    if (_buildingUIPanel == null)
-                //    {
-                //        // create UI
-                //        _buildingUIPanel = UnityGameApp.Inst.UI.createUIPanel(_mapBuildingConf.uiPanelName) as UIPanel;
-                //        if (_buildingUIPanel == null)
-                //        {
-                //            Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map Building [{_name}] without ui panel [{_mapBuildingConf.uiPanelName}]");
-                //            return;
-                //        }
-                //        _buildingUIPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
-                //    }
-                //    if (_buildingUIPanel is UICommonFactoryPanel _factoryUI)
-                //    {
-                //        _factoryUI.InitFactoryInfo(unityGameObject.GetComponent<UnityGameObjectBehaviour>().mgGameObjectConfigName);
-                //    }
-                //    _buildingUIPanel.showUI();
-                //}
+                // 未解锁提示
+                string factoryName = unityGameObject.GetComponent<UnityGameObjectBehaviour>().mgGameObjectConfigName;
+                var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+                if (!cmGame.GetFactoryIsActive(factoryName) && cmGame.mainSceneHUDs.ContainsKey(factoryName))
+                {
+                    var panel = cmGame.mainSceneHUDs[unityGameObject.GetComponent<UnityGameObjectBehaviour>().mgGameObjectConfigName] as UITowerHeroLockHudPanel;
+                    panel.showUI();
+                    panel.activeLabLock(true);
+                }
             }
         }
         public void OnMapBuildingTriggerStay(string triggerObjectName, UnityEngine.Collider other)
@@ -179,25 +167,34 @@ namespace UnityMiniGameFramework
                     }
                 }
             }
-
         }
+
         public void OnMapBuildingTriggerExit(string triggerObjectName, UnityEngine.Collider other)
         {
-            if (_buildingUIPanel != null)
+            var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
+            if (comp != null && comp.mgGameObject.type == "MapHeroObject" && (comp.mgGameObject as MapHeroObject).isSelf)
             {
-                var comp = other.gameObject.GetComponent<UnityGameObjectBehaviour>();
-                if (comp != null && comp.mgGameObject.type == "MapHeroObject" && (comp.mgGameObject as MapHeroObject).isSelf)
+                // 未解锁提示
+                string factoryName = unityGameObject.GetComponent<UnityGameObjectBehaviour>().mgGameObjectConfigName;
+                var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+                if (!cmGame.GetFactoryIsActive(factoryName) && cmGame.mainSceneHUDs.ContainsKey(factoryName))
                 {
-                    int nearState = 0;
-                    _buildingNearState.TryGetValue(comp.mgGameObject.name, out nearState);
-                    if (nearState != 0)
-                    {
-                        // last frame is nearby, exit nearby
-                        _buildingNearState[comp.mgGameObject.name] = 0;
-                    }
+                    var panel = cmGame.mainSceneHUDs[unityGameObject.GetComponent<UnityGameObjectBehaviour>().mgGameObjectConfigName] as UITowerHeroLockHudPanel;
+                    panel.showUI();
+                    panel.activeLabLock(false);
+                }
 
-                    // player
+                int nearState = 0;
+                _buildingNearState.TryGetValue(comp.mgGameObject.name, out nearState);
+                if (nearState != 0)
+                {
+                    // last frame is nearby, exit nearby
+                    _buildingNearState[comp.mgGameObject.name] = 0;
+                }
 
+                // player
+                if (_buildingUIPanel != null)
+                {
                     _buildingUIPanel.hideUI();
                 }
             }

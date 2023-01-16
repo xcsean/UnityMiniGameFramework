@@ -33,7 +33,6 @@ namespace UnityMiniGameFramework
         protected Label _labRightPopup;
         protected Label _labStockCnt;
         protected Label _labProduceCnt;
-        protected Label _labLockTip;
         protected VisualElement _sprStockGoods;
         protected VisualElement _sprProduceGoods;
 
@@ -65,7 +64,6 @@ namespace UnityMiniGameFramework
 
         protected void FindUI()
         {
-            _labLockTip = this._uiObjects["labLockTip"].unityVisualElement as Label;
             _labLeftPopup = this._uiObjects["labLeftPopup"].unityVisualElement as Label;
             _labRightPopup = this._uiObjects["labRightPopup"].unityVisualElement as Label;
             _labStockCnt = this._uiObjects["labStockCnt"].unityVisualElement as Label;
@@ -93,14 +91,11 @@ namespace UnityMiniGameFramework
             _CMFactory = _cmFactory;
             if (_CMFactory == null || !_CMFactory.IsActive)
             {
-                _labLockTip.text = $"Unlock at\r\nbattle level {_factoryConf.userLevelRequire}";
-                _labLockTip.style.display = DisplayStyle.Flex;
                 _unlock.style.display = DisplayStyle.None;
                 DoUpdateInputStore(0, 0);
                 DoUpdatePruduceGoods(0, 0);
                 return;
             }
-            _labLockTip.style.display = DisplayStyle.None;
             _unlock.style.display = DisplayStyle.Flex;
 
             _lastUpdateProduceVer = _CMFactory.produceVer;
@@ -270,7 +265,8 @@ namespace UnityMiniGameFramework
 
             if (followTrans != null && _factoryConf != null)
             {
-                screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(followTrans.position));
+                screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera)
+                    .worldToScreenPos(followTrans.position));
                 setPoisition(screenPos.x + _factoryConf.TopUIOffset.x, screenPos.y + _factoryConf.TopUIOffset.y);
             }
 

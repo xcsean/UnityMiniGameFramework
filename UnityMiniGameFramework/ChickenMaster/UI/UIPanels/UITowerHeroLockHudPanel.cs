@@ -22,12 +22,16 @@ namespace UnityMiniGameFramework
         }
 
         protected Label _labLockTip;
+        protected VisualElement _sprLock;
+        protected VisualElement _labLockBg;
 
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
 
             _labLockTip = this._uiObjects["labLockTip"].unityVisualElement as Label;
+            _sprLock = this._uiObjects["sprLock"].unityVisualElement;
+            _labLockBg = this._uiObjects["labLockBg"].unityVisualElement;
         }
 
         private Transform followTrans;
@@ -47,6 +51,18 @@ namespace UnityMiniGameFramework
             {
                 _labLockTip.text = "";
             }
+            _labLockBg.style.display = DisplayStyle.Flex;
+            _sprLock.style.display = DisplayStyle.Flex;
+        }
+
+        public void activeLabLock(bool isShow)
+        {
+            _labLockBg.style.display = isShow ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        public void activeSprLock(bool isShow)
+        {
+            _sprLock.style.display = isShow ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         protected void onUpdate()
