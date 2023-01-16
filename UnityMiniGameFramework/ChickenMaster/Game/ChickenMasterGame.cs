@@ -724,9 +724,9 @@ namespace UnityMiniGameFramework
 
                 CMFactory cmFac = GetFactory(buildingName);
 
-                var panel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
+                var panel = UnityGameApp.Inst.UI.createNewUIPanel("TowerHeroLockHudUI") as UITowerHeroLockHudPanel;
                 panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
-                panel.RefreshInfo(cmFac == null ? null : cmFac, _factoryConf);
+                panel.RefreshInfo(_factoryConf.userLevelRequire);
                 panel.SetFollowTarget(gObj.unityGameObject.transform);
                 panel.showUI();
 
@@ -765,7 +765,7 @@ namespace UnityMiniGameFramework
             }
             var panel = UnityGameApp.Inst.UI.createNewUIPanel("TowerHeroLockHudUI") as UITowerHeroLockHudPanel;
             panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
-            panel.RefreshInfo(_conf);
+            panel.RefreshInfo(_conf.userLevelRequire);
             panel.SetFollowTarget(gObj.unityGameObject.transform);
             panel.showUI();
 

@@ -1,4 +1,4 @@
-using MiniGameFramework;
+﻿using MiniGameFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -136,11 +136,21 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void InitProduceProgressUI()
         {
-            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
-            if (cmGame.mainSceneHUDs.ContainsKey(_factoryConf.mapBuildName))
+            // 激活
+            if (_init)
             {
-                _produceProgressPanel = (cmGame.mainSceneHUDs[_factoryConf.mapBuildName] as UIProduceProgressPanel);
+                var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+                if (cmGame.mainSceneHUDs.ContainsKey(_factoryConf.mapBuildName))
+                {
+                    var panel = (cmGame.mainSceneHUDs[_factoryConf.mapBuildName] as UITowerHeroLockHudPanel);
+                    panel.hideUI();
+                }
+
+                _produceProgressPanel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
+                _produceProgressPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
                 _produceProgressPanel.RefreshInfo(this, _factoryConf);
+                _produceProgressPanel.SetFollowTarget(_mapBuildingObj.unityGameObject.transform);
+                _produceProgressPanel.showUI();
             }
         }
 

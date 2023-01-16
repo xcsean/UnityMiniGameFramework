@@ -37,11 +37,15 @@ namespace UnityMiniGameFramework
             followTrans = trans;
         }
 
-        public void RefreshInfo(CMHeroConf conf)
+        public void RefreshInfo(int unlockLevel)
         {
-            if (conf != null)
+            if (unlockLevel > 0)
             {
-                _labLockTip.text = $"Unlock at\r\nbattle level {conf.userLevelRequire}";
+                _labLockTip.text = $"Unlock at\r\nbattle level {unlockLevel}";
+            }
+            else
+            {
+                _labLockTip.text = "";
             }
         }
 
