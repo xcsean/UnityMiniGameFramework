@@ -70,7 +70,7 @@ namespace UnityMiniGameFramework
         {
             if (_localUserConfig == null)
             {
-                string jsonStr = GameApp.Inst.File.readStringFrom("/localStorage/UserConfig.json");
+                string jsonStr = GameApp.Inst.File.readStringFrom("/StreamingAssets/Config/UserConfig.json");
                 var jsonObj = JsonUtil.FromJson<LocalUserConfig>(jsonStr);
                 if (jsonObj != null)
                 {
