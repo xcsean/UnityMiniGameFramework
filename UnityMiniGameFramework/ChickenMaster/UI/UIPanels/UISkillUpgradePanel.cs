@@ -8,11 +8,10 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    public class UISkillUpgradePanel: UIPanel
+    public class UISkillUpgradePanel: UIPopupPanel
     {
         override public string type => "UISkillUpgradePanel";
 
-        protected Button _closeBtn;
         protected VisualElement content;
         public static UISkillUpgradePanel create()
         {
@@ -24,8 +23,6 @@ namespace UnityMiniGameFramework
 
             BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
 
-            _closeBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            _closeBtn.clicked += onClickClose;
             content = this._uiObjects["unity-content-container"].unityVisualElement;
             for (int index = 1; index < content.childCount + 1; index++)
             {
@@ -59,11 +56,6 @@ namespace UnityMiniGameFramework
         {
             base.showUI();
             showSkills();
-        }
-
-        private void onClickClose()
-        {
-            hideUI();
         }
 
         private void showSkills()

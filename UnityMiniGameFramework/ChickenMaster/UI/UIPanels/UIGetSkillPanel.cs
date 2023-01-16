@@ -8,11 +8,10 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    public class UIGetSkillPanel : UIPanel
+    public class UIGetSkillPanel : UIPopupPanel
     {
         override public string type => "UIGetSkillPanel";
 
-        protected Button _closeBtn;
         protected Button _videoBtn;
         protected ProgressBar _progressBar;
         protected Label _timeLab;
@@ -28,8 +27,6 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
-            _closeBtn = _uiObjects["CloseButton"].unityVisualElement as Button;
-            _closeBtn.clicked += onClickClose;
             _videoBtn = this._uiObjects["VideoButton"].unityVisualElement as Button;
             _videoBtn.clicked += onClickVideo;
             _progressBar = this._uiObjects["ProgressBar"].unityVisualElement as ProgressBar;
@@ -39,11 +36,6 @@ namespace UnityMiniGameFramework
             _skillIcon = this._uiObjects["SkillIcon"].unityVisualElement;
 
             BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
-        }
-
-        private void onClickClose()
-        {
-            hideUI();
         }
 
         private void onClickVideo()

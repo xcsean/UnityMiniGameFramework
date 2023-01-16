@@ -8,11 +8,10 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    public class UIDoubleAttackPanel : UIPanel
+    public class UIDoubleAttackPanel : UIPopupPanel
     {
         override public string type => "UIDoubleAttackPanel";
 
-        protected Button _closeBtn;
         protected Button _videoBtn;
         protected VisualElement _dmgPb;
         protected Label _timeLab;
@@ -28,19 +27,12 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
-            _closeBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            _closeBtn.clicked += onClickClose;
             _videoBtn = this._uiObjects["VideoButton"].unityVisualElement as Button;
             _videoBtn.clicked += onClickVideo;
             _dmgPb = this._uiObjects["TimeProgressBar"].unityVisualElement;
             _timeLab = this._uiObjects["TimeLabel"].unityVisualElement as Label;
 
             BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
-        }
-
-        private void onClickClose()
-        {
-            hideUI();
         }
 
         private void onClickVideo()

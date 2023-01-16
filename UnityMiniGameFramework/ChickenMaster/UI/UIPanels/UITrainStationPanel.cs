@@ -58,9 +58,6 @@ namespace UnityMiniGameFramework
         protected Button _SpeedUpBtn;
         public Button SpeedUpBtn => _SpeedUpBtn;
 
-        protected Button _CloseBtn;
-        public Button CloseBtn => _CloseBtn;
-
         private Boolean isMaxLevel = false;
 
         override public void Init(UIPanelConf conf)
@@ -85,8 +82,6 @@ namespace UnityMiniGameFramework
             _CallBtn.clicked += onCallClick;
             _SpeedUpBtn = this._uiObjects["SpeedUpBtn"].unityVisualElement as Button;
             _SpeedUpBtn.clicked += onSpeedUpClick;
-            _CloseBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            _CloseBtn.clicked += onClickClose;
 
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             _trainStation = cmGame.TrainStation;
@@ -94,11 +89,6 @@ namespace UnityMiniGameFramework
             refreshInfo();
 
             _trainStation.setUIPanel(this);
-        }
-
-        private void onClickClose()
-        {
-            hideUI();
         }
 
         public override void showUI()

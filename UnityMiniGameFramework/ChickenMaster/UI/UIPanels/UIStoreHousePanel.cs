@@ -116,10 +116,10 @@ namespace UnityMiniGameFramework
             //    }
             //}
 
-            foreach (var worker in _storeHouse.workers)
-            {
-                //worker.maxCarryCount *= 2;
-            }
+            //foreach (var worker in _storeHouse.workers)
+            //{
+            //    //worker.maxCarryCount *= 2;
+            //}
         }
 
         public override void showUI()

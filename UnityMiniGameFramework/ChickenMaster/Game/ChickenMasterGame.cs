@@ -207,8 +207,14 @@ namespace UnityMiniGameFramework
             _ui.show();
         }
 
-        private List<UIPanel> panels = new List<UIPanel>();
-        public void addUI(UIPanel ui)
+        private List<UIPopupPanel> panels = new List<UIPopupPanel>();
+        private List<string> exPanels = new List<string>()
+        {
+            "UIPassRewardPanel",
+            "UIWeaponAscendPanel"
+        };
+        public bool haveExPanel = false;
+        public void addUI(UIPopupPanel ui)
         {
             if (
                 ui.type == "UIStorehouseCapacityPanel"
@@ -224,29 +230,75 @@ namespace UnityMiniGameFramework
             {
                 panels.Add(ui);
             }
+
+            hideAllUI();
         }
 
-        public void removeUI(UIPanel ui)
+        public void removeUI(UIPopupPanel ui)
         {
             if (panels.Contains(ui))
             {
                 panels.Remove(ui);
             }
+
+            reshowAllUI();
         }
 
         public void hideAllUI()
         {
-            foreach (var ui in panels)
+            int exIndex = -1;
+            for (int i = 0; i < panels.Count; i++)
             {
-                ui.display(false);
+                var ui = panels[i];
+                if (exIndex == -1 && exPanels.Contains(ui.type))
+                {
+                    exIndex = i;
+                }
+            }
+
+            haveExPanel = exIndex != -1;
+            if (exIndex != -1)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{exIndex}____{panels[exIndex].type}");
+                for (int i = 0; i < panels.Count; i++)
+                {
+                    var ui = panels[i];
+                    ui.display(i == exIndex);
+                }
+            }
+            else
+            {
+                foreach (var ui in panels)
+                {
+                    ui.display(true);
+                }
             }
         }
 
         public void reshowAllUI()
         {
-            foreach (var ui in panels)
+            int exIndex = -1;
+            for (int i = 0; i < panels.Count; i++)
             {
-                ui.display(true);
+                var ui = panels[i];
+
+                if (exIndex == -1 && exPanels.Contains(ui.type))
+                {
+                    exIndex = i;
+                }
+            }
+
+            haveExPanel = exIndex != -1;
+            if (exIndex != -1)
+            {
+                panels[exIndex].display(true);
+            }
+            else
+            {
+                foreach (var ui in panels)
+                {
+                    ui.display(true);
+                }
             }
         }
 

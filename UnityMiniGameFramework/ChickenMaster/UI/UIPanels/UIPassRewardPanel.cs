@@ -20,7 +20,7 @@ namespace UnityMiniGameFramework
         public int total;
         public int temp;
     }
-    public class UIPassRewardPanel : UIPanel
+    public class UIPassRewardPanel : UIPopupPanel
     {
         override public string type => "UIPassRewardPanel";
         public static UIPassRewardPanel create()
@@ -30,7 +30,6 @@ namespace UnityMiniGameFramework
 
         protected Button NormalGetButton;
         protected Button VideoGetButton;
-        protected Button CloseButton;
         private VisualElement layoutGrid;
         private CMDefenseLevelAward rewards;
 
@@ -44,18 +43,19 @@ namespace UnityMiniGameFramework
 
             NormalGetButton = this._uiObjects["NormalGetButton"].unityVisualElement as Button;
             VideoGetButton = this._uiObjects["VideoGetButton"].unityVisualElement as Button;
-            CloseButton = this._uiObjects["CloseButton"].unityVisualElement as Button;
             layoutGrid = this._uiObjects["layoutGrid"].unityVisualElement;
 
             NormalGetButton.clicked += onClickNormalGet;
             VideoGetButton.clicked += onClickVideoGet;
-            CloseButton.clicked += onClickClose;
         }
 
         public override void showUI()
         {
             base.showUI();
             showReward();
+
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.uiMainPanel.Joystick.OnMouseUp(null);
         }
 
         private void showReward()
@@ -65,7 +65,7 @@ namespace UnityMiniGameFramework
             int level = bi.currentLevel - 1;
             var _gameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
 
-            for(int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 var grid = layoutGrid.Q<VisualElement>($"grid{i}");
                 grid.style.display = DisplayStyle.None;
@@ -250,7 +250,7 @@ namespace UnityMiniGameFramework
             //collectRewards(true);
         }
 
-        private void onClickClose()
+        public override void onCloseClick()
         {
             //showAni(2);
             collectRewards();
@@ -384,8 +384,6 @@ namespace UnityMiniGameFramework
                 grid.Q<Label>("have").style.display = DisplayStyle.None;
             }
             base.hideUI();
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.reshowAllUI();
         }
     }
 }
