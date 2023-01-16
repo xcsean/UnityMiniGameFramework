@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiniGameFramework;
 using UnityEngine;
+using Debug = MiniGameFramework.Debug;
+using GameObject = UnityEngine.GameObject;
 
 namespace UnityMiniGameFramework
 {
@@ -22,7 +25,15 @@ namespace UnityMiniGameFramework
 
         private Dictionary<string, AudioClip> m_CachedAudioAssets = new Dictionary<string, AudioClip>();
         private string m_lastBGMName;
+        private AudionConfig _config;
 
+        public void Init()
+        {
+            _config =  (AudionConfig)UnityGameApp.Inst.Conf.getConfig("audios");
+            if (_config == null)
+                Debug.DebugOutput(DebugTraceType.DTT_Error, "audiosConfig Init Fail");
+        }
+        
         private void Awake()
         {
             if (_instance == null)
@@ -46,6 +57,9 @@ namespace UnityMiniGameFramework
 
         public void PlayBGM(string clipName)
         {
+            if(true)
+                return;
+            
             if(string.IsNullOrEmpty(clipName))
                 return;
             if (m_bgmSource.isPlaying && m_lastBGMName == clipName)

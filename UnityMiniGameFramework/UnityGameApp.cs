@@ -317,6 +317,7 @@ namespace UnityMiniGameFramework
             _conf.regConfigCreator("WeaponConfig", WeaponConfig.create);
             _conf.regConfigCreator("CMGameConfig", CMGameConfig.create);
             _conf.regConfigCreator("AnalysisConfig", AnalysisConfig.create);
+            _conf.regConfigCreator("AudionConfig", AudionConfig.create);
 
             // reg component
             GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
@@ -375,6 +376,7 @@ namespace UnityMiniGameFramework
         {
             base._initManagers();
 
+            _audManager.Init();
             _analysisMgr.Init();
             _datamanager.Init();
             _aniManager.Init();

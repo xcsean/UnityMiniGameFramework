@@ -56,7 +56,7 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMTrainStation init train prefab [{mapNpcConf.prefabName}] not MapNPCObject");
                 return false;
             }
-
+            
             _trainNpcObj.moveAct.SetRotationAdd(new Vector3(0.0f, -90.0f, 0.0f));
             _trainNpcObj.moveAct.setMoveType(true);
             _initTrain();
@@ -68,7 +68,8 @@ namespace UnityMiniGameFramework
 
             return true;
         }
-
+        
+        
         protected void _initTrain()
         {
             var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
@@ -155,6 +156,7 @@ namespace UnityMiniGameFramework
                 else
                 {
                     // arrived, start onboard
+                    UnityGameApp.Inst.AudioManager.PlaySFX("Audio/MP3/Train/Train_come");
                     _onboardTimeLeft = _station.trainStaionConf.trainOnboardTime;
                 }
             }
@@ -165,7 +167,6 @@ namespace UnityMiniGameFramework
                 // TO DO: show onboard animation
 
                 _onboardTimeLeft -= UnityEngine.Time.deltaTime;
-
                 if(_onboardTimeLeft <= 0)
                 {
                     // onbard finish, sell item and leave
