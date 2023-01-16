@@ -125,9 +125,6 @@ namespace UnityMiniGameFramework
             _battleStartBtn = this._uiObjects["BattleStartBtn"].unityVisualElement;
             _btnGm = this._uiObjects["BtnGm"].unityVisualElement as Button;
 
-            // 实现中 先隐藏
-            _battleStartBtn.style.display = DisplayStyle.None;
-
             _btnUseSkill.clicked += OnUseSkillBtnClick;
             _btnDoubleExp.clicked += OnDoubleExpBtnClick;
             _btnDoubleAtt.clicked += OnDoubleAttBtnClick;
@@ -181,8 +178,6 @@ namespace UnityMiniGameFramework
                     (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
 
                     level.Start();
-                    // todo 
-                    //_recoveryTime.text = "";
                     cmGame.Egg.eggUI.clearRecoverTime();
                 }
             }
@@ -194,23 +189,17 @@ namespace UnityMiniGameFramework
                     (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
 
                     level.Start();
-                    // todo 
-                    //_recoveryTime.text = "";
                     cmGame.Egg.eggUI.clearRecoverTime();
                 }
             }
         }
 
-        public void changeEggState(bool isFighting, float _hp)
+        public void changeBattleStartByEggState(bool isFighting, float _hp)
         {
             bool isDie = _hp <= 0;
-            //_recoveryTime.style.display = (!isFighting) ? DisplayStyle.Flex : DisplayStyle.None;
-
             _btnStart.style.display = (!isFighting && !isDie) ? DisplayStyle.Flex : DisplayStyle.None;
             _btnRecover.style.display = (!isFighting && isDie) ? DisplayStyle.Flex : DisplayStyle.None;
 
-            //var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            //cmGame.uiMainPanel.ShowBattleStartInfo(isFighting && !isDie);
             ShowBattleStartInfo(isFighting && !isDie);
         }
 
@@ -271,7 +260,7 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnGmBtnClick()
         {
-            if (UnityGameApp.Inst.Datas.GetLocalUserConfig().ShowGm)
+            if (UnityGameApp.Inst.Datas.localUserConfig != null && UnityGameApp.Inst.Datas.localUserConfig.ShowGm)
             {
                 var _ui = UnityGameApp.Inst.UI.createUIPanel("GMUI") as UIGMPanel;
                 _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
@@ -485,6 +474,10 @@ namespace UnityMiniGameFramework
                 sprBoss.style.left = 48 - tx.width / 2;
             }
         }
+        
+        /// <summary>
+        /// 关卡战斗日志
+        /// </summary>
         public void refreshLevelInfo(CMShootingLevel lvl)
         {
             //DateTime t = new DateTime((long)(lvl.timeLeft * 1000));
@@ -499,6 +492,9 @@ namespace UnityMiniGameFramework
             _LevelInfo.text = info;
         }
 
+        /// <summary>
+        /// 鸡肉
+        /// </summary>
         public void refreshMeat()
         {
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);

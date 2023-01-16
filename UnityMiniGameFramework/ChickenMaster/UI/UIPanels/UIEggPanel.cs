@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UIElements;
 using MiniGameFramework;
+
 namespace UnityMiniGameFramework
 {
     public class UIEggPanel : UIPanel
@@ -29,87 +30,86 @@ namespace UnityMiniGameFramework
         {
             base.Init(conf);
 
-            //this.unityUIDocument.sortingOrder = -1;
-
             _recoveryTime = this._uiObjects["RecoverTime"].unityVisualElement as Label;
 
             _startBtn = this._uiObjects["StartBtn"].unityVisualElement as Button;
             _recoverBtn = this._uiObjects["RecoverBtn"].unityVisualElement as Button;
             stars = this._uiObjects["stars"].unityVisualElement;
 
-            _startBtn.clicked += onStartLevelClick;
-            _recoverBtn.clicked += onRecoverClick;
-            _recoveryTime.text = "ready";
+            _startBtn.style.display = DisplayStyle.None;
+            _recoverBtn.style.display = DisplayStyle.None;
+            //_startBtn.clicked += onStartLevelClick;
+            //_recoverBtn.clicked += onRecoverClick;
+            _recoveryTime.text = "READY";
         }
 
-        public void onStartLevelClick()
-        {
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
+        //public void onStartLevelClick()
+        //{
+        //    var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+        //    var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
 
-            if (bi.egg.hp <= 0)
-            {
-                // can't start level
-                return;
-            }
+        //    if (bi.egg.hp <= 0)
+        //    {
+        //        // can't start level
+        //        return;
+        //    }
 
-            var lvlConf = cmGame.GetCurrentDefenseLevelConf();
-            if (lvlConf == null)
-            {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"GetCurrentDefenseLevelConf [{bi.currentLevel}] not exist");
-                return;
-            }
+        //    var lvlConf = cmGame.GetCurrentDefenseLevelConf();
+        //    if (lvlConf == null)
+        //    {
+        //        Debug.DebugOutput(DebugTraceType.DTT_Error, $"GetCurrentDefenseLevelConf [{bi.currentLevel}] not exist");
+        //        return;
+        //    }
 
-            if (UnityGameApp.Inst.MainScene.map.currentLevel == null)
-            {
-                var level = UnityGameApp.Inst.MainScene.map.CreateLevel(lvlConf.mapLevelName);
-                if (level != null)
-                {
-                    (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
+        //    if (UnityGameApp.Inst.MainScene.map.currentLevel == null)
+        //    {
+        //        var level = UnityGameApp.Inst.MainScene.map.CreateLevel(lvlConf.mapLevelName);
+        //        if (level != null)
+        //        {
+        //            (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
 
-                    level.Start();
-                    _recoveryTime.text = "";
-                }
-            }
-            else if (!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
-            {
-                var level = UnityGameApp.Inst.MainScene.map.CreateLevel(lvlConf.mapLevelName);
-                if (level != null)
-                {
-                    (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
+        //            level.Start();
+        //            _recoveryTime.text = "";
+        //        }
+        //    }
+        //    else if (!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
+        //    {
+        //        var level = UnityGameApp.Inst.MainScene.map.CreateLevel(lvlConf.mapLevelName);
+        //        if (level != null)
+        //        {
+        //            (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, bi.currentLevel);
 
-                    level.Start();
-                    _recoveryTime.text = "";
-                }
-            }
-            else
-            {
-                // level is ongoing
-            }
-            //changeEggState(true);
-        }
+        //            level.Start();
+        //            _recoveryTime.text = "";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // level is ongoing
+        //    }
+        //    //changeEggState(true);
+        //}
 
-        private void onVideoCb()
-        {
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.Egg.recoverEgg();
-        }
+        //private void onVideoCb()
+        //{
+        //    var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+        //    cmGame.Egg.recoverEgg();
+        //}
 
-        private void onRecoverClick()
-        {
-            SDKManager.showAutoAd(onVideoCb, "recover_egg");
-        }
+        //private void onRecoverClick()
+        //{
+        //    SDKManager.showAutoAd(onVideoCb, "recover_egg");
+        //}
 
         public void changeEggState(bool isFighting)
         {
-            bool isDie = _hp <= 0;
             _recoveryTime.style.display = (!isFighting) ? DisplayStyle.Flex : DisplayStyle.None;
-            _startBtn.style.display = (!isFighting && !isDie) ? DisplayStyle.Flex : DisplayStyle.None;
-            _recoverBtn.style.display = (!isFighting && isDie) ? DisplayStyle.Flex : DisplayStyle.None;
+            //bool isDie = _hp <= 0;
+            //_startBtn.style.display = (!isFighting && !isDie) ? DisplayStyle.Flex : DisplayStyle.None;
+            //_recoverBtn.style.display = (!isFighting && isDie) ? DisplayStyle.Flex : DisplayStyle.None;
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            //cmGame.uiMainPanel.ShowBattleStartInfo(isFighting && !isDie);
-            cmGame.uiMainPanel.changeEggState(isFighting, _hp);
+            cmGame.uiMainPanel.changeBattleStartByEggState(isFighting, _hp);
         }
 
         public void onEggDie()
@@ -119,9 +119,7 @@ namespace UnityMiniGameFramework
         }
         public void onEggRecover()
         {
-            //changeEggState(false);
-            _recoveryTime.text = "ready";
-            // TO DO : show start button
+            _recoveryTime.text = "READY";
         }
 
         public void clearRecoverTime()

@@ -113,7 +113,7 @@ namespace UnityMiniGameFramework
                         int upgradeNeed = cmGame.gameConf.getLevelUpExpRequire(bi.level);
                         grid.Q<Label>("progress").text = $"0/{upgradeNeed}";
                         float prog = bi.exp > upgradeNeed ? 1f : ((float)bi.exp / upgradeNeed);
-                        grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93));
+                        grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93f));
                         progs.Add(new ProgressAniParams()
                         {
                             type = "exp",
@@ -163,7 +163,7 @@ namespace UnityMiniGameFramework
                                     grid.Q<Label>("progress").text = $"0/{upgradeNeed}";
                                     grid.Q<Label>("lv").text = $"{lv}";
                                     float prog = have > upgradeNeed ? 1f : ((float)have / upgradeNeed);
-                                    grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93));
+                                    grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93f));
                                     progs.Add(new ProgressAniParams()
                                     {
                                         type = "gunpiece",
@@ -268,7 +268,7 @@ namespace UnityMiniGameFramework
                 VisualElement grid = layoutGrid.Q<VisualElement>($"grid{prog.id}");
 
                 float progress = prog.cur > 1f ? 1f : prog.cur;
-                grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(progress * 93));
+                grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(progress * 93f));
                 grid.Q<Label>("progress").text = $"{end}/{prog.total}";
                 if (type == 3)
                 {
@@ -304,7 +304,7 @@ namespace UnityMiniGameFramework
                 prog.cur += 0.01f;
                 VisualElement grid = layoutGrid.Q<VisualElement>($"grid{prog.id}");
                 float progress = prog.cur > 1f ? (prog.cur / 1f) : prog.cur;
-                grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(progress * 93));
+                grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(progress * 93f));
 
                 if (prog.cur >= prog.end)
                 {
