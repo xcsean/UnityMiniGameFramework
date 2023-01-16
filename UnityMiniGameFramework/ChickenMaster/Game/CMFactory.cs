@@ -115,12 +115,12 @@ namespace UnityMiniGameFramework
             _produceVer = 0;
             
             //todo:data与control需要分离
-            _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
+            _updateProductBox(factoryConf.inputStorePrefabPath, (float)currentProductInputStore /
                                                                 ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
                                                                 .currentLevelConf
                                                                 .fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
-                currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
+                (float)currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             setBuildGray(false);
 
             _init = true;
@@ -256,7 +256,7 @@ namespace UnityMiniGameFramework
                 _produceProgressPanel.DoUpdateInputStore(currentProductInputStore, toFill);
             }
 
-            _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
+            _updateProductBox(factoryConf.inputStorePrefabPath, (float)currentProductInputStore /
                                                                 ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
                                                                 .currentLevelConf
                                                                 .fetchPackCount, _inputStorePosition);
@@ -289,7 +289,7 @@ namespace UnityMiniGameFramework
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{currentProductOutputStore}");
 
             _updateProductBox(factoryConf.outputStorePrefabPath,
-                currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
+                (float)currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
@@ -365,12 +365,12 @@ namespace UnityMiniGameFramework
             string haveBuff = checkBuff() ? "已翻倍" : "无增益";
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}({haveBuff})，产出总数量：{currentProductOutputStore}");
 
-            _updateProductBox(factoryConf.inputStorePrefabPath, currentProductInputStore /
+            _updateProductBox(factoryConf.inputStorePrefabPath,(float) currentProductInputStore /
                                                                 ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
                                                                 .currentLevelConf
                                                                 .fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
-                currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
+                (float)currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
 
@@ -386,10 +386,11 @@ namespace UnityMiniGameFramework
             
         }
 
-        protected virtual void _updateProductBox(string boxPrefabPath, int boxNum,SpawnPos spawnPos)
+        protected virtual void _updateProductBox(string boxPrefabPath, float _boxNum,SpawnPos spawnPos)
         {
             var putTf = spawnPos.spawnObject.transform;
             int childCount = putTf.childCount;
+            int boxNum = (int) Math.Ceiling(_boxNum);
             if (childCount == boxNum)
                 return;
 
