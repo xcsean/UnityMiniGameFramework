@@ -140,9 +140,6 @@ namespace UnityMiniGameFramework
             }
 
             HideAction();
-
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.removeUI(this);
             removeUpdate();
         }
 
@@ -155,15 +152,18 @@ namespace UnityMiniGameFramework
             //_unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
             //_unityUIDocument.rootVisualElement.style.opacity = 1f;
 
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            if (cmGame.haveExPanel)
+            {
+                return;
+            }
+
             if (onShowStartHandle != null)
             {
                 onShowStartHandle();
             }
 
             ShowAction();
-
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.addUI(this);
         }
         public void setPoisition(float x, float y)
         {

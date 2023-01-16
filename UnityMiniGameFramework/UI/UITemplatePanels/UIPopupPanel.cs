@@ -44,9 +44,25 @@ namespace UnityMiniGameFramework
         //    base.showUI();
         //}
 
-        public void onCloseClick()
+        virtual public void onCloseClick()
         {
             this.hideUI();
+        }
+
+        override public void showUI()
+        {
+            base.showUI();
+
+            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.addUI(this);
+        }
+
+        override public void hideUI()
+        {
+            base.hideUI();
+
+            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            cmGame.removeUI(this);
         }
     }
 }

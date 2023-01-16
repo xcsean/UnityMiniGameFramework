@@ -8,7 +8,7 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    public class UIOfflineRewardPanel : UIPanel
+    public class UIOfflineRewardPanel : UIPopupPanel
     {
         override public string type => "UIOfflineRewardPanel";
         public static UIOfflineRewardPanel create()
@@ -16,7 +16,6 @@ namespace UnityMiniGameFramework
             return new UIOfflineRewardPanel();
         }
 
-        public Button CloseButton;
         public Button VideoGetButton;
         public Label OfflineTimeLabel;
         public VisualElement coinGrid;
@@ -31,14 +30,12 @@ namespace UnityMiniGameFramework
 
             BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
 
-            CloseButton = this._uiObjects["CloseButton"].unityVisualElement as Button;
             VideoGetButton = this._uiObjects["VideoGetButton"].unityVisualElement as Button;
             OfflineTimeLabel = this._uiObjects["OfflineTimeLabel"].unityVisualElement as Label;
             coinGrid = this._uiObjects["coinGrid"].unityVisualElement;
             expGrid = this._uiObjects["expGrid"].unityVisualElement;
             meatGrid = this._uiObjects["meatGrid"].unityVisualElement;
 
-            CloseButton.clicked += onCloseClick;
             VideoGetButton.clicked += onVideoClick;
         }
 
@@ -80,15 +77,15 @@ namespace UnityMiniGameFramework
             this.showUI();
         }
 
-        private void onCloseClick()
-        {
-            receiveRewards(1);
-            this.hideUI();
-        }
-
         private void onVideoClick()
         {
             SDKManager.showAutoAd(onVideoCb, "offline_reward");
+        }
+
+        public override void onCloseClick()
+        {
+            receiveRewards();
+            base.onCloseClick();
         }
 
         private void onVideoCb()

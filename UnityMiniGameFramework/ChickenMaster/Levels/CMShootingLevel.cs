@@ -272,7 +272,6 @@ namespace UnityMiniGameFramework
             cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level Win !");
 
             // show pass-reward
-            cmGame.hideAllUI();
             UIPassRewardPanel _passUI = UnityGameApp.Inst.UI.createUIPanel("PassRewardUI") as UIPassRewardPanel;
             _passUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             _passUI.showUI();

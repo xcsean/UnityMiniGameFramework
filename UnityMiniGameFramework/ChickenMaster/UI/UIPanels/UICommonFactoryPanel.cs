@@ -139,7 +139,7 @@ namespace UnityMiniGameFramework
         protected void OnEfficiencyBtnClick()
         {
             Debug.DebugOutput(DebugTraceType.DTT_Debug, "onEfficiencyBtnClick...");
-            SDKManager.showAutoAd(onVideoCb, "factory_productivity_x2");
+            SDKManager.showAutoAd(onVideoCb, $"{_factoryConf.mapBuildName}_productivity_x2");
         }
 
         private void onVideoCb()

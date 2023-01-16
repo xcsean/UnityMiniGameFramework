@@ -8,11 +8,10 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
-    public class UIDoubleExpPanel : UIPanel
+    public class UIDoubleExpPanel : UIPopupPanel
     {
         override public string type => "UIDoubleExpPanel";
 
-        protected Button _closeBtn;
         protected Button _videoBtn;
         protected VisualElement _expPb;
         protected Label _timeLab;
@@ -30,20 +29,11 @@ namespace UnityMiniGameFramework
 
             BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
 
-            _closeBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
-            _closeBtn.clicked += onClickClose;
             _videoBtn = this._uiObjects["VideoButton"].unityVisualElement as Button;
             _videoBtn.clicked += onClickVideo;
             _expPb = this._uiObjects["TimeProgressBar"].unityVisualElement;
             _timeLab = this._uiObjects["TimeLabel"].unityVisualElement as Label;
         }
-
-        private void onClickClose()
-        {
-            hideUI();
-        }
-
-
         private void onClickVideo()
         {
             SDKManager.showAutoAd(onVideoCb, "double_exp");
