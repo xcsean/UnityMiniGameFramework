@@ -91,39 +91,6 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            // TO DO : move hpbar show/hide code to level start/end 
-            if(UnityGameApp.Inst.MainScene.map.currentLevel != null && UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
-            {
-                // in level
-                //if(!_hpBar.barObject.activeSelf)
-                //{
-                //    _hpBar.show();
-                //}
-                //if (_eggUI.isShow)
-                //{
-                //    _eggUI.hideUI();
-                //}
-                _eggUI.changeEggState(true);
-            }
-            else
-            {
-                // not in level
-                //if(_hpBar.barObject.activeSelf)
-                //{
-                //    _hpBar.hide();
-                //}
-                if(!_eggUI.isShow)
-                {
-                    var vec = (_eggObject.transform.position - (UnityGameApp.Inst.Game as ChickenMasterGame).Self.mapHero.unityGameObject.transform.position);
-
-                    //if(vec.magnitude <= _conf.EggUIShowRange)
-                    //{
-                    //    _eggUI.showUI();
-                    //}
-                }
-                _eggUI.changeEggState(false);
-            }
-
             if(_eggUI != null)
             {
                 var screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(_eggObject.transform.position));
@@ -171,7 +138,38 @@ namespace UnityMiniGameFramework
                 {
                     _eggUI.refreshRecoveryTime(_eggInfo.nextRecoverTime - nowTickMilliseconds);
                 }
+            }
 
+            // TO DO : move hpbar show/hide code to level start/end 
+            if (UnityGameApp.Inst.MainScene.map.currentLevel != null && UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
+            {
+                // in level
+                //if(!_hpBar.barObject.activeSelf)
+                //{
+                //    _hpBar.show();
+                //}
+                //if (_eggUI.isShow)
+                //{
+                //    _eggUI.hideUI();
+                //}
+                _eggUI.changeEggState(true);
+            }
+            else
+            {
+                // not in level
+                //if(_hpBar.barObject.activeSelf)
+                //{
+                //    _hpBar.hide();
+                //}
+                //if (!_eggUI.isShow)
+                //{
+                //    var vec = (_eggObject.transform.position - (UnityGameApp.Inst.Game as ChickenMasterGame).Self.mapHero.unityGameObject.transform.position);
+                //    if (vec.magnitude <= _conf.EggUIShowRange)
+                //    {
+                //        _eggUI.showUI();
+                //    }
+                //}
+                _eggUI.changeEggState(false);
             }
 
         }
