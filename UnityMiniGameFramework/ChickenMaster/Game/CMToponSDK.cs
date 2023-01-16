@@ -38,22 +38,22 @@ namespace UnityMiniGameFramework
 
         public void onAdVideoPlayFail(string placementId)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public void onAdVideoClosedEvent(string placementId)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public void onAdClick(string placementId)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public void onAdLoadFail(string placementId)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 }

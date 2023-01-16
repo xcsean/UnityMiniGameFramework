@@ -32,16 +32,18 @@ namespace UnityMiniGameFramework
         public static void showAutoAd(Action callball, string eventName = "")
         {
 
-            if (!SDKManager._sdk.isNull())
+            if (SDKManager._sdk != null)
             {
-                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{eventName}"));
+                //UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{eventName}"));
                 SDKManager._sdk.showAutoAd((SdkEvent args) =>
                 {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Start showAutoAd" + args.type.ToString());
                     if (args.type == AdEventType.RewardEvent)
                     {
                         //TODO 看完视频下发奖励
                         MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                        UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
+                        //UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
+                        callball();
                     }
                 });
             }
