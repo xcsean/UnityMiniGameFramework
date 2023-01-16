@@ -159,9 +159,6 @@ namespace UnityMiniGameFramework
             _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
             _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
 
-            // TO DO : set hero pic and gun pic
-            //_HeadPic.style.backgroundImage = new StyleBackground(texture2d);
-
             refreshInfo();
             refreshGunUpgradeProgress();
         }
@@ -181,11 +178,10 @@ namespace UnityMiniGameFramework
             if (_hero == null)
             {
                 // not active
-                //_btnAct.text = "ACTIVATE";
                 _heroLockBg.style.display = DisplayStyle.Flex;
 
                 _labHeroName.text = $"{_heroConf.mapHeroName}";
-                _labHeroActCoin.text = $"{_heroConf.activateGoldCost}";
+                _labHeroActCoin.text = StringUtil.StringNumFormat($"{_heroConf.activateGoldCost}");
                 _labUpgradeCoin.text = $"{0}";
 
                 _labAttacked.text = $"0";
@@ -211,7 +207,6 @@ namespace UnityMiniGameFramework
                 }
                 int upgradeCost = _hero.getUpgradeGoldCost();
 
-                //_btnAct.text = "UPGRADE";
                 _labHeroName.text = $"{_heroConf.mapHeroName}";
                 _labUpgradeCoin.text = $"{upgradeCost}";
 
@@ -238,7 +233,6 @@ namespace UnityMiniGameFramework
             gunItem.style.display = DisplayStyle.Flex;
             var btnArmed = gunItem.Q<Button>("btnArmed");
 
-            // TODO gun name
             var cmGameConf = UnityGameApp.Inst.Conf.getConfig("cmgame") as CMGameConfig;
             gunItem.Q<Label>("labGunName").text = $"{cmGameConf.gameConfs.gunConfs[cmGunConf.id].name}";
 
@@ -373,11 +367,11 @@ namespace UnityMiniGameFramework
         }
 
         /// <summary>
-        /// 英雄等级进阶
+        /// 英雄等级进阶（暂无）
         /// </summary>
         private void refreshHeroAdvanced(int lv)
         {
-            // TODO 5级一次进阶 读配置
+            // 5级一次进阶 读配置
             float n = ((float)lv / 5 - 1);
             int len = _advanced.childCount;
             for (int i = 0; i < len; i++)

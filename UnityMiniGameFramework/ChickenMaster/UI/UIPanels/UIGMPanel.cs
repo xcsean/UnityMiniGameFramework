@@ -146,7 +146,7 @@ namespace UnityMiniGameFramework
                     cmGame.Self.AddBackpackProduct("meat", input);
                     break;
                 case "等级":
-                    cmGame.Self.AddTestLevel(input);
+                    cmGame.Self.GM_SetPlayerLevel(input);
                     break;
                 case "关卡":
                     onStartLevel(input);

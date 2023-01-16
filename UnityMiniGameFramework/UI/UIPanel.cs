@@ -223,7 +223,6 @@ namespace UnityMiniGameFramework
         }
 
         /// <summary>
-        /// TODO 首次加载显示，无法看到动画
         /// 界面显示时缩放动画
         /// </summary>
         virtual public void ShowAction()
@@ -234,7 +233,7 @@ namespace UnityMiniGameFramework
 
                 _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(0.1f, 0.1f, 1f)));
                 _showActionVE.style.opacity = 0f;
-                // delay处理首次加载无法执行过渡动画问题,使用delay后scale不能调为0，用到ScrollView无法显示
+                // delay是处理首次加载无法执行过渡动画问题。使用delay后scale不能调为0，否则用到ScrollView的无法显示
                 _showActionVE.schedule.Execute(() =>
                 {
                     _showActionVE.style.scale = new StyleScale(new Scale(new Vector3(1f, 1f, 1f)));

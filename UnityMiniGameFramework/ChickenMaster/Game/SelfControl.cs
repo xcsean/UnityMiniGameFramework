@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -690,16 +690,9 @@ namespace UnityMiniGameFramework
         /// <summary>
         ///  GM测试
         /// </summary>
-        public void AddTestLevel(int lv)
+        public void GM_SetPlayerLevel(int lv)
         {
-            if (lv <= 0)
-            {
-                return;
-            }
-
-            int curLv = _baseInfo.level;
-            int curExp = _baseInfo.exp;
-            int addLv = lv;
+            int setLv = lv;
 
             var lvConfs = _cmGame.gameConf.gameConfs.levelUpExpRequire;
             if (lvConfs == null)
@@ -707,26 +700,31 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"SelfControl levelUpExpRequire config not exist");
                 return;
             }
-            while (!lvConfs.ContainsKey(curLv + addLv))
+            while (setLv > 0 && !lvConfs.ContainsKey(setLv))
             {
-                addLv--;
+                setLv--;
             }
-            if (addLv <= 0)
+            if (setLv <= 0)
             {
                 return;
             }
-
-            int needUpExp = _cmGame.gameConf.getLevelUpExpRequire(curLv + addLv - 1);
-            if (needUpExp > 0)
+            int needUpExp = 0;
+            for (int i = 1; i < setLv; i++)
             {
-                // level up
-                _baseInfo.exp += (needUpExp - curExp);
-                _baseInfo.level = _baseInfo.level + 1;
+                needUpExp += _cmGame.gameConf.getLevelUpExpRequire(i);
+            }
 
-                // 测试用 刷新ui就行了
-                //_OnLevelUp();
+            if (needUpExp >= 0)
+            {
+                // modify level
+                _baseInfo.exp = needUpExp;
+                _baseInfo.level = setLv;
+
+                Debug.DebugOutput(DebugTraceType.DTT_Debug, $"GM_SetPlayerLevel modify exp[{needUpExp}],level[{setLv}]");
+
                 _cmGame.uiMainPanel.refreshLevel(_baseInfo.level);
-                _cmGame.uiMainPanel.refreshExp(_baseInfo.exp, needUpExp - curExp);
+                _cmGame.uiMainPanel.refreshExp(_baseInfo.exp, 0);
+
                 _cmGame.baseInfo.markDirty();
             }
         }
