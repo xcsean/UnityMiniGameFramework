@@ -82,9 +82,11 @@ namespace UnityMiniGameFramework
             }
             if (_actor.actionComponent.hasState(ActStates.STATE_KEY_NO_ATK))
             {
+                _gunObj?.StopFire();
+                _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                 return;
             }
-
+            
             if (_currentTargetMon == null)
             {
                 // try seek monster
