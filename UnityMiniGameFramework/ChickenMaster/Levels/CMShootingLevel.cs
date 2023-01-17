@@ -52,7 +52,8 @@ namespace UnityMiniGameFramework
                     if (levelRange > 0)
                     {
                         // calc monster level
-                        monLv = monLvRange.levelRangeMin + (monLvRange.levelRangeMax - monLvRange.levelRangeMin) * (level - 1) / levelRange;
+                        int gameLevel = level - defLevelConf.levelRangeMin + 1; // 按区间算，101-200，那105关在这个区间就是第5关
+                        monLv = monLvRange.levelRangeMin + (monLvRange.levelRangeMax - monLvRange.levelRangeMin) * (gameLevel - 1) / levelRange;
                     }
                     sp.mapMonSpawn.SetSpawnMonsterLevel(monLv);
                 }

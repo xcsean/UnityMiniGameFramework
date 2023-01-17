@@ -34,6 +34,12 @@ namespace UnityMiniGameFramework
         protected Button _btnInfo;
         protected Button _btnWarn;
         protected Button _btnError;
+        protected Button _btnClear;
+
+        protected Dictionary<LogType, int> btnStatuDic = new Dictionary<LogType, int>();
+        protected List<GMLogInfo> infos = new List<GMLogInfo>();
+        protected StyleColor btnBgColor1 = new StyleColor(new Color(50f / 255f, 50f / 255f, 50f / 255f));
+        protected StyleColor btnBgColor2 = new StyleColor(new Color(70f / 255f, 70f / 255f, 70f / 255f));
 
         override public void Init(UIPanelConf conf)
         {
@@ -49,6 +55,11 @@ namespace UnityMiniGameFramework
             _btnInfo = this._uiObjects["btnInfo"].unityVisualElement as Button;
             _btnWarn = this._uiObjects["btnWarn"].unityVisualElement as Button;
             _btnError = this._uiObjects["btnError"].unityVisualElement as Button;
+            _btnClear = this._uiObjects["btnClear"].unityVisualElement as Button;
+
+            _btnInfo.style.color = new StyleColor(Color.white);
+            _btnWarn.style.color = new StyleColor(Color.yellow);
+            _btnError.style.color = new StyleColor(Color.red);
 
             btnStatuDic[LogType.Log] = 0;
             btnStatuDic[LogType.Warning] = 0;
@@ -57,13 +68,25 @@ namespace UnityMiniGameFramework
             _btnInfo.clicked += onClickBtnInfo;
             _btnWarn.clicked += onClickBtnWarn;
             _btnError.clicked += onClickBtnError;
+            _btnClear.clicked += onClickBtnClear;
+
+           // unityUIDocument.rootVisualElement.schedule.Execute(() =>
+           //{
+                
+           // }).Every(20);
         }
 
         public override void showUI()
         {
             base.showUI();
 
-            onShowLogByType();
+            onUpdateAllLog();
+        }
+
+        protected void onClickBtnClear()
+        {
+            UnityGameApp.Inst.logs.Clear();
+            onUpdateAllLog();
         }
 
         protected int _logInfoCnt = 0;
@@ -74,7 +97,7 @@ namespace UnityMiniGameFramework
             get { return _logInfoCnt; }
             set {
                 _logInfoCnt = value;
-                _btnInfo.text = $"Log({_logInfoCnt})"; 
+                _btnInfo.text = _logInfoCnt > 999 ? "Log(999+)" : $"Log({_logInfoCnt}";
             } 
         }
         protected int logWarnCnt
@@ -83,7 +106,7 @@ namespace UnityMiniGameFramework
             set
             {
                 _logWarnCnt = value;
-                _btnWarn.text = $"Log({_logWarnCnt})";
+                _btnWarn.text = _logWarnCnt > 999 ? "Log(999+)" : $"Log({_logWarnCnt}";
             }
         }
         protected int logErrorCnt
@@ -92,58 +115,57 @@ namespace UnityMiniGameFramework
             set
             {
                 _logErrorCnt = value;
-                _btnError.text = $"Log({_logErrorCnt})";
+                _btnError.text = _logErrorCnt > 999 ? "Log(999+)" : $"Log({_logErrorCnt}";
             }
         }
 
-        protected StyleColor btnColor1 = new StyleColor(new Color(50f / 255f, 50f / 255f, 50f / 255f));
-        protected StyleColor btnColor2 = new StyleColor(new Color(70f / 255f, 70f / 255f, 70f / 255f));
         protected void onClickBtnInfo()
         {
             if (btnStatuDic[LogType.Log] == 1)
             {
                 btnStatuDic[LogType.Log] = 0;
-                _btnInfo.style.backgroundColor = btnColor1;
+                _btnInfo.style.backgroundColor = btnBgColor1;
             }
             else
             {
                 btnStatuDic[LogType.Log] = 1;
-                _btnInfo.style.backgroundColor = btnColor2;
+                _btnInfo.style.backgroundColor = btnBgColor2;
             }
-            onShowLogByType();
+            onUpdateAllLog();
         }
         protected void onClickBtnWarn()
         {
             if (btnStatuDic[LogType.Warning] == 1)
             {
                 btnStatuDic[LogType.Warning] = 0;
-                _btnWarn.style.backgroundColor = btnColor1;
+                _btnWarn.style.backgroundColor = btnBgColor1;
             }
             else
             {
                 btnStatuDic[LogType.Warning] = 1;
-                _btnWarn.style.backgroundColor = btnColor2;
+                _btnWarn.style.backgroundColor = btnBgColor2;
             }
-            onShowLogByType();
+            onUpdateAllLog();
         }
         protected void onClickBtnError()
         {
             if (btnStatuDic[LogType.Error] == 1)
             {
                 btnStatuDic[LogType.Error] = 0;
-                _btnError.style.backgroundColor = btnColor1;
+                _btnError.style.backgroundColor = btnBgColor1;
             }
             else
             {
                 btnStatuDic[LogType.Error] = 1;
-                _btnError.style.backgroundColor = btnColor2;
+                _btnError.style.backgroundColor = btnBgColor2;
             }
-            onShowLogByType();
+            onUpdateAllLog();
         }
 
-        protected Dictionary<LogType, int> btnStatuDic = new Dictionary<LogType, int>();
-        protected List<GMLogInfo> infos = new List<GMLogInfo>();
-        protected void onShowLogByType()
+        /// <summary>
+        /// 刷新Log
+        /// </summary>
+        public void onUpdateAllLog()
         {
             logInfoCnt = 0;
             logWarnCnt = 0;
@@ -246,6 +268,10 @@ namespace UnityMiniGameFramework
 
         List<string> singleList = new List<string>();
         Label logDetailLab;
+        /// <summary>
+        /// 点击Log 显示堆栈详情
+        /// </summary>
+        /// <param name="_GMLogInfo"></param>
         private void showLogDetailInfo(GMLogInfo _GMLogInfo)
         {
             singleList.Clear();
