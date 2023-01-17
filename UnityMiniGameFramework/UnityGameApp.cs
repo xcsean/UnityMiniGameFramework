@@ -222,10 +222,29 @@ namespace UnityMiniGameFramework
 
             _initNetwork();
 
+            onListenerLogMessage();
+
             _loadStartScene();
 
             return true;
         }
+
+        public List<GMLogInfo> logs;
+        private void onListenerLogMessage()
+        {
+            logs = new List<GMLogInfo>();
+            Application.logMessageReceivedThreaded += (string condition, string stackTrace, LogType type) =>
+            {
+                logs.Add(new GMLogInfo() 
+                {
+                    time = $"[{DateTime.Now.ToString("hh:mm:ss")}]",
+                    condition = condition,
+                    stackTrace = stackTrace,
+                    type = type
+                });
+            };
+        }
+
         override public void OnUpdate()
         {
             base.OnUpdate();

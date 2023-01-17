@@ -98,7 +98,7 @@ namespace UnityMiniGameFramework
                     break;
                 }
                 btn.style.display = DisplayStyle.Flex;
-                (btn.Q("labBtnGm") as Label).text = $"{item.name}";
+                btn.text = $"{item.name}";
 
                 btn.clicked += () =>
                 {
