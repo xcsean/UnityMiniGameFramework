@@ -696,11 +696,8 @@ namespace UnityMiniGameFramework
         /// </summary>
         public void GM_SetPlayerLevel(int lv)
         {
+            // 修改等级和经验
             int setLv = lv;
-            _baseInfo.currentLevel = setLv;
-            _cmGame.baseInfo.markDirty();
-            return;
-
             var lvConfs = _cmGame.gameConf.gameConfs.levelUpExpRequire;
             if (lvConfs == null)
             {
