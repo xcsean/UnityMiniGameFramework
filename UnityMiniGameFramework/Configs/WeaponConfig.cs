@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 //using System.Text.Json;
 using System.Threading.Tasks;
-
 using MiniGameFramework;
 using UnityEngine;
 
@@ -37,6 +36,9 @@ namespace UnityMiniGameFramework
         public float? attackRange { get; set; }
 
         public float? projectileFlySpeed { get; set; } // only in fireType=projectile case
+
+        public string fireAudio { get; set; }
+        public string hitAudio { get; set; }
 
         public float? hitForce { get; set; }
 

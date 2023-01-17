@@ -75,6 +75,9 @@ namespace UnityMiniGameFramework
 
         protected float _projectFlySpeed;
         protected Dictionary<VFXObjectBase, UnityEngine.GameObject> _currentProjectiles;
+        
+        protected string _fireAudio;
+        protected string _hitAudio;
 
         protected VFXObjectBase _throwEmmiter;
         protected Dictionary<UnityEngine.GameObject, float> _emmiterHitObjectsTime;
@@ -84,6 +87,7 @@ namespace UnityMiniGameFramework
         protected UnityEngine.GameObject _currentRayHitObject;
         protected UnityEngine.Ray _currentRay;
         protected UnityEngine.RaycastHit _currentHitPoint;
+        
 
         protected ActorObject _currentTarget;
 
@@ -157,6 +161,9 @@ namespace UnityMiniGameFramework
             }
             
             _projectFlySpeed = _conf.FireConf.projectileFlySpeed.HasValue ? _conf.FireConf.projectileFlySpeed.Value : 10;
+            _fireAudio = string.IsNullOrEmpty(_conf.FireConf.fireAudio) ? string.Empty : _conf.FireConf.fireAudio;
+            _hitAudio = string.IsNullOrEmpty(_conf.FireConf.hitAudio) ? string.Empty : _conf.FireConf.hitAudio;
+            
             
             _gunPos = tr.gameObject;
             _name = _conf.name;
@@ -354,6 +361,7 @@ namespace UnityMiniGameFramework
 
             if(_doFire())
             {
+                _doFireAudio();
                 _currCD = _fireCd;
             }
 
@@ -387,6 +395,7 @@ namespace UnityMiniGameFramework
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
                 if (combComp != null)
                 {
+                    _onHitAudio();
                     combComp.OnHitByWeapon(this);
                 }
             }
@@ -471,6 +480,7 @@ namespace UnityMiniGameFramework
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
                 if (combComp != null)
                 {
+                    _onHitAudio();
                     combComp.OnHitByWeapon(this);
                 }
 
@@ -603,8 +613,23 @@ namespace UnityMiniGameFramework
                 case "multiprojectile":
                     return _dofireMultiProjectile();
             }
-
             return true;
+        }
+
+        protected virtual void _doFireAudio()
+        {
+            if (!string.IsNullOrEmpty(_fireAudio))
+            {
+                UnityGameApp.Inst.AudioManager.PlaySFXByAudioName(_fireAudio);
+            }
+        }
+
+        protected virtual void _onHitAudio()
+        {
+            if (!string.IsNullOrEmpty(_hitAudio))
+            {
+                UnityGameApp.Inst.AudioManager.PlaySFXByAudioName(_hitAudio);
+            }
         }
 
         virtual protected bool _dofireProjectile()
@@ -732,6 +757,7 @@ namespace UnityMiniGameFramework
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
                 if (combComp != null)
                 {
+                    _onHitAudio();
                     combComp.OnHitByWeapon(this);
                 }
 

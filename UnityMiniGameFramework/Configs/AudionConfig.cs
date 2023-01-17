@@ -37,7 +37,7 @@ namespace UnityMiniGameFramework
         
         public AudionConf getAudioConfig(string audioName)
         {
-            if (audionsConf.Audios == null || audionsConf.Audios.ContainsKey(audioName))
+            if (audionsConf.Audios == null || !audionsConf.Audios.ContainsKey(audioName))
                 return null;
             return audionsConf.Audios[audioName];
         }

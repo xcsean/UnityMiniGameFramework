@@ -15,10 +15,8 @@ namespace UnityMiniGameFramework
     {
         public static AudioManager Instance => _instance;
         private static AudioManager _instance;
-        [SerializeField]
-        private AudioSource m_bgmSource;
-        [SerializeField]
-        private GameObject m_audioObjOrigin;
+        [SerializeField] private AudioSource m_bgmSource;
+        [SerializeField] private GameObject m_audioObjOrigin;
 
         private List<AudioSource> m_activeAduioSources = new List<AudioSource>(20);
         private Stack<AudioSource> m_sfxSourcePool = new Stack<AudioSource>(30);
@@ -29,11 +27,11 @@ namespace UnityMiniGameFramework
 
         public void Init()
         {
-            _config =  (AudionConfig)UnityGameApp.Inst.Conf.getConfig("audios");
+            _config = (AudionConfig) UnityGameApp.Inst.Conf.getConfig("audios");
             if (_config == null)
                 Debug.DebugOutput(DebugTraceType.DTT_Error, "audiosConfig Init Fail");
         }
-        
+
         private void Awake()
         {
             if (_instance == null)
@@ -57,7 +55,7 @@ namespace UnityMiniGameFramework
 
         public void PlayBGM(string clipName)
         {
-            if(string.IsNullOrEmpty(clipName))
+            if (string.IsNullOrEmpty(clipName))
                 return;
             if (m_bgmSource.isPlaying && m_lastBGMName == clipName)
                 return;
@@ -76,31 +74,40 @@ namespace UnityMiniGameFramework
             m_lastBGMName = clipName;
         }
 
+        public void PlaySFXByAudioName(string audioName)
+        {
+            var config = _config.getAudioConfig(audioName);
+            if (config == null)
+                return;
+            PlaySFX(config.SrcPath);
+        }
+
         public void PlaySFX(string clipName, bool looping = false)
         {
-            if(string.IsNullOrEmpty(clipName))
+            if (string.IsNullOrEmpty(clipName))
                 return;
             AudioClip clip;
             if (m_CachedAudioAssets.TryGetValue(clipName, out clip))
             {
-                
             }
             else
             {
                 clip = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadAudioClip(clipName);
                 m_CachedAudioAssets.Add(clipName, clip);
             }
+
             AudioSource source = GetOneAudioSource();
             m_activeAduioSources.Add(source);
             source.clip = clip;
             source.loop = looping;
             source.Play();
         }
+
         private AudioSource GetOneAudioSource()
         {
             return m_sfxSourcePool.Count > 0 ? m_sfxSourcePool.Pop() : AddNewAudioSource();
         }
-        
+
         private AudioSource AddNewAudioSource()
         {
             var go = GameObject.Instantiate(m_audioObjOrigin, transform);
@@ -123,10 +130,11 @@ namespace UnityMiniGameFramework
                     i++;
             }
         }
-        
+
         private bool CanAudioSourceBeRecycled(AudioSource audioSource)
         {
-            return audioSource.clip == null || !audioSource.isPlaying || (!audioSource.loop && audioSource.time >= audioSource.clip.length);
+            return audioSource.clip == null || !audioSource.isPlaying ||
+                   (!audioSource.loop && audioSource.time >= audioSource.clip.length);
         }
     }
 }
