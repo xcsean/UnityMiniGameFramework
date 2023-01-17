@@ -42,7 +42,6 @@ namespace UnityMiniGameFramework
             FindUI();
 
         }
-
         protected void FindUI()
         {
             _logListView = this._uiObjects["logListView"].unityVisualElement as ListView;
@@ -67,8 +66,38 @@ namespace UnityMiniGameFramework
             onShowLogByType();
         }
 
-        StyleColor btnColor1 = new StyleColor(new Color(50f / 255f, 50f / 255f, 50f / 255f));
-        StyleColor btnColor2 = new StyleColor(new Color(70f / 255f, 70f / 255f, 70f / 255f));
+        protected int _logInfoCnt = 0;
+        protected int _logWarnCnt = 0;
+        protected int _logErrorCnt = 0;
+        protected int logInfoCnt
+        {
+            get { return _logInfoCnt; }
+            set {
+                _logInfoCnt = value;
+                _btnInfo.text = $"Log({_logInfoCnt})"; 
+            } 
+        }
+        protected int logWarnCnt
+        {
+            get { return _logWarnCnt; }
+            set
+            {
+                _logWarnCnt = value;
+                _btnWarn.text = $"Log({_logWarnCnt})";
+            }
+        }
+        protected int logErrorCnt
+        {
+            get { return _logErrorCnt; }
+            set
+            {
+                _logErrorCnt = value;
+                _btnError.text = $"Log({_logErrorCnt})";
+            }
+        }
+
+        protected StyleColor btnColor1 = new StyleColor(new Color(50f / 255f, 50f / 255f, 50f / 255f));
+        protected StyleColor btnColor2 = new StyleColor(new Color(70f / 255f, 70f / 255f, 70f / 255f));
         protected void onClickBtnInfo()
         {
             if (btnStatuDic[LogType.Log] == 1)
@@ -116,9 +145,24 @@ namespace UnityMiniGameFramework
         protected List<GMLogInfo> infos = new List<GMLogInfo>();
         protected void onShowLogByType()
         {
+            logInfoCnt = 0;
+            logWarnCnt = 0;
+            logErrorCnt = 0;
             infos.Clear();
             for (int i = 0; i < UnityGameApp.Inst.logs.Count; i++)
             {
+                switch (UnityGameApp.Inst.logs[i].type)
+                {
+                    case LogType.Log:
+                        logInfoCnt += 1;
+                        break;
+                    case LogType.Warning:
+                        logWarnCnt += 1;
+                        break;
+                    case LogType.Error:
+                        logErrorCnt += 1;
+                        break;
+                }
                 if (btnStatuDic[UnityGameApp.Inst.logs[i].type] == 1)
                 {
                     infos.Add(UnityGameApp.Inst.logs[i]);
@@ -153,7 +197,9 @@ namespace UnityMiniGameFramework
             }
             if (isInitLogList)
             {
-                //return;
+                _logListView.itemsSource = logInfos;
+                _logListView.RefreshItems();
+                return;
             }
             isInitLogList = true;
             Action<VisualElement, int> bindItem = (e, i) =>
@@ -177,9 +223,9 @@ namespace UnityMiniGameFramework
             _logListView.fixedItemHeight = 60;
             _logListView.makeItem = () => new HelpBox();
             _logListView.bindItem = bindItem;
-            _logListView.itemsSource = logInfos;
             _logListView.selectionType = SelectionType.Single;
             _logListView.onSelectionChange += onClickLogItem;
+            _logListView.itemsSource = logInfos;
 
             //_logListView.SetSelection(6);
             //UnityEngine.Debug.LogError("delay SetSelection6---->");
@@ -237,7 +283,7 @@ namespace UnityMiniGameFramework
             {
                 if (item != null && (item is GMLogInfo))
                 {
-                    UnityEngine.Debug.Log("obj2=" + (DateTime.Now.ToString("hh:mm:ss")));
+                    //UnityEngine.Debug.Log("obj2=" + (DateTime.Now.ToString("hh:mm:ss")));
                     showLogDetailInfo(item as GMLogInfo);
                     break;
                 }
