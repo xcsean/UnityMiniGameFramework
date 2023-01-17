@@ -79,7 +79,53 @@ namespace UnityMiniGameFramework
             var config = _config.getAudioConfig(audioName);
             if (config == null)
                 return;
-            PlaySFX(config.SrcPath);
+            //PlaySFX(config.SrcPath);
+            PlaySFX(config);
+        }
+
+        private void PlaySFX(AudionConf config)
+        {
+            if (config == null)
+                return;
+            AudioClip clip;
+            string clipName = config.SrcPath;
+            if (m_CachedAudioAssets.TryGetValue(clipName, out clip))
+            {
+            }
+            else
+            {
+                clip = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadAudioClip(clipName);
+                m_CachedAudioAssets.Add(clipName, clip);
+            }
+
+            AudioSource source = GetOneAudioSource();
+            m_activeAduioSources.Add(source);
+            source.clip = clip;
+            if (!config.SpatialBlend.HasValue || config.SpatialBlend.Equals(0))
+            {
+                source.Play();
+                source.spatialBlend = 0;
+                source.gameObject.transform.position = Vector3.zero;
+                return;
+            }
+
+            source.spatialBlend = (float) config.SpatialBlend;
+            source.volume = config.Volume ?? 1;
+            source.maxDistance = config.MaxDistance ?? 500;
+            source.rolloffMode = AudioRolloffMode.Custom;
+            string mapNode = config.MapRoot;
+            string root = mapNode.Substring(0, mapNode.IndexOf('/'));
+            var go = GameObject.Find(root);
+            if (go != null)
+            {
+                string nodePath = mapNode.Substring(mapNode.IndexOf('/') + 1, mapNode.Length - root.Length - 1);
+                var node = go.transform.Find(nodePath);
+                if (node != null)
+                {
+                    source.gameObject.transform.position = node.transform.position;
+                }
+            }
+            source.Play();
         }
 
         public void PlaySFX(string clipName, bool looping = false)

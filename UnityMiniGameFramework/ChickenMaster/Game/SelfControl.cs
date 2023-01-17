@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -42,6 +44,7 @@ namespace UnityMiniGameFramework
 
             UnityGameApp.Inst.MainScene.camera.follow(_mapHeroObj);
             _mapHeroObj.markAsSelf();
+            _mapHeroObj.unityGameObject.AddComponent<AudioListener>();
 
             _isInited = true;
 

@@ -56,7 +56,7 @@ namespace UnityMiniGameFramework
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.uiMainPanel.Joystick.OnMouseUp(null);
-            UnityGameApp.Inst.AudioManager.PlaySFX("Audio/MP3/Fight/fight_win");
+            UnityGameApp.Inst.AudioManager.PlaySFXByAudioName("FightWin");
         }
 
         private void showReward()

@@ -156,7 +156,7 @@ namespace UnityMiniGameFramework
                 else
                 {
                     // arrived, start onboard
-                    UnityGameApp.Inst.AudioManager.PlaySFX("Audio/MP3/Train/Train_come");
+                    UnityGameApp.Inst.AudioManager.PlaySFXByAudioName("TrainCome");
                     _onboardTimeLeft = _station.trainStaionConf.trainOnboardTime;
                 }
             }

@@ -9,6 +9,10 @@ namespace UnityMiniGameFramework
     {
         public string Name { get; set; }
         public string SrcPath { get; set; }
+        public int? SpatialBlend { get; set; }
+        public string MapRoot { get; set; }
+        public float? MaxDistance { get; set; }
+        public float? Volume { get; set; }
     }
     
     
