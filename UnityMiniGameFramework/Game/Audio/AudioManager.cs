@@ -103,9 +103,10 @@ namespace UnityMiniGameFramework
             source.clip = clip;
             if (!config.SpatialBlend.HasValue || config.SpatialBlend.Equals(0))
             {
-                source.Play();
+                source.volume = 1;
                 source.spatialBlend = 0;
                 source.gameObject.transform.position = Vector3.zero;
+                source.Play();
                 return;
             }
 
@@ -144,6 +145,9 @@ namespace UnityMiniGameFramework
 
             AudioSource source = GetOneAudioSource();
             m_activeAduioSources.Add(source);
+            source.gameObject.transform.position = Vector3.zero;
+            source.volume = 1;
+            source.spatialBlend = 0;
             source.clip = clip;
             source.loop = looping;
             source.Play();
