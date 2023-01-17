@@ -29,6 +29,15 @@ namespace UnityMiniGameFramework
             public string type;
             public VisualElement obj;
         }
+        protected class XMoveToParams
+        {
+            public int dir; // x:-1-左,1-右
+            public float speed;
+            public float endPosX;
+            public bool arrive;
+
+            public List<bool> bParams;
+        }
 
         override public string type => "UIGameMainPanel";
         public static UIGameMainPanel create()
@@ -146,7 +155,7 @@ namespace UnityMiniGameFramework
             vts = Resources.Load<VisualTreeAsset>("UI/Controls/FlyNumIcon");
             vts_tips = Resources.Load<VisualTreeAsset>("UI/Controls/Tips");
 
-            ShowBattleStartInfo(false);
+            _battleStartInfo.transform.position = new Vector3(-240, 0, 0);
         }
 
         /// <summary>
@@ -199,6 +208,16 @@ namespace UnityMiniGameFramework
             bool isDie = _hp <= 0;
             _btnStart.style.display = (!isFighting && !isDie) ? DisplayStyle.Flex : DisplayStyle.None;
             _btnRecover.style.display = (!isFighting && isDie) ? DisplayStyle.Flex : DisplayStyle.None;
+            if (mtp != null && !mtp.arrive)
+            {
+                _btnStart.style.display = DisplayStyle.None;
+                _btnRecover.style.display = DisplayStyle.None;
+                mtp.bParams = new List<bool>
+                {
+                    (!isFighting && !isDie),
+                    (!isFighting && isDie)
+                };
+            }
 
             ShowBattleStartInfo(isFighting && !isDie);
         }
@@ -376,28 +395,6 @@ namespace UnityMiniGameFramework
                 }
             }
         }
-        public void setTips(int index, string tip)
-        {
-            if (tipObjs.Count == 0)
-            {
-                for (var i = 0; i < 10; i++)
-                {
-                    var tipsObj = vts_tips.CloneTree();
-                    _NotifyBg.Add(tipsObj);
-                    tipsObj.transform.position = new Vector3(0, 0);
-                    tipsObj.style.display = DisplayStyle.None;
-                    tipObjs.Add(tipsObj);
-                }
-            }
-
-            var obj = tipObjs[index];
-            if (obj != null)
-            {
-                obj.Q<Label>("tipLabel").text = $"{tip}";
-                obj.transform.position = new Vector3(0, 0);
-                obj.style.display = DisplayStyle.Flex;
-            }
-        }
 
         private TemplateContainer getTipsObj(string tip)
         {
@@ -510,17 +507,47 @@ namespace UnityMiniGameFramework
             _TrainTime.text = $"{t.Minutes}:{t.Seconds}";
         }
 
+        private XMoveToParams mtp = null;
         // 战斗开始提示图标
         public void ShowBattleStartInfo(bool isShow = true)
         {
+            if(mtp != null)
+            {
+                if (mtp.arrive)
+                {
+                    if ((isShow && mtp.dir == 1) || (!isShow && mtp.dir == -1))
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
             if (isShow)
             {
-                // TODO use animation 
-                _battleStartInfo.transform.position = new UnityEngine.Vector3(0, 0, 0);
+                //// TODO use animation 
+                _battleStartInfo.transform.position = new Vector3(-240, 0, 0);
+                mtp = new XMoveToParams
+                {
+                    arrive = false,
+                    dir = 1,
+                    speed = -200,
+                    endPosX = 0,
+                };
             }
             else
             {
-                _battleStartInfo.transform.position = new UnityEngine.Vector3(-240, 0, 0);
+                _battleStartInfo.transform.position = new Vector3(0, 0, 0);
+                mtp = new XMoveToParams
+                {
+                    arrive = false,
+                    dir = -1,
+                    speed = 200,
+                    endPosX = -240,
+                };
             }
         }
 
@@ -586,10 +613,30 @@ namespace UnityMiniGameFramework
                 }
             }
         }
+
+        private void onUpdateBattleTips()
+        {
+            if (mtp == null || mtp.arrive)
+            {
+                return;
+            }
+
+            mtp.speed += 1200f * Time.deltaTime * mtp.dir;
+            _battleStartInfo.transform.position += new Vector3((mtp.speed - 600f * Time.deltaTime * mtp.dir) * Time.deltaTime, 0);
+            float dis = mtp.endPosX - _battleStartInfo.transform.position.x;
+            if ((mtp.dir * dis <= 0))
+            {
+                _battleStartInfo.transform.position = new Vector3(mtp.endPosX, 0);
+                _btnStart.style.display = mtp.bParams[0] ? DisplayStyle.Flex : DisplayStyle.None;
+                _btnRecover.style.display = mtp.bParams[1] ? DisplayStyle.Flex : DisplayStyle.None;
+                mtp.arrive = true;
+            }
+        }
+
         public void OnUpdate()
         {
             onUpdateAni();
-
+            onUpdateBattleTips();
             if (_notifyMessages == null)
             {
                 return;
