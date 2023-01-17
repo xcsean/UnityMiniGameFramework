@@ -165,7 +165,8 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"spawn monster [{_conf.monsterConfName}] level[{_spawnMonsterLevel}]");
+            string str = $"level[{_spawnMonsterLevel}] hp[{combatConf.hpMax}] def[{combatConf.def}] att[{combatConf.attackBase}]";
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"spawn monster [{_conf.monsterConfName}] {str}");
 
             mapMonsterObj.setLevel(_spawnMonsterLevel);
 
