@@ -40,6 +40,7 @@ namespace UnityMiniGameFramework
         protected List<GMLogInfo> infos = new List<GMLogInfo>();
         protected StyleColor btnBgColor1 = new StyleColor(new Color(50f / 255f, 50f / 255f, 50f / 255f));
         protected StyleColor btnBgColor2 = new StyleColor(new Color(70f / 255f, 70f / 255f, 70f / 255f));
+        protected int logAllCnt = 0;
 
         override public void Init(UIPanelConf conf)
         {
@@ -69,24 +70,35 @@ namespace UnityMiniGameFramework
             _btnWarn.clicked += onClickBtnWarn;
             _btnError.clicked += onClickBtnError;
             _btnClear.clicked += onClickBtnClear;
-
-           // unityUIDocument.rootVisualElement.schedule.Execute(() =>
-           //{
-                
-           // }).Every(20);
         }
 
         public override void showUI()
         {
             base.showUI();
 
-            onUpdateAllLog();
+            addUpdate(onUpdate);
+        }
+
+        public override void hideUI()
+        {
+            base.hideUI();
+        }
+
+        protected void onUpdate()
+        {
+            if (logAllCnt != UnityGameApp.Inst.logs.Count && UnityGameApp.Inst.logs.Count > 0)
+            {
+                logAllCnt = UnityGameApp.Inst.logs.Count;
+                onUpdateAllLog();
+            }
         }
 
         protected void onClickBtnClear()
         {
+            logAllCnt = 0;
             UnityGameApp.Inst.logs.Clear();
             onUpdateAllLog();
+            showLogDetailInfo(null);
         }
 
         protected int _logInfoCnt = 0;
@@ -97,7 +109,7 @@ namespace UnityMiniGameFramework
             get { return _logInfoCnt; }
             set {
                 _logInfoCnt = value;
-                _btnInfo.text = _logInfoCnt > 999 ? "Log(999+)" : $"Log({_logInfoCnt}";
+                _btnInfo.text = _logInfoCnt > 999 ? "Log(999+)" : $"Log({_logInfoCnt})";
             } 
         }
         protected int logWarnCnt
@@ -106,7 +118,7 @@ namespace UnityMiniGameFramework
             set
             {
                 _logWarnCnt = value;
-                _btnWarn.text = _logWarnCnt > 999 ? "Log(999+)" : $"Log({_logWarnCnt}";
+                _btnWarn.text = _logWarnCnt > 999 ? "Warn(999+)" : $"Warn({_logWarnCnt})";
             }
         }
         protected int logErrorCnt
@@ -115,7 +127,7 @@ namespace UnityMiniGameFramework
             set
             {
                 _logErrorCnt = value;
-                _btnError.text = _logErrorCnt > 999 ? "Log(999+)" : $"Log({_logErrorCnt}";
+                _btnError.text = _logErrorCnt > 999 ? "Error(999+)" : $"Error({_logErrorCnt})";
             }
         }
 
@@ -212,11 +224,6 @@ namespace UnityMiniGameFramework
         private bool isInitLogList = false;
         protected void showLogListInfo(List<GMLogInfo> logInfos)
         {
-            if (logInfos.Count == 0)
-            {
-                _logListView.RefreshItems();
-                return;
-            }
             if (isInitLogList)
             {
                 _logListView.itemsSource = logInfos;
@@ -266,8 +273,9 @@ namespace UnityMiniGameFramework
             };
         }
 
-        List<string> singleList = new List<string>();
-        Label logDetailLab;
+        private List<string> singleList = new List<string>();
+        private Label logDetailLab;
+        private bool isInitLogDetailList = false;
         /// <summary>
         /// 点击Log 显示堆栈详情
         /// </summary>
@@ -275,6 +283,13 @@ namespace UnityMiniGameFramework
         private void showLogDetailInfo(GMLogInfo _GMLogInfo)
         {
             singleList.Clear();
+            if (_GMLogInfo == null)
+            {
+                _logDetailListView.itemsSource = singleList;
+                _logDetailListView.RefreshItems();
+                return;
+            }
+
             singleList.Add($"{_GMLogInfo.condition}\r\n{_GMLogInfo.stackTrace}");
 
             if (singleList.Count > 0)
