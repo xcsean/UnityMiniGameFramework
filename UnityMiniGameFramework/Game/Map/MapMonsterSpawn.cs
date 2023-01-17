@@ -165,6 +165,8 @@ namespace UnityMiniGameFramework
                 return;
             }
 
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"spawn monster [{_conf.monsterConfName}] level[{_spawnMonsterLevel}]");
+
             mapMonsterObj.setLevel(_spawnMonsterLevel);
 
             var combatComp = new CMCombatComponent();
