@@ -44,8 +44,9 @@ namespace UnityMiniGameFramework
 
             UnityGameApp.Inst.MainScene.camera.follow(_mapHeroObj);
             _mapHeroObj.markAsSelf();
+            //todo:需要根据场景变更来切换
             _mapHeroObj.unityGameObject.AddComponent<AudioListener>();
-
+            UnityGameApp.Inst.MainScene.unityCamera.gameObject.GetComponent<AudioListener>().enabled = false;
             _isInited = true;
 
             // init hero ui
@@ -696,6 +697,9 @@ namespace UnityMiniGameFramework
         public void GM_SetPlayerLevel(int lv)
         {
             int setLv = lv;
+            _baseInfo.currentLevel = setLv;
+            _cmGame.baseInfo.markDirty();
+            return;
 
             var lvConfs = _cmGame.gameConf.gameConfs.levelUpExpRequire;
             if (lvConfs == null)
