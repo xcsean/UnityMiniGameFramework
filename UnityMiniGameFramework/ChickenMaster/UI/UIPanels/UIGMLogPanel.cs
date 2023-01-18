@@ -148,6 +148,8 @@ namespace UnityMiniGameFramework
                 btnStatuDic[LogType.Log] = 1;
                 _btnInfo.style.backgroundColor = btnBgColor2;
             }
+
+            showLogDetailInfo(null);
             onUpdateAllLog();
         }
         protected void onClickBtnWarn()
@@ -162,6 +164,8 @@ namespace UnityMiniGameFramework
                 btnStatuDic[LogType.Warning] = 1;
                 _btnWarn.style.backgroundColor = btnBgColor2;
             }
+
+            showLogDetailInfo(null);
             onUpdateAllLog();
         }
         protected void onClickBtnError()
@@ -176,6 +180,8 @@ namespace UnityMiniGameFramework
                 btnStatuDic[LogType.Error] = 1;
                 _btnError.style.backgroundColor = btnBgColor2;
             }
+
+            showLogDetailInfo(null);
             onUpdateAllLog();
         }
 
@@ -214,7 +220,6 @@ namespace UnityMiniGameFramework
                     infos.Add(UnityGameApp.Inst.logs[i]);
                 }
             }
-            showLogDetailInfo(null);
             showLogListInfo(infos);
         }
 
@@ -265,6 +270,8 @@ namespace UnityMiniGameFramework
 
                 (e as HelpBox).style.borderBottomWidth = 0;
                 (e as HelpBox).style.borderTopWidth = 0;
+                (e as HelpBox).style.borderLeftWidth = 0;
+                (e as HelpBox).style.borderRightWidth = 0;
                 (e as HelpBox).style.fontSize = 18;
                 (e as HelpBox).style.whiteSpace = WhiteSpace.Normal;
                 (e as HelpBox).style.width = new StyleLength(new Length(680));
@@ -292,28 +299,26 @@ namespace UnityMiniGameFramework
 
         private List<string> singleList = new List<string>();
         private Label logDetailLab;
-        private bool isInitLogDetailList = false;
         /// <summary>
         /// 点击Log显示堆栈详情
         /// </summary>
         private void showLogDetailInfo(GMLogInfo _GMLogInfo)
         {
             singleList.Clear();
-            if (_GMLogInfo != null)
+            if (_GMLogInfo == null)
             {
-                singleList.Add($"{_GMLogInfo.condition}\r\n{_GMLogInfo.stackTrace}");
-            }
-            if (isInitLogDetailList)
-            {
-                _logDetailListView.itemsSource = singleList;
-                _logDetailListView.RefreshItems();
+                if (logDetailLab != null)
+                {
+                    logDetailLab.text = "";
+                }
                 return;
             }
-            if (singleList.Count <= 0)
+            singleList.Add($"{_GMLogInfo.condition}\r\n{_GMLogInfo.stackTrace}");
+            if (logDetailLab != null)
             {
+                logDetailLab.text = singleList[0];
                 return;
             }
-            isInitLogDetailList = true;
           
             Action<VisualElement, int> bindItem = (e, i) =>
             {

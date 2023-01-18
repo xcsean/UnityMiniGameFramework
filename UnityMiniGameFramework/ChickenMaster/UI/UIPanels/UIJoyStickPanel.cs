@@ -22,8 +22,8 @@ namespace UnityMiniGameFramework
         }
         // 摇杆相关
         protected float _panelWidth;
-        protected UnityEngine.Vector2 _panelInitPos;
-        protected UnityEngine.Vector2 _btnInitPos;
+        protected Vector2 _panelInitPos;
+        protected Vector2 _btnInitPos;
         protected VisualElement _btn;
         protected VisualElement _back;
         protected VisualElement _content;
@@ -31,21 +31,21 @@ namespace UnityMiniGameFramework
 
         protected bool _click;
         protected bool _moving;
-        protected UnityEngine.Vector3 _movVec;
-        protected UnityEngine.Vector3 _dir;
+        protected Vector3 _movVec;
+        protected Vector3 _dir;
         protected float _degree;
 
         public bool isMoving => _moving;
-        public UnityEngine.Vector3 movVector3 => _movVec;
-        public UnityEngine.Vector3 direction => _dir;
+        public Vector3 movVector3 => _movVec;
+        public Vector3 direction => _dir;
         public float degreee => _degree;
 
         // 英雄拖动相关
-        protected UnityEngine.Vector3 _currentPickHeroInitPos;
+        protected Vector3 _currentPickHeroInitPos;
         protected CMNPCHeros _currentPickNPCHero;
         protected VFXRangeCricle _atkRangeCircleVFX;
         protected string _currentPickAreaName;
-        protected UnityEngine.Vector3 _currentPickPosition;
+        protected Vector3 _currentPickPosition;
         protected Dictionary<string, CMNPCHeros> _defAreaHeros;
 
         override public void Init(UIPanelConf conf)
@@ -70,22 +70,21 @@ namespace UnityMiniGameFramework
 
         void _postInit()
         {
-            _btnInitPos = new UnityEngine.Vector2(_btn.transform.position.x, _btn.transform.position.y);
-            _panelInitPos = new UnityEngine.Vector2(_back.transform.position.x, _back.transform.position.y);
+            _btnInitPos = new Vector2(_btn.transform.position.x, _btn.transform.position.y);
+            _panelInitPos = new Vector2(_back.transform.position.x, _back.transform.position.y);
             _panelWidth = _back.layout.width / 2;
 
             _clickArea.RegisterCallback<PointerDownEvent>(OnMouseDown);
             _clickArea.RegisterCallback<PointerMoveEvent>(OnMouseMove);
             _clickArea.RegisterCallback<PointerUpEvent>(OnMouseUp);
 
-            //_clickArea.RegisterCallback<MouseDownEvent>(OnMouseDown);
             //_clickArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             //_clickArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
             //_clickArea.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
 
         }
 
-        protected UnityEngine.Vector2 _transMousePosition(VisualElement ve, UnityEngine.Vector2 mousePos)
+        protected Vector2 _transMousePosition(VisualElement ve, Vector2 mousePos)
         {
             //Vector2 newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(
             //m_Bar.panel, TransformToFollow.position, UnityGameApp.Inst.MainScene.unityCamera);
@@ -95,7 +94,7 @@ namespace UnityMiniGameFramework
 
             //UnityEngine.Vector2 mousePositionCorrected = new UnityEngine.Vector2(mousePos.x, Screen.height - mousePos.y);
             //UnityEngine.Vector2 newPosition = RuntimePanelUtils.ScreenToPanel(ve.panel, mousePos);
-            UnityEngine.Vector2 newPosition = ve.WorldToLocal(mousePos);
+            Vector2 newPosition = ve.WorldToLocal(mousePos);
             newPosition.x = newPosition.x - ve.layout.width / 2;
             newPosition.y = newPosition.y - ve.layout.height / 2;
             return newPosition;
@@ -141,7 +140,7 @@ namespace UnityMiniGameFramework
             this._click = true;
             this._moving = false;
 
-            _btn.style.unityBackgroundImageTintColor = new StyleColor(new UnityEngine.Color(1, 1, 1, 1));
+            _btn.style.unityBackgroundImageTintColor = new StyleColor(new Color(1, 1, 1, 1));
 
             _clickArea.CaptureMouse();
         }
@@ -176,9 +175,9 @@ namespace UnityMiniGameFramework
             ////获取向量归一化
             _dir = _btn.transform.position.normalized;
             ////获取弧度
-            _degree = UnityEngine.Mathf.Atan2(_btn.transform.position.y, _btn.transform.position.x);
+            _degree = Mathf.Atan2(_btn.transform.position.y, _btn.transform.position.x);
 
-            _movVec = new UnityEngine.Vector3(-_btn.transform.position.x, 0, _btn.transform.position.y);
+            _movVec = new Vector3(-_btn.transform.position.x, 0, _btn.transform.position.y);
         }
 
         public void OnMouseLeave(MouseLeaveEvent e)
@@ -214,9 +213,9 @@ namespace UnityMiniGameFramework
         /// </summary>
         protected void OnCheckTouchUp()
         {
-            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
+            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
             {
-                if (UnityEngine.Input.touchCount == 0)
+                if (Input.touchCount == 0)
                 {
                     // mouse up
                     OnMouseUp(null);
@@ -224,7 +223,7 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                if (!UnityEngine.Input.GetMouseButton(0))
+                if (!Input.GetMouseButton(0))
                 {
                     // mouse up
                     OnMouseUp(null);
@@ -243,7 +242,7 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
 
             UnityEngine.RaycastHit[] hitInfos = UnityEngine.Physics.RaycastAll(
-                UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(UnityEngine.Input.mousePosition),
+                UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
                 1000.0f,
                 UnityEngine.LayerMask.GetMask("Self"));
 
@@ -280,7 +279,7 @@ namespace UnityMiniGameFramework
                     _currentPickNPCHero.mapHero.actionComponent.addState(ActStates.STATE_KEY_NO_ATK);
 
                     _currentPickHeroInitPos = _currentPickNPCHero.mapHero.unityGameObject.transform.position;
-                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = new UnityEngine.Vector3(
+                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = new Vector3(
                         _currentPickNPCHero.mapHero.unityGameObject.transform.position.x,
                         _currentPickNPCHero.mapHero.unityGameObject.transform.position.y + 0.5f,
                         _currentPickNPCHero.mapHero.unityGameObject.transform.position.z
@@ -288,7 +287,7 @@ namespace UnityMiniGameFramework
 
                     _atkRangeCircleVFX.unityGameObject.SetActive(true);
                     _atkRangeCircleVFX.unityGameObject.transform.SetParent(_currentPickNPCHero.mapHero.unityGameObject.transform);
-                    _atkRangeCircleVFX.unityGameObject.transform.localPosition = new UnityEngine.Vector3(0, 0.5f, 0);
+                    _atkRangeCircleVFX.unityGameObject.transform.localPosition = new Vector3(0, 0.5f, 0);
 
                     _atkRangeCircleVFX.SetCircleRange(_currentPickNPCHero.gun.attackRange);
 
@@ -337,7 +336,6 @@ namespace UnityMiniGameFramework
                     _currentPickNPCHero.heroInfo.position.x = _currentPickPosition.x;
                     _currentPickNPCHero.heroInfo.position.y = _currentPickPosition.y;
                     _currentPickNPCHero.heroInfo.position.z = _currentPickPosition.z;
-
                 }
                 else
                 {
@@ -383,10 +381,9 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            // TODO 改成touch
-            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
+            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
             {
-                if (UnityEngine.Input.touchCount != 1)
+                if (Input.touchCount != 1)
                 {
                     // mouse up
                     OnPutEnd();
@@ -395,7 +392,7 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                if (!UnityEngine.Input.GetMouseButton(0))
+                if (!Input.GetMouseButton(0))
                 {
                     // mouse up
                     OnPutEnd();
@@ -405,7 +402,7 @@ namespace UnityMiniGameFramework
 
             // pick def area
             UnityEngine.RaycastHit[] hitInfos = UnityEngine.Physics.RaycastAll(
-                UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(UnityEngine.Input.mousePosition),
+                UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
                 1000.0f,
                 UnityEngine.LayerMask.GetMask("DefArea"));
 
@@ -424,13 +421,13 @@ namespace UnityMiniGameFramework
 
                 // pick ground position
                 hitInfos = UnityEngine.Physics.RaycastAll(
-                    UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(UnityEngine.Input.mousePosition),
+                    UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
                     1000.0f,
                     UnityEngine.LayerMask.GetMask("Ground"));
 
                 if (hitInfos.Length > 0)
                 {
-                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = new UnityEngine.Vector3(
+                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = new Vector3(
                        hitInfos[0].point.x,
                        hitInfos[0].point.y + 0.5f,
                        hitInfos[0].point.z
@@ -441,7 +438,7 @@ namespace UnityMiniGameFramework
             {
                 _atkRangeCircleVFX.ShowAttackRange(true); // can put
 
-                _currentPickNPCHero.mapHero.unityGameObject.transform.position = new UnityEngine.Vector3(
+                _currentPickNPCHero.mapHero.unityGameObject.transform.position = new Vector3(
                     _currentPickPosition.x,
                     _currentPickPosition.y + 0.5f,
                     _currentPickPosition.z
@@ -453,7 +450,7 @@ namespace UnityMiniGameFramework
         {
             base.showUI();
 
-            UnityGameApp.Inst.addUpdateCall(this.OnUpdate);
+            addUpdate(this.OnUpdate);
         }
 
         public override void hideUI()
