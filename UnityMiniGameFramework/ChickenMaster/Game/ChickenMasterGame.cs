@@ -198,12 +198,7 @@ namespace UnityMiniGameFramework
 
             _lastSaveTime = nowMillisecond;
 
-
-            if(GameApp.Inst.Platform == PlatformEnum.PlatformEditor || 
-                GameApp.Inst.Platform == PlatformEnum.PlatformEditorMac)
-            {
-                SDKManager.InitSDK(new CMToponSDK());
-            }
+            SDKManager.InitSDK(new CMToponSDK());
         }
 
         public void OnStartSceneLoaded()

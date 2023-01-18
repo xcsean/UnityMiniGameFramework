@@ -16,8 +16,11 @@ namespace UnityMiniGameFramework
 
         public static void InitSDK(ISDK s)
         {
-            _sdk = s;
-            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Developer SDKManager InitSDK:" +  _sdk);
+            if (_sdk == null)
+            {
+                _sdk = s;
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Developer SDKManager InitSDK:" + _sdk);
+            }
         }
 
         public static void showAutoAd(Action callball, string eventName = "")
@@ -41,5 +44,5 @@ namespace UnityMiniGameFramework
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Mybe SDK not init details ===>>>> " + ex);
             }
         }
-}
+    }
 }
