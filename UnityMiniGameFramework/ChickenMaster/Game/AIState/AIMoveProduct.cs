@@ -530,6 +530,21 @@ namespace UnityMiniGameFramework
                     _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.inputPutPosition.randSpawnPos() }, 0.5f);
                 }
             }
+            // 有目标但目标input已经满了时
+            if (_targetFactory != null)
+            {
+                if (_targetFactory.currentProductInputStore >= _targetFactory.maxInputProductStore)
+                {
+                    var fac = _fetchFactoryByInput();
+                    if (fac != null && fac.factoryName != _targetFactory.factoryName)
+                    {
+                        _targetFactory = fac;
+                        _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
+                        addProductGo(_worker.workerConf.productPrefab);
+                        _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.inputPutPosition.randSpawnPos() }, 0.5f);
+                    }
+                }
+            }
 
             if (_movAct.isMoving)
             {
