@@ -14,43 +14,25 @@ namespace UnityMiniGameFramework
 
         public static ISDK sdk => _sdk;
 
-        protected static SDKBehaviour _sdkBehaviour;
-
-        public static SDKBehaviour sdkBehaviour => _sdkBehaviour;
-
         public static void InitSDK(ISDK s)
         {
             _sdk = s;
-            _sdk.Init(_sdkBehaviour);
-        }
-
-        public static void setSdkBehaviour(SDKBehaviour s)
-        {
-            _sdkBehaviour = s;
+            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Developer SDKManager InitSDK:" +  _sdk);
         }
 
         public static void showAutoAd(Action callball, string eventName = "")
         {
-
-            if (!SDKManager._sdk.isNull())
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{eventName}"));
+            _sdk.showAutoAd((SdkEvent args) =>
             {
-                //UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{eventName}"));
-                SDKManager._sdk.showAutoAd((SdkEvent args) =>
+                if (args.type == AdEventType.RewardEvent)
                 {
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Start showAutoAd" + args.type.ToString());
-                    if (args.type == AdEventType.RewardEvent)
-                    {
-                        //TODO 看完视频下发奖励
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                        //UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
-                        callball();
-                    }
-                });
-            }
-            else
-            {
-                callball();
-            }
+                    //TODO 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                    UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
+                    callball();
+                }
+            });
         }
     }
 }

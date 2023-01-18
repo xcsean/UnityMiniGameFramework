@@ -8,13 +8,11 @@ namespace UnityMiniGameFramework
 {
     public interface ISDK
     {
-        void Init(SDKBehaviour sdkb);
-
-        bool isNull();
+        void Init();
 
         void showVideo(Action<SdkEvent> callback);
 
-        void showAutoAd(Action<SdkEvent> callback);
+        void showAutoAd(Action<SdkEvent> cb);
 
         void loadVideo();
 
