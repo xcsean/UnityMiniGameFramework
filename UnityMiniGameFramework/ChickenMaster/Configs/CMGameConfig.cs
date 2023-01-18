@@ -143,6 +143,7 @@ namespace UnityMiniGameFramework
         public int MaxstoreCount { get; set; }
         public int maxSellCountPerRound { get; set; }
         public int upgradeGoldCost { get; set; }
+        public int TrainCarriageCount { get; set; }
     }
 
     public class CMTrainStationConf

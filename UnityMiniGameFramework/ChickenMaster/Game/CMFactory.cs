@@ -34,7 +34,9 @@ namespace UnityMiniGameFramework
         public SpawnPos outputStorePosition => _outputStorePosition;
 
         public LocalFactoryInfo localFacInfo => _localFacInfo;
+
         protected LocalFactoryInfo _localFacInfo;
+
         // 头顶生产进度条
         protected UIProduceProgressPanel _produceProgressPanel;
         protected UIProduceProgressPanel produceProgressPanel => _produceProgressPanel;
@@ -43,8 +45,12 @@ namespace UnityMiniGameFramework
         public int maxInputProductStore => _factoryLevelConf.maxInputProductStore;
         public int maxOutputProductStore => _factoryLevelConf.maxOutputProductStore;
 
-        public int currentProductInputStore => _localFacInfo.buildingInputProduct == null ? 0 : _localFacInfo.buildingInputProduct.count;
-        public int currentProductOutputStore => _localFacInfo.buildingOutputProduct == null ? 0 : _localFacInfo.buildingOutputProduct.count;
+        public int currentProductInputStore =>
+            _localFacInfo.buildingInputProduct == null ? 0 : _localFacInfo.buildingInputProduct.count;
+
+        public int currentProductOutputStore => _localFacInfo.buildingOutputProduct == null
+            ? 0
+            : _localFacInfo.buildingOutputProduct.count;
 
         public float currentCD => _currentCD;
         protected float _currentCD;
@@ -62,7 +68,7 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory  init config not exist");
                 return false;
             }
-                
+
             _factoryConf = factoryConf;
             _factoryName = _factoryConf.mapBuildName;
             _mapBuildingObj = null;
@@ -70,15 +76,17 @@ namespace UnityMiniGameFramework
             map.buildings.TryGetValue(_factoryConf.mapBuildName, out _mapBuildingObj);
             if (_mapBuildingObj == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory map building [{_factoryConf.mapBuildName}] not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"CMFactory map building [{_factoryConf.mapBuildName}] not exist");
                 return false;
             }
-            
+
             _inputPutPosition = map.getSpawnPosByObjectName(_factoryConf.inputPutPosName);
             if (_inputPutPosition == null)
             {
                 return false;
             }
+
             _inputStorePosition = map.getSpawnPosByObjectName(_factoryConf.inputStorePosName);
             if (_inputStorePosition == null)
             {
@@ -90,6 +98,7 @@ namespace UnityMiniGameFramework
             {
                 return false;
             }
+
             _outputStorePosition = map.getSpawnPosByObjectName(_factoryConf.outputStorePosName);
             if (_outputStorePosition == null)
             {
@@ -99,28 +108,29 @@ namespace UnityMiniGameFramework
             setBuildGray(true);
             return true;
         }
-        
-        
+
+
         public bool Init(LocalFactoryInfo facInfo)
         {
             _localFacInfo = facInfo;
-            
+
             if (!_factoryConf.levelConfs.TryGetValue(_localFacInfo.level, out _factoryLevelConf))
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMFactory [{_factoryName}] level [{_localFacInfo.level}] config not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"CMFactory [{_factoryName}] level [{_localFacInfo.level}] config not exist");
                 return false;
             }
-            
+
             _currentCD = produceCD;
             _produceVer = 0;
-            
+
             //todo:data与control需要分离
-            _updateProductBox(factoryConf.inputStorePrefabPath, (float)currentProductInputStore /
+            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
                                                                 ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
                                                                 .currentLevelConf
                                                                 .fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
-                (float)currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
+                (float) currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             setBuildGray(false);
 
             _init = true;
@@ -146,8 +156,10 @@ namespace UnityMiniGameFramework
                     panel.hideUI();
                 }
 
-                _produceProgressPanel = UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
-                _produceProgressPanel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+                _produceProgressPanel =
+                    UnityGameApp.Inst.UI.createNewUIPanel("ProduceProgressUI") as UIProduceProgressPanel;
+                _produceProgressPanel.unityGameObject.transform.SetParent(
+                    ((MGGameObject) UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
                 _produceProgressPanel.RefreshInfo(this, _factoryConf);
                 _produceProgressPanel.SetFollowTarget(_mapBuildingObj.unityGameObject.transform);
                 _produceProgressPanel.showUI();
@@ -195,7 +207,9 @@ namespace UnityMiniGameFramework
                 _factoryLevelConf = _factoryConf.levelConfs[_localFacInfo.level];
                 cmGame.baseInfo.markDirty();
 
-                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData12($"建筑[{_factoryConf.mapBuildName}]等级{_localFacInfo.level}"));
+                UnityGameApp.Inst.RESTFulClient.Report(
+                    UnityGameApp.Inst.AnalysisMgr.GetPointData12(
+                        $"建筑[{_factoryConf.mapBuildName}]等级{_localFacInfo.level}"));
             }
             else
             {
@@ -213,7 +227,8 @@ namespace UnityMiniGameFramework
         {
             if (info.productName != _factoryConf.inputProductName)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"factory [{_factoryConf.mapBuildName}] fill product [{info.productName}] but expect [{_factoryConf.inputProductName}]");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"factory [{_factoryConf.mapBuildName}] fill product [{info.productName}] but expect [{_factoryConf.inputProductName}]");
                 return;
             }
 
@@ -256,12 +271,13 @@ namespace UnityMiniGameFramework
                 _produceProgressPanel.DoUpdateInputStore(currentProductInputStore, toFill);
             }
 
-            _updateProductBox(factoryConf.inputStorePrefabPath, (float)currentProductInputStore /
+            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
                                                                 ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
                                                                 .currentLevelConf
                                                                 .fetchPackCount, _inputStorePosition);
 
-            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
+            Debug.DebugOutput(DebugTraceType.DTT_Debug,
+                $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
             cmGame.baseInfo.markDirty();
             cmGame.uiMainPanel.refreshMeat();
         }
@@ -286,11 +302,12 @@ namespace UnityMiniGameFramework
                 _produceProgressPanel.DoUpdateOutStore(currentProductOutputStore, -fetchCount);
             }
 
-            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{currentProductOutputStore}");
+            Debug.DebugOutput(DebugTraceType.DTT_Debug,
+                $"{_localFacInfo.level}级工厂到车站，搬运数量：{fetchCount}，工厂剩余数量：{currentProductOutputStore}");
 
             _updateProductBox(factoryConf.outputStorePrefabPath,
-                (float)currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
-            
+                (float) currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
+
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
 
@@ -312,7 +329,8 @@ namespace UnityMiniGameFramework
             int produceCount = _factoryLevelConf.produceOutputCount;
             if (_localFacInfo.buildingInputProduct.count < _factoryLevelConf.costInputCount)
             {
-                produceCount = _localFacInfo.buildingInputProduct.count * _factoryLevelConf.produceOutputCount / _factoryLevelConf.costInputCount;
+                produceCount = _localFacInfo.buildingInputProduct.count * _factoryLevelConf.produceOutputCount /
+                               _factoryLevelConf.costInputCount;
                 if (produceCount <= 0)
                 {
                     produceCount = 1;
@@ -326,7 +344,8 @@ namespace UnityMiniGameFramework
                 produceCount = spaceLeft;
             }
 
-            int realCostInputCount = produceCount * _factoryLevelConf.costInputCount / _factoryLevelConf.produceOutputCount;
+            int realCostInputCount =
+                produceCount * _factoryLevelConf.costInputCount / _factoryLevelConf.produceOutputCount;
             if (realCostInputCount >= _localFacInfo.buildingInputProduct.count)
             {
                 _localFacInfo.buildingInputProduct.count = 0;
@@ -363,14 +382,15 @@ namespace UnityMiniGameFramework
             }
 
             string haveBuff = checkBuff() ? "已翻倍" : "无增益";
-            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}({haveBuff})，产出总数量：{currentProductOutputStore}");
+            Debug.DebugOutput(DebugTraceType.DTT_Debug,
+                $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}({haveBuff})，产出总数量：{currentProductOutputStore}");
 
-            _updateProductBox(factoryConf.inputStorePrefabPath,(float) currentProductInputStore /
+            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
                                                                 ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
                                                                 .currentLevelConf
                                                                 .fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
-                (float)currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
+                (float) currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             cmGame.baseInfo.markDirty();
 
@@ -383,10 +403,9 @@ namespace UnityMiniGameFramework
             {
                 _produceVer++;
             }
-            
         }
 
-        protected virtual void _updateProductBox(string boxPrefabPath, float _boxNum,SpawnPos spawnPos)
+        protected virtual void _updateProductBox(string boxPrefabPath, float _boxNum, SpawnPos spawnPos)
         {
             var putTf = spawnPos.spawnObject.transform;
             int childCount = putTf.childCount;
@@ -409,8 +428,9 @@ namespace UnityMiniGameFramework
                 obj.transform.SetParent(putTf);
                 obj.transform.localEulerAngles = Vector3.zero;
             }
+
             var boxCollider = spawnPos.spawnObject.GetComponent<BoxCollider>();
-            if(!boxCollider)
+            if (!boxCollider)
                 return;
             Vector3 size = boxCollider.size;
             float boxLenght = 0.32f;
@@ -434,24 +454,26 @@ namespace UnityMiniGameFramework
                 childTf.localPosition = pos;
             }
         }
-        
+
         public void OnUpdate()
         {
-            if(!_init)
+            if (!_init)
                 return;
-            
+
             if (currentProductInputStore <= 0)
             {
-                if (_mapBuildingObj.animatorComponent.currBaseAnimation != null && _mapBuildingObj.animatorComponent.currBaseAnimation.aniName == ActAnis.BuildWorking)
+                if (_mapBuildingObj.animatorComponent.currBaseAnimation != null &&
+                    _mapBuildingObj.animatorComponent.currBaseAnimation.aniName == ActAnis.BuildWorking)
                 {
                     _mapBuildingObj.animatorComponent.stopAnimation(ActAnis.BuildWorking);
                 }
-                
+
                 return;
             }
-            
 
-            if (_mapBuildingObj.animatorComponent.currBaseAnimation ==null ||_mapBuildingObj.animatorComponent.currBaseAnimation.aniName != ActAnis.BuildWorking)
+
+            if (_mapBuildingObj.animatorComponent.currBaseAnimation == null ||
+                _mapBuildingObj.animatorComponent.currBaseAnimation.aniName != ActAnis.BuildWorking)
             {
                 _mapBuildingObj.animatorComponent.playAnimation(ActAnis.BuildWorking);
             }
@@ -477,8 +499,8 @@ namespace UnityMiniGameFramework
                 return;
             acquirer.BuildMeshRender.material.SetColor("_MainColor",
                 isGray ? Color.gray : new Color(176.0f / 255, 176.0f / 255, 176.0f / 255));
-
         }
+
         public bool checkBuff()
         {
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
@@ -510,7 +532,7 @@ namespace UnityMiniGameFramework
                     return false;
             }
 
-            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            long nowMillisecond = (long) (DateTime.Now.Ticks / 10000);
             if (buffTime >= nowMillisecond)
             {
                 return true;

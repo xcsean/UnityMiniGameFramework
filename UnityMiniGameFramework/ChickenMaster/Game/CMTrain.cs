@@ -9,6 +9,38 @@ using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
+
+    public class Carriage
+    {
+        private UnityEngine.GameObject _gameObject;
+        private Animator _animator;
+        private Transform _nextCarriageNode;
+        public Transform NextCarriageNode => _nextCarriageNode;
+        private UnityEngine.GameObject _boxRoot;
+
+        public Carriage(Transform parent)
+        {
+            _gameObject = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject("actor/Carriage");
+            _gameObject = UnityEngine.GameObject.Instantiate(_gameObject);
+            _gameObject.transform.SetParent(parent);
+            _gameObject.transform.localPosition = Vector3.zero;
+            _boxRoot = _gameObject.transform.Find("Dummy005/Bone002/boxes").gameObject;
+            _nextCarriageNode = _gameObject.transform.Find("nextCarriage");
+            _animator = _gameObject.GetComponent<Animator>();
+        }
+        
+
+        public void ShowBox(bool isShow)
+        {
+            _boxRoot.SetActive(isShow);
+        }
+
+        public void PlayAnimation(bool isRun)
+        {
+            _animator.Play(isRun ? "run" : "stop");
+        }
+        
+    }
     public class CMTrain
     {
         protected MapNPCObject _trainNpcObj;
@@ -22,7 +54,7 @@ namespace UnityMiniGameFramework
         protected float _onboardTimeLeft;
 
         protected bool _isInited;
-        private UnityEngine.GameObject _boxRoot;
+        private List<Carriage> _carriageList = new List<Carriage>();
         
         
         public bool Init(CMTrainStation s)
@@ -74,7 +106,14 @@ namespace UnityMiniGameFramework
         {
             var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
             _timeToTrainArrival = _station.trainStationInfo.NextTrainArrivalTime - nowTickMillsecond;
-            _boxRoot = _trainNpcObj.unityGameObject.transform.Find("CarriageNode/Carriage/Dummy005/Bone002/boxes").gameObject;
+            var CarriageNode =  _trainNpcObj.unityGameObject.transform.Find("CarriageNode");
+
+            for (int i = 0; i < _station.currentLevelConf.TrainCarriageCount; i++)
+            {
+                var nextNode = new Carriage(CarriageNode);
+                _carriageList.Add(nextNode);
+                CarriageNode = nextNode.NextCarriageNode;
+            }
             setBoxShow(false);
             if (_timeToTrainArrival > 0)
             {
@@ -103,9 +142,18 @@ namespace UnityMiniGameFramework
 
         public void setBoxShow(bool isShow)
         {
-            if(!_boxRoot)
-                return;
-            _boxRoot.SetActive(isShow);
+            foreach (var carriage in _carriageList)
+            {
+                carriage.ShowBox(isShow);
+            }
+        }
+
+        private void carriagePlayAnimation(bool isRun)
+        {
+            foreach (var carriage in _carriageList)
+            {
+                carriage.PlayAnimation(isRun);
+            }
         }
         
 
@@ -139,6 +187,7 @@ namespace UnityMiniGameFramework
                 _trainNpcObj.moveAct.directSetPosition(_station.trainStartPos.transform.position); // set to start pos
                 _trainNpcObj.unityGameObject.SetActive(true); // show train
                 setBoxShow(false);
+                carriagePlayAnimation(true);
                 _trainNpcObj.moveAct.moveOn(new List<UnityEngine.Vector3>() { _station.trainStopPos.transform.position }, 0.1f); // move to stop
 
                 return;
@@ -157,6 +206,7 @@ namespace UnityMiniGameFramework
                 {
                     // arrived, start onboard
                     UnityGameApp.Inst.AudioManager.PlaySFXByAudioName("TrainCome");
+                    carriagePlayAnimation(false);
                     _onboardTimeLeft = _station.trainStaionConf.trainOnboardTime;
                 }
             }
@@ -179,6 +229,7 @@ namespace UnityMiniGameFramework
                     {
                         _timeToTrainArrival = 1; // atleast 1
                     }
+                    carriagePlayAnimation(true);
                     _trainNpcObj.moveAct.moveOn(new List<UnityEngine.Vector3>() { _station.trainMoveoutPos.transform.position }, 0.1f); // move out
                 }
             }
