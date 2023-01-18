@@ -23,16 +23,23 @@ namespace UnityMiniGameFramework
         public static void showAutoAd(Action callball, string eventName = "")
         {
             UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{eventName}"));
-            _sdk.showAutoAd((SdkEvent args) =>
+            try
             {
-                if (args.type == AdEventType.RewardEvent)
+                _sdk.showAutoAd((SdkEvent args) =>
                 {
-                    //TODO 看完视频下发奖励
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                    UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
-                    callball();
-                }
-            });
+                    if (args.type == AdEventType.RewardEvent)
+                    {
+                        //TODO 看完视频下发奖励
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                        UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
+                        callball();
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Mybe SDK not init details ===>>>> " + ex);
+            }
         }
-    }
+}
 }
