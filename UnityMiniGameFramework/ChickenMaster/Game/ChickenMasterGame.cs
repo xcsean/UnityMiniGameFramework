@@ -264,7 +264,6 @@ namespace UnityMiniGameFramework
             haveExPanel = exIndex != -1;
             if (exIndex != -1)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{exIndex}____{panels[exIndex].type}");
                 for (int i = 0; i < panels.Count; i++)
                 {
                     var ui = panels[i];
