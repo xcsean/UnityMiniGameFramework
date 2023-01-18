@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Unity.Profiling;
+using UnityEngine;
 using UnityEngine.UIElements;
+
 using MiniGameFramework;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -41,6 +44,52 @@ namespace UnityMiniGameFramework
         protected TextField _countTextField;
         protected TextField _idTextField;
         protected VisualElement _btnList;
+        protected Label _labStats;
+        protected Label _labFPS;
+
+        ProfilerRecorder drawcall;
+        ProfilerRecorder batches;
+        ProfilerRecorder vertices;
+
+        private long _drawcallCnt;
+        protected long drawcallCnt
+        {
+            get { return _drawcallCnt; }
+            set
+            {
+                if (_drawcallCnt != value && value != 0)
+                {
+                    _drawcallCnt = value;
+                    UpdateStats();
+                }
+            }
+        }
+        private long _batchesCnt;
+        protected long batchesCnt
+        {
+            get { return _batchesCnt; }
+            set
+            {
+                if (_batchesCnt != value && value != 0)
+                {
+                    _batchesCnt = value;
+                    UpdateStats();
+                }
+            }
+        }
+        private long _verticesCnt;
+        protected long verticesCnt
+        {
+            get { return _verticesCnt; }
+            set
+            {
+                if (_verticesCnt != value && value != 0)
+                {
+                    _verticesCnt = value;
+                    UpdateStats();
+                }
+            }
+        }
 
         override public void Init(UIPanelConf conf)
         {
@@ -55,7 +104,8 @@ namespace UnityMiniGameFramework
                 new GMItem(){ name = "武器等级", resID = "", count = 5 },
                 new GMItem(){ name = "武器攻速", resID = "", count = 400 },
                 new GMItem(){ name = "武器范围", resID = "", count = 10 },
-                new GMItem(){ name = "Log", resID = "", count = 10 }
+                new GMItem(){ name = "Log", resID = "", count = 10 },
+                new GMItem(){ name = "FPS", resID = "", count = 10 }
              };
 
             FindUI();
@@ -67,12 +117,20 @@ namespace UnityMiniGameFramework
         {
             BindShowActionVE(this._uiObjects["Content"].unityVisualElement);
 
+            _labFPS = this._uiObjects["labFPS"].unityVisualElement as Label;
+            _labStats = this._uiObjects["labStats"].unityVisualElement as Label;
             _btnList = this._uiObjects["btnList"].unityVisualElement;
             _countTextField = this._uiObjects["countTextField"].unityVisualElement as TextField;
             _idTextField = this._uiObjects["idTextField"].unityVisualElement as TextField;
 
+            _labFPS.text = "";
+            _labStats.text = "";
             // 不能代码修改，导致输入框无法使用？
             //_countTextField.label = "";
+
+            batches = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Batches Count");
+            drawcall = ProfilerRecorder.StartNew(ProfilerCategory.Render, "SetPass Calls Count");
+            vertices = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Vertices Count");
         }
 
         public override void showUI()
@@ -80,6 +138,44 @@ namespace UnityMiniGameFramework
             base.showUI();
 
             RefreshInfo();
+
+            addUpdate(onUpdate);
+        }
+        protected void onUpdate()
+        {
+            if (showFPS)
+            {
+                onUpdateGameStats();
+            }
+        }
+
+        protected bool showFPS = true;
+        protected float fpsMs = 0f;
+        protected float fpsInterval = 0;
+        protected void onUpdateGameStats()
+        {
+            fpsMs += (Time.unscaledDeltaTime - fpsMs) * 0.1f;
+
+            fpsInterval += Time.deltaTime;
+            if (fpsInterval > 0.07f)
+            {
+                fpsInterval = 0;
+                UpdateFPS();
+            }
+
+            batchesCnt = batches.LastValue;
+            drawcallCnt = drawcall.LastValue;
+            verticesCnt = vertices.LastValue;
+        }
+
+        protected void UpdateFPS()
+        {
+            _labFPS.text = $"{(1.0f / fpsMs).ToString("f1")}FPS({(fpsMs * 1000f).ToString("f1")}ms)";
+        }
+
+        protected void UpdateStats()
+        {
+            _labStats.text = $"Batches: {_batchesCnt}\r\nDrawCall: {_drawcallCnt}\r\nVertices: {_verticesCnt}";
         }
 
         protected void InitInfo()
@@ -110,7 +206,6 @@ namespace UnityMiniGameFramework
 
         protected void RefreshInfo()
         {
-            // 
             _countTextField.value = "";
             _idTextField.value = "1";
         }
@@ -210,6 +305,14 @@ namespace UnityMiniGameFramework
                     var _ui = UnityGameApp.Inst.UI.createUIPanel("GMLogUI") as UIGMLogPanel;
                     _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
                     _ui.showUI();
+                    break;
+                case "FPS":
+                    showFPS = !showFPS;
+                    if (!showFPS)
+                    {
+                        _labFPS.text = "";
+                        _labStats.text = "";
+                    }
                     break;
                 default:
                     isPrint = false;

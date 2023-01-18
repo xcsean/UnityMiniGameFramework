@@ -192,21 +192,29 @@ namespace UnityMiniGameFramework
             {
                 switch (UnityGameApp.Inst.logs[i].type)
                 {
-                    case LogType.Log:
-                        logInfoCnt += 1;
-                        break;
                     case LogType.Warning:
                         logWarnCnt += 1;
                         break;
                     case LogType.Error:
                         logErrorCnt += 1;
                         break;
+                    default:
+                        logInfoCnt += 1;
+                        break;
                 }
-                if (btnStatuDic[UnityGameApp.Inst.logs[i].type] == 1)
+                if (btnStatuDic.ContainsKey(UnityGameApp.Inst.logs[i].type))
+                {
+                    if (btnStatuDic[UnityGameApp.Inst.logs[i].type] == 1)
+                    {
+                        infos.Add(UnityGameApp.Inst.logs[i]);
+                    }
+                }
+                else
                 {
                     infos.Add(UnityGameApp.Inst.logs[i]);
                 }
             }
+            showLogDetailInfo(null);
             showLogListInfo(infos);
         }
 
@@ -284,47 +292,47 @@ namespace UnityMiniGameFramework
 
         private List<string> singleList = new List<string>();
         private Label logDetailLab;
-
+        private bool isInitLogDetailList = false;
         /// <summary>
         /// 点击Log显示堆栈详情
         /// </summary>
         private void showLogDetailInfo(GMLogInfo _GMLogInfo)
         {
             singleList.Clear();
-            if (_GMLogInfo == null)
+            if (_GMLogInfo != null)
+            {
+                singleList.Add($"{_GMLogInfo.condition}\r\n{_GMLogInfo.stackTrace}");
+            }
+            if (isInitLogDetailList)
             {
                 _logDetailListView.itemsSource = singleList;
                 _logDetailListView.RefreshItems();
                 return;
             }
-
-            singleList.Add($"{_GMLogInfo.condition}\r\n{_GMLogInfo.stackTrace}");
+            if (singleList.Count <= 0)
+            {
+                return;
+            }
+            isInitLogDetailList = true;
           
-            if (logDetailLab == null)
+            Action<VisualElement, int> bindItem = (e, i) =>
             {
-                Action<VisualElement, int> bindItem = (e, i) =>
+                if (!(e as Label).ClassListContains("unity-gm-font"))
                 {
-                    if (!(e as Label).ClassListContains("unity-gm-font"))
-                    {
-                        (e as Label).AddToClassList("unity-gm-font");
-                    }
-                    logDetailLab = e as Label;
-                    (e as Label).text = singleList[i];
-                    (e as Label).style.fontSize = 18;
-                    (e as Label).style.whiteSpace = WhiteSpace.Normal;
-                    (e as Label).style.width = new StyleLength(new Length(680));
-                    (e as Label).style.color = new StyleColor(new Color(240f / 255f, 240f / 255f, 240f / 255f));
-                    (e as Label).style.backgroundColor = new StyleColor(new Color(30f / 255f, 30f / 255f, 30f / 255f, 0f));
-                };
-                _logDetailListView.makeItem = () => new Label();
-                _logDetailListView.bindItem = bindItem;
-                _logDetailListView.itemsSource = singleList;
-                _logDetailListView.selectionType = SelectionType.None;
-            }
-            else
-            {
-                logDetailLab.text = singleList[0];
-            }
+                    (e as Label).AddToClassList("unity-gm-font");
+                }
+                logDetailLab = e as Label;
+                (e as Label).text = singleList[i];
+                (e as Label).style.fontSize = 18;
+                (e as Label).style.whiteSpace = WhiteSpace.Normal;
+                (e as Label).style.width = new StyleLength(new Length(680));
+                (e as Label).style.color = new StyleColor(new Color(240f / 255f, 240f / 255f, 240f / 255f));
+                (e as Label).style.backgroundColor = new StyleColor(new Color(30f / 255f, 30f / 255f, 30f / 255f, 0f));
+            };
+            _logDetailListView.makeItem = () => new Label();
+            _logDetailListView.bindItem = bindItem;
+            _logDetailListView.itemsSource = singleList;
+            _logDetailListView.selectionType = SelectionType.None;
         }
 
         private void onClickLogItem(IEnumerable<object> obj)
