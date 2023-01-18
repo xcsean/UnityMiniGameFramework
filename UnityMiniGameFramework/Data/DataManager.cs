@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 using MiniGameFramework;
 
@@ -74,12 +75,13 @@ namespace UnityMiniGameFramework
         {
             if (_localUserConfig == null)
             {
-#if UNITY_ANDROID || UNITY_IPHONE
-                // 手动拷贝
-                string fileName = "/UserConfig.json";
-#else
                 string fileName = "/StreamingAssets/Config/UserConfig.json";
-#endif
+                if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+                {
+                    // 手动拷贝到手机【内部存储/Android/data/com.ltgames.android.roostergang/files】
+                    fileName = "/UserConfig.json";
+                }
+
                 if (GameApp.Inst.File.isFileExist(fileName))
                 {
                     string jsonStr = GameApp.Inst.File.readStringFrom(fileName);
@@ -91,7 +93,7 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"GetLocalUserConfig {fileName} not exist");
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"GetLocalUserConfig {fileName} not exist");
                 }
             }
 

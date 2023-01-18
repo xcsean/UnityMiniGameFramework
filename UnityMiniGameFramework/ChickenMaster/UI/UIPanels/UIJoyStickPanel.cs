@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using UnityEngine;
 using UnityEngine.UIElements;
 using MiniGameFramework;
 
@@ -73,10 +74,14 @@ namespace UnityMiniGameFramework
             _panelInitPos = new UnityEngine.Vector2(_back.transform.position.x, _back.transform.position.y);
             _panelWidth = _back.layout.width / 2;
 
-            _clickArea.RegisterCallback<MouseDownEvent>(OnMouseDown);
-            _clickArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
-            _clickArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
-            _clickArea.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
+            _clickArea.RegisterCallback<PointerDownEvent>(OnMouseDown);
+            _clickArea.RegisterCallback<PointerMoveEvent>(OnMouseMove);
+            _clickArea.RegisterCallback<PointerUpEvent>(OnMouseUp);
+
+            //_clickArea.RegisterCallback<MouseDownEvent>(OnMouseDown);
+            //_clickArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
+            //_clickArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            //_clickArea.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
 
         }
 
@@ -117,7 +122,7 @@ namespace UnityMiniGameFramework
             }
         }
 
-        public void OnMouseDown(MouseDownEvent e)
+        public void OnMouseDown(PointerDownEvent e)
         {
             _defAreaHeros = (UnityGameApp.Inst.Game as ChickenMasterGame).GetDefAreaHeros();
             if (OnCheckPut() != null)
@@ -128,7 +133,7 @@ namespace UnityMiniGameFramework
             _btn.style.visibility = Visibility.Visible;
             _back.style.visibility = Visibility.Visible;
 
-            _content.transform.position = _transMousePosition(_content, e.mousePosition);
+            _content.transform.position = _transMousePosition(_content, e.position);
             _btn.transform.position = _btnInitPos;
 
             //SetClickArea(true);
@@ -141,7 +146,8 @@ namespace UnityMiniGameFramework
             _clickArea.CaptureMouse();
         }
 
-        public void OnMouseMove(MouseMoveEvent e)
+        protected Vector2 posDelta = Vector2.zero;
+        public void OnMouseMove(PointerMoveEvent e)
         {
             if (!this._click)
             {
@@ -149,9 +155,11 @@ namespace UnityMiniGameFramework
             }
             this._moving = true;
 
-            UnityEngine.Vector2 posDelta = e.mouseDelta;
+            // posDelta = e.mouseDelta;
+            posDelta.x = e.deltaPosition.x;
+            posDelta.y = e.deltaPosition.y;
 
-            UnityEngine.Vector2 btn_pos = _btn.transform.position;
+            Vector2 btn_pos = _btn.transform.position;
             btn_pos.x += posDelta.x;
             btn_pos.y += posDelta.y;
 
@@ -179,7 +187,7 @@ namespace UnityMiniGameFramework
             //OnMouseUp(null);
         }
 
-        public void OnMouseUp(MouseUpEvent e)
+        public void OnMouseUp(PointerUpEvent e)
         {
             if (!_click)
             {

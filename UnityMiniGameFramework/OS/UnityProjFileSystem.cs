@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using MiniGameFramework;
 using UnityEngine;
-using UnityEngine.Networking;
+
+using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
@@ -15,35 +15,38 @@ namespace UnityMiniGameFramework
     {
         protected string _getFullPath(string fileName)
         {
-#if UNITY_ANDROID || UNITY_IPHONE
-            return Application.persistentDataPath + filename;
-#else
-            return Application.dataPath + fileName;
-#endif
+            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                return Application.persistentDataPath + fileName;
+            }
+            else
+            {
+                return Application.dataPath + fileName;
+            }
         }
 
-        public StreamReader getFileReadStream(string filename)
+        public StreamReader getFileReadStream(string fileName)
         {
-            string path = _getFullPath(filename);
+            string path = _getFullPath(fileName);
             return new StreamReader(path);
         }
 
-        public StreamWriter getFileWriteStream(string filename)
+        public StreamWriter getFileWriteStream(string fileName)
         {
-            string path = _getFullPath(filename);
+            string path = _getFullPath(fileName);
             return new StreamWriter(path, true);
         }
 
-        public FileStream getFileReadBinaryStream(string filename)
+        public FileStream getFileReadBinaryStream(string fileName)
         {
-            string path = getLocalSaveFilePath(filename);
+            string path = getLocalSaveFilePath(fileName);
             createDir(path);
             return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read);
         }
 
-        public FileStream getFileWriteBinaryStream(string filename)
+        public FileStream getFileWriteBinaryStream(string fileName)
         {
-            string path = getLocalSaveFilePath(filename);
+            string path = getLocalSaveFilePath(fileName);
             createDir(path);
             return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
         }
@@ -57,9 +60,9 @@ namespace UnityMiniGameFramework
             }
         }
 
-        public bool isFileExist(string filename)
+        public bool isFileExist(string fileName)
         {
-            string path = _getFullPath(filename);
+            string path = _getFullPath(fileName);
             return File.Exists(path);
         }
 
@@ -68,7 +71,6 @@ namespace UnityMiniGameFramework
             if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
             {
                 return Application.persistentDataPath + fileName;
-                    
             }
             else
             {
@@ -76,36 +78,36 @@ namespace UnityMiniGameFramework
             }
         }
 
-        public bool isLocalSaveFileExist(string filename)
+        public bool isLocalSaveFileExist(string fileName)
         {
-            string path = getLocalSaveFilePath(filename);
+            string path = getLocalSaveFilePath(fileName);
             return File.Exists(path);
         }
         
 
-        public void delFile(string filename)
+        public void delFile(string fileName)
         {
-            string path = _getFullPath(filename);
-            File.Delete(filename);
+            string path = _getFullPath(fileName);
+            File.Delete(fileName);
         }
 
-        public byte[] readRawDataFrom(string filename)
+        public byte[] readRawDataFrom(string fileName)
         {
             throw new NotImplementedException();
         }
 
-        public string readStringFrom(string filename)
+        public string readStringFrom(string fileName)
         {
-            string path = _getFullPath(filename);
+            string path = _getFullPath(fileName);
             using (StreamReader reader = new StreamReader(path))
             {
                 return reader.ReadToEnd();
             }
         }
 
-        public string readStringFromStreamPath(string filename)
+        public string readStringFromStreamPath(string fileName)
         {
-            string path = Application.streamingAssetsPath + filename;
+            string path = Application.streamingAssetsPath + fileName;
             if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformEditorMac)
             {
                 path = "file://" + path;
@@ -118,14 +120,14 @@ namespace UnityMiniGameFramework
             return www.text;
         }
 
-        public void writeRawDataTo(string filename, byte[] rawData)
+        public void writeRawDataTo(string fileName, byte[] rawData)
         {
             throw new NotImplementedException();
         }
 
-        public void writeStringDataTo(string filename, string strData)
+        public void writeStringDataTo(string fileName, string strData)
         {
-            string path = _getFullPath(filename);
+            string path = _getFullPath(fileName);
             using (StreamWriter writer = new StreamWriter(path, true))
             {
                 writer.Write(strData);

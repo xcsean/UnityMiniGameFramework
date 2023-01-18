@@ -35,8 +35,13 @@ namespace UnityMiniGameFramework
         protected Button _btnWarn;
         protected Button _btnError;
         protected Button _btnClear;
-
+        /// <summary>
+        /// 页签选中1
+        /// </summary>
         protected Dictionary<LogType, int> btnStatuDic = new Dictionary<LogType, int>();
+        /// <summary>
+        /// 所有log日志
+        /// </summary>
         protected List<GMLogInfo> infos = new List<GMLogInfo>();
         protected StyleColor btnBgColor1 = new StyleColor(new Color(50f / 255f, 50f / 255f, 50f / 255f));
         protected StyleColor btnBgColor2 = new StyleColor(new Color(70f / 255f, 70f / 255f, 70f / 255f));
@@ -62,7 +67,7 @@ namespace UnityMiniGameFramework
             _btnWarn.style.color = new StyleColor(Color.yellow);
             _btnError.style.color = new StyleColor(Color.red);
 
-            btnStatuDic[LogType.Log] = 0;
+            btnStatuDic[LogType.Log] = 1;
             btnStatuDic[LogType.Warning] = 0;
             btnStatuDic[LogType.Error] = 0;
 
@@ -109,7 +114,7 @@ namespace UnityMiniGameFramework
             get { return _logInfoCnt; }
             set {
                 _logInfoCnt = value;
-                _btnInfo.text = _logInfoCnt > 999 ? "Log(999+)" : $"Log({_logInfoCnt})";
+                _btnInfo.text = _logInfoCnt > 999 ? "      999+" : $"      {_logInfoCnt}";
             } 
         }
         protected int logWarnCnt
@@ -118,7 +123,7 @@ namespace UnityMiniGameFramework
             set
             {
                 _logWarnCnt = value;
-                _btnWarn.text = _logWarnCnt > 999 ? "Warn(999+)" : $"Warn({_logWarnCnt})";
+                _btnWarn.text = _logWarnCnt > 999 ? "      999+" : $"      {_logWarnCnt}";
             }
         }
         protected int logErrorCnt
@@ -127,7 +132,7 @@ namespace UnityMiniGameFramework
             set
             {
                 _logErrorCnt = value;
-                _btnError.text = _logErrorCnt > 999 ? "Error(999+)" : $"Error({_logErrorCnt})";
+                _btnError.text = _logErrorCnt > 999 ? "      999+" : $"      {_logErrorCnt}";
             }
         }
 
@@ -230,6 +235,10 @@ namespace UnityMiniGameFramework
                 _logListView.RefreshItems();
                 return;
             }
+            if (logInfos.Count <= 0)
+            {
+                return;
+            }
             isInitLogList = true;
             Action<VisualElement, int> bindItem = (e, i) =>
             {
@@ -238,6 +247,11 @@ namespace UnityMiniGameFramework
                     return;
                 }
                 var _GMLogInfo = logInfos[i];
+
+                if (!(e as HelpBox).ClassListContains("unity-gm-font"))
+                {
+                    (e as HelpBox).AddToClassList("unity-gm-font");
+                }
                 (e as HelpBox).text = $"{_GMLogInfo.time} {_GMLogInfo.condition}";
                 (e as HelpBox).messageType = logTypeToHelpBoxMessageType(_GMLogInfo.type);
 
@@ -256,6 +270,8 @@ namespace UnityMiniGameFramework
             _logListView.onSelectionChange += onClickLogItem;
             _logListView.itemsSource = logInfos;
 
+            // todo 初始自动滑动到底部
+
             //_logListView.SetSelection(6);
             //UnityEngine.Debug.LogError("delay SetSelection6---->");
 
@@ -264,22 +280,14 @@ namespace UnityMiniGameFramework
             //    _logListView.SetSelection(6);
             //    UnityEngine.Debug.LogError("delay SetSelection6---->");
             //}).StartingIn(20);
-
-            // todo 初始自动滑动到底部
-            _logListView.itemsSourceChanged += () =>
-            {
-                UnityEngine.Debug.LogError("itemsSourceChanged---->");
-                //_logListView.SetSelection(logInfos.Count - 1);
-            };
         }
 
         private List<string> singleList = new List<string>();
         private Label logDetailLab;
-        private bool isInitLogDetailList = false;
+
         /// <summary>
-        /// 点击Log 显示堆栈详情
+        /// 点击Log显示堆栈详情
         /// </summary>
-        /// <param name="_GMLogInfo"></param>
         private void showLogDetailInfo(GMLogInfo _GMLogInfo)
         {
             singleList.Clear();
@@ -291,30 +299,31 @@ namespace UnityMiniGameFramework
             }
 
             singleList.Add($"{_GMLogInfo.condition}\r\n{_GMLogInfo.stackTrace}");
-
-            if (singleList.Count > 0)
+          
+            if (logDetailLab == null)
             {
-                if (logDetailLab == null)
+                Action<VisualElement, int> bindItem = (e, i) =>
                 {
-                    Action<VisualElement, int> bindItem = (e, i) =>
+                    if (!(e as Label).ClassListContains("unity-gm-font"))
                     {
-                        logDetailLab = e as Label;
-                        (e as Label).text = singleList[i];
-                        (e as Label).style.fontSize = 18;
-                        (e as Label).style.whiteSpace = WhiteSpace.Normal;
-                        (e as Label).style.width = new StyleLength(new Length(680));
-                        (e as Label).style.color = new StyleColor(new Color(240f / 255f, 240f / 255f, 240f / 255f));
-                        (e as Label).style.backgroundColor = new StyleColor(new Color(30f / 255f, 30f / 255f, 30f / 255f, 0f));
-                    };
-                    _logDetailListView.makeItem = () => new Label();
-                    _logDetailListView.bindItem = bindItem;
-                    _logDetailListView.itemsSource = singleList;
-                    _logDetailListView.selectionType = SelectionType.None;
-                }
-                else
-                {
-                    logDetailLab.text = singleList[0];
-                }
+                        (e as Label).AddToClassList("unity-gm-font");
+                    }
+                    logDetailLab = e as Label;
+                    (e as Label).text = singleList[i];
+                    (e as Label).style.fontSize = 18;
+                    (e as Label).style.whiteSpace = WhiteSpace.Normal;
+                    (e as Label).style.width = new StyleLength(new Length(680));
+                    (e as Label).style.color = new StyleColor(new Color(240f / 255f, 240f / 255f, 240f / 255f));
+                    (e as Label).style.backgroundColor = new StyleColor(new Color(30f / 255f, 30f / 255f, 30f / 255f, 0f));
+                };
+                _logDetailListView.makeItem = () => new Label();
+                _logDetailListView.bindItem = bindItem;
+                _logDetailListView.itemsSource = singleList;
+                _logDetailListView.selectionType = SelectionType.None;
+            }
+            else
+            {
+                logDetailLab.text = singleList[0];
             }
         }
 
@@ -324,7 +333,6 @@ namespace UnityMiniGameFramework
             {
                 if (item != null && (item is GMLogInfo))
                 {
-                    //UnityEngine.Debug.Log("obj2=" + (DateTime.Now.ToString("hh:mm:ss")));
                     showLogDetailInfo(item as GMLogInfo);
                     break;
                 }
