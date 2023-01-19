@@ -18,6 +18,7 @@ namespace UnityMiniGameFramework
         {
             if (_sdk == null)
             {
+                s.Init();
                 _sdk = s;
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Developer SDKManager InitSDK:" + _sdk);
             }
