@@ -197,6 +197,7 @@
     <Compile Include="Game\Controller\InputActorControllerComp.cs" />
     <Compile Include="Game\Controller\AIActorControllerComp.cs" />
     <Compile Include="Game\Controller\NetworkActorControllerComp.cs" />
+    <Compile Include="Game\Map\MapDefAreaObject.cs" />
     <Compile Include="Game\Effect\VFXObjects\VFXRangeCricle.cs" />
     <Compile Include="Game\Effect\FootPrint.cs" />
     <Compile Include="Game\Effect\QuadBatch.cs" />

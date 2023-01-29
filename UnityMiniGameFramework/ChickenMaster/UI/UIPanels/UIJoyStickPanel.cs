@@ -303,6 +303,8 @@ namespace UnityMiniGameFramework
         /// </summary>
         public void OnPutEnd()
         {
+            ShowDefArea(false);
+
             if (_currentPickNPCHero == null)
             {
                 return;
@@ -371,6 +373,34 @@ namespace UnityMiniGameFramework
             cmGame.baseInfo.markDirty();
         }
 
+        private void ShowDefArea(bool isShow)
+        {
+            if (isShow)
+            {
+                var map = UnityGameApp.Inst.MainScene.map as Map;
+                foreach (var area in map.defAreas)
+                {
+                    if (_defAreaHeros.ContainsKey(area.Key))
+                    {
+                        area.Value.ShowAreaStyle(true);
+                    }
+                    else
+                    {
+                        area.Value.ShowAreaStyle(false);
+                    }
+                }
+            }
+            else
+            {
+                var map = UnityGameApp.Inst.MainScene.map as Map;
+                foreach (var area in map.defAreas)
+                {
+                    area.Value.HideArea();
+                }
+            }
+
+        }
+
         protected void OnUpdate()
         {
             OnCheckTouchUp();
@@ -401,6 +431,9 @@ namespace UnityMiniGameFramework
             }
 
             // pick def area
+
+            ShowDefArea(true);
+
             UnityEngine.RaycastHit[] hitInfos = UnityEngine.Physics.RaycastAll(
                 UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
                 1000.0f,

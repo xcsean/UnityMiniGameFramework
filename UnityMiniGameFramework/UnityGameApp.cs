@@ -348,6 +348,7 @@ namespace UnityMiniGameFramework
             GameObjectManager.registerGameObjectCreator("UnityGameCamera", UnityGameCamera.create);
             GameObjectManager.registerGameObjectCreator("ActorObject", ActorObject.create);
             GameObjectManager.registerGameObjectCreator("Map", Map.create);
+            GameObjectManager.registerGameObjectCreator("MapDefAreaObject", MapDefAreaObject.create);
             GameObjectManager.registerGameObjectCreator("MapNPCObject", MapNPCObject.create);
             GameObjectManager.registerGameObjectCreator("MapHeroObject", MapHeroObject.create);
             GameObjectManager.registerGameObjectCreator("MapMonsterObject", MapMonsterObject.create);

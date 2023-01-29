@@ -34,6 +34,9 @@ namespace UnityMiniGameFramework
         protected Dictionary<string, MapBuildingObject> _buildings;
         public Dictionary<string, MapBuildingObject> buildings => _buildings;
 
+        protected Dictionary<string, MapDefAreaObject> _defAreas;
+        public Dictionary<string, MapDefAreaObject> defAreas => _defAreas;
+
         protected Dictionary<string, List<UnityEngine.Vector3>> _paths;
 
         protected HashSet<MapActorObject> _mapActors;
@@ -47,6 +50,7 @@ namespace UnityMiniGameFramework
 
             _npcs = new Dictionary<string, MapNPCObject>();
             _buildings = new Dictionary<string, MapBuildingObject>();
+            _defAreas = new Dictionary<string, MapDefAreaObject>();
             _paths = new Dictionary<string, List<UnityEngine.Vector3>>();
 
             _mapActors = new HashSet<MapActorObject>();
@@ -205,6 +209,35 @@ namespace UnityMiniGameFramework
                     }
 
                     this._buildings[buildingObj.name] = buildingObj;
+                }
+            }
+
+            // init defAreas
+            if(_conf.defAreas != null)
+            {
+                foreach (var areaObjName in _conf.defAreas)
+                {
+                    var tr = this._unityGameObject.transform.Find(areaObjName);
+                    if (tr == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) defArea ({areaObjName}) not exist.");
+                        continue;
+                    }
+
+                    var ugo = tr.gameObject.GetComponent<UnityGameObjectBehaviour>();
+                    if (ugo == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) defArea ({areaObjName}) no UnityGameObjectBehaviour.");
+                        continue;
+                    }
+
+                    var defareaObj = ugo.mgGameObject as MapDefAreaObject;
+                    if (defareaObj == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) defArea ({areaObjName}) not MapBuildingObject.");
+                        continue;
+                    }
+                    this._defAreas[defareaObj.unityGameObject.name] = defareaObj;
                 }
             }
         }
