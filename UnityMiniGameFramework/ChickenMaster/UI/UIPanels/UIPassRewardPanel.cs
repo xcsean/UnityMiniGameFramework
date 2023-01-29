@@ -152,41 +152,46 @@ namespace UnityMiniGameFramework
                             grid.Q<VisualElement>("weapon").style.display = DisplayStyle.Flex;
                             grid.Q<Label>("have").style.display = DisplayStyle.None;
                             grid.Q<VisualElement>("RewardIcon").style.backgroundImage = null;
+
+                            LocalWeaponInfo gunInfo = null;
+                            CMGunConf gunValue = null;
                             foreach (var gun in gunConf)
                             {
-                                if (gun.Value.upgradeItemName == rewardConf.items[i].itemName)
+                                if (gunInfo == null && gun.Value.upgradeItemName == rewardConf.items[i].itemName)
                                 {
-                                    var gunInfo = cmGame.GetWeaponInfo(gun.Value.id);
-                                    int lv = gunInfo == null ? 1 : gunInfo.level;
-                                    var weaponInfo = cmGame.Self.GetBackpackItemInfo(rewardConf.items[i].itemName);
-                                    int have = weaponInfo == null ? 0 : weaponInfo.count;
-                                    int upgradeNeed = gun.Value.gunLevelConf[lv].upgrageCostItemCost;
-                                    grid.Q<Label>("progress").text = $"0/{upgradeNeed}";
-                                    grid.Q<Label>("lv").text = $"{lv}";
-                                    float prog = have > upgradeNeed ? 1f : ((float)have / upgradeNeed);
-                                    grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93f));
-                                    progs.Add(new ProgressAniParams()
-                                    {
-                                        type = "gunpiece",
-                                        id = index,
-                                        cur = 0f,
-                                        end = prog,
-                                        have = have,
-                                        normal = have + rewardCount,
-                                        video = have + rewardCount * 3,
-                                        total = upgradeNeed
-                                    });
-
-                                    var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/weapons/{gun.Value.weaponIcon}");
-                                    if (tx != null)
-                                    {
-                                        grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
-                                        grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
-                                        grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
-                                        grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
-                                        grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
-                                    }
+                                    gunInfo = cmGame.GetWeaponInfo(gun.Value.id);
+                                    gunValue = gun.Value;
                                 }
+                            }
+
+                            int lv = gunInfo == null ? 1 : gunInfo.level;
+                            var weaponInfo = cmGame.Self.GetBackpackItemInfo(rewardConf.items[i].itemName);
+                            int have = weaponInfo == null ? 0 : weaponInfo.count;
+                            int upgradeNeed = gunValue.gunLevelConf[lv].upgrageCostItemCost;
+                            grid.Q<Label>("progress").text = $"0/{upgradeNeed}";
+                            grid.Q<Label>("lv").text = $"{lv}";
+                            float prog = have > upgradeNeed ? 1f : ((float)have / upgradeNeed);
+                            grid.Q<VisualElement>("bar").style.width = new StyleLength(new Length(prog * 93f));
+                            progs.Add(new ProgressAniParams()
+                            {
+                                type = "gunpiece",
+                                id = index,
+                                cur = 0f,
+                                end = prog,
+                                have = have,
+                                normal = have + rewardCount,
+                                video = have + rewardCount * 3,
+                                total = upgradeNeed
+                            });
+
+                            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/weapons/{gunValue.weaponIcon}");
+                            if (tx != null)
+                            {
+                                grid.Q<VisualElement>("RewardIcon").style.backgroundImage = tx;
+                                grid.Q<VisualElement>("RewardIcon").style.width = tx.width;
+                                grid.Q<VisualElement>("RewardIcon").style.height = tx.height;
+                                grid.Q<VisualElement>("RewardIcon").style.left = (170 - tx.width) / 2;
+                                grid.Q<VisualElement>("RewardIcon").style.top = (120 - tx.height) / 2;
                             }
                             grid.style.display = DisplayStyle.Flex;
                             index++;
@@ -315,6 +320,7 @@ namespace UnityMiniGameFramework
                     {
                         isEnd = false;
                         prog.cur = 0f;
+                        prog.have = 0;
                         prog.video -= prog.total;
                         prog.normal -= prog.total;
                         prog.temp += 1;
