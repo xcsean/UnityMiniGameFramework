@@ -72,6 +72,7 @@ namespace UnityMiniGameFramework
         protected Label _NotifyText;
         public Label NotifyText => _NotifyText;
         public VisualElement _NotifyBg;
+        public VisualElement _bossIncoming;
 
         protected Button _btnUseSkill;
         protected Button _btnDoubleExp;
@@ -133,6 +134,7 @@ namespace UnityMiniGameFramework
             _battleStartInfo = this._uiObjects["BattleStartInfo"].unityVisualElement;
             _battleStartBtn = this._uiObjects["BattleStartBtn"].unityVisualElement;
             _btnGm = this._uiObjects["BtnGm"].unityVisualElement as Button;
+            _bossIncoming = this._uiObjects["BossWarning"].unityVisualElement;
 
             _btnUseSkill.clicked += OnUseSkillBtnClick;
             _btnDoubleExp.clicked += OnDoubleExpBtnClick;
@@ -148,6 +150,7 @@ namespace UnityMiniGameFramework
 
 
             _LevelInfo.text = "Not Start";
+            _bossIncoming.style.display = DisplayStyle.None;
             _NotifyText.text = "";
             _NotifyBg.style.display = DisplayStyle.Flex;
 
@@ -199,6 +202,11 @@ namespace UnityMiniGameFramework
 
                     level.Start();
                     cmGame.Egg.eggUI.clearRecoverTime();
+
+                    if(bi.currentLevel % 5 == 0) // boss提示
+                    {
+                        ShowBossWarning();
+                    }
                 }
             }
         }
@@ -633,10 +641,31 @@ namespace UnityMiniGameFramework
             }
         }
 
+        private float counting = 0;
+        private void onUpdateBossWarning()
+        {
+            if(counting <= 0)
+            {
+                _bossIncoming.style.display = DisplayStyle.None;
+                return;
+            }
+
+            counting -= UnityEngine.Time.deltaTime;
+            float scale = counting < 1.7f ? 1f : (2f - counting) / 0.3f;
+            _bossIncoming.style.scale = new StyleScale(new Scale(new Vector3(scale, scale)));
+        }
+
+        public void ShowBossWarning()
+        {
+            counting = 2f;
+            _bossIncoming.style.display = DisplayStyle.Flex;
+        }
+
         public void OnUpdate()
         {
             onUpdateAni();
             onUpdateBattleTips();
+            onUpdateBossWarning();
             if (_notifyMessages == null)
             {
                 return;
