@@ -78,7 +78,7 @@ namespace UnityMiniGameFramework
 
             foreach (var bufAttr in bufAttrs)
             {
-                if (bufAttr.name == "MOV_SPEED")
+                if (bufAttr.name == BuffAttrNameDefine.MOVE_SPEED)
                 {
                     speedMul += bufAttr.mulValue;
                 }
@@ -87,6 +87,9 @@ namespace UnityMiniGameFramework
             AccSpeed = _conf.AccSpeed * (1 + speedMul);
             MaxSpeed = _conf.MaxSpeed * (1 + speedMul);
             MinSpeed = _conf.MinSpeed * (1 + speedMul);
+            //todo: updateSpeed _curSpeed < MaxSpeed _curSpeed没有改变 
+            _curSpeed = MaxSpeed;
+            
         }
 
         public void moveToward(UnityEngine.Vector3 to)

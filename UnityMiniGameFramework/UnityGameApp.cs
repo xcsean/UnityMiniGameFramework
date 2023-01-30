@@ -157,6 +157,11 @@ namespace UnityMiniGameFramework
 
         protected AnalysisDataManager _analysisMgr;
         public AnalysisDataManager AnalysisMgr => _analysisMgr;
+
+        protected BuffDataManager _buffDataMgr;
+
+        public BuffDataManager BuffDataMgr => _buffDataMgr;
+
         protected DataManager _datamanager;
         public DataManager Datas => _datamanager;
 
@@ -307,6 +312,7 @@ namespace UnityMiniGameFramework
             base._createManagers();
 
             // new managers
+            _buffDataMgr = new BuffDataManager();
             _analysisMgr = new AnalysisDataManager();
             _datamanager = new DataManager();
             _aniManager = new AnimationManager();
@@ -337,6 +343,7 @@ namespace UnityMiniGameFramework
             _conf.regConfigCreator("CMGameConfig", CMGameConfig.create);
             _conf.regConfigCreator("AnalysisConfig", AnalysisConfig.create);
             _conf.regConfigCreator("AudionConfig", AudionConfig.create);
+            _conf.regConfigCreator("BuffConfig", BuffConfig.create);
 
             // reg component
             GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
@@ -396,6 +403,7 @@ namespace UnityMiniGameFramework
         {
             base._initManagers();
 
+            _buffDataMgr.Init();
             _audManager.Init();
             _analysisMgr.Init();
             _datamanager.Init();

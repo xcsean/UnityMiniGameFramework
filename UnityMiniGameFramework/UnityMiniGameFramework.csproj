@@ -149,6 +149,7 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UIWeaponAscendPanel.cs" />
     <Compile Include="Configs\AnalysisConfig.cs" />
     <Compile Include="Configs\AudionConfig.cs" />
+    <Compile Include="Configs\BuffConfig.cs" />
     <Compile Include="Configs\CharacterConfig.cs" />
     <Compile Include="Configs\MapActorObjectConfigs.cs" />
     <Compile Include="Configs\MapConfig.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Game\Audio\Audio.cs" />
     <Compile Include="Game\Audio\AudioManager.cs" />
     <Compile Include="Game\Battle\BattleUI\BattleNumberEmitter.cs" />
+    <Compile Include="Game\Battle\BuffDataManager.cs" />
     <Compile Include="Game\Camera\UnityGameCamera.cs" />
     <Compile Include="Game\Controller\ActorControllerComponent.cs" />
     <Compile Include="Game\Controller\AIState\AIGunFireTarget.cs" />

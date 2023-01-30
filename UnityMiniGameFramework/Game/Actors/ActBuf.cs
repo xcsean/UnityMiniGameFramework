@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
+    class BuffAttrNameDefine
+    {
+        public const string MOVE_SPEED = "MOVE_SPEED";
+        public const string HP = "HP";
+        public const string DEF = "DEF";
+        public const string ATK = "ATK";
+        public const string MISS = "MISS";
+        public const string CRIT_RATE = "CRIT_RATE";
+        public const string CRIT_PER = "CRIT_PER";
+    }
+
     public class ActBuf
     {
         protected ActorObject _actor;
@@ -27,7 +38,7 @@ namespace UnityMiniGameFramework
             _fromActor = fromActor;
         }
 
-        public void Init(ActBufConfig conf, float time)
+        public void Init(ActBufConfig conf, float time = 30)
         {
             _conf = conf;
             _timeLeft = time;
@@ -41,7 +52,7 @@ namespace UnityMiniGameFramework
         protected virtual bool _checkTimeFinish()
         {
             _timeLeft -= UnityEngine.Time.deltaTime;
-            if(_timeLeft > 0)
+            if (_timeLeft > 0)
             {
                 return false;
             }
@@ -55,12 +66,12 @@ namespace UnityMiniGameFramework
 
         protected void _onAddState()
         {
-            if(_conf.bufAddStates == null)
+            if (_conf.bufAddStates == null)
             {
                 return;
             }
 
-            foreach(var stKey in _conf.bufAddStates)
+            foreach (var stKey in _conf.bufAddStates)
             {
                 _actor.actionComponent.addState(stKey);
             }
@@ -68,19 +79,19 @@ namespace UnityMiniGameFramework
 
         protected void _onAddAttr()
         {
-            if(_conf.bufAttrs == null)
+            if (_conf.bufAttrs == null)
             {
                 return;
             }
 
             var combatComp = _actor.getComponent("CombatComponent") as CombatComponent;
 
-            if(combatComp == null)
+            if (combatComp == null)
             {
                 return;
             }
 
-            foreach(var bufAttr in _conf.bufAttrs)
+            foreach (var bufAttr in _conf.bufAttrs)
             {
                 combatComp.AddBufAttr(bufAttr);
             }
@@ -140,7 +151,7 @@ namespace UnityMiniGameFramework
 
         protected void _onDotUpdate()
         {
-            if(_conf.dot == null)
+            if (_conf.dot == null)
             {
                 return;
             }
@@ -153,13 +164,14 @@ namespace UnityMiniGameFramework
             }
 
             _dotTimeLeft -= UnityEngine.Time.deltaTime;
-            if(_dotTimeLeft <= 0)
+            if (_dotTimeLeft <= 0)
             {
                 _dotTimeLeft += _conf.dot.time;
 
                 combatComp.OnDamageBy(_fromActor, _conf.dot.damage);
             }
         }
+
         public virtual void OnUpdate()
         {
             _onDotUpdate();

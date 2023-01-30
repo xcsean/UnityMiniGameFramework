@@ -26,6 +26,8 @@ namespace UnityMiniGameFramework
 
 
         protected ActBufConfig _actBuf;
+        protected float _actbufMul;
+        public float ActbufMul => _actbufMul;
         public ActBufConfig actBuf => _actBuf;
 
         public void initAttack(AttackConf conf)
@@ -40,15 +42,11 @@ namespace UnityMiniGameFramework
             };
         }
 
-        public void initActBuf(ActBufConfig actBuf, float actbufMul)
+        public void initActBuf(string buffName, float actbufMul)
         {
-            if(actBuf == null)
-            {
-                return;
-            }
-            // TO DO : init actbuf
-
-            _actBuf = new ActBufConfig();
+            _actBuf = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffConfig(buffName);
+            
+            _actbufMul = actbufMul;
         }
 
         public void addAttackInfo(WeaponAttack atkAdd)
@@ -70,20 +68,20 @@ namespace UnityMiniGameFramework
 
             foreach (var bufAttr in bufAttrs)
             {
-                if (bufAttr.name == "ATK")
+                if (bufAttr.name == BuffAttrNameDefine.ATK)
                 {
                     attackAdd += bufAttr.addValue;
                     attackMul += bufAttr.mulValue;
                 }
-                else if (bufAttr.name == "MISS")
+                else if (bufAttr.name == BuffAttrNameDefine.MISS)
                 {
                     missingRateAdd += bufAttr.addValue;
                 }
-                else if (bufAttr.name == "CRIT_RATE")
+                else if (bufAttr.name == BuffAttrNameDefine.CRIT_RATE)
                 {
                     criticalHitRateAdd += bufAttr.addValue;
                 }
-                else if (bufAttr.name == "CRIT_PER")
+                else if (bufAttr.name == BuffAttrNameDefine.CRIT_PER)
                 {
                     criticalHitPerAdd += bufAttr.addValue;
                 }

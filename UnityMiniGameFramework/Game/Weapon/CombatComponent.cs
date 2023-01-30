@@ -173,7 +173,7 @@ namespace UnityMiniGameFramework
 
             OnDamageBy(weapon.holder, dmg, critical);
         }
-
+        
         virtual public void OnDamageBy(ActorObject actor, int dmg, bool critical = false)
         {
             if (_isDie)

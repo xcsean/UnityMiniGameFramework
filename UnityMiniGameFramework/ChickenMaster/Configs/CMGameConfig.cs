@@ -33,7 +33,7 @@ namespace UnityMiniGameFramework
         public string upgradeItemName { get; set; }
         public int activateItemCost { get; set; }
 
-        public ActBufConfig actbuf { get; set; }
+        public string buffName { get; set; }
 
         public Dictionary<int, CMGunLevelConf> gunLevelConf { get; set; }
     }

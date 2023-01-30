@@ -37,12 +37,12 @@ namespace UnityMiniGameFramework
 
             foreach (var bufAttr in _bufAttrs)
             {
-                if (bufAttr.name == "HP")
+                if (bufAttr.name == BuffAttrNameDefine.HP)
                 {
                     hpAdd += bufAttr.addValue;
                     hpMul += bufAttr.mulValue;
                 }
-                else if (bufAttr.name == "DEF")
+                else if (bufAttr.name == BuffAttrNameDefine.DEF)
                 {
                     defAdd += bufAttr.addValue;
                     defMul += bufAttr.mulValue;
@@ -64,12 +64,23 @@ namespace UnityMiniGameFramework
             base.OnHitByWeapon(weapon);
 
             // TO DO : add ActBuf to actor from weapon config
+            if(_isDie)
+                return;
             if(weapon.actBuf != null)
             {
-                //_actor.actionComponent.AddBuf(weapon.actBuf);
+                OnBuffAddByActBuffConfig(weapon.actBuf, _actor, weapon.holder);
             }
-        } 
+        }
 
+        protected virtual void OnBuffAddByActBuffConfig(ActBufConfig config, ActorObject actor, ActorObject fromActor)
+        {
+            if (config == null)
+                return;
+            ActBuf buff = new ActBuf(actor, fromActor);
+            buff.Init(config, config.endTime);
+            actor.actionComponent.AddBuf(buff);
+        }
+        
         override protected void _onHitMissed(ActorObject actor)
         {
             // TO DO : show missing text
