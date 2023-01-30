@@ -82,6 +82,8 @@ namespace MiniGameFramework
                     
                     lock(_ActResults)
                     {
+                        _Acts.RemoveAt(i);
+
                         _ActResults.Enqueue(new PostActResult()
                         {
                             res = new RCPostActResult()
