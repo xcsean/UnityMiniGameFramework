@@ -48,6 +48,20 @@ namespace UnityMiniGameFramework
             return uss;
         }
 
+        /// <summary>
+        /// 加载UXML文件
+        /// </summary>
+        public UnityEngine.UIElements.VisualTreeAsset LoadUXML(string uxmlName)
+        {
+            var uxml = Resources.Load(uxmlName) as UnityEngine.UIElements.VisualTreeAsset;
+            if (uxml == null)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadUXML {uxmlName} not exist");
+                return null;
+            }
+            return uxml;
+        }
+
         public Sprite LoadSprite(string spritePath)
         {
             var sp = Resources.Load<Sprite>(spritePath);

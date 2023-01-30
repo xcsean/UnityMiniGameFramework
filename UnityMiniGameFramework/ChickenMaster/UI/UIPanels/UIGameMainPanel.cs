@@ -156,8 +156,8 @@ namespace UnityMiniGameFramework
             _btnUseSkill.style.display = DisplayStyle.None;
 
             _notifyMessages = new List<NotifyMessage>();
-            vts = Resources.Load<VisualTreeAsset>("UI/Controls/FlyNumIcon");
-            vts_tips = Resources.Load<VisualTreeAsset>("UI/Controls/Tips");
+            vts = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadUXML("UI/Controls/FlyNumIcon");
+            vts_tips = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadUXML("UI/Controls/Tips");
 
             _battleStartInfo.transform.position = new Vector3(-240, 0, 0);
         }

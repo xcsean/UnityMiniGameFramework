@@ -31,12 +31,16 @@ namespace UnityMiniGameFramework
 
         private CMStoreHouse _CMStoreHouse;
 
+        protected VisualTreeAsset _flyIconUxml;
         protected Label _labCapacity;
         protected Label _labPopup;
+
         protected CapacityPopupNumber popupNumber;
 
         protected Color _red = new Color(237f / 255f, 77f / 255f, 10f / 255f);
         protected Color _green = new Color(146f / 255f, 234f / 255f, 75f / 255f);
+
+        private List<TemplateContainer> flyIcons = new List<TemplateContainer>();
 
         override public void Init(UIPanelConf conf)
         {
@@ -51,6 +55,8 @@ namespace UnityMiniGameFramework
         {
             _labCapacity = this._uiObjects["labCapacity"].unityVisualElement as Label;
             _labPopup = this._uiObjects["labPopup"].unityVisualElement as Label;
+
+            _flyIconUxml = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadUXML($"UI/Controls/FlyIcon");
         }
 
         public void RefreshInfo(CMStoreHouse _cmStoreHouse)
@@ -85,6 +91,11 @@ namespace UnityMiniGameFramework
 
         public void OnUpdatePopup()
         {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                FlyAction();
+            }
+
             if (popupNumber != null && popupNumber.LifeTime > 0f)
             {
                 popupNumber.LifeTime -= Time.deltaTime;
@@ -101,6 +112,44 @@ namespace UnityMiniGameFramework
             {
                 _labPopup.text = "";
                 popupNumber = null;
+            }
+        }
+
+        private void FlyAction()
+        {
+            var tvList = new List<TimeValue>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                TemplateContainer temp = null;
+                if (flyIcons.Count == 0)
+                {
+                    if (_flyIconUxml != null)
+                    {
+                        temp = _flyIconUxml.CloneTree();
+                    }
+                }
+                else
+                {
+                    temp = flyIcons[0];
+                    flyIcons.RemoveAt(0);
+                }
+                if (temp == null)
+                {
+                    continue;
+                }
+                //tvList.Clear();
+                //tvList.Add(new TimeValue(i * 0.02f));
+                temp.transform.position = new Vector3(0, 0);
+                temp.style.display = DisplayStyle.Flex;
+                //temp.Q<VisualElement>("Icon").style.transitionDelay = new StyleList<TimeValue>(tvList);
+                //temp.Q<VisualElement>("Icon").style.translate = new StyleTranslate(new Translate(new Length(400f), new Length(-400f), 0f));
+                //temp.schedule.Execute(() =>
+                //{
+                //    //temp.Q<VisualElement>("Icon").style.translate = new StyleTranslate(new Translate(new Length(0f), new Length(0f), 0f));
+                //    temp.style.display = DisplayStyle.None;
+                //    flyIcons.Add(temp);
+                //}).StartingIn(2000);
             }
         }
 
