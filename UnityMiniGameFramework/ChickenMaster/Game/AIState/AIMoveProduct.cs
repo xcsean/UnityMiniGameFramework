@@ -465,6 +465,10 @@ namespace UnityMiniGameFramework
             // wait fetch
 
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            if (cmGame.StoreHouse.storeHouseInfo.storeCount <= 0)
+            {
+                return;
+            }
             //if (cmGame.StoreHouse.storeHouseInfo.storeCount < cmGame.StoreHouse.currentLevelConf.fetchPackCount)
             //{
             //    // can't fetch yet
