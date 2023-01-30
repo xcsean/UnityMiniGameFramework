@@ -97,11 +97,11 @@ namespace UnityMiniGameFramework
 
         public void OnUpdatePopup()
         {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                flyTotalCnt = 10;
-                InputStorehouseFlyAction();
-            }
+            //if (Input.GetKeyDown(KeyCode.T))
+            //{
+            //    flyTotalCnt = 10;
+            //    InputStorehouseFlyAction();
+            //}
 
             if (popupNumber != null && popupNumber.LifeTime > 0f)
             {
