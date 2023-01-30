@@ -125,10 +125,11 @@ namespace UnityMiniGameFramework
             _produceVer = 0;
 
             //todo:data与control需要分离
-            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
-                                                                ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
-                                                                .currentLevelConf
-                                                                .fetchPackCount, _inputStorePosition);
+            //_updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
+            //                                                    ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
+            //                                                    .currentLevelConf
+            //                                                    .fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore / _factoryLevelConf.fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
                 (float) currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             setBuildGray(false);
@@ -271,10 +272,11 @@ namespace UnityMiniGameFramework
                 _produceProgressPanel.DoUpdateInputStore(currentProductInputStore, toFill);
             }
 
-            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
-                                                                ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
-                                                                .currentLevelConf
-                                                                .fetchPackCount, _inputStorePosition);
+            //_updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
+            //                                                    ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
+            //                                                    .currentLevelConf
+            //                                                    .fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore / factoryLevelConf.fetchPackCount, _inputStorePosition);
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug,
                 $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
@@ -385,10 +387,11 @@ namespace UnityMiniGameFramework
             Debug.DebugOutput(DebugTraceType.DTT_Debug,
                 $"{_localFacInfo.level}级工厂原料数量：{currentProductInputStore}，产出数量：{produceCount}({haveBuff})，产出总数量：{currentProductOutputStore}");
 
-            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
-                                                                ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
-                                                                .currentLevelConf
-                                                                .fetchPackCount, _inputStorePosition);
+            //_updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore /
+            //                                                    ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
+            //                                                    .currentLevelConf
+            //                                                    .fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore / _factoryLevelConf.fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
                 (float) currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
