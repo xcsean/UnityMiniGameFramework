@@ -469,12 +469,6 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
-            //if (cmGame.StoreHouse.storeHouseInfo.storeCount < cmGame.StoreHouse.currentLevelConf.fetchPackCount)
-            //{
-            //    // can't fetch yet
-            //    // TO DO : show tip on woker npc
-            //    return;
-            //}
 
             // playing fetch animation
             if(!_isPlayedActAni)

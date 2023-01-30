@@ -86,6 +86,12 @@ namespace UnityMiniGameFramework
                     LifeTime = 1f,
                     UpPos = Vector3.zero,
                 };
+
+                if (changeCnt > 0)
+                {
+                    flyTotalCnt = 10;
+                    InputStorehouseFlyAction();
+                }
             }
         }
 
@@ -93,7 +99,8 @@ namespace UnityMiniGameFramework
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                FlyAction();
+                flyTotalCnt = 10;
+                InputStorehouseFlyAction();
             }
 
             if (popupNumber != null && popupNumber.LifeTime > 0f)
@@ -115,42 +122,92 @@ namespace UnityMiniGameFramework
             }
         }
 
+        private Vector2 GetSelfHeroPos()
+        {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var pos = cmGame.Self.selfMapHero.unityGameObject.transform.position;
+            var screenPos = UnityGameApp.Inst.ScreenToUIPos((UnityGameApp.Inst.MainScene.camera as UnityGameCamera).worldToScreenPos(pos));
+            screenPos.y -= 110;
+            return screenPos;
+        }
+
+        /// <summary>
+        /// 鸡肉从主角头顶飞到仓库
+        /// </summary>
         private void FlyAction()
         {
-            var tvList = new List<TimeValue>();
+            var durationTv = new List<TimeValue>();
 
-            for (int i = 0; i < 10; i++)
+            TemplateContainer temp = null;
+            if (flyIcons.Count == 0)
             {
-                TemplateContainer temp = null;
-                if (flyIcons.Count == 0)
+                if (_flyIconUxml != null)
                 {
-                    if (_flyIconUxml != null)
-                    {
-                        temp = _flyIconUxml.CloneTree();
-                    }
+                    temp = _flyIconUxml.CloneTree();
+                    unityUIDocument.rootVisualElement.Add(temp);
+
+                    string ussName = "unity-move-show";
+                    var uss = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadStyleSheet(ussName);
+                    temp.styleSheets.Add(uss);
+                    temp.Q<VisualElement>("Icon").AddToClassList(ussName);
                 }
-                else
+            }
+            else
+            {
+                temp = flyIcons[0];
+                flyIcons.RemoveAt(0);
+            }
+            if (temp == null)
+            {
+                return;
+            }
+
+            durationTv.Clear();
+            durationTv.Add(new TimeValue(0));
+            temp.Q<VisualElement>("Icon").style.transitionDuration = new StyleList<TimeValue>(durationTv);
+
+
+            temp.Q<VisualElement>("Icon").style.translate = new StyleTranslate(new Translate(new Length(
+                GetSelfHeroPos().x - temp.parent.transform.position.x), new Length(GetSelfHeroPos().y - temp.parent.transform.position.y), 0f));
+
+            temp.style.display = DisplayStyle.Flex;
+
+            temp.schedule.Execute(() =>
+            {
+                durationTv.Clear();
+                durationTv.Add(new TimeValue(0.5f));
+                temp.Q<VisualElement>("Icon").style.transitionDuration = new StyleList<TimeValue>(durationTv);
+
+                temp.Q<VisualElement>("Icon").style.translate = new StyleTranslate(new Translate(new Length(0f), new Length(0f), 0f));
+
+                temp.schedule.Execute(() =>
                 {
-                    temp = flyIcons[0];
-                    flyIcons.RemoveAt(0);
-                }
-                if (temp == null)
+                    temp.style.display = DisplayStyle.None;
+                    flyIcons.Add(temp);
+                }).StartingIn(500 + 100);
+
+            }).StartingIn(20);
+        }
+
+        /// <summary>
+        /// 根据放入仓库数量创建飞鸡肉动画
+        /// </summary>
+        private int flyTotalCnt = 0;
+        private bool creatingFlyIcon = false;
+        private void InputStorehouseFlyAction()
+        {
+            if (flyTotalCnt > 0 && !creatingFlyIcon)
+            {
+                flyTotalCnt--;
+                creatingFlyIcon = true;
+                unityUIDocument.rootVisualElement.schedule.Execute(() =>
                 {
-                    continue;
-                }
-                //tvList.Clear();
-                //tvList.Add(new TimeValue(i * 0.02f));
-                unityUIDocument.rootVisualElement.Add(temp);
-                temp.transform.position = new Vector3(0, 0);
-                temp.style.display = DisplayStyle.Flex;
-                //temp.Q<VisualElement>("Icon").style.transitionDelay = new StyleList<TimeValue>(tvList);
-                //temp.Q<VisualElement>("Icon").style.translate = new StyleTranslate(new Translate(new Length(400f), new Length(-400f), 0f));
-                //temp.schedule.Execute(() =>
-                //{
-                //    //temp.Q<VisualElement>("Icon").style.translate = new StyleTranslate(new Translate(new Length(0f), new Length(0f), 0f));
-                //    temp.style.display = DisplayStyle.None;
-                //    flyIcons.Add(temp);
-                //}).StartingIn(2000);
+                    creatingFlyIcon = false;
+                    InputStorehouseFlyAction();
+
+                }).StartingIn(50);
+
+                FlyAction();
             }
         }
 
