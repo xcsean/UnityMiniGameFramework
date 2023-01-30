@@ -54,6 +54,8 @@ namespace UnityMiniGameFramework
 
         public override void showUI()
         {
+            base.hideUI();
+            return;
             base.showUI();
             showSkills();
         }

@@ -153,6 +153,7 @@ namespace UnityMiniGameFramework
             _bossIncoming.style.display = DisplayStyle.None;
             _NotifyText.text = "";
             _NotifyBg.style.display = DisplayStyle.Flex;
+            _btnUseSkill.style.display = DisplayStyle.None;
 
             _notifyMessages = new List<NotifyMessage>();
             vts = Resources.Load<VisualTreeAsset>("UI/Controls/FlyNumIcon");
