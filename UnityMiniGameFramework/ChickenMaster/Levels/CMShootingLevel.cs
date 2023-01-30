@@ -249,7 +249,7 @@ namespace UnityMiniGameFramework
                 bi.currentLevel = cmGame.gameConf.maxDefenseLevelCount;
             }
 
-            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData3($"当前关卡：{bi.currentLevel}"));
+            UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData5($"当前关卡：{bi.currentLevel}"));
 
             _mainUI.refreshCurrentLevel(bi.currentLevel);
             //}
