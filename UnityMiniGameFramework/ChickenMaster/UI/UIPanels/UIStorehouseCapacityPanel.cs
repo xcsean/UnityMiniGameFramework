@@ -140,6 +140,7 @@ namespace UnityMiniGameFramework
                 }
                 //tvList.Clear();
                 //tvList.Add(new TimeValue(i * 0.02f));
+                unityUIDocument.rootVisualElement.Add(temp);
                 temp.transform.position = new Vector3(0, 0);
                 temp.style.display = DisplayStyle.Flex;
                 //temp.Q<VisualElement>("Icon").style.transitionDelay = new StyleList<TimeValue>(tvList);
