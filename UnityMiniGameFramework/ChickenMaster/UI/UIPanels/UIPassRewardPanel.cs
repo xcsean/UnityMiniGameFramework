@@ -148,7 +148,7 @@ namespace UnityMiniGameFramework
                             int rewardCount = rewardConf.items[i].count;
                             grid.Q<Label>("count").text = $"X{rewardCount}";
                             grid.Q<Label>("count").style.display = DisplayStyle.None;
-                            grid.Q<Label>("name").text = $"piece x{rewardCount}";//$"{rewardConf.items[i].itemName}";
+                            grid.Q<Label>("name").text = $"Piece x{rewardCount}";//$"{rewardConf.items[i].itemName}";
                             grid.Q<VisualElement>("weapon").style.display = DisplayStyle.Flex;
                             grid.Q<Label>("have").style.display = DisplayStyle.None;
                             grid.Q<VisualElement>("RewardIcon").style.backgroundImage = null;
@@ -286,7 +286,7 @@ namespace UnityMiniGameFramework
                     }
                     else if (prog.type == "gunpiece")
                     {
-                        grid.Q<Label>("name").text = $"piece x{prog.video - prog.have}";
+                        grid.Q<Label>("name").text = $"Piece x{prog.video - prog.have}";
                     }
                     else
                     {
