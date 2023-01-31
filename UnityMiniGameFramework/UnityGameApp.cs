@@ -272,11 +272,10 @@ namespace UnityMiniGameFramework
 
         override public void OnAppSuspended()
         {
-            if (_datamanager != null)
+            if (_datamanager != null && _datamanager.localUserData != null)
             {
                 _datamanager.localUserData.writeBack();
             }
-            UnityEngine.Debug.Log("--OnAppSuspended----------------" + DateTime.Now);
             if (Game != null && (Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
             {
                 // 在线时间打点
@@ -285,7 +284,6 @@ namespace UnityMiniGameFramework
         }
         override public void OnAppResume()
         {
-            UnityEngine.Debug.Log("--OnAppResume----------------" + DateTime.Now);
             if (Game != null && (Game as ChickenMasterGame).userInfo != null && ((Game as ChickenMasterGame).userInfo.getData() as LocalUserInfo).uuid != null)
             {
                 // 在线时间打点
@@ -295,8 +293,7 @@ namespace UnityMiniGameFramework
 
         override public void OnAppExit()
         {
-            UnityEngine.Debug.Log("--OnAppExit----------------" + DateTime.Now);
-            if (_datamanager != null)
+            if (_datamanager != null && _datamanager.localUserData != null)
             {
                 _datamanager.localUserData.writeBack();
             }
@@ -456,6 +453,7 @@ namespace UnityMiniGameFramework
             _ui.regUIPanelCreator("UISkillUpgradePanel", UISkillUpgradePanel.create);
             _ui.regUIPanelCreator("UIPassRewardPanel", UIPassRewardPanel.create);
             _ui.regUIPanelCreator("UIOfflineRewardPanel", UIOfflineRewardPanel.create);
+            _ui.regUIPanelCreator("UITipsPanel", UITipsPanel.create);
 
             // reg ui control creator
             _ui.regUIObjectCreator("UIObject", UIObject.create);

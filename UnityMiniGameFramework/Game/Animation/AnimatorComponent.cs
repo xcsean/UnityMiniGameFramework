@@ -83,8 +83,7 @@ namespace UnityMiniGameFramework
             }
 
             Animation ani = _anis[aniName];
-
-            if(_currAnis.ContainsKey(ani.aniSlotName))
+            if (_currAnis.ContainsKey(ani.aniSlotName))
             {
                 // TO DO : stop or transit old ani
                 //_currAnis[ani.aniSlotName];
@@ -108,15 +107,15 @@ namespace UnityMiniGameFramework
             }
 
             Animation ani = _anis[aniName];
-
             if (!_currAnis.ContainsKey(ani.aniSlotName))
             {
                 return;
             }
-
             _currAnis.Remove(ani.aniSlotName);
 
-            // TO DO : stop playing
+            // stop playing
+            _unityAnimator.Play("");
+            _unityAnimator.speed = 0f;
         }
 
         override public void Init(object config)

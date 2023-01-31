@@ -96,10 +96,7 @@ namespace UnityMiniGameFramework
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
                 if (_heroConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).currentLevel < _heroConf.userLevelRequire)
                 {
-                    // TO DO : level require
-
-                    // for Debug ...
-                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "Game Level not reach !");
+                    cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "Game Level not reach !");
                 }
                 else if (cmGame.Self.TrySubGold(_heroConf.activateGoldCost))
                 {
@@ -116,10 +113,7 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    // TO DO : not enough gold
-
-                    // for Debug ...
-                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
+                    cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 }
             }
         }

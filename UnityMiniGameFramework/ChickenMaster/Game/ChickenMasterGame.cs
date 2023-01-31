@@ -207,6 +207,19 @@ namespace UnityMiniGameFramework
             _ui.show();
         }
 
+        private UITipsPanel _uiTips;
+        public void ShowTips(CMGNotifyType type, string tipsStr)
+        {
+            if (_uiTips == null)
+            {
+                _uiTips = UnityGameApp.Inst.UI.createUIPanel("TipsUI") as UITipsPanel;
+                _uiTips.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+                _uiTips.setSortOrder(10000);
+                _uiTips.showUI();
+            }
+            _uiTips.NofityMessage(type, tipsStr);
+        }
+
         private List<UIPopupPanel> panels = new List<UIPopupPanel>();
         private List<string> exPanels = new List<string>()
         {

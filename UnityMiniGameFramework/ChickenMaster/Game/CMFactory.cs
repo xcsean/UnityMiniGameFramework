@@ -185,7 +185,7 @@ namespace UnityMiniGameFramework
             if (!_factoryConf.levelConfs.ContainsKey(_localFacInfo.level + 1))
             {
                 // for Debug ...
-                cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "already max level !");
+                cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "already max level !");
 
                 return false;
             }
@@ -196,7 +196,7 @@ namespace UnityMiniGameFramework
                 // no more level
 
                 // for Debug ...
-                cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "already max level !");
+                cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "already max level !");
 
                 return false;
             }
@@ -217,7 +217,7 @@ namespace UnityMiniGameFramework
                 // TO DO : not enough gold
 
                 // for Debug ...
-                cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
+                cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 return false;
             }
 
