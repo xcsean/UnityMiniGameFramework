@@ -82,7 +82,7 @@ namespace UnityMiniGameFramework
             else
             {
                 // for Debug ...
-                cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
+                cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
 
                 // TO DO : not enough gold
                 return false;
@@ -235,7 +235,7 @@ namespace UnityMiniGameFramework
                 else
                 {
                     // not enough item
-                    _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for activate");
+                    _cmGame.ShowTips(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for activate");
                 }
             }
             else
@@ -243,7 +243,7 @@ namespace UnityMiniGameFramework
                 // not enough item
 
                 // for Debug ...
-                _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for activate");
+                _cmGame.ShowTips(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for activate");
             }
 
             return false;
@@ -260,7 +260,7 @@ namespace UnityMiniGameFramework
                 // max level
 
                 // for Debug ...
-                _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"Already max level");
+                _cmGame.ShowTips(CMGNotifyType.CMG_ERROR, $"Already max level");
 
                 return false;
             }
@@ -291,7 +291,7 @@ namespace UnityMiniGameFramework
                     // not enough item
 
                     // for Debug ...
-                    _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for upgrade");
+                    _cmGame.ShowTips(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for upgrade");
                 }
             }
             else
@@ -299,7 +299,7 @@ namespace UnityMiniGameFramework
                 // not enough item
 
                 // for Debug ...
-                _cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for upgrade");
+                _cmGame.ShowTips(CMGNotifyType.CMG_ERROR, $"insuffcient {cmGunConf.upgradeItemName} for upgrade");
             }
 
             return false;

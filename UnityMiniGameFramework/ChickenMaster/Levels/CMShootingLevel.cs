@@ -226,7 +226,7 @@ namespace UnityMiniGameFramework
         {
             // for Debug ...
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level Time up");
+            cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Level Time up");
         }
 
         protected override void _OnWin()
@@ -274,7 +274,7 @@ namespace UnityMiniGameFramework
             //cmGame.baseInfo.markDirty();
 
             // for Debug ...
-            cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level Win !");
+            cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Level Win !");
 
             if (hasPassReward)
             {
@@ -292,7 +292,7 @@ namespace UnityMiniGameFramework
             // for Debug ...
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
 
-            cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_Notify, "Level lost !");
+            cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Level lost !");
         }
     }
 }

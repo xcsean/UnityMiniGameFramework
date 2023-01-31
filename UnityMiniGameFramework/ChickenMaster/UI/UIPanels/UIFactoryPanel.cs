@@ -62,7 +62,7 @@ namespace UnityMiniGameFramework
                     // TO DO : not enough gold
 
                     // for Debug ...
-                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
+                    cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 }
             }
             else

@@ -38,6 +38,11 @@ namespace UnityMiniGameFramework
                         UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
                         callball();
                     }
+                    //else if (args.type == AdEventType.AdLoadFailureEvent)
+                    //{
+                    //    ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                    //    cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "ad load failure!");
+                    //}
                 });
             }
             catch (Exception ex)

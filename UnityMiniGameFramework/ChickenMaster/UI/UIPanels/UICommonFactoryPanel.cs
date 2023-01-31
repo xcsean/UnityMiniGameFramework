@@ -107,7 +107,7 @@ namespace UnityMiniGameFramework
                 if (_factoryConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).currentLevel < _factoryConf.userLevelRequire)
                 {
                     // for Debug ...
-                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "Game Level not reach !");
+                    cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "Game Level not reach !");
                     return;
                 }
 
@@ -119,7 +119,7 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    cmGame.uiMainPanel.NofityMessage(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
+                    cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 }
             }
             else
