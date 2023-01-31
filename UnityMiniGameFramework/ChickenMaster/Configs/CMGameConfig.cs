@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 //using System.Text.Json;
 using System.Threading.Tasks;
-
+using JetBrains.Annotations;
 using MiniGameFramework;
 using UnityEngine;
 
@@ -20,7 +20,7 @@ namespace UnityMiniGameFramework
 
         public float rangeAdd { get; set; }
 
-        public List<string> buffAttrs { get; set; }
+        [CanBeNull] public List<string> buffAttrs { get; set; }
 
         public int IncreasedAttackSpeed { get; set; }
     }

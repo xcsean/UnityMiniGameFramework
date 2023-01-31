@@ -48,12 +48,13 @@ namespace UnityMiniGameFramework
             if (_actBuf.isVaild())
             {
                 _actBuf.bufAttrs.Clear();
-                foreach (var attrName in gunLevelConf.buffAttrs)
-                {
-                    var config = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffAttrConfig(attrName);
-                    if (config.isVaild())
-                        _actBuf.bufAttrs.Add(config);
-                }
+                if (gunLevelConf.buffAttrs != null)
+                    foreach (var attrName in gunLevelConf.buffAttrs)
+                    {
+                        var config = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffAttrConfig(attrName);
+                        if (config.isVaild())
+                            _actBuf.bufAttrs.Add(config);
+                    }
             }
             _actbufMul = actbufMul;
         }
