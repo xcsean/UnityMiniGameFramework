@@ -13,8 +13,8 @@ namespace UnityMiniGameFramework
         public const string DEF = "DEF";
         public const string ATK = "ATK";
         public const string MISS = "MISS";
-        public const string CRIT_RATE = "CRIT_RATE";
-        public const string CRIT_PER = "CRIT_PER";
+        public const string CRIT_RATE = "CRIT_RATE";            // 暴击率
+        public const string CRIT_PER = "CRIT_PER";              // x倍暴击
     }
 
     public class ActBuf

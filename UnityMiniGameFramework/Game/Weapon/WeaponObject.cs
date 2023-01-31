@@ -11,7 +11,7 @@ namespace UnityMiniGameFramework
         public int attackMin { get; set; }
         public int attackMax { get; set; }
         public int missingRate { get; set; }
-        public int criticalHitRate { get; set; }
+        public float criticalHitRate { get; set; }
         public float criticalHitPer { get; set; }
 
     }
@@ -97,11 +97,32 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            _attackInfo.attackMin = (int)(_attackInfo.attackMin * (1 + attackMul) + attackAdd);
-            _attackInfo.attackMax = (int)(_attackInfo.attackMax * (1 + attackMul) + attackAdd);
-            _attackInfo.missingRate = (int)(_attackInfo.missingRate + missingRateAdd);
-            _attackInfo.criticalHitRate = (int)(_attackInfo.criticalHitRate + criticalHitRateAdd);
-            _attackInfo.criticalHitPer = (int)(_attackInfo.criticalHitPer + criticalHitPerAdd);
+            foreach (var buffAttr in _actBuf.bufAttrs)
+            {
+                if (buffAttr.name == BuffAttrNameDefine.ATK)
+                {
+                    attackAdd += buffAttr.addValue;
+                    attackMul += buffAttr.mulValue;
+                }
+                else if (buffAttr.name == BuffAttrNameDefine.MISS)
+                {
+                    missingRateAdd += buffAttr.addValue;
+                }
+                else if (buffAttr.name == BuffAttrNameDefine.CRIT_RATE)
+                {
+                    criticalHitRateAdd += buffAttr.addValue;
+                }
+                else if (buffAttr.name == BuffAttrNameDefine.CRIT_PER)
+                {
+                    criticalHitPerAdd += buffAttr.addValue;
+                }
+            }
+
+            _attackInfo.attackMin = (int) (_attackInfo.attackMin * (1 + attackMul) + attackAdd);
+            _attackInfo.attackMax = (int) (_attackInfo.attackMax * (1 + attackMul) + attackAdd);
+            _attackInfo.missingRate = (int) (_attackInfo.missingRate + missingRateAdd);
+            _attackInfo.criticalHitRate = _attackInfo.criticalHitRate + criticalHitRateAdd;
+            _attackInfo.criticalHitPer = _attackInfo.criticalHitPer + criticalHitPerAdd;
         }
 
         public void setHolder(ActorObject h)

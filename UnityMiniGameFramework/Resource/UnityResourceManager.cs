@@ -73,6 +73,18 @@ namespace UnityMiniGameFramework
 
             return sp;
         }
+
+        public Font LoadFont(string path)
+        {
+            Font font = Resources.Load<Font>(path);
+            if (font == null)
+            {
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"LoadFont {path} not exist");
+                return null;
+            }
+
+            return font;
+        }
         
         public Texture2D LoadTexture(string iconName)
         {

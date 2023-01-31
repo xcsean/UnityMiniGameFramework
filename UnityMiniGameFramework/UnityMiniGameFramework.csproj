@@ -81,6 +81,9 @@
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UI.dll</HintPath>
     </Reference>
