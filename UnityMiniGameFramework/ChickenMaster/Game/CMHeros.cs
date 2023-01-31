@@ -76,7 +76,7 @@ namespace UnityMiniGameFramework
 
             _initAdditionalComponent();
 
-            RefreshLockHudUI();
+            HideLockHudUI();
         }
 
         protected virtual void _initAdditionalComponent()
@@ -241,7 +241,7 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 头顶未解锁提示
         /// </summary>
-        protected void RefreshLockHudUI()
+        protected void HideLockHudUI()
         {
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             if (cmGame.mainSceneHUDs.ContainsKey(heroInfo.mapHeroName))

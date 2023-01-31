@@ -138,6 +138,14 @@ namespace UnityMiniGameFramework
                 {
                     return;
                 }
+                string factoryName = unityGameObject.GetComponent<UnityGameObjectBehaviour>().mgGameObjectConfigName;
+                var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+                var factory = cmGame.GetFactory(factoryName);
+                // 未达到可解锁等级 不显示界面
+                if (factory != null && factory.factoryConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).currentLevel < factory.factoryConf.userLevelRequire)
+                {
+                    return;
+                }
                 int nearState = 0;
                 _buildingNearState.TryGetValue(comp.mgGameObject.name, out nearState);
                 if (nearState == 0)

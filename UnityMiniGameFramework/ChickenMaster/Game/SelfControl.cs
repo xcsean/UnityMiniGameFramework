@@ -107,14 +107,19 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            var heroConf = _cmGameConf.getCMHeroConf(npcObj.name);
-            if (heroConf == null)
+            var _heroConf = _cmGameConf.getCMHeroConf(npcObj.name);
+            if (_heroConf == null)
             {
                 return;
             }
 
             // 主角移动中不触发打开界面
             if (_mapHeroObj.moveAct.isMoving)
+            {
+                return;
+            }
+            // 未达到可解锁等级 不显示界面
+            if (_heroConf.userLevelRequire > 0 && _baseInfo.currentLevel < _heroConf.userLevelRequire)
             {
                 return;
             }
@@ -148,8 +153,8 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            var heroConf = _cmGameConf.getCMHeroConf(npcObj.name);
-            if (heroConf == null)
+            var _heroConf = _cmGameConf.getCMHeroConf(npcObj.name);
+            if (_heroConf == null)
             {
                 return;
             }
