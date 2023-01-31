@@ -274,7 +274,7 @@ namespace UnityMiniGameFramework
             //cmGame.baseInfo.markDirty();
 
             // for Debug ...
-            cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Level Win !");
+            cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Victory!");
 
             if (hasPassReward)
             {
@@ -288,7 +288,7 @@ namespace UnityMiniGameFramework
         protected override void _OnLose()
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Level lost !");
+            cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Defeat!");
         }
     }
 }
