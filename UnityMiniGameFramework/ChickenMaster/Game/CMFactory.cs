@@ -469,6 +469,11 @@ namespace UnityMiniGameFramework
                     _mapBuildingObj.animatorComponent.currBaseAnimation.aniName == ActAnis.BuildWorking)
                 {
                     _mapBuildingObj.animatorComponent.stopAnimation(ActAnis.BuildWorking);
+
+                    if (_mapBuildingObj.unityGameObject.transform.Find("WorkingEffect").gameObject.activeSelf)
+                    {
+                        _mapBuildingObj.unityGameObject.transform.Find("WorkingEffect").gameObject.SetActive(false);
+                    }
                 }
 
                 return;
@@ -479,6 +484,11 @@ namespace UnityMiniGameFramework
                 _mapBuildingObj.animatorComponent.currBaseAnimation.aniName != ActAnis.BuildWorking)
             {
                 _mapBuildingObj.animatorComponent.playAnimation(ActAnis.BuildWorking);
+
+                if (_mapBuildingObj.unityGameObject.transform.Find("WorkingEffect").gameObject.activeSelf == false)
+                {
+                    _mapBuildingObj.unityGameObject.transform.Find("WorkingEffect").gameObject.SetActive(true);
+                }
             }
 
             _currentCD -= UnityEngine.Time.deltaTime;
