@@ -60,9 +60,6 @@ namespace UnityMiniGameFramework
         protected Label _exp;
         public Label exp => _exp;
 
-        protected Label _CurrentLevel;
-        public Label CurrentLevel => _CurrentLevel;
-
         protected Label _LevelInfo;
         public Label LevelInfo => _LevelInfo;
 
@@ -116,7 +113,6 @@ namespace UnityMiniGameFramework
             _goldNum = this._uiObjects["GoldNum"].unityVisualElement as Label;
             _level = this._uiObjects["Level"].unityVisualElement as Label;
             _exp = this._uiObjects["Exp"].unityVisualElement as Label;
-            _CurrentLevel = this._uiObjects["CurrentLevel"].unityVisualElement as Label;
             _LevelInfo = this._uiObjects["LevelInfo"].unityVisualElement as Label;
             _NotifyText = this._uiObjects["NotifyText"].unityVisualElement as Label;
             _TrainTime = this._uiObjects["TrainTime"].unityVisualElement as Label;
