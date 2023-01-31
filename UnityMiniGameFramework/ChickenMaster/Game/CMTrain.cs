@@ -208,6 +208,11 @@ namespace UnityMiniGameFramework
                     UnityGameApp.Inst.AudioManager.PlaySFXByAudioName("TrainCome");
                     carriagePlayAnimation(false);
                     _onboardTimeLeft = _station.trainStaionConf.trainOnboardTime;
+
+                    if (_trainNpcObj.unityGameObject.transform.Find("Eff_Train_2").gameObject.activeSelf == false)
+                    {
+                        _trainNpcObj.unityGameObject.transform.Find("Eff_Train_2").gameObject.SetActive(true);
+                    }
                 }
             }
 
@@ -231,6 +236,11 @@ namespace UnityMiniGameFramework
                     }
                     carriagePlayAnimation(true);
                     _trainNpcObj.moveAct.moveOn(new List<UnityEngine.Vector3>() { _station.trainMoveoutPos.transform.position }, 0.1f); // move out
+
+                    if (_trainNpcObj.unityGameObject.transform.Find("Eff_Train_2").gameObject.activeSelf)
+                    {
+                        _trainNpcObj.unityGameObject.transform.Find("Eff_Train_2").gameObject.SetActive(false);
+                    }
                 }
             }
         }
