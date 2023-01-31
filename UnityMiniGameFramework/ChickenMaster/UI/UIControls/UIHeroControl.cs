@@ -91,8 +91,6 @@ namespace UnityMiniGameFramework
             _Gun1Pic.RegisterCallback<MouseUpEvent>(onGun1Click);
             _Gun2Pic.RegisterCallback<MouseUpEvent>(onGun2Click);
             _Gun3Pic.RegisterCallback<MouseUpEvent>(onGun3Click);
-
-            // TO DO : add gun active/upgrade btn
         }
 
         public void onActBtnClick(MouseUpEvent e)
@@ -103,9 +101,6 @@ namespace UnityMiniGameFramework
                 ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
                 if (_heroConf.userLevelRequire > 0 && (cmGame.baseInfo.getData() as LocalBaseInfo).level < _heroConf.userLevelRequire)
                 {
-                    // TO DO : level require
-
-                    // for Debug ...
                     cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "User Level not reach !");
                 }
                 else if (cmGame.Self.TrySubGold(_heroConf.activateGoldCost))
@@ -122,9 +117,6 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    // TO DO : not enough gold
-
-                    // for Debug ...
                     cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "insuffcient gold !");
                 }
             }
@@ -160,9 +152,6 @@ namespace UnityMiniGameFramework
                 _gun2Info = cmGame.GetWeaponInfo(_heroConf.guns[1]);
                 _gun3Info = cmGame.GetWeaponInfo(_heroConf.guns[2]);
             }
-
-            // TO DO : set hero pic and gun pic
-            //_HeadPic.style.backgroundImage = new StyleBackground(texture2d);
 
             refreshInfo();
 
@@ -314,9 +303,6 @@ namespace UnityMiniGameFramework
                 if(!_hero.TryUpgradeWeapon(gunId))
                 {
                     // active failed
-
-                    // TO DO : move change weapon to other button
-                    // for Debug ...
                     _hero.ChangeWeapon(gunId);
 
                     return false;
@@ -326,7 +312,6 @@ namespace UnityMiniGameFramework
                     return true;
                 }
             }
-
         }
 
         public void onGun1Click(MouseUpEvent e)

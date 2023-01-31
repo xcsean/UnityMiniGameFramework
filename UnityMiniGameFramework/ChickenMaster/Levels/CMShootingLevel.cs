@@ -287,11 +287,7 @@ namespace UnityMiniGameFramework
 
         protected override void _OnLose()
         {
-            // TO DO : on level lose
-
-            // for Debug ...
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-
             cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Level lost !");
         }
     }
