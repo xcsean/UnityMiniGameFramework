@@ -20,6 +20,8 @@ namespace UnityMiniGameFramework
 
         public float rangeAdd { get; set; }
 
+        public List<string> buffAttrs { get; set; }
+
         public int IncreasedAttackSpeed { get; set; }
     }
 

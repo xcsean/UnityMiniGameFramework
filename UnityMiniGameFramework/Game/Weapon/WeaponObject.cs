@@ -42,10 +42,19 @@ namespace UnityMiniGameFramework
             };
         }
 
-        public void initActBuf(string buffName, float actbufMul)
+        public void initActBuf(string buffName, float actbufMul,CMGunLevelConf gunLevelConf)
         {
             _actBuf = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffConfig(buffName);
-            
+            if (_actBuf.isVaild())
+            {
+                _actBuf.bufAttrs.Clear();
+                foreach (var attrName in gunLevelConf.buffAttrs)
+                {
+                    var config = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffAttrConfig(attrName);
+                    if (config.isVaild())
+                        _actBuf.bufAttrs.Add(config);
+                }
+            }
             _actbufMul = actbufMul;
         }
 

@@ -194,7 +194,7 @@ namespace UnityMiniGameFramework
             if (cmGunConf.gunLevelConf.TryGetValue(weaponInfo.level, out gunLevelConf))
             {
                 _gun.initAttack(gunLevelConf.attack);
-                _gun.initActBuf(cmGunConf.buffName, gunLevelConf.actbufMul);
+                _gun.initActBuf(cmGunConf.buffName, gunLevelConf.actbufMul,gunLevelConf);
                 _gun.setHolder(_mapHeroObj);
                 float addRangeSum = 0.0f;
                 CMGunLevelConf _levelConf = null;
