@@ -389,7 +389,7 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            if (actBuf != null)
+            if (actBuf.isVaild())
             {
                 var buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(actBuf.bufVFXName);
                 if (buffHitVfx != null)
@@ -486,7 +486,7 @@ namespace UnityMiniGameFramework
             }
 
             VFXObjectBase buffHitVfx = null;
-            if (actBuf != null)
+            if (actBuf.isVaild())
             {
                 buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(actBuf.bufVFXName);
                 if (buffHitVfx != null)
@@ -780,7 +780,7 @@ namespace UnityMiniGameFramework
             }
             
             VFXObjectBase buffHitVfx = null;
-            if (actBuf != null)
+            if (actBuf.isVaild())
             {
                 buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(actBuf.bufVFXName);
                 if (buffHitVfx != null)

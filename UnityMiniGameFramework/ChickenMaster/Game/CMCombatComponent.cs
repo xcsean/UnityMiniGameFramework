@@ -66,7 +66,7 @@ namespace UnityMiniGameFramework
             // TO DO : add ActBuf to actor from weapon config
             if(_isDie)
                 return;
-            if(weapon.actBuf != null)
+            if(weapon.actBuf.isVaild())
             {
                 OnBuffAddByActBuffConfig(weapon.actBuf, _actor, weapon.holder);
             }
@@ -74,7 +74,7 @@ namespace UnityMiniGameFramework
 
         protected virtual void OnBuffAddByActBuffConfig(ActBufConfig config, ActorObject actor, ActorObject fromActor)
         {
-            if (config == null)
+            if (!config.isVaild())
                 return;
             ActBuf buff = new ActBuf(actor, fromActor);
             buff.Init(config, config.endTime);

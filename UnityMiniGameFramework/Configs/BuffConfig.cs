@@ -10,14 +10,19 @@ namespace UnityMiniGameFramework
         public int damage { get; set; }
     }
 
-    public class ActBufAttrConfig
+    public struct ActBufAttrConfig
     {
         public string name { get; set; }
         public float addValue { get; set; }
         public float mulValue { get; set; }
+
+        public bool isVaild()
+        {
+            return !string.IsNullOrEmpty(name);
+        }
     }
 
-    public class ActBufConfig
+    public struct ActBufConfig
     {
         public string bufName { get; set; }
 
@@ -30,6 +35,11 @@ namespace UnityMiniGameFramework
         public List<ActBufAttrConfig> bufAttrs { get; set; }
 
         public ActBufDotConfig dot { get; set; }
+
+        public bool isVaild()
+        {
+            return !string.IsNullOrEmpty(bufName);
+        }
     }
 
     [Serializable]
@@ -57,19 +67,31 @@ namespace UnityMiniGameFramework
 
         public ActBufConfig GetBuffConfig(string buffName)
         {
+            if (string.IsNullOrEmpty(buffName))
+                return default;
+
             if (buffConfig.buffs == null || !buffConfig.buffs.ContainsKey(buffName))
             {
-                return null;
+                return default;
             }
-            return buffConfig.buffs[buffName];
+
+            //return buffConfig.buffs[buffName];
+            var config = new ActBufConfig();
+            buffConfig.buffs.TryGetValue(buffName, out config);
+            return config;
         }
 
         public ActBufAttrConfig GetBuffAttrConfig(string attrName)
         {
+            if (string.IsNullOrEmpty(attrName))
+                return default;
             if (buffConfig.buffAttrs == null || !buffConfig.buffAttrs.ContainsKey(attrName))
-                return null;
-            
-            return buffConfig.buffAttrs[attrName];
+                return default;
+
+            //return buffConfig.buffAttrs[attrName];
+            var config = new ActBufAttrConfig();
+            buffConfig.buffAttrs.TryGetValue(attrName, out config);
+            return config;
         }
     }
 }
