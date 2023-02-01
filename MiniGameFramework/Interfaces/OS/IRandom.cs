@@ -9,5 +9,7 @@ namespace MiniGameFramework
     public interface IRandom
     {
         int RandomBetween(int begin, int end);
+
+        bool IsRandomHit(float probability);
     }
 }

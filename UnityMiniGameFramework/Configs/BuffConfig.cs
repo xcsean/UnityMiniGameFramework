@@ -41,6 +41,19 @@ namespace UnityMiniGameFramework
         {
             return !string.IsNullOrEmpty(bufName);
         }
+
+        public bool CheckAddBuff()
+        {
+            if (bufAttrs == null)
+                return true;
+            foreach (var attr in bufAttrs)
+            {
+                if (attr.name == BuffAttrNameDefine.TRIGGER_ADD_BUFF)
+                    return UnityGameApp.Inst.Rand.IsRandomHit(attr.probability);
+            }
+
+            return true;
+        }
     }
 
     [Serializable]

@@ -151,8 +151,7 @@ namespace UnityMiniGameFramework
             }
 
             // check missing
-            var missed = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
-            if (missed < weapon.attackInfo.missingRate * 10000)
+            if(UnityGameApp.Inst.Rand.IsRandomHit(weapon.attackInfo.missingRate))
             {
                 // missed
                 _onHitMissed(weapon.holder);
@@ -168,8 +167,7 @@ namespace UnityMiniGameFramework
             int dmg = _onDamageCalculation(weapon);
             
             bool critical = false;
-            var criticalHit = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
-            if (criticalHit < weapon.attackInfo.criticalHitRate * 10000)
+            if (UnityGameApp.Inst.Rand.IsRandomHit(weapon.attackInfo.criticalHitRate))
             {
                 // critical
                 dmg = (int)(dmg * weapon.attackInfo.criticalHitPer);

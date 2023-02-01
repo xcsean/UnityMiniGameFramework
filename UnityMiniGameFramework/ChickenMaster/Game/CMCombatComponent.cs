@@ -82,8 +82,7 @@ namespace UnityMiniGameFramework
                 bool _isIgnoreArmor = false;
                 foreach (var attr in weapon.actBuf.bufAttrs)
                 {
-                    var rate = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
-                    if (rate < attr.probability * 10000)
+                    if(UnityGameApp.Inst.Rand.IsRandomHit(attr.probability))
                     {
                         _isIgnoreArmor = true;
                         if (attr.name == BuffAttrNameDefine.FIXED_DAMAGE)
@@ -105,9 +104,12 @@ namespace UnityMiniGameFramework
         {
             if (!config.isVaild())
                 return;
-            ActBuf buff = new ActBuf(actor, fromActor);
-            buff.Init(config, config.endTime);
-            actor.actionComponent.AddBuf(buff);
+            if (config.CheckAddBuff())
+            {
+                ActBuf buff = new ActBuf(actor, fromActor);
+                buff.Init(config, config.endTime);
+                actor.actionComponent.AddBuf(buff);    
+            }
         }
         
         override protected void _onHitMissed(ActorObject actor)
