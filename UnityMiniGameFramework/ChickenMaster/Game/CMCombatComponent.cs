@@ -59,17 +59,46 @@ namespace UnityMiniGameFramework
 
             OnRecalcAttributes();
         }
-        override public void OnHitByWeapon(WeaponObject weapon)
+        protected override void OnDamageCalculation(WeaponObject weapon)
         {
-            base.OnHitByWeapon(weapon);
-
-            // TO DO : add ActBuf to actor from weapon config
-            if(_isDie)
-                return;
             if(weapon.actBuf.isVaild())
             {
                 OnBuffAddByActBuffConfig(weapon.actBuf, _actor, weapon.holder);
             }
+            base.OnDamageCalculation(weapon);
+        }
+
+        protected override int _onDamageCalculation(WeaponObject weapon)
+        {
+            int dmg = base._onDamageCalculation(weapon);
+            if (!weapon.actBuf.isVaild())
+                return dmg;
+            // 固定伤害
+            int fixedDamage = 0;
+            // 百分比伤害
+            float perHP = 0;
+            if (weapon.actBuf.bufAttrs != null)
+            {
+                bool _isIgnoreArmor = false;
+                foreach (var attr in weapon.actBuf.bufAttrs)
+                {
+                    var rate = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
+                    if (rate < attr.probability * 10000)
+                    {
+                        _isIgnoreArmor = true;
+                        if (attr.name == BuffAttrNameDefine.FIXED_DAMAGE)
+                            fixedDamage += (int) attr.addValue;
+                        if (attr.name == BuffAttrNameDefine.PER_DAMAGE)
+                            perHP += attr.mulValue;
+                    }
+                }
+
+                if (_isIgnoreArmor)
+                    dmg = (int) (_maxHP * perHP) + fixedDamage + dmg + _Def;
+            }
+
+
+            return dmg;
         }
 
         protected virtual void OnBuffAddByActBuffConfig(ActBufConfig config, ActorObject actor, ActorObject fromActor)

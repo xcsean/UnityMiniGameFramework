@@ -42,7 +42,7 @@ namespace UnityMiniGameFramework
             };
         }
 
-        public void initActBuf(string buffName, float actbufMul,CMGunLevelConf gunLevelConf)
+        public void initActBuf(string buffName, CMGunLevelConf gunLevelConf)
         {
             _actBuf = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffConfig(buffName);
             if (_actBuf.isVaild())
@@ -56,7 +56,8 @@ namespace UnityMiniGameFramework
                             _actBuf.bufAttrs.Add(config);
                     }
             }
-            _actbufMul = actbufMul;
+
+            _actbufMul = gunLevelConf.actbufMul;
         }
 
         public void addAttackInfo(WeaponAttack atkAdd)

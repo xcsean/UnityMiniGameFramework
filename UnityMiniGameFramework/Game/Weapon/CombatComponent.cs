@@ -159,9 +159,14 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            // rand dmg
-            int dmg = UnityGameApp.Inst.Rand.RandomBetween(weapon.attackInfo.attackMin, weapon.attackInfo.attackMax);
+            OnDamageCalculation(weapon);
+        }
 
+        protected virtual void OnDamageCalculation(WeaponObject weapon)
+        {
+            // rand dmg
+            int dmg = _onDamageCalculation(weapon);
+            
             bool critical = false;
             var criticalHit = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
             if (criticalHit < weapon.attackInfo.criticalHitRate * 10000)
@@ -173,6 +178,12 @@ namespace UnityMiniGameFramework
 
             OnDamageBy(weapon.holder, dmg, critical);
         }
+
+        protected virtual int _onDamageCalculation(WeaponObject weapon)
+        {
+            return UnityGameApp.Inst.Rand.RandomBetween(weapon.attackInfo.attackMin, weapon.attackInfo.attackMax);
+        }
+        
         
         virtual public void OnDamageBy(ActorObject actor, int dmg, bool critical = false)
         {

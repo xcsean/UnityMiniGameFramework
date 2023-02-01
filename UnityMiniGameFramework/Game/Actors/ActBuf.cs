@@ -15,6 +15,8 @@ namespace UnityMiniGameFramework
         public const string MISS = "MISS";
         public const string CRIT_RATE = "CRIT_RATE";            // 暴击率
         public const string CRIT_PER = "CRIT_PER";              // x倍暴击
+        public const string FIXED_DAMAGE = "FIXED_DAMAGE";      // 无视护甲-固定伤害
+        public const string PER_DAMAGE = "PER_DAMAGE";          // 无视护甲-百分比伤害
     }
 
     public class ActBuf
