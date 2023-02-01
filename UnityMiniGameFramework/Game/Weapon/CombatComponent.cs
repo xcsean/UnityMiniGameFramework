@@ -9,6 +9,14 @@ using UnityEngine;
 
 namespace UnityMiniGameFramework
 {
+
+    public enum DamageTypeEnum
+    {
+        Attack = 1,
+        Critical = 2,
+        Dot = 3,
+    }
+    
     public class HealthBar
     {
         UnityEngine.GameObject _barObject;
@@ -151,8 +159,7 @@ namespace UnityMiniGameFramework
             }
 
             // check missing
-            var missed = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
-            if (missed < weapon.attackInfo.missingRate * 10000)
+            if(UnityGameApp.Inst.Rand.IsRandomHit(weapon.attackInfo.missingRate))
             {
                 // missed
                 _onHitMissed(weapon.holder);
@@ -168,15 +175,14 @@ namespace UnityMiniGameFramework
             int dmg = _onDamageCalculation(weapon);
             
             bool critical = false;
-            var criticalHit = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
-            if (criticalHit < weapon.attackInfo.criticalHitRate * 10000)
+            if (UnityGameApp.Inst.Rand.IsRandomHit(weapon.attackInfo.criticalHitRate))
             {
                 // critical
                 dmg = (int)(dmg * weapon.attackInfo.criticalHitPer);
                 critical = true;
             }
 
-            OnDamageBy(weapon.holder, dmg, critical);
+            OnDamageBy(weapon.holder, dmg, critical ? DamageTypeEnum.Critical : DamageTypeEnum.Attack);
         }
 
         protected virtual int _onDamageCalculation(WeaponObject weapon)
@@ -185,7 +191,7 @@ namespace UnityMiniGameFramework
         }
         
         
-        virtual public void OnDamageBy(ActorObject actor, int dmg, bool critical = false)
+        virtual public void OnDamageBy(ActorObject actor, int dmg, DamageTypeEnum damageType)
         {
             if (_isDie)
             {
@@ -194,7 +200,7 @@ namespace UnityMiniGameFramework
 
             dmg = dmg - _Def;
 
-            _onDamage(actor, dmg, critical);
+            _onDamage(actor, dmg, damageType);
 
             _HP -= dmg;
             if (_HP < 0)
@@ -236,7 +242,7 @@ namespace UnityMiniGameFramework
         {
 
         }
-        virtual protected void _onDamage(ActorObject actor, int dmg, bool critical)
+        virtual protected void _onDamage(ActorObject actor, int dmg, DamageTypeEnum damageTypeEnum)
         {
 
         }

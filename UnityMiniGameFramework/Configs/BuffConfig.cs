@@ -15,8 +15,11 @@ namespace UnityMiniGameFramework
         public string name { get; set; }
         public float addValue { get; set; }
         public float mulValue { get; set; }
-        
+
         public float probability { get; set; }
+        public float time { get; set; }
+        public int damage { get; set; }
+
         public bool isVaild()
         {
             return !string.IsNullOrEmpty(name);
@@ -40,6 +43,19 @@ namespace UnityMiniGameFramework
         public bool isVaild()
         {
             return !string.IsNullOrEmpty(bufName);
+        }
+
+        public bool CheckAddBuff()
+        {
+            if (bufAttrs == null)
+                return true;
+            foreach (var attr in bufAttrs)
+            {
+                if (attr.name == BuffAttrNameDefine.TRIGGER_ADD_BUFF)
+                    return UnityGameApp.Inst.Rand.IsRandomHit(attr.probability);
+            }
+
+            return true;
         }
     }
 

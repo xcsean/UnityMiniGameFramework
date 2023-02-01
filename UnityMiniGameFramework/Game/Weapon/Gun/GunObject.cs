@@ -389,15 +389,24 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            if (actBuf.isVaild() && !string.IsNullOrEmpty(actBuf.bufVFXName))
+            if (ActBuffs != null)
             {
-                var buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(actBuf.bufVFXName);
-                if (buffHitVfx != null)
+                foreach (var actBuffConfig in ActBuffs)
                 {
-                    buffHitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                    buffHitVfx.unityGameObject.transform.position = hitPoint;
+                    if (actBuffConfig.isVaild() && !string.IsNullOrEmpty(actBuffConfig.bufVFXName))
+                    {
+                        var buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(actBuffConfig.bufVFXName);
+                        if (buffHitVfx != null)
+                        {
+                            buffHitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                            buffHitVfx.unityGameObject.transform.position = hitPoint;
+                        }
+                    }
                 }
+                
             }
+            
+            
             
 
             // do hit result
@@ -484,21 +493,27 @@ namespace UnityMiniGameFramework
                     hitVfx.unityGameObject.transform.localPosition = UnityEngine.Vector3.zero;
                 }
             }
-
-            VFXObjectBase buffHitVfx = null;
-            if (actBuf.isVaild() && !string.IsNullOrEmpty(actBuf.bufVFXName))
+            
+            var ugbGameObj = o.GetComponent<UnityGameObjectBehaviour>();
+            if (ActBuffs != null)
             {
-                buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(actBuf.bufVFXName);
-                if (buffHitVfx != null)
+                foreach (var buffConfig in ActBuffs)
                 {
-                    buffHitVfx.unityGameObject.transform.SetParent(
-                        ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                    buffHitVfx.unityGameObject.transform.position = Vector3.zero;
+                    if (buffConfig.isVaild() && !string.IsNullOrEmpty(buffConfig.bufVFXName))
+                    {
+                        var buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(buffConfig.bufVFXName);
+                        if (buffHitVfx != null)
+                        {
+                            buffHitVfx.unityGameObject.transform.SetParent(
+                                ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                            buffHitVfx.unityGameObject.transform.position = Vector3.zero;
+                            UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(buffHitVfx, ugbGameObj.mgGameObject);
+                        }
+                    }
                 }
             }
 
             // do hit result
-            var ugbGameObj = o.GetComponent<UnityGameObjectBehaviour>();
             if (ugbGameObj != null)
             {
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
@@ -511,11 +526,6 @@ namespace UnityMiniGameFramework
                 if(hitVfx != null)
                 {
                     UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(hitVfx, ugbGameObj.mgGameObject);
-                }
-
-                if (buffHitVfx != null)
-                {
-                    UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(buffHitVfx, ugbGameObj.mgGameObject);
                 }
             }
 
@@ -779,20 +789,27 @@ namespace UnityMiniGameFramework
                 }
             }
             
-            VFXObjectBase buffHitVfx = null;
-            if (actBuf.isVaild() && !string.IsNullOrEmpty(actBuf.bufVFXName))
+            var ugbGameObj = _currentRayHitObject.GetComponent<UnityGameObjectBehaviour>();
+            if (ActBuffs != null)
             {
-                buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(actBuf.bufVFXName);
-                if (buffHitVfx != null)
+                foreach (var buffConfig in ActBuffs)
                 {
-                    buffHitVfx.unityGameObject.transform.SetParent(
-                        ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                    buffHitVfx.unityGameObject.transform.position = Vector3.zero;
+                    if (buffConfig.isVaild() && !string.IsNullOrEmpty(buffConfig.bufVFXName))
+                    {
+                        var buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(buffConfig.bufVFXName);
+                        if (buffHitVfx != null)
+                        {
+                            buffHitVfx.unityGameObject.transform.SetParent(
+                                ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                            buffHitVfx.unityGameObject.transform.position = Vector3.zero;
+                            UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(buffHitVfx, ugbGameObj.mgGameObject);
+                        }
+                    }
                 }
             }
 
             // do hit result
-            var ugbGameObj = _currentRayHitObject.GetComponent<UnityGameObjectBehaviour>();
+            
             if (ugbGameObj != null)
             {
                 var combComp = ugbGameObj.mgGameObject.getComponent("CombatComponent") as CombatComponent;
@@ -805,11 +822,6 @@ namespace UnityMiniGameFramework
                 if (hitVfx != null)
                 {
                     UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(hitVfx, ugbGameObj.mgGameObject);
-                }
-
-                if (buffHitVfx != null)
-                {
-                    UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(buffHitVfx, ugbGameObj.mgGameObject);
                 }
             }
 

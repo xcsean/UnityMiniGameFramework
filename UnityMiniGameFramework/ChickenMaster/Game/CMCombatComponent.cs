@@ -61,9 +61,13 @@ namespace UnityMiniGameFramework
         }
         protected override void OnDamageCalculation(WeaponObject weapon)
         {
-            if(weapon.actBuf.isVaild())
+            if(weapon.ActBuffs!=null)
             {
-                OnBuffAddByActBuffConfig(weapon.actBuf, _actor, weapon.holder);
+                foreach (var actBuff in weapon.ActBuffs)
+                {
+                    OnBuffAddByActBuffConfig(actBuff, _actor, weapon.holder);
+                }
+                
             }
             base.OnDamageCalculation(weapon);
         }
@@ -71,33 +75,34 @@ namespace UnityMiniGameFramework
         protected override int _onDamageCalculation(WeaponObject weapon)
         {
             int dmg = base._onDamageCalculation(weapon);
-            if (!weapon.actBuf.isVaild())
+            if (weapon.ActBuffs == null)
                 return dmg;
             // 固定伤害
             int fixedDamage = 0;
             // 百分比伤害
             float perHP = 0;
-            if (weapon.actBuf.bufAttrs != null)
+            foreach (var actBuffConfig in weapon.ActBuffs)
             {
-                bool _isIgnoreArmor = false;
-                foreach (var attr in weapon.actBuf.bufAttrs)
+                if (actBuffConfig.bufAttrs != null)
                 {
-                    var rate = UnityGameApp.Inst.Rand.RandomBetween(0, 10000);
-                    if (rate < attr.probability * 10000)
+                    bool _isIgnoreArmor = false;
+                    foreach (var attr in actBuffConfig.bufAttrs)
                     {
-                        _isIgnoreArmor = true;
-                        if (attr.name == BuffAttrNameDefine.FIXED_DAMAGE)
-                            fixedDamage += (int) attr.addValue;
-                        if (attr.name == BuffAttrNameDefine.PER_DAMAGE)
-                            perHP += attr.mulValue;
+                        if(UnityGameApp.Inst.Rand.IsRandomHit(attr.probability))
+                        {
+                            _isIgnoreArmor = true;
+                            if (attr.name == BuffAttrNameDefine.FIXED_DAMAGE)
+                                fixedDamage += (int) attr.addValue;
+                            if (attr.name == BuffAttrNameDefine.PER_DAMAGE)
+                                perHP += attr.mulValue;
+                        }
                     }
-                }
 
-                if (_isIgnoreArmor)
-                    dmg = (int) (_maxHP * perHP) + fixedDamage + dmg + _Def;
+                    if (_isIgnoreArmor)
+                        dmg = (int) (_maxHP * perHP) + fixedDamage + dmg + _Def;
+                }    
             }
-
-
+            
             return dmg;
         }
 
@@ -105,16 +110,19 @@ namespace UnityMiniGameFramework
         {
             if (!config.isVaild())
                 return;
-            ActBuf buff = new ActBuf(actor, fromActor);
-            buff.Init(config, config.endTime);
-            actor.actionComponent.AddBuf(buff);
+            if (config.CheckAddBuff())
+            {
+                ActBuf buff = new ActBuf(actor, fromActor);
+                buff.Init(config, config.endTime);
+                actor.actionComponent.AddBuf(buff);    
+            }
         }
         
         override protected void _onHitMissed(ActorObject actor)
         {
             // TO DO : show missing text
         }
-        override protected void _onDamage(ActorObject actor, int dmg, bool critical)
+        override protected void _onDamage(ActorObject actor, int dmg, DamageTypeEnum damageType)
         {
             // TO DO : show damage text
             
@@ -124,7 +132,7 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_System,
                     $" ({_actor.name}) 受到来自({(actor != null ? actor.name : string.Empty)})的({dmg}点伤害)");
                 BattleNumberEmitter.CreateNumAction.Invoke(mgGameObject.unityGameObject, dmg,
-                    critical);
+                    damageType);
             }
                 
         }

@@ -114,27 +114,36 @@ namespace UnityMiniGameFramework
         protected CMFactory _fetchFactoryByInput()
         {
             // first find empty input factory
-            for (int i = 0; i < _factories.Count; ++i)
+            //for (int i = 0; i < _factories.Count; ++i)
+            //{
+            //    var fac = _factories[i];
+            //    if (fac.currentProductInputStore <= _worker.maxCarryCount)
+            //    {
+            //        return fac;
+            //    }
+            //}
+
+            //// then find most value product factory with more than one pack space
+            //for (int i = 0; i < _factories.Count; ++i)
+            //{
+            //    var fac = _factories[i];
+            //    if (fac.maxInputProductStore - fac.currentProductInputStore > _worker.maxCarryCount)
+            //    {
+            //        return fac;
+            //    }
+            //}
+
+            // find empty factory with the most value product
+            for (int i = _factories.Count - 1; i >= 0; --i)
             {
                 var fac = _factories[i];
-                if (fac.currentProductInputStore <= _worker.maxCarryCount)
+                if (fac.currentProductInputStore == 0)
                 {
                     return fac;
                 }
             }
-
-            // then find most value product factory with more than one pack space
-            for (int i = 0; i < _factories.Count; ++i)
-            {
-                var fac = _factories[i];
-                if (fac.maxInputProductStore - fac.currentProductInputStore > _worker.maxCarryCount)
-                {
-                    return fac;
-                }
-            }
-
             // then find most value product factory
-            for (int i=0; i< _factories.Count; ++i)
+            for (int i = _factories.Count - 1; i >= 0; --i)
             {
                 var fac = _factories[i];
                 if(fac.currentProductInputStore < fac.maxInputProductStore)
@@ -145,12 +154,13 @@ namespace UnityMiniGameFramework
 
             return null;
         }
+
         protected CMFactory _fetchFactoryByOutput()
         {
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             int maxValue = 0;
             CMFactory ret = null;
-            for (int i = 0; i < _factories.Count; ++i)
+            for (int i = _factories.Count - 1; i >= 0; --i)
             {
                 var fac = _factories[i];
                 var prodConf = cmGame.gameConf.getCMProductConf(fac.factoryConf.outputProductName);

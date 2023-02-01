@@ -21,5 +21,11 @@ namespace UnityMiniGameFramework
         {
             return _rand.Next(begin, end);
         }
+
+        public bool IsRandomHit(float probability)
+        {
+            var rate = RandomBetween(0, 10000);
+            return rate < probability * 10000;
+        }
     }
 }
