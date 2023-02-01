@@ -173,7 +173,7 @@ namespace UnityMiniGameFramework
             {
                 _dotTimeLeft += _conf.dot.time;
 
-                combatComp.OnDamageBy(_fromActor, _conf.dot.damage);
+                combatComp.OnDamageBy(_fromActor, _conf.dot.damage, DamageTypeEnum.Dot);
             }
         }
 

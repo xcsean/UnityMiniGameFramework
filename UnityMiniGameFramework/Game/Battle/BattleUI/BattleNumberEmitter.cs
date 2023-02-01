@@ -7,9 +7,9 @@ namespace UnityMiniGameFramework
     public class BattleNumberEmitter : MonoBehaviour
     {
         public Canvas parentCanvas;
-        private static UnityAction<GameObject, int, bool> _createNumAction;
+        private static UnityAction<GameObject, int, DamageTypeEnum> _createNumAction;
 
-        public static UnityAction<GameObject, int, bool> CreateNumAction
+        public static UnityAction<GameObject, int, DamageTypeEnum> CreateNumAction
         {
             get => _createNumAction;
         }
@@ -25,7 +25,7 @@ namespace UnityMiniGameFramework
         }
 
 
-        private void CreateBattleNum(GameObject targetGo, int dmg, bool critical)
+        private void CreateBattleNum(GameObject targetGo, int dmg, DamageTypeEnum damageType)
         {
             var go = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject(
                 "Battle/BattleEffect/BattleDamageNumber/Prefabs/BattleNumber");
@@ -33,11 +33,19 @@ namespace UnityMiniGameFramework
             var numText = go.GetComponentInChildren<UIImageNumText>();
             numText.text = dmg.ToString();
             numText.SetUIPos(targetGo);
-            Font font;
-            if (critical)
-                font = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadFont("Fonts/FontNumPurple");
-            else
-                font = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadFont("Fonts/FontNumRed");
+            Font font = null;
+            switch (damageType)
+            {
+                case DamageTypeEnum.Attack:
+                    font = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadFont("Fonts/FontNumRed");
+                    break;
+                case DamageTypeEnum.Critical:
+                    font = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadFont("Fonts/FontNumPurple");
+                    break;
+                case DamageTypeEnum.Dot:
+                    font = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadFont("Fonts/FontNumYellow");
+                    break;
+            }
 
             if (font != null)
                 numText.font = font;

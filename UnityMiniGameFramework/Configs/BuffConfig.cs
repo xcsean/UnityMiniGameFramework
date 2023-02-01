@@ -15,8 +15,11 @@ namespace UnityMiniGameFramework
         public string name { get; set; }
         public float addValue { get; set; }
         public float mulValue { get; set; }
-        
+
         public float probability { get; set; }
+        public float time { get; set; }
+        public int damage { get; set; }
+
         public bool isVaild()
         {
             return !string.IsNullOrEmpty(name);

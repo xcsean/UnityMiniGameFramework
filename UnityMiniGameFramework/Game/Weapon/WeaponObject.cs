@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
@@ -13,7 +14,6 @@ namespace UnityMiniGameFramework
         public int missingRate { get; set; }
         public float criticalHitRate { get; set; }
         public float criticalHitPer { get; set; }
-
     }
 
     abstract public class WeaponObject : MGGameObject
@@ -25,10 +25,10 @@ namespace UnityMiniGameFramework
         public WeaponAttack attackInfo => _attackInfo;
 
 
-        protected ActBufConfig _actBuf;
+        protected List<ActBufConfig> _actBuffs;
         protected float _actbufMul;
         public float ActbufMul => _actbufMul;
-        public ActBufConfig actBuf => _actBuf;
+        public List<ActBufConfig> ActBuffs => _actBuffs;
 
         public void initAttack(AttackConf conf)
         {
@@ -42,19 +42,41 @@ namespace UnityMiniGameFramework
             };
         }
 
-        public void initActBuf(string buffName, CMGunLevelConf gunLevelConf)
+        public void initActBuf(List<string> buffsList, CMGunLevelConf gunLevelConf)
         {
-            _actBuf = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffConfig(buffName);
-            if (_actBuf.isVaild())
+            if (_actBuffs == null)
+                _actBuffs = new List<ActBufConfig>();
+            _actBuffs.Clear();
+            if (buffsList == null)
+                return;
+            List<string> attrs = new List<string>();
+            foreach (var buffName in buffsList)
             {
-                _actBuf.bufAttrs.Clear();
-                if (gunLevelConf.buffAttrs != null)
-                    foreach (var attrName in gunLevelConf.buffAttrs)
+                ActBufConfig actBuff = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffConfig(buffName);
+                if (!actBuff.isVaild())
+                    continue;
+                actBuff.bufAttrs.Clear();
+                if (gunLevelConf.buffAttrs == null)
+                    continue;
+                if (gunLevelConf.buffAttrs.TryGetValue(buffName + "Attrs", out attrs))
+                    foreach (var attrName in attrs)
                     {
                         var config = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffAttrConfig(attrName);
-                        if (config.isVaild())
-                            _actBuf.bufAttrs.Add(config);
+                        if (!config.isVaild())
+                            continue;
+                        actBuff.bufAttrs.Add(config);
+                        if (config.name == BuffAttrNameDefine.DOT_DAMAGE)
+                        {
+                            if (actBuff.dot == null)
+                                actBuff.dot = new ActBufDotConfig();
+                            actBuff.dot.damage = config.damage;
+                            actBuff.dot.time = config.time;
+                        }
                     }
+                else
+                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"{buffName} not exit in gunLevelConf BuffAttrs");
+
+                _actBuffs.Add(actBuff);
             }
 
             _actbufMul = gunLevelConf.actbufMul;
@@ -98,26 +120,33 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            if (_actBuf.bufAttrs != null)
+            if (_actBuffs != null)
             {
-                foreach (var buffAttr in _actBuf.bufAttrs)
+                foreach (var buffConfig in _actBuffs)
                 {
-                    if (buffAttr.name == BuffAttrNameDefine.ATK)
+                    if (!buffConfig.isVaild())
+                        continue;
+                    if (buffConfig.bufAttrs == null)
+                        continue;
+                    foreach (var buffAttr in buffConfig.bufAttrs)
                     {
-                        attackAdd += buffAttr.addValue;
-                        attackMul += buffAttr.mulValue;
-                    }
-                    else if (buffAttr.name == BuffAttrNameDefine.MISS)
-                    {
-                        missingRateAdd += buffAttr.addValue;
-                    }
-                    else if (buffAttr.name == BuffAttrNameDefine.CRIT_RATE)
-                    {
-                        criticalHitRateAdd += buffAttr.addValue;
-                    }
-                    else if (buffAttr.name == BuffAttrNameDefine.CRIT_PER)
-                    {
-                        criticalHitPerAdd += buffAttr.addValue;
+                        if (buffAttr.name == BuffAttrNameDefine.ATK)
+                        {
+                            attackAdd += buffAttr.addValue;
+                            attackMul += buffAttr.mulValue;
+                        }
+                        else if (buffAttr.name == BuffAttrNameDefine.MISS)
+                        {
+                            missingRateAdd += buffAttr.addValue;
+                        }
+                        else if (buffAttr.name == BuffAttrNameDefine.CRIT_RATE)
+                        {
+                            criticalHitRateAdd += buffAttr.addValue;
+                        }
+                        else if (buffAttr.name == BuffAttrNameDefine.CRIT_PER)
+                        {
+                            criticalHitPerAdd += buffAttr.addValue;
+                        }
                     }
                 }
             }

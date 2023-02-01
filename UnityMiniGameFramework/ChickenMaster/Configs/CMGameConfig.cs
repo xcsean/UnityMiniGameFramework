@@ -20,7 +20,7 @@ namespace UnityMiniGameFramework
 
         public float rangeAdd { get; set; }
 
-        [CanBeNull] public List<string> buffAttrs { get; set; }
+        [CanBeNull] public Dictionary<string, List<string>> buffAttrs { get; set; }
 
         public int IncreasedAttackSpeed { get; set; }
     }
@@ -35,7 +35,7 @@ namespace UnityMiniGameFramework
         public string upgradeItemName { get; set; }
         public int activateItemCost { get; set; }
 
-        public string buffName { get; set; }
+        public List<string> buffs { get; set; }
 
         public Dictionary<int, CMGunLevelConf> gunLevelConf { get; set; }
     }
