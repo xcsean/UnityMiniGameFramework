@@ -58,7 +58,7 @@ namespace UnityMiniGameFramework
 
             coinGrid.style.display = offlineReward.gold > 0 ? DisplayStyle.Flex : DisplayStyle.None;
             coinGrid.Q<Label>("count").text = $"x{_offlineReward.gold}";
-            expGrid.style.display = offlineReward.exp > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            expGrid.style.display = DisplayStyle.None;// offlineReward.exp > 0 ? DisplayStyle.Flex : DisplayStyle.None;
             expGrid.Q<Label>("count").text = $"x{_offlineReward.exp}";
             meatGrid.style.display = DisplayStyle.None;
             foreach (var pro in offlineReward.products)
@@ -99,10 +99,10 @@ namespace UnityMiniGameFramework
             var _baseInfo = UnityGameApp.Inst.Datas.localUserData.getData("baseInfo");
             var bi = _baseInfo.getData() as LocalBaseInfo;
             bi.unfetchedOfflineAward.gold += _offlineReward.gold * rate;
-            bi.unfetchedOfflineAward.exp += _offlineReward.exp * rate;
+            //bi.unfetchedOfflineAward.exp += _offlineReward.exp * rate;
 
             bi.gold += _offlineReward.gold * rate;
-            bi.exp += _offlineReward.exp * rate;
+            //bi.exp += _offlineReward.exp * rate;
 
             foreach (var itemAwd in _offlineReward.items)
             {
