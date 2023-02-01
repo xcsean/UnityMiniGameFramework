@@ -678,6 +678,12 @@ namespace UnityMiniGameFramework
 
             _baseInfo.exp += exp;
 
+            _cmGame.baseInfo.markDirty();
+            CheckLevelUp();
+        }
+
+        private void CheckLevelUp()
+        {
             int levelUpExp = _cmGame.gameConf.getLevelUpExpRequire(_baseInfo.level);
             if (levelUpExp > 0)
             {
@@ -687,11 +693,13 @@ namespace UnityMiniGameFramework
                     _baseInfo.exp = _baseInfo.exp - levelUpExp;
                     _baseInfo.level = _baseInfo.level + 1;
 
+                    levelUpExp = _cmGame.gameConf.getLevelUpExpRequire(_baseInfo.level);
+
                     _OnLevelUp();
+                    _cmGame.baseInfo.markDirty();
+                    CheckLevelUp();
                 }
             }
-
-            _cmGame.baseInfo.markDirty();
 
             _cmGame.uiMainPanel.refreshExp(_baseInfo.exp, levelUpExp);
         }
