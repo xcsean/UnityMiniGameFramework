@@ -43,11 +43,11 @@ namespace UnityMiniGameFramework
             }
             par.createtime = DateTime.Now;
 
-            //this.DoAction<SC_Result, CS_ReportParam>("report", par, (RCPostActResult res) =>
-            //{
-            //    Debug.DebugOutput(DebugTraceType.DTT_Debug, $"UnityRESTFulClient report result:{res.content}");
-            //    cb(res.content as SC_Result);
-            //});
+            this.DoAction<SC_Result, CS_ReportParam>("report", par, (RCPostActResult res) =>
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Debug, $"UnityRESTFulClient report result:{res.content}");
+                cb(res.content as SC_Result);
+            });
         }
 
         public void ReportList(CS_ReportParamList par, Action<SC_Result> cb = null)

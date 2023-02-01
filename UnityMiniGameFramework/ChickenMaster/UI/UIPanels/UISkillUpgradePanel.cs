@@ -56,8 +56,8 @@ namespace UnityMiniGameFramework
         {
             base.hideUI();
             return;
-            base.showUI();
-            showSkills();
+            //base.showUI();
+            //showSkills();
         }
 
         private void showSkills()
