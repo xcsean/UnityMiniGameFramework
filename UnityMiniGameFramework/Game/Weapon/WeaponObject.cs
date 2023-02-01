@@ -98,24 +98,27 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            foreach (var buffAttr in _actBuf.bufAttrs)
+            if (_actBuf.bufAttrs != null)
             {
-                if (buffAttr.name == BuffAttrNameDefine.ATK)
+                foreach (var buffAttr in _actBuf.bufAttrs)
                 {
-                    attackAdd += buffAttr.addValue;
-                    attackMul += buffAttr.mulValue;
-                }
-                else if (buffAttr.name == BuffAttrNameDefine.MISS)
-                {
-                    missingRateAdd += buffAttr.addValue;
-                }
-                else if (buffAttr.name == BuffAttrNameDefine.CRIT_RATE)
-                {
-                    criticalHitRateAdd += buffAttr.addValue;
-                }
-                else if (buffAttr.name == BuffAttrNameDefine.CRIT_PER)
-                {
-                    criticalHitPerAdd += buffAttr.addValue;
+                    if (buffAttr.name == BuffAttrNameDefine.ATK)
+                    {
+                        attackAdd += buffAttr.addValue;
+                        attackMul += buffAttr.mulValue;
+                    }
+                    else if (buffAttr.name == BuffAttrNameDefine.MISS)
+                    {
+                        missingRateAdd += buffAttr.addValue;
+                    }
+                    else if (buffAttr.name == BuffAttrNameDefine.CRIT_RATE)
+                    {
+                        criticalHitRateAdd += buffAttr.addValue;
+                    }
+                    else if (buffAttr.name == BuffAttrNameDefine.CRIT_PER)
+                    {
+                        criticalHitPerAdd += buffAttr.addValue;
+                    }
                 }
             }
 
