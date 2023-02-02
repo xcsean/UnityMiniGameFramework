@@ -215,11 +215,11 @@ namespace UnityMiniGameFramework
                 _uiTips = UnityGameApp.Inst.UI.createUIPanel("TipsUI") as UITipsPanel;
 
                 UnityEngine.Transform scaneParent = null;
-                if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterStartScene)
+                if (UnityGameApp.Inst.currInitStep == MiniGameFramework.GameAppInitStep.EnterStartScene)
                 {
                     scaneParent = ((MGGameObject)UnityGameApp.Inst.StartScene.uiRootObject).unityGameObject.transform;
                 }
-                else if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+                else if (UnityGameApp.Inst.currInitStep == MiniGameFramework.GameAppInitStep.EnterMainScene)
                 {
                     scaneParent = ((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform;
                 }
