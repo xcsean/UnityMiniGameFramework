@@ -105,7 +105,8 @@ namespace UnityMiniGameFramework
                 new GMItem(){ name = "武器攻速", resID = "", count = 400 },
                 new GMItem(){ name = "武器范围", resID = "", count = 10 },
                 new GMItem(){ name = "Log", resID = "", count = 10 },
-                new GMItem(){ name = "FPS", resID = "", count = 10 }
+                new GMItem(){ name = "FPS", resID = "", count = 10 },
+                new GMItem(){ name = "添加道具", resID = "", count = 100 }
              };
 
             FindUI();
@@ -313,6 +314,10 @@ namespace UnityMiniGameFramework
                         _labFPS.text = "";
                         _labStats.text = "";
                     }
+                    break;
+                case "添加道具":
+                    string itemName = GetItemID();
+                    cmGame.Self.AddBackpackItem(itemName, amount);
                     break;
                 default:
                     isPrint = false;
