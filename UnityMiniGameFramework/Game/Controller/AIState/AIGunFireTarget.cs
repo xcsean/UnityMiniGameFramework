@@ -119,10 +119,12 @@ namespace UnityMiniGameFramework
 
                 if(!_actor.animatorComponent.isCurrBaseAnimation(ActAnis.FireAni))
                 {
-                    _actor.animatorComponent.playAnimation(ActAnis.FireAni);
+                    if (_gunObj.conf.FireConf.fireType == "ray")
+                        _actor.animatorComponent.playAnimation(ActAnis.HoldGunAni);
+                    else
+                        _actor.animatorComponent.playAnimation(ActAnis.FireAni);
                 }
-
-                _gunObj.Fire(_currentTargetMon);
+                
                 // 枪口与人物的夹角
                 float angle = UnityEngine.Vector3.Angle(_actor.unityGameObject.transform.forward,
                     _gunObj.unityGameObject.transform.forward);
@@ -132,6 +134,7 @@ namespace UnityMiniGameFramework
                 //旋转
                 forward = UnityEngine.Quaternion.AngleAxis(angle, UnityEngine.Vector3.up) * forward;
                 _actor.unityGameObject.transform.forward = forward;
+                _gunObj.Fire(_currentTargetMon);
             }
             else
             {

@@ -605,11 +605,13 @@ namespace UnityMiniGameFramework
             }
 
             _rayVFX.linerRender.SetPosition(1, new UnityEngine.Vector3(0f, 0f, rayLength));
-
+            var forward = _gunPos.transform.forward;
+            forward.y = 0;
+            _rayVFX.unityGameObject.transform.forward = forward; 
             // Adjust impact effect position
             if (_rayImpactVFX != null)
             {
-                _rayImpactVFX.unityGameObject.transform.position = _gunPos.transform.position + _gunPos.transform.forward * rayLength;
+                _rayImpactVFX.unityGameObject.transform.position = _gunPos.transform.position + _rayVFX.unityGameObject.transform.forward * rayLength;
             }
         }
 
