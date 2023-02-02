@@ -101,6 +101,7 @@ namespace UnityMiniGameFramework
             _monsters.Clear();
         }
 
+        private static int _monsterCount = 0;
         public void OnUpdate()
         {
             if(!_isSpawning)
@@ -110,6 +111,7 @@ namespace UnityMiniGameFramework
 
             if(_isFinishSpawn)
             {
+                _monsterCount = 0;
                 return;
             }
 
@@ -120,7 +122,6 @@ namespace UnityMiniGameFramework
             }
 
             _spawnCD = _conf.spawnInterval;
-
             for(uint i=0; i< _conf.perSpawnCount; ++i)
             {
                 if (_monsters.Count >= _conf.maxCount)
@@ -134,6 +135,7 @@ namespace UnityMiniGameFramework
                     return;
                 }
 
+                _monsterCount++;
                 _spawnSingleMonster();
             }
         }
@@ -155,6 +157,8 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"init monster spawn monster [{_conf.monsterConfName}] prefab [{_monConf.prefabName}] without UnityGameObjectBehaviour");
                 return;
             }
+
+            mgObj.name = _conf.monsterConfName + _monsterCount;
 
             var mapMonsterObj = mgObj.mgGameObject as MapMonsterObject;
             if (mapMonsterObj == null)

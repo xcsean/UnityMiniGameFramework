@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Vector3 = UnityEngine.Vector3;
 
 namespace UnityMiniGameFramework
 {
@@ -121,7 +123,15 @@ namespace UnityMiniGameFramework
                 }
 
                 _gunObj.Fire(_currentTargetMon);
-                _actor.unityGameObject.transform.forward = (_currentTargetMon.unityGameObject.transform.position - _actor.unityGameObject.transform.position).normalized;
+                // 枪口与人物的夹角
+                float angle = UnityEngine.Vector3.Angle(_actor.unityGameObject.transform.forward,
+                    _gunObj.unityGameObject.transform.forward);
+
+                var forward = (_currentTargetMon.unityGameObject.transform.position -
+                               _actor.unityGameObject.transform.position).normalized;
+                //旋转
+                forward = UnityEngine.Quaternion.AngleAxis(angle, UnityEngine.Vector3.up) * forward;
+                _actor.unityGameObject.transform.forward = forward;
             }
             else
             {
