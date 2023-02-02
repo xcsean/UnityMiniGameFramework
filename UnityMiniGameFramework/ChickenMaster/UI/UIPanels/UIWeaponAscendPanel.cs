@@ -24,6 +24,9 @@ namespace UnityMiniGameFramework
         protected Label _labDamage;
         protected Label _labSpeed;
         protected Label _labRange;
+        protected Label _labDamageDesc;
+        protected Label _labSpeedDesc;
+        protected Label _labRangeDesc;
 
         public override void Init(UIPanelConf conf)
         {
@@ -39,6 +42,9 @@ namespace UnityMiniGameFramework
             _labDamage = this._uiObjects["labDamage"].unityVisualElement as Label;
             _labSpeed = this._uiObjects["labSpeed"].unityVisualElement as Label;
             _labRange = this._uiObjects["labRange"].unityVisualElement as Label;
+            _labDamageDesc = this._uiObjects["labDamageDesc"].unityVisualElement as Label;
+            _labSpeedDesc = this._uiObjects["labSpeedDesc"].unityVisualElement as Label;
+            _labRangeDesc = this._uiObjects["labRangeDesc"].unityVisualElement as Label;
             _labGunName = this._uiObjects["labGunName"].unityVisualElement as Label;
             _labGunStar = this._uiObjects["labGunStar"].unityVisualElement as Label;
             _sprGunIcon = this._uiObjects["sprGunIcon"].unityVisualElement;
@@ -58,6 +64,13 @@ namespace UnityMiniGameFramework
                 _labGunName.text = "";
                 _labGunStar.text = "0";
                 _sprGunIcon.style.backgroundImage = null;
+
+                _labDamage.style.display = DisplayStyle.None;
+                _labSpeed.style.display = DisplayStyle.None;
+                _labRange.style.display = DisplayStyle.None;
+                _labDamageDesc.style.display = DisplayStyle.None;
+                _labSpeedDesc.style.display = DisplayStyle.None;
+                _labRangeDesc.style.display = DisplayStyle.None;
             }
             else
             {
@@ -78,6 +91,13 @@ namespace UnityMiniGameFramework
                     _sprGunIcon.style.width = tx.width;
                     _sprGunIcon.style.height = tx.height;
                 }
+
+                _labDamage.style.display = gunConf.gunLevelConf[gunInfo.level].attack.attackMin > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+                _labSpeed.style.display = gunConf.gunLevelConf[gunInfo.level].IncreasedAttackSpeed > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+                _labRange.style.display = DisplayStyle.None;
+                _labDamageDesc.style.display = gunConf.gunLevelConf[gunInfo.level].attack.attackMin > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+                _labSpeedDesc.style.display = gunConf.gunLevelConf[gunInfo.level].IncreasedAttackSpeed > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+                _labRangeDesc.style.display = DisplayStyle.None;
             }
 
             showUI();

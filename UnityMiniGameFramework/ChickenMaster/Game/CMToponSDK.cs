@@ -49,8 +49,11 @@ namespace UnityMiniGameFramework
 
         private void showTips(string str)
         {
-            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.ShowTips(CMGNotifyType.CMG_ERROR, str);
+            var cmGame = UnityGameApp.Inst.Game;
+            if (cmGame != null)
+            {
+                (cmGame as ChickenMasterGame).ShowTips(CMGNotifyType.CMG_ERROR, str);
+            }
         }
     }
 }

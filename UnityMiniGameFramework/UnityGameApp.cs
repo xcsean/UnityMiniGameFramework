@@ -302,6 +302,11 @@ namespace UnityMiniGameFramework
                 // 在线时间打点
                 RESTFulClient.Report(AnalysisMgr.GetPointData1($"退出时间", 4));
             }
+
+            if (RESTFulClient != null)
+            {
+                RESTFulClient.Fin();
+            }
         }
 
         override protected void _createManagers()

@@ -99,6 +99,8 @@ namespace MiniGameFramework
 
                 if (_finished)
                 {
+                    // dispose after the last request
+                    _httpClient.OnDispose();
                     break;
                 }
             }

@@ -202,12 +202,28 @@ namespace UnityMiniGameFramework
             if(_map.currentLevel != null)
             {
                 (_map.currentLevel as MapLevel).OnMonsterDie(mon as MapMonsterObject);
+                PlayDieEff(mon);
             }
         }
 
         private void MapMonsterObj_OnDispose(GameObject obj)
         {
             _monsters.Remove(obj as MapMonsterObject);
+        }
+
+        public void PlayDieEff(ActorObject mon)
+        {
+            var dieEffect = UnityGameApp.Inst.VFXManager.createVFXObject("MonsterDie");
+
+            if (dieEffect != null)
+            {
+                dieEffect.unityGameObject.SetActive(true);
+                dieEffect.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                dieEffect.unityGameObject.transform.position = mon.unityGameObject.transform.position;
+                dieEffect.unityGameObject.transform.localScale = new UnityEngine.Vector3(0.5f, 0.5f, 0.5f);
+                dieEffect.Play();
+                Debug.DebugOutput(DebugTraceType.DTT_Debug, $"monster die effect play {dieEffect.unityGameObject.transform.localScale.y}");
+            }
         }
     }
 
