@@ -216,9 +216,9 @@ namespace UnityMiniGameFramework
                 dieEffect.unityGameObject.SetActive(true);
                 dieEffect.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                 dieEffect.unityGameObject.transform.position = mon.unityGameObject.transform.position;
-                //dieEffect.unityGameObject.transform.localScale = new UnityEngine.Vector3(0.5f, 0.5f);
+                dieEffect.unityGameObject.transform.localScale = new UnityEngine.Vector3(0.5f, 0.5f, 0.5f);
                 dieEffect.Play();
-                Debug.DebugOutput(DebugTraceType.DTT_Debug, "monster die effect play");
+                Debug.DebugOutput(DebugTraceType.DTT_Debug, $"monster die effect play {dieEffect.unityGameObject.transform.localScale.y}");
             }
         }
     }
