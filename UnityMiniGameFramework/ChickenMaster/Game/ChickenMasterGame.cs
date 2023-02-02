@@ -223,6 +223,10 @@ namespace UnityMiniGameFramework
                 {
                     scaneParent = ((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform;
                 }
+                if (scaneParent == null)
+                {
+                    return;
+                }
                 _uiTips.unityGameObject.transform.SetParent(scaneParent);
                 _uiTips.setSortOrder(10000);
                 _uiTips.showUI();
