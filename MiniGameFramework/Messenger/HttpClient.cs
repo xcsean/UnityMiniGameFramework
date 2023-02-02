@@ -17,6 +17,15 @@ namespace MiniGameFramework
         public MGHttpClient()
         {
             _client = new HttpClient();
+            _client.Timeout = TimeSpan.FromSeconds(5);
+        }
+
+        public void OnDispose()
+        {
+            if (_client != null)
+            {
+                _client.Dispose();
+            }
         }
 
         public async Task<string> GetStringAsync(string uri)

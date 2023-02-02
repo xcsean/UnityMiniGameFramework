@@ -8,6 +8,7 @@ namespace MiniGameFramework
 {
     public interface IHttpClient
     {
+        void OnDispose();
         Task<string> GetStringAsync(string uri);
         Task<T> GetJsonAsync<T>(string uri) where T : class;
 
