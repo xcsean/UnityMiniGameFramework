@@ -434,7 +434,7 @@ namespace UnityMiniGameFramework
             if (_conf.FireConf.collideExplosive != null)
             {
                 var explosiveObj = UnityGameApp.Inst.WeaponManager.CreateExplosiveObject(_conf.FireConf.collideExplosive);
-                if (explosiveObj.explosiveVFX != null)
+                if (explosiveObj != null && explosiveObj.explosiveVFX != null)
                 {
                     explosiveObj.setGunObject(this);
                     explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);

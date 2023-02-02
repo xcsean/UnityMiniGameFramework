@@ -27,6 +27,7 @@ namespace UnityMiniGameFramework
     public class RESTFulAPIConf
     {
         public string url { get; set; }
+        public string testUrl { get; set; }
     }
 
     [Serializable]
