@@ -213,7 +213,17 @@ namespace UnityMiniGameFramework
             if (_uiTips == null)
             {
                 _uiTips = UnityGameApp.Inst.UI.createUIPanel("TipsUI") as UITipsPanel;
-                _uiTips.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+
+                UnityEngine.Transform scaneParent = null;
+                if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterStartScene)
+                {
+                    scaneParent = ((MGGameObject)UnityGameApp.Inst.StartScene.uiRootObject).unityGameObject.transform;
+                }
+                else if (UnityGameApp.Inst.currInitStep != MiniGameFramework.GameAppInitStep.EnterMainScene)
+                {
+                    scaneParent = ((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform;
+                }
+                _uiTips.unityGameObject.transform.SetParent(scaneParent);
                 _uiTips.setSortOrder(10000);
                 _uiTips.showUI();
             }
