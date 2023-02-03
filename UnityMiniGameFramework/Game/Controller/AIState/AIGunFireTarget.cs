@@ -119,7 +119,7 @@ namespace UnityMiniGameFramework
 
                 if(!_actor.animatorComponent.isCurrBaseAnimation(ActAnis.FireAni))
                 {
-                    if (_gunObj.conf.FireConf.fireType == "ray")
+                    if (_gunObj.conf.FireConf.fireType == "ray" || _gunObj.conf.FireConf.fireType == "emmiter")
                         _actor.animatorComponent.playAnimation(ActAnis.HoldGunAni);
                     else
                         _actor.animatorComponent.playAnimation(ActAnis.FireAni);
