@@ -146,6 +146,8 @@ namespace UnityMiniGameFramework
 
 
             _LevelInfo.text = "Not Start";
+            _LevelInfo.style.display = DisplayStyle.None;
+
             _bossIncoming.style.display = DisplayStyle.None;
             _NotifyText.text = "";
             _NotifyBg.style.display = DisplayStyle.Flex;
@@ -482,16 +484,14 @@ namespace UnityMiniGameFramework
         /// </summary>
         public void refreshLevelInfo(CMShootingLevel lvl)
         {
-            //DateTime t = new DateTime((long)(lvl.timeLeft * 1000));
-            var t = new TimeSpan((long)(lvl.timeLeft * 10000000));
-            string info = $"Time: {t.Minutes}:{t.Seconds}:{t.Milliseconds}";
-            info += $"\r\nGameLevel: {lvl.level}";
-            foreach (var kmPair in lvl.kmCount)
-            {
-                info += $"\r\n{kmPair.Key} : {kmPair.Value}";
-            }
-
-            _LevelInfo.text = info;
+            //var t = new TimeSpan((long)(lvl.timeLeft * 10000000));
+            //string info = $"Time: {t.Minutes}:{t.Seconds}:{t.Milliseconds}";
+            //info += $"\r\nGameLevel: {lvl.level}";
+            //foreach (var kmPair in lvl.kmCount)
+            //{
+            //    info += $"\r\n{kmPair.Key} : {kmPair.Value}";
+            //}
+            //_LevelInfo.text = info;
         }
 
         /// <summary>
