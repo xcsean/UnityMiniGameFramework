@@ -588,8 +588,11 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
-
-            _currentRay.direction = _gunPos.transform.forward;
+            
+            
+            var forward = _gunPos.transform.forward;
+            forward.y = 0;
+            _currentRay.direction = forward;
             _currentRay.origin = _gunPos.transform.position;
 
             var rayLength = _attackRange;
@@ -605,8 +608,7 @@ namespace UnityMiniGameFramework
             }
 
             _rayVFX.linerRender.SetPosition(1, new UnityEngine.Vector3(0f, 0f, rayLength));
-            var forward = _gunPos.transform.forward;
-            forward.y = 0;
+            
             _rayVFX.unityGameObject.transform.forward = forward; 
             // Adjust impact effect position
             if (_rayImpactVFX != null)
