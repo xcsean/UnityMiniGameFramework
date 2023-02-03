@@ -21,6 +21,9 @@ namespace UnityMiniGameFramework
         public Label level;
         public Label capacity;
         public Label storage;
+        public Label nextlevel;
+        public Label nextcapacity;
+        public Label nextstorage;
 
 
         protected Label _UpgradePrice;
@@ -44,6 +47,9 @@ namespace UnityMiniGameFramework
             level = this._uiObjects["Level"].unityVisualElement as Label;
             storage = this._uiObjects["Storage"].unityVisualElement as Label;
             capacity = this._uiObjects["Capacity"].unityVisualElement as Label;
+            nextlevel = this._uiObjects["NextLevel"].unityVisualElement as Label;
+            nextstorage = this._uiObjects["NextStorage"].unityVisualElement as Label;
+            nextcapacity = this._uiObjects["NextCapacity"].unityVisualElement as Label;
             _UpgradePrice = this._uiObjects["upgradePrice"].unityVisualElement as Label;
 
             _UpgradeBtn = this._uiObjects["UpgradeBtn"].unityVisualElement as Button;
@@ -61,13 +67,24 @@ namespace UnityMiniGameFramework
 
         public void refreshInfo()
         {
-            storage.text = $"{_storeHouse.currentLevelConf.MaxstoreCount}";
-            capacity.text = $"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[_storeHouse.storeHouseInfo.level]}";
-            _UpgradePrice.text = $"{_storeHouse.currentLevelConf.upgradeGoldCost}";
+            int CurLevel = _storeHouse.storeHouseInfo.level;
+            storage.text = StringUtil.StringNumFormat($"{_storeHouse.currentLevelConf.MaxstoreCount}");
+            capacity.text = StringUtil.StringNumFormat($"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[CurLevel]}");
+            _UpgradePrice.text = StringUtil.StringNumFormat($"{_storeHouse.currentLevelConf.upgradeGoldCost}");
 
-            isMaxLevel = _storeHouse.storeHouseInfo.level >= _storeHouse.storeHouseConf.levelConfs.Count;
+            isMaxLevel = !(_storeHouse.storeHouseConf.levelConfs.ContainsKey(CurLevel + 1) && _storeHouse.storeHouseConf.workerConf.levelCarryCount.ContainsKey(CurLevel + 1));
             _UpgradeBtn.text = isMaxLevel ? "OK" : "UPGRADE";
-            level.text = isMaxLevel ? $"Lv.{_storeHouse.storeHouseInfo.level} is max" : $"Lv.{_storeHouse.storeHouseInfo.level}";
+            level.text = isMaxLevel ? $"Lv.{CurLevel} is max" : $"Lv.{CurLevel}";
+            nextlevel.text = $"Lv.{CurLevel + 1}";
+            nextlevel.style.display = isMaxLevel ? DisplayStyle.None : DisplayStyle.Flex;
+
+            nextstorage.style.display = isMaxLevel ? DisplayStyle.None : DisplayStyle.Flex;
+            nextcapacity.style.display = isMaxLevel ? DisplayStyle.None : DisplayStyle.Flex;
+            if (!isMaxLevel)
+            {
+                nextstorage.text = StringUtil.StringNumFormat($"{_storeHouse.storeHouseConf.levelConfs[CurLevel + 1].MaxstoreCount}");
+                nextcapacity.text = StringUtil.StringNumFormat($"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[CurLevel + 1]}");
+            }
         }
 
         public void onUpgradeClick()
