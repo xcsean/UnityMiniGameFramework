@@ -28,7 +28,7 @@ namespace UnityMiniGameFramework
             _nextCarriageNode = _gameObject.transform.Find("nextCarriage");
             _animator = _gameObject.GetComponent<Animator>();
         }
-        
+
 
         public void ShowBox(bool isShow)
         {
@@ -39,7 +39,7 @@ namespace UnityMiniGameFramework
         {
             _animator.Play(isRun ? "run" : "stop");
         }
-        
+
     }
     public class CMTrain
     {
@@ -55,8 +55,8 @@ namespace UnityMiniGameFramework
 
         protected bool _isInited;
         private List<Carriage> _carriageList = new List<Carriage>();
-        
-        
+
+
         public bool Init(CMTrainStation s)
         {
             _station = s;
@@ -88,7 +88,7 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMTrainStation init train prefab [{mapNpcConf.prefabName}] not MapNPCObject");
                 return false;
             }
-            
+
             _trainNpcObj.moveAct.SetRotationAdd(new Vector3(0.0f, -90.0f, 0.0f));
             _trainNpcObj.moveAct.setMoveType(true);
             _initTrain();
@@ -100,13 +100,13 @@ namespace UnityMiniGameFramework
 
             return true;
         }
-        
-        
+
+
         protected void _initTrain()
         {
             var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
             _timeToTrainArrival = _station.trainStationInfo.NextTrainArrivalTime - nowTickMillsecond;
-            var CarriageNode =  _trainNpcObj.unityGameObject.transform.Find("CarriageNode");
+            var CarriageNode = _trainNpcObj.unityGameObject.transform.Find("CarriageNode");
 
             for (int i = 0; i < _station.currentLevelConf.TrainCarriageCount; i++)
             {
@@ -155,18 +155,18 @@ namespace UnityMiniGameFramework
                 carriage.PlayAnimation(isRun);
             }
         }
-        
+
 
         public void OnUpdate()
         {
-            if(!_isInited)
+            if (!_isInited)
             {
                 return;
             }
 
             if (_timeToTrainArrival > 0)
             {
-                if(!_trainNpcObj.moveAct.isMoving)
+                if (!_trainNpcObj.moveAct.isMoving)
                 {
                     _trainNpcObj.unityGameObject.SetActive(false); // hide train
                 }
@@ -195,7 +195,7 @@ namespace UnityMiniGameFramework
 
             // train start arrive
 
-            if(_onboardTimeLeft <= 0)
+            if (_onboardTimeLeft <= 0)
             {
                 if (_trainNpcObj.moveAct.isMoving)
                 {
@@ -217,12 +217,12 @@ namespace UnityMiniGameFramework
             }
 
             // train arrived
-            if(_onboardTimeLeft > 0)
+            if (_onboardTimeLeft > 0)
             {
                 // TO DO: show onboard animation
 
                 _onboardTimeLeft -= UnityEngine.Time.deltaTime;
-                if(_onboardTimeLeft <= 0)
+                if (_onboardTimeLeft <= 0)
                 {
                     // onbard finish, sell item and leave
                     _station.TrySellTrainStaionProducts();
@@ -230,7 +230,7 @@ namespace UnityMiniGameFramework
                     var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
                     _station.trainStationInfo.NextTrainArrivalTime = nowTickMillsecond + (long)(_station.trainStaionConf.trainArriveTime * 1000);
                     _timeToTrainArrival = _station.trainStationInfo.NextTrainArrivalTime - nowTickMillsecond;
-                    if(_timeToTrainArrival <=0)
+                    if (_timeToTrainArrival <= 0)
                     {
                         _timeToTrainArrival = 1; // atleast 1
                     }
@@ -243,6 +243,11 @@ namespace UnityMiniGameFramework
                     }
                 }
             }
+        }
+
+        public void CallTrainBack()
+        {
+            _onboardTimeLeft = 0;
         }
     }
 }
