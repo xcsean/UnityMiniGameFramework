@@ -57,7 +57,10 @@ namespace UnityMiniGameFramework
                     continue;
                 actBuff.bufAttrs.Clear();
                 if (gunLevelConf.buffAttrs == null)
+                {
+                    _actBuffs.Add(actBuff);
                     continue;
+                }
                 if (gunLevelConf.buffAttrs.TryGetValue(buffName + "Attrs", out attrs))
                     foreach (var attrName in attrs)
                     {
