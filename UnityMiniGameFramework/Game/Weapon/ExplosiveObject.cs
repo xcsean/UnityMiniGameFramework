@@ -75,6 +75,8 @@ namespace UnityMiniGameFramework
 
             foreach (var obj in _hitedObjects)
             {
+                if (obj == null)
+                    continue;
                 var ugo = obj.GetComponent<UnityGameObjectBehaviour>();
                 if (ugo != null)
                 {

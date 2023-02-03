@@ -122,6 +122,8 @@ namespace UnityMiniGameFramework
         {
             // TO DO : show missing text
         }
+
+        private Dictionary<int, string> damageDesDic = new Dictionary<int, string>() {{1, "普通"}, {2, "暴击"}, {3, "dot"}};
         override protected void _onDamage(ActorObject actor, int dmg, DamageTypeEnum damageType)
         {
             // TO DO : show damage text
@@ -129,8 +131,10 @@ namespace UnityMiniGameFramework
             // perform onhit act
             if (_gameObject is MGGameObject mgGameObject)
             {
+                string damageDes = string.Empty;
+                damageDesDic.TryGetValue((int) damageType, out damageDes);
                 Debug.DebugOutput(DebugTraceType.DTT_System,
-                    $" ({_actor.name}) 受到来自({(actor != null ? actor.name : string.Empty)})的({dmg}点伤害)");
+                    $" ({_actor.name}) 受到来自({(actor != null ? actor.name : string.Empty)})的({damageDes}{dmg}点伤害)");
                 BattleNumberEmitter.CreateNumAction.Invoke(mgGameObject.unityGameObject, dmg,
                     damageType);
             }
@@ -139,6 +143,13 @@ namespace UnityMiniGameFramework
         override protected void _onDie(ActorObject actor)
         {
             _actor.actionComponent.AddAction(_dieAct);
+        }
+
+        public override void OnHitByWeapon(WeaponObject weapon)
+        {
+            if(_actor.type!="MapMonsterObject")
+                return;
+            base.OnHitByWeapon(weapon);
         }
     }
 }

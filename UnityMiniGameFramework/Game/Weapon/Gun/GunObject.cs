@@ -434,15 +434,17 @@ namespace UnityMiniGameFramework
             UnityGameApp.Inst.VFXManager.onVFXDestory(projectileObject.projVfxObj);
             _currentProjectiles.Remove(projectileObject.projVfxObj);
 
-            if (_conf.FireConf.collideExplosive != null)
+            if (_conf.FireConf.collideExplosive != null && _currentTarget != null)
             {
-                var explosiveObj = UnityGameApp.Inst.WeaponManager.CreateExplosiveObject(_conf.FireConf.collideExplosive);
+                var explosiveObj =
+                    UnityGameApp.Inst.WeaponManager.CreateExplosiveObject(_conf.FireConf.collideExplosive);
                 if (explosiveObj != null && explosiveObj.explosiveVFX != null)
                 {
                     explosiveObj.setGunObject(this);
-                    explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                    explosiveObj.explosiveVFX.unityGameObject.transform.position = hitPoint;
-                    //explosiveObj.explosiveVFX.unityGameObject.transform.forward = contact.normal;
+                    explosiveObj.explosiveVFX.unityGameObject.transform.position =
+                        _currentTarget.unityGameObject.transform.position;
+                    explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(
+                        ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                 }
             }
         }
