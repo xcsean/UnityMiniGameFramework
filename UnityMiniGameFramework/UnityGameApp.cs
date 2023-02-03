@@ -83,11 +83,18 @@ namespace UnityMiniGameFramework
             Application.targetFrameRate = 60;
 
             Application.quitting += UnityGameApp.Inst.OnAppExit;
+
+            InitSDK();
         }
 
         protected virtual void initGameAppPlatform()
         {
             GameApp.Inst.Platform = PlatformEnum.PlatformEditor;
+        }
+
+        protected virtual void InitSDK()
+        {
+            
         }
 
         protected virtual void Start()
@@ -237,17 +244,28 @@ namespace UnityMiniGameFramework
         public List<GMLogInfo> logs;
         private void onListenerLogMessage()
         {
-            logs = new List<GMLogInfo>();
-            Application.logMessageReceivedThreaded += (string condition, string stackTrace, LogType type) =>
+            if (UnityGameApp.Inst.Datas.localUserConfig != null && UnityGameApp.Inst.Datas.localUserConfig.ShowGm)
             {
-                logs.Add(new GMLogInfo() 
+                logs = new List<GMLogInfo>();
+                Application.logMessageReceivedThreaded += (string condition, string stackTrace, LogType type) =>
                 {
-                    time = $"[{DateTime.Now.ToString("hh:mm:ss")}]",
-                    condition = condition,
-                    stackTrace = stackTrace,
-                    type = type
-                });
-            };
+                    if (logs.Count > 50000)
+                    {
+                        return;
+                    }
+                    if (type != LogType.Log && type != LogType.Error && type != LogType.Warning)
+                    {
+                        return;
+                    }
+                    logs.Add(new GMLogInfo() 
+                    {
+                        time = $"[{DateTime.Now.ToString("hh:mm:ss")}]",
+                        condition = condition,
+                        stackTrace = stackTrace,
+                        type = type
+                    });
+                };
+            }
         }
 
         override public void OnUpdate()

@@ -74,6 +74,10 @@ namespace UnityMiniGameFramework
         }
         public void NofityMessage(CMGNotifyType t, string msg)
         {
+            if (vts_tips == null)
+            {
+                return;
+            }
             var notify = new NotifyMessage()
             {
                 t = t,

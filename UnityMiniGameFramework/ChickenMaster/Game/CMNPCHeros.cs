@@ -54,11 +54,11 @@ namespace UnityMiniGameFramework
         {
             ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
 
-            if (_heroInfo.level >= cmGame.Self.userLevel)
-            {
-                // can't bigger than user level
-                return false;
-            }
+            //if (_heroInfo.level >= cmGame.Self.userLevel)
+            //{
+            //    // can't bigger than user level
+            //    return false;
+            //}
 
             int upgradeGold = getUpgradeGoldCost();
             if(upgradeGold <= 0)

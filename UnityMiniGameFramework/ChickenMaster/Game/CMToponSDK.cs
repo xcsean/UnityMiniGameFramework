@@ -26,12 +26,12 @@ namespace UnityMiniGameFramework
         public virtual void showAutoAd(Action<SdkEvent> cb)
         {
             cb(new SdkEvent(AdEventType.RewardEvent, "test"));
-            showTips("ad play success !");
+            showTips("ad play success.");
         }
 
         public void onAdVideoPlayFail(string placementId)
         {
-            showTips("ad play fail !");
+            showTips($"ad play fail.");
         }
 
         public void onAdVideoClosedEvent(string placementId)
@@ -44,15 +44,14 @@ namespace UnityMiniGameFramework
 
         public void onAdLoadFail(string placementId)
         {
-            showTips("ad load fail !");
+            showTips($"ad load fail.");
         }
 
         private void showTips(string str)
         {
-            var cmGame = UnityGameApp.Inst.Game;
-            if (cmGame != null)
+            if (UnityGameApp.Inst.Game is ChickenMasterGame cmGame)
             {
-                (cmGame as ChickenMasterGame).ShowTips(CMGNotifyType.CMG_ERROR, str);
+                cmGame.ShowTips(CMGNotifyType.CMG_ERROR, str);
             }
         }
     }
