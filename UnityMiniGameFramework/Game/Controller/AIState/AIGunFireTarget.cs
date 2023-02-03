@@ -128,7 +128,7 @@ namespace UnityMiniGameFramework
                 // 枪口与人物的夹角
                 Vector3 actorForward = _actor.unityGameObject.transform.forward;
                 actorForward.y = 0;
-                Vector3 gunForward = _gunObj.unityGameObject.transform.forward;
+                Vector3 gunForward = _gunObj.GunPos.transform.forward;
                 gunForward.y = 0;
 
                 float angle = UnityEngine.Vector3.Angle(actorForward, gunForward);

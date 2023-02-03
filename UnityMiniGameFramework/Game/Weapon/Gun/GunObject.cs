@@ -71,6 +71,9 @@ namespace UnityMiniGameFramework
         public bool isOpenFire => _isOpenFire;
 
         protected UnityEngine.GameObject _gunPos;
+
+        public UnityEngine.GameObject GunPos => _gunPos;
+
         protected float _currCD;
 
         protected float _projectFlySpeed;
