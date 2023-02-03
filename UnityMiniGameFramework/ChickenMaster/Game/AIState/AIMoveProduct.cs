@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MiniGameFramework;
 using UnityEngine;
 using GameObject = UnityEngine.GameObject;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -247,6 +248,7 @@ namespace UnityMiniGameFramework
                     _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
                     addProductGo(_worker.workerConf.productPrefab);
                     _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.TrainStation.putPosition.randSpawnPos() }, 0.5f);
+                    _movAct.speedUpBuff = GetSpeedUpBuff();
                     _onUpdateWorker = _updateTrainStationMovingToPut;
                 }
 
@@ -281,6 +283,7 @@ namespace UnityMiniGameFramework
                 _movAct.setMovingAni(ActAnis.RunAni);
                 removeProductGo();
                 _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.outputFetchPosition.randSpawnPos() }, 0.5f);
+                _movAct.speedUpBuff = GetSpeedUpBuff();
                 _onUpdateWorker = _updateTrainStationMovingToFetching;
             }
 
@@ -352,6 +355,7 @@ namespace UnityMiniGameFramework
                 _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
                 addProductGo(_worker.workerConf.productPrefab);
                 _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.TrainStation.putPosition.randSpawnPos() }, 0.5f);
+                _movAct.speedUpBuff = GetSpeedUpBuff();
                 _onUpdateWorker = _updateTrainStationMovingToPut;
             }
         }
@@ -448,6 +452,7 @@ namespace UnityMiniGameFramework
 
                     _movAct.setMovingAni(ActAnis.RunAni);
                     _movAct.moveOn(new List<UnityEngine.Vector3>() { cmGame.StoreHouse.fetchPosition.randSpawnPos() }, 0.5f);
+                    _movAct.speedUpBuff = GetSpeedUpBuff();
                     removeProductGo();
                     _onUpdateWorker = _updateStoreHouseMovingToFetching;
                 }
@@ -536,6 +541,7 @@ namespace UnityMiniGameFramework
                     _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
                     addProductGo(_worker.workerConf.productPrefab);
                     _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.inputPutPosition.randSpawnPos() }, 0.5f);
+                    _movAct.speedUpBuff = GetSpeedUpBuff();
                 }
             }
             // 有目标但目标input已经满了时
@@ -550,6 +556,7 @@ namespace UnityMiniGameFramework
                         _movAct.setMovingAni(_worker.workerConf.carryMovingAniName);
                         addProductGo(_worker.workerConf.productPrefab);
                         _movAct.moveOn(new List<UnityEngine.Vector3>() { _targetFactory.inputPutPosition.randSpawnPos() }, 0.5f);
+                        _movAct.speedUpBuff = GetSpeedUpBuff();
                     }
                 }
             }
@@ -672,6 +679,29 @@ namespace UnityMiniGameFramework
             cmGame.baseInfo.markDirty();
 
             _onUpdateWorker = _updateStoreHouseIdle;
+        }
+
+        private float GetSpeedUpBuff()
+        {
+            float buff = 0f;
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var bi = cmGame.baseInfo.getData() as LocalBaseInfo;
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+
+            switch (_targetName)
+            {
+                case "storeHouse":
+                    buff = bi.buffs.storehouseProterSpeed < nowMillisecond ? 0f : 1f;
+                    break;
+                case "trainStation":
+                    buff = bi.buffs.trainProterSpeed < nowMillisecond ? 0f : 1f;
+                    break;
+
+                default:
+                    break;
+            }
+
+            return buff;
         }
     }
 }

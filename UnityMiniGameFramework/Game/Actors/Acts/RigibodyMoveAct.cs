@@ -56,6 +56,8 @@ namespace UnityMiniGameFramework
 
         protected MovingConf _conf;
 
+        public float speedUpBuff = 0f;
+
         public void setMovingConf(MovingConf conf)
         {
             _conf = conf;
@@ -230,7 +232,7 @@ namespace UnityMiniGameFramework
 
             _decSpeed();
 
-            _rigiBody.MovePosition(_rigiBody.position + _rigiBody.transform.forward * _curSpeed * UnityEngine.Time.deltaTime);
+            _rigiBody.MovePosition(_rigiBody.position + _rigiBody.transform.forward * _curSpeed * speedBuff() * UnityEngine.Time.deltaTime);
         }
 
         void _updateMove()
@@ -241,7 +243,7 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            float aniPlaySpeed = _curSpeed / AniDefMoveSpeed;
+            float aniPlaySpeed = _curSpeed * speedBuff() / AniDefMoveSpeed;
             if(aniPlaySpeed < 1.0f)
             {
                 aniPlaySpeed = 1.0f;
@@ -277,12 +279,12 @@ namespace UnityMiniGameFramework
 
             if (!_isTrainMove)
             {
-                _rigiBody.MovePosition(_rigiBody.position + _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime); 
+                _rigiBody.MovePosition(_rigiBody.position + _movVec.Value * _curSpeed * speedBuff() * UnityEngine.Time.deltaTime); 
             }
             else
             {
                 _rigiBody.gameObject.transform.position = _rigiBody.gameObject.transform.position +
-                                                          _movVec.Value * _curSpeed * UnityEngine.Time.deltaTime;
+                                                          _movVec.Value * _curSpeed * speedBuff() * UnityEngine.Time.deltaTime;
             }
         }
 
@@ -356,6 +358,11 @@ namespace UnityMiniGameFramework
                     _curSpeed = MaxSpeed;
                 }
             }
+        }
+
+        private float speedBuff()
+        {
+            return 1f + speedUpBuff;
         }
     }
 }

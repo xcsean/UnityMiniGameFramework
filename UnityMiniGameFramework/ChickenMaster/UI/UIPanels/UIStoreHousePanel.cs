@@ -107,6 +107,27 @@ namespace UnityMiniGameFramework
             //{
             //    //worker.maxCarryCount *= 2;
             //}
+
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var bi = cmGame.baseInfo.getData() as LocalBaseInfo;
+            long buffTime = bi.buffs.storehouseProterSpeed;
+            CMSingleBuffConf buffCfg = cmGame.gameConf.gameConfs.buffsConf.storehouseProterSpeed;
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            if (buffTime < nowMillisecond)
+            {
+                buffTime = nowMillisecond + buffCfg.videoGet * 1000;
+            }
+            else
+            {
+                buffTime += buffCfg.videoGet * 1000;
+                if (buffTime - nowMillisecond > buffCfg.maxBuff * 1000)
+                {
+                    buffTime = nowMillisecond + buffCfg.maxBuff * 1000;
+                }
+            }
+
+            bi.buffs.storehouseProterSpeed = buffTime;
+            cmGame.baseInfo.markDirty();
         }
 
         public override void showUI()
