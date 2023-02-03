@@ -293,7 +293,11 @@ namespace UnityMiniGameFramework
                 _barValue.style.width = new StyleLength(new Length(0f));
                 return;
             }
-
+            else if (_CMFactory.currentProductInputStore >= _CMFactory.maxOutputProductStore)
+            {
+                _barValue.style.width = new StyleLength(new Length(58f));
+                return;
+            }
             _barValue.style.width = new StyleLength(new Length(58 * (1f - _CMFactory.currentCD / _CMFactory.produceCD)));
 
             if (_lastUpdateProduceVer != _CMFactory.produceVer)

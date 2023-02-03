@@ -107,6 +107,15 @@ namespace UnityMiniGameFramework
                 {
                     return 0;
                 }
+                string lNum = System.Text.RegularExpressions.Regex.Replace(l.factoryConf.mapBuildName, @"[^0-9]+", "");
+                string rNum = System.Text.RegularExpressions.Regex.Replace(r.factoryConf.mapBuildName, @"[^0-9]+", "");
+                if (!string.IsNullOrEmpty(lNum) && !string.IsNullOrEmpty(rNum))
+                {
+                    if (Int32.Parse(lNum) < Int32.Parse(rNum))
+                    {
+                        return 0;
+                    }
+                }
 
                 return 1;
             });
