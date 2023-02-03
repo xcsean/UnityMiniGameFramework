@@ -404,7 +404,10 @@ namespace UnityMiniGameFramework
         public bool CallTrainNow()
         {
             // TO DO : call train by watch Ad.
-
+            
+            var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
+            trainStationInfo.NextTrainArrivalTime = nowTickMillsecond;
+            train.CallTrainBack();
             return true;
         }
 

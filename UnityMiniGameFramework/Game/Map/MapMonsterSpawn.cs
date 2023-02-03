@@ -214,7 +214,6 @@ namespace UnityMiniGameFramework
         public void PlayDieEff(ActorObject mon)
         {
             var dieEffect = UnityGameApp.Inst.VFXManager.createVFXObject("MonsterDie");
-
             if (dieEffect != null)
             {
                 dieEffect.unityGameObject.SetActive(true);
@@ -222,7 +221,6 @@ namespace UnityMiniGameFramework
                 dieEffect.unityGameObject.transform.position = mon.unityGameObject.transform.position;
                 dieEffect.unityGameObject.transform.localScale = new UnityEngine.Vector3(0.5f, 0.5f, 0.5f);
                 dieEffect.Play();
-                Debug.DebugOutput(DebugTraceType.DTT_Debug, $"monster die effect play {dieEffect.unityGameObject.transform.localScale.y}");
             }
         }
     }
