@@ -415,9 +415,17 @@ namespace UnityMiniGameFramework
         /// <param name="gunIndex"></param>
         protected void OnUpgradeGun(int gunIndex)
         {
+            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             int gunId = _heroConf.guns[gunIndex];
+
             if (_hero == null)
             {
+                return;
+            }
+            LocalWeaponInfo weaponInfo = cmGame.GetWeaponInfo(gunId);
+            if (weaponInfo == null)
+            {
+                // 未激活
                 return;
             }
             if (!_hero.TryUpgradeWeapon(gunId))
@@ -425,7 +433,6 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Debug, "无法升级武器");
                 return;
             }
-            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
 
             LocalWeaponInfo _gunInfo = null;
             if (gunIndex == 0)

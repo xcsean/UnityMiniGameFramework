@@ -26,12 +26,13 @@ namespace UnityMiniGameFramework
         public virtual void showAutoAd(Action<SdkEvent> cb)
         {
             cb(new SdkEvent(AdEventType.RewardEvent, "test"));
-            showTips("ad play success.");
+            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, "------------------ ad play success. ------------------");
+            //showTips("ad play success.");
         }
 
         public void onAdVideoPlayFail(string placementId)
         {
-            showTips($"ad play fail.");
+            showTips($"Sorry, not available now. Plz try again later.");
         }
 
         public void onAdVideoClosedEvent(string placementId)
@@ -44,7 +45,8 @@ namespace UnityMiniGameFramework
 
         public void onAdLoadFail(string placementId)
         {
-            showTips($"ad load fail.");
+            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, "------------------ ad load fail. ------------------");
+            //showTips($"ad load fail.");
         }
 
         private void showTips(string str)

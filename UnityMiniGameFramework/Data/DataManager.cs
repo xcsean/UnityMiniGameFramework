@@ -93,7 +93,7 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"GetLocalUserConfig {fileName} not exist");
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"GetLocalUserConfig {fileName} not exist");
                 }
             }
 
