@@ -759,15 +759,14 @@ namespace UnityMiniGameFramework
                 int hours = time / 60 / 60;
                 int mins = (time - hours * 60 * 60) / 60;
                 int secs = time - hours * 60 * 60 - mins * 60;
-                var str = hours >= 10 ? hours.ToString() : "0" + hours.ToString();
-                str += mins >= 10 ? ":" + mins.ToString() : ":0" + mins.ToString();
+                var str = mins >= 10 ? mins.ToString() : "0" + mins.ToString();
                 str += secs >= 10 ? ":" + secs.ToString() : ":0" + secs.ToString();
 
                 return str;
             }
             else
             {
-                return "00:00:00";
+                return "00:00";
             }
         }
     }
