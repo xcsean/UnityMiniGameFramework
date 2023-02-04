@@ -68,9 +68,9 @@ namespace UnityMiniGameFramework
         public void refreshInfo()
         {
             int CurLevel = _storeHouse.storeHouseInfo.level;
-            storage.text = StringUtil.StringNumFormat($"{_storeHouse.currentLevelConf.MaxstoreCount}");
-            capacity.text = StringUtil.StringNumFormat($"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[CurLevel]}");
-            _UpgradePrice.text = StringUtil.StringNumFormat($"{_storeHouse.currentLevelConf.upgradeGoldCost}");
+            storage.text = StringUtil.StringNumFormatWithDot($"{_storeHouse.currentLevelConf.MaxstoreCount}");
+            capacity.text = StringUtil.StringNumFormatWithDot($"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[CurLevel]}");
+            _UpgradePrice.text = StringUtil.StringNumFormatWithDot($"{_storeHouse.currentLevelConf.upgradeGoldCost}");
 
             isMaxLevel = !(_storeHouse.storeHouseConf.levelConfs.ContainsKey(CurLevel + 1) && _storeHouse.storeHouseConf.workerConf.levelCarryCount.ContainsKey(CurLevel + 1));
             _UpgradeBtn.text = isMaxLevel ? "OK" : "UPGRADE";
@@ -82,8 +82,8 @@ namespace UnityMiniGameFramework
             nextcapacity.style.display = isMaxLevel ? DisplayStyle.None : DisplayStyle.Flex;
             if (!isMaxLevel)
             {
-                nextstorage.text = StringUtil.StringNumFormat($"{_storeHouse.storeHouseConf.levelConfs[CurLevel + 1].MaxstoreCount}");
-                nextcapacity.text = StringUtil.StringNumFormat($"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[CurLevel + 1]}");
+                nextstorage.text = StringUtil.StringNumFormatWithDot($"{_storeHouse.storeHouseConf.levelConfs[CurLevel + 1].MaxstoreCount}");
+                nextcapacity.text = StringUtil.StringNumFormatWithDot($"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[CurLevel + 1]}");
             }
         }
 
