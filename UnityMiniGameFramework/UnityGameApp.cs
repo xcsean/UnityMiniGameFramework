@@ -244,9 +244,9 @@ namespace UnityMiniGameFramework
         public List<GMLogInfo> logs;
         private void onListenerLogMessage()
         {
+            logs = new List<GMLogInfo>();
             if (UnityGameApp.Inst.Datas.localUserConfig != null && UnityGameApp.Inst.Datas.localUserConfig.ShowGm)
             {
-                logs = new List<GMLogInfo>();
                 Application.logMessageReceivedThreaded += (string condition, string stackTrace, LogType type) =>
                 {
                     if (logs.Count > 50000)
