@@ -81,7 +81,7 @@ namespace UnityMiniGameFramework
             foreach (var config in weapon.ActBuffs)
             {
                 if (config.bufAttrs != null)
-                    dmg += OnDamageCalByConf(config.bufAttrs, dmg);
+                    dmg += OnDamageCalByConf(config.bufAttrs);
             }
 
             return dmg;
