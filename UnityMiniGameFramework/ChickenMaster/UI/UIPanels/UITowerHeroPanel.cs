@@ -202,7 +202,7 @@ namespace UnityMiniGameFramework
                 int upgradeCost = _hero.getUpgradeGoldCost();
 
                 _labHeroName.text = $"{_heroConf.mapHeroName}";
-                _labUpgradeCoin.text = $"{upgradeCost}";
+                _labUpgradeCoin.text = StringUtil.StringNumFormat($"{upgradeCost}");
 
                 _labAttacked.text = $"{_hero.heroInfo.level}";  // 改为等级
                 _labAttackCur.text = StringUtil.StringNumFormat($"{attack}");

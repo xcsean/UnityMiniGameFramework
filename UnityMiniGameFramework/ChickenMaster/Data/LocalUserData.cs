@@ -108,7 +108,7 @@ namespace UnityMiniGameFramework
 
     public class LocalBaseInfo
     {
-        public int gold { get; set; }
+        public long gold { get; set; }
         public int level { get; set; }
         public int exp { get; set; }
 

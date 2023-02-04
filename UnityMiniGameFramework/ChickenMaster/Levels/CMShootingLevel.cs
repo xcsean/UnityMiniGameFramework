@@ -236,13 +236,14 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
 
-            // 配合GM工具挑战任意关卡，前推关卡给奖励
+            // 配合GM工具挑战任意关卡，往后挑战关卡才给奖励
             bool hasPassReward = _level >= bi.currentLevel;
             bi.currentLevel = bi.currentLevel == _level ? (_level + 1) : _level;
 
             //if (bi.currentLevel == _level)
             //{
-            //bi.currentLevel++;
+            //    bi.currentLevel++;
+            //}
             if (bi.currentLevel > cmGame.gameConf.maxDefenseLevelCount)
             {
                 // max level reached

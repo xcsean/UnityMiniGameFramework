@@ -96,7 +96,7 @@ namespace UnityMiniGameFramework
             refreshMeat();
         }
 
-        public void refreshGold(int gold)
+        public void refreshGold(long gold)
         {
             _goldNum.text = $"Gold:{gold}";
         }

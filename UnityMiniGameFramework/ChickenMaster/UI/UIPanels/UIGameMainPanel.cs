@@ -190,6 +190,11 @@ namespace UnityMiniGameFramework
 
                     level.Start();
                     cmGame.Egg.eggUI.clearRecoverTime();
+
+                    if (IsBossLevel(bi.currentLevel)) // boss提示
+                    {
+                        ShowBossWarning();
+                    }
                 }
             }
             else if (!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
@@ -202,12 +207,27 @@ namespace UnityMiniGameFramework
                     level.Start();
                     cmGame.Egg.eggUI.clearRecoverTime();
 
-                    if(bi.currentLevel % 5 == 0) // boss提示
+                    if(IsBossLevel(bi.currentLevel)) // boss提示
                     {
                         ShowBossWarning();
                     }
                 }
             }
+        }
+        private bool IsBossLevel(int currLevel)
+        {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            foreach (var lvlConf in cmGame.gameConf.gameConfs.defenseLevels)
+            {
+                if (lvlConf.mapLevelName.Contains("BigBoss"))
+                {
+                    if (currLevel >= lvlConf.levelRangeMin && currLevel <= lvlConf.levelRangeMax && lvlConf.levelDivide > 0)
+                    {
+                        return (currLevel % lvlConf.levelDivide) == 0;
+                    }
+                }
+            }
+            return false;
         }
 
         public void changeBattleStartByEggState(bool isFighting, float _hp)
@@ -305,7 +325,7 @@ namespace UnityMiniGameFramework
             refreshMeat();
         }
 
-        public void refreshGold(int gold)
+        public void refreshGold(long gold)
         {
             _goldNum.text = StringUtil.StringNumFormat($"{gold}");
         }
@@ -424,20 +444,28 @@ namespace UnityMiniGameFramework
         /// <summary>
         /// 当前关卡
         /// </summary>
-        public void refreshCurrentLevel(int currentLevel)
+        public void refreshCurrentLevel(int currLevel)
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             int maxLevel = cmGame.gameConf.maxDefenseLevelCount;
-            int firstNum = Math.Max(0, currentLevel - 1);
+            int firstNum = Math.Max(0, currLevel - 1);
+            string bossIcon = "boss1";
             int bossLevel = 10000;
-            string bossIcon = "Mob_boss_1";
             foreach (var lvlConf in cmGame.gameConf.gameConfs.defenseLevels)
             {
-                if (lvlConf.mapLevelName == "testLevelBigBoss")
+                if (lvlConf.mapLevelName.Contains("BigBoss"))
                 {
-                    bossLevel = (currentLevel / lvlConf.levelDivide + 1) * lvlConf.levelDivide;
-                    int num = bossLevel / lvlConf.levelDivide;
-                    bossIcon = $"Mob_boss_{num}";
+                    if (currLevel >= lvlConf.levelRangeMin && currLevel <= lvlConf.levelRangeMax && lvlConf.levelDivide > 0)
+                    {
+                        bossLevel = ((currLevel - 1) / lvlConf.levelDivide + 1) * lvlConf.levelDivide;
+                        foreach (var item in lvlConf.monsterLvRanges)
+                        {
+                            if (item.Key.Contains("boss"))
+                            {
+                                bossIcon = $"{item.Key}";
+                            }
+                        }
+                    }
                 }
             }
             for (int i = 0; i < 3; i++)
@@ -450,12 +478,12 @@ namespace UnityMiniGameFramework
 
                 if (i == 2)
                 {
-                    if (currentLevel == maxLevel)
+                    if (currLevel == maxLevel)
                     {
                         labLevel.text = "Max";
                     }
-                    sprIcon.style.display = currentLevel == bossLevel ? DisplayStyle.Flex : DisplayStyle.None;
-                    labLevel.style.display = currentLevel == bossLevel ? DisplayStyle.None : DisplayStyle.Flex;
+                    sprIcon.style.display = currLevel == bossLevel ? DisplayStyle.Flex : DisplayStyle.None;
+                    labLevel.style.display = currLevel == bossLevel ? DisplayStyle.None : DisplayStyle.Flex;
                 }
                 else
                 {
@@ -466,7 +494,7 @@ namespace UnityMiniGameFramework
             var labBoss = _bossInfo.Q<Label>("labLevel");
             if (labBoss != null)
             {
-                labBoss.text = $"{bossLevel - currentLevel} level";
+                labBoss.text = $"{bossLevel - currLevel} level";
             }
             VisualElement sprBoss = _bossInfo.Q<VisualElement>("bossHead");
             var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/boss/{bossIcon}");
@@ -475,7 +503,7 @@ namespace UnityMiniGameFramework
                 sprBoss.style.backgroundImage = tx;
                 sprBoss.style.width = tx.width;
                 sprBoss.style.height = tx.height;
-                sprBoss.style.left = 48 - tx.width / 2;
+                sprBoss.style.left = 48 - tx.width / 2 - 5;
             }
         }
         

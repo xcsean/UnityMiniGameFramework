@@ -233,7 +233,14 @@ namespace UnityMiniGameFramework
             {
                 if (System.Text.RegularExpressions.Regex.IsMatch(inputStr, @"^\d+$"))
                 {
-                    input = int.Parse(inputStr);
+                    if (inputStr.Length > Int32.MaxValue.ToString().Length - 1)
+                    {
+                        input = 10000 * 10000;
+                    }
+                    else
+                    {
+                        input = Int32.Parse(inputStr);
+                    }
                 }
             }
             return input;
