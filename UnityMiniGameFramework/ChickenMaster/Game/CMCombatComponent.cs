@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using MiniGameFramework;
 
 namespace UnityMiniGameFramework
@@ -52,23 +51,24 @@ namespace UnityMiniGameFramework
             int prevHP = _HP;
             int prevMaxHP = _maxHP;
 
-            _maxHP = (int)(_ccConf.hpMax * (1 + hpMul) + hpAdd);
-            _Def = (int)(_ccConf.def * (1 + defMul) + defAdd);
+            _maxHP = (int) (_ccConf.hpMax * (1 + hpMul) + hpAdd);
+            _Def = (int) (_ccConf.def * (1 + defMul) + defAdd);
 
             _HP = prevHP * _maxHP / prevMaxHP;
 
             OnRecalcAttributes();
         }
+
         protected override void OnDamageCalculation(WeaponObject weapon)
         {
-            if(weapon.ActBuffs!=null)
+            if (weapon.ActBuffs != null)
             {
                 foreach (var actBuff in weapon.ActBuffs)
                 {
                     OnBuffAddByActBuffConfig(actBuff, _actor, weapon.holder);
                 }
-                
             }
+
             base.OnDamageCalculation(weapon);
         }
 
@@ -77,32 +77,49 @@ namespace UnityMiniGameFramework
             int dmg = base._onDamageCalculation(weapon);
             if (weapon.ActBuffs == null)
                 return dmg;
+
+            foreach (var config in weapon.ActBuffs)
+            {
+                if (config.bufAttrs != null)
+                    dmg += OnDamageCalByConf(config.bufAttrs, dmg);
+            }
+
+            return dmg;
+        }
+
+        public override int OnDamageCalByConf(List<ActBufAttrConfig> buffAttrs, int dmg = 0)
+        {
+            if (buffAttrs == null)
+                return dmg;
             // 固定伤害
             int fixedDamage = 0;
             // 百分比伤害
             float perHP = 0;
-            foreach (var actBuffConfig in weapon.ActBuffs)
+            // 普通伤害
+            int commonDamage = 0;
+            float commonPerHp = 0;
+            foreach (var attr in buffAttrs)
             {
-                if (actBuffConfig.bufAttrs != null)
+                bool _isIgnoreArmor = false;
                 {
-                    bool _isIgnoreArmor = false;
-                    foreach (var attr in actBuffConfig.bufAttrs)
+                    if (attr.name == BuffAttrNameDefine.FIXED_DAMAGE)
                     {
-                        if(UnityGameApp.Inst.Rand.IsRandomHit(attr.probability))
-                        {
-                            _isIgnoreArmor = true;
-                            if (attr.name == BuffAttrNameDefine.FIXED_DAMAGE)
-                                fixedDamage += (int) attr.addValue;
-                            if (attr.name == BuffAttrNameDefine.PER_DAMAGE)
-                                perHP += attr.mulValue;
-                        }
+                        _isIgnoreArmor = true;
+                        fixedDamage += (int) attr.addValue;
+                        perHP += attr.mulValue;
                     }
+                    else if (attr.name == BuffAttrNameDefine.ATTACK_DAMAGE)
+                    {
+                        commonDamage += (int) attr.addValue;
+                        commonPerHp += attr.mulValue;
+                    }
+                }
 
-                    if (_isIgnoreArmor)
-                        dmg = (int) (_maxHP * perHP) + fixedDamage + dmg + _Def;
-                }    
+                if (_isIgnoreArmor)
+                    dmg = (int) (_maxHP * perHP) + fixedDamage + dmg + _Def;
+                dmg = dmg + (int) (_maxHP * commonPerHp) + commonDamage;
             }
-            
+
             return dmg;
         }
 
@@ -114,20 +131,21 @@ namespace UnityMiniGameFramework
             {
                 ActBuf buff = new ActBuf(actor, fromActor);
                 buff.Init(config, config.endTime);
-                actor.actionComponent.AddBuf(buff);    
+                actor.actionComponent.AddBuf(buff);
             }
         }
-        
+
         override protected void _onHitMissed(ActorObject actor)
         {
             // TO DO : show missing text
         }
 
         private Dictionary<int, string> damageDesDic = new Dictionary<int, string>() {{1, "普通"}, {2, "暴击"}, {3, "dot"}};
+
         override protected void _onDamage(ActorObject actor, int dmg, DamageTypeEnum damageType)
         {
             // TO DO : show damage text
-            
+
             // perform onhit act
             if (_gameObject is MGGameObject mgGameObject)
             {
@@ -138,8 +156,8 @@ namespace UnityMiniGameFramework
                 BattleNumberEmitter.CreateNumAction.Invoke(mgGameObject.unityGameObject, dmg,
                     damageType);
             }
-                
         }
+
         override protected void _onDie(ActorObject actor)
         {
             _actor.actionComponent.AddAction(_dieAct);
@@ -147,7 +165,7 @@ namespace UnityMiniGameFramework
 
         public override void OnHitByWeapon(WeaponObject weapon)
         {
-            if(_actor.type!="MapMonsterObject")
+            if (_actor.type != "MapMonsterObject")
                 return;
             base.OnHitByWeapon(weapon);
         }

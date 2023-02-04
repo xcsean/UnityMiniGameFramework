@@ -19,7 +19,8 @@ namespace UnityMiniGameFramework
         public const string PER_DAMAGE = "PER_DAMAGE";          // 无视护甲-百分比伤害
         public const string TRIGGER_ADD_BUFF = "TRIGGER_ADD_BUFF";// 触发添加此buff
         public const string DOT_DAMAGE = "DOT_DAMAGE";   // dot 伤害
-        
+        public const string ATTACK_DAMAGE = "ATTACK_DAMAGE";      // 普通伤害 计算护甲
+
     }
 
     public class ActBuf
@@ -172,8 +173,8 @@ namespace UnityMiniGameFramework
             if (_dotTimeLeft <= 0)
             {
                 _dotTimeLeft += _conf.dot.time;
-
-                combatComp.OnDamageBy(_fromActor, _conf.dot.damage, DamageTypeEnum.Dot);
+                int dmg = combatComp.OnDamageCalByConf(new List<ActBufAttrConfig>() {_conf.dot.config});
+                combatComp.OnDamageBy(_fromActor, dmg, DamageTypeEnum.Dot);
             }
         }
 

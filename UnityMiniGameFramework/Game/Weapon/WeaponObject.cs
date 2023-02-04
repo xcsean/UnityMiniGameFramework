@@ -68,12 +68,12 @@ namespace UnityMiniGameFramework
                         if (!config.isVaild())
                             continue;
                         actBuff.bufAttrs.Add(config);
-                        if (config.name == BuffAttrNameDefine.DOT_DAMAGE)
+                        if (config.type == "dot")
                         {
                             if (actBuff.dot == null)
                                 actBuff.dot = new ActBufDotConfig();
-                            actBuff.dot.damage = config.damage;
                             actBuff.dot.time = config.time;
+                            actBuff.dot.config = config;
                         }
                     }
                 else

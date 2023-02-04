@@ -106,6 +106,8 @@ namespace UnityMiniGameFramework
 
         protected CombatConf _ccConf;
 
+        
+
         public override void Init(object config)
         {
             base.Init(config);
@@ -189,8 +191,13 @@ namespace UnityMiniGameFramework
         {
             return UnityGameApp.Inst.Rand.RandomBetween(weapon.attackInfo.attackMin, weapon.attackInfo.attackMax);
         }
-        
-        
+
+        public virtual int OnDamageCalByConf(List<ActBufAttrConfig> buffAttrs,int dmg = 0)
+        {
+            return 0;
+        }
+
+
         virtual public void OnDamageBy(ActorObject actor, int dmg, DamageTypeEnum damageType)
         {
             if (_isDie)

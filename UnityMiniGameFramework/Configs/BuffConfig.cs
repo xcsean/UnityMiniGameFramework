@@ -7,7 +7,8 @@ namespace UnityMiniGameFramework
     public class ActBufDotConfig
     {
         public float time { get; set; }
-        public int damage { get; set; }
+
+        public ActBufAttrConfig config { get; set; }
     }
 
     public struct ActBufAttrConfig
@@ -18,7 +19,7 @@ namespace UnityMiniGameFramework
 
         public float probability { get; set; }
         public float time { get; set; }
-        public int damage { get; set; }
+        public string type { get; set; }
 
         public bool isVaild()
         {
