@@ -29,9 +29,12 @@ namespace UnityMiniGameFramework
 
     public struct ActBufConfig
     {
+
+        public UInt64 buffUID { get; set; }
         public string bufName { get; set; }
 
         public string bufVFXName { get; set; }
+        public string buffIcon { get; set; }
 
         public float endTime { get; set; }
 

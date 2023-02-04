@@ -44,6 +44,11 @@ namespace UnityMiniGameFramework
             _fromActor = fromActor;
         }
 
+        public UInt64 getBuffId()
+        {
+            return _conf.buffUID;
+        }
+
         public void Init(ActBufConfig conf, float time = 30)
         {
             _conf = conf;
@@ -68,6 +73,18 @@ namespace UnityMiniGameFramework
             _actor.actionComponent.OnBufRemove(this);
 
             return true;
+        }
+
+        protected void _onAddBuffIcon()
+        {
+            var combatComp = _actor.getComponent("CombatComponent") as CombatComponent;
+            combatComp?.AddBuffIcon(_conf.buffIcon);
+        }
+
+        protected void _onSubBuffIcon()
+        {
+            var combatComp = _actor.getComponent("CombatComponent") as CombatComponent;
+            combatComp?.SubBuffIcon(_conf.buffIcon);
         }
 
         protected void _onAddState()
@@ -107,6 +124,7 @@ namespace UnityMiniGameFramework
 
         public virtual void OnAdd()
         {
+            _onAddBuffIcon();
             _onAddState();
 
             _onAddAttr();
@@ -150,6 +168,7 @@ namespace UnityMiniGameFramework
 
         public virtual void OnRemove()
         {
+            _onSubBuffIcon();
             _onRemoveState();
 
             _onRemoveAttr();

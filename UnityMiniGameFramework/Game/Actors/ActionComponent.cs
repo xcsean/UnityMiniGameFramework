@@ -26,7 +26,7 @@ namespace UnityMiniGameFramework
         protected List<Act> _penddingActions;
         protected HashSet<Act> _currActivateActions;
 
-        protected HashSet<ActBuf> _bufs;
+        protected Dictionary<UInt64,ActBuf> _bufs;
 
         public List<Act> penddingActions => _penddingActions;
         public List<Act> currActivateActions => _currActivateActions.ToList();
@@ -36,21 +36,26 @@ namespace UnityMiniGameFramework
             _penddingActions = new List<Act>();
             _currActivateActions = new HashSet<Act>();
 
-            _bufs = new HashSet<ActBuf>();
+            _bufs = new Dictionary<ulong, ActBuf>();
         }
 
         public void AddBuf(ActBuf buf)
         {
-            _bufs.Add(buf);
-
+            _bufs.Add(buf.getBuffId(),buf);
+            
             buf.OnAdd();
+        }
+
+        public bool HasBuf(UInt64 buffId)
+        {
+            return _bufs.ContainsKey(buffId);
         }
 
         public void OnBufRemove(ActBuf buf)
         {
             buf.OnRemove();
-
-            _bufs.Remove(buf);
+            if(_bufs.ContainsKey(buf.getBuffId()))
+                _bufs.Remove(buf.getBuffId());
         }
 
         public void AddAction(Act act)
@@ -117,7 +122,7 @@ namespace UnityMiniGameFramework
 
             if(_bufs != null)
             {
-                foreach (var buf in _bufs)
+                foreach (var buf in _bufs.Values)
                 {
                     buf.OnUpdate();
                 }
@@ -145,7 +150,7 @@ namespace UnityMiniGameFramework
 
             if (_bufs != null)
             {
-                ActBuf[] bufArray = _bufs.ToArray();
+                ActBuf[] bufArray = _bufs.Values.ToArray();
                 foreach (var buf in bufArray)
                 {
                     buf.OnPostUpdate();

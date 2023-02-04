@@ -42,6 +42,7 @@ namespace UnityMiniGameFramework
             };
         }
 
+        private static UInt64 buff_UID = 0;
         public void initActBuf(List<string> buffsList, CMGunLevelConf gunLevelConf)
         {
             if (_actBuffs == null)
@@ -53,6 +54,8 @@ namespace UnityMiniGameFramework
             foreach (var buffName in buffsList)
             {
                 ActBufConfig actBuff = UnityGameApp.Inst.BuffDataMgr.BuffConfig.GetBuffConfig(buffName);
+                buff_UID++;
+                actBuff.buffUID = buff_UID;
                 if (!actBuff.isVaild())
                     continue;
                 actBuff.bufAttrs.Clear();

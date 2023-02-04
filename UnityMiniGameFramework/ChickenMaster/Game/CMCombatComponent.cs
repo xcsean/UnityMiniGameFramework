@@ -127,6 +127,8 @@ namespace UnityMiniGameFramework
         {
             if (!config.isVaild())
                 return;
+            if(actor.actionComponent.HasBuf(config.buffUID))
+                return;
             if (config.CheckAddBuff())
             {
                 ActBuf buff = new ActBuf(actor, fromActor);
