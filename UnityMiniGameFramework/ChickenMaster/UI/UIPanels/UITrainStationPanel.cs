@@ -108,6 +108,7 @@ namespace UnityMiniGameFramework
 
         private string numChange(int num)
         {
+            return StringUtil.StringNumFormat(num.ToString());
             try
             {
                 List<Format> numDatas = new List<Format>()
