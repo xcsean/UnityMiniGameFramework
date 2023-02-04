@@ -36,6 +36,9 @@ namespace UnityMiniGameFramework
         protected Label _CurStorage;
         public Label CurStorage => _CurStorage;
 
+        protected Label _CurStationStorage;
+        public Label CurStationStorage => _CurStationStorage;
+
         protected Label _NextLv;
         public Label NextLv => _NextLv;
 
@@ -44,6 +47,9 @@ namespace UnityMiniGameFramework
 
         protected Label _NextStorage;
         public Label NextStorage => _NextStorage;
+
+        protected Label _NextStationStorage;
+        public Label NextStationStorage => _NextStationStorage;
 
         protected Label _UpgradePrice;
         public Label UpgradePrice => _UpgradePrice;
@@ -70,9 +76,11 @@ namespace UnityMiniGameFramework
             _CurLv = this._uiObjects["curLv"].unityVisualElement as Label;
             _CurCapacity = this._uiObjects["curCapacity"].unityVisualElement as Label;
             _CurStorage = this._uiObjects["curStorage"].unityVisualElement as Label;
+            _CurStationStorage = this._uiObjects["curStationStorage"].unityVisualElement as Label;
             _NextLv = this._uiObjects["nextLv"].unityVisualElement as Label;
             _NextCapacity = this._uiObjects["nextCapacity"].unityVisualElement as Label;
             _NextStorage = this._uiObjects["nextStorage"].unityVisualElement as Label;
+            _NextStationStorage = this._uiObjects["nextStationStorage"].unityVisualElement as Label;
             _UpgradePrice = this._uiObjects["UpgradePrice"].unityVisualElement as Label;
 
             _UpgradeBtn = this._uiObjects["UpgradeBtn"].unityVisualElement as Button;
@@ -141,8 +149,10 @@ namespace UnityMiniGameFramework
             _NextLv.text = $"{nextLevel}";
             _CurCapacity.text = $"{numChange(levelCarryConf[_trainStation.trainStationInfo.level])}";
             _NextCapacity.text = $"{numChange(levelCarryConf[nextLevel])}";
-            _CurStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[_trainStation.trainStationInfo.level].MaxstoreCount)}";
-            _NextStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[nextLevel].MaxstoreCount)}";
+            _CurStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[_trainStation.trainStationInfo.level].maxSellCountPerRound)}";
+            _CurStationStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[_trainStation.trainStationInfo.level].MaxstoreCount)}";
+            _NextStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[nextLevel].maxSellCountPerRound)}";
+            _NextStationStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[nextLevel].MaxstoreCount)}";
             UpgradePrice.text = $"{numChange(_trainStation.currentLevelConf.upgradeGoldCost)}";
             UpgradeBtn.text = isMaxLevel ? "OK" : "Upgrade";
 

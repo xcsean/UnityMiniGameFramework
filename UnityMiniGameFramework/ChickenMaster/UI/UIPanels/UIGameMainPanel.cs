@@ -83,6 +83,9 @@ namespace UnityMiniGameFramework
         protected VisualElement _bossInfo;
         protected VisualElement _battleStartInfo;
         protected VisualElement _expBar;
+        protected Label _atkBuff;
+        protected Label _expBuff;
+        protected Label _eggRecover;
 
         protected float _expBarWidth = 72f;
 
@@ -131,6 +134,9 @@ namespace UnityMiniGameFramework
             _battleStartBtn = this._uiObjects["BattleStartBtn"].unityVisualElement;
             _btnGm = this._uiObjects["BtnGm"].unityVisualElement as Button;
             _bossIncoming = this._uiObjects["BossWarning"].unityVisualElement;
+            _atkBuff = this._uiObjects["atkBuffTime"].unityVisualElement as Label;
+            _expBuff = this._uiObjects["expBuffTime"].unityVisualElement as Label;
+            _eggRecover = this._uiObjects["eggRecoverTime"].unityVisualElement as Label;
 
             _btnUseSkill.clicked += OnUseSkillBtnClick;
             _btnDoubleExp.clicked += OnDoubleExpBtnClick;
@@ -691,6 +697,8 @@ namespace UnityMiniGameFramework
             onUpdateAni();
             onUpdateBattleTips();
             onUpdateBossWarning();
+            onUpdateBuffTime();
+            onUpdateEggRecover();
             if (_notifyMessages == null)
             {
                 return;
@@ -720,6 +728,47 @@ namespace UnityMiniGameFramework
             //{
             //    _refreshNotifyMessages();
             //}
+        }
+
+        private void onUpdateBuffTime()
+        {
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
+            _atkBuff.text = GetTimeStr(bi.buffs.doubleAtk);
+            _expBuff.text = GetTimeStr(bi.buffs.doubleExp);
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            _atkBuff.style.display = bi.buffs.doubleAtk > nowMillisecond ? DisplayStyle.Flex : DisplayStyle.None;
+            _expBuff.style.display = bi.buffs.doubleExp > nowMillisecond ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void onUpdateEggRecover()
+        {
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
+            _eggRecover.text = GetTimeStr(bi.egg.nextRecoverTime);
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            _eggRecover.style.display = bi.egg.nextRecoverTime > nowMillisecond ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+        private string GetTimeStr(long buffTime)
+        {
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            if (buffTime > nowMillisecond)
+            {
+                int time = (int)(buffTime - nowMillisecond) / 1000;
+
+                int hours = time / 60 / 60;
+                int mins = (time - hours * 60 * 60) / 60;
+                int secs = time - hours * 60 * 60 - mins * 60;
+                var str = hours >= 10 ? hours.ToString() : "0" + hours.ToString();
+                str += mins >= 10 ? ":" + mins.ToString() : ":0" + mins.ToString();
+                str += secs >= 10 ? ":" + secs.ToString() : ":0" + secs.ToString();
+
+                return str;
+            }
+            else
+            {
+                return "00:00:00";
+            }
         }
     }
 }
