@@ -441,9 +441,8 @@ namespace UnityMiniGameFramework
                 if (explosiveObj != null && explosiveObj.explosiveVFX != null)
                 {
                     explosiveObj.setGunObject(this);
-                    explosiveObj.explosiveVFX.unityGameObject.transform.position =
-                        _currentTarget.unityGameObject.transform.position;
-                    explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(
+                    explosiveObj.explosiveVFX.unityGameObject.transform.position = other.transform.position;
+                        explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(
                         ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                 }
             }
