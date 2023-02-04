@@ -81,7 +81,7 @@ namespace UnityMiniGameFramework
                 _labSpeed.text = $"{gunConf.gunLevelConf[gunInfo.level].IncreasedAttackSpeed}";
                 _labRange.text = "0";
 
-                _labGunName.text = $"{gunConf.id}";
+                _labGunName.text = $"{gunConf.name}";
                 _labGunStar.text = $"{gunInfo.level}";
 
                 var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/weapons/{gunConf.weaponIcon}");
