@@ -434,6 +434,11 @@ namespace UnityMiniGameFramework
 
             // refresh main ui Info
             _uiMainPanel.refreshAll();
+
+            foreach (var npc in cmNPCHeros)
+            {
+                npc.Value.combatComp.RecalcAttributes();
+            }
         }
 
         protected void _checkOfflineAwards()

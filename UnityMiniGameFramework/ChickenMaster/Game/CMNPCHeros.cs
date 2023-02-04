@@ -144,13 +144,13 @@ namespace UnityMiniGameFramework
                 });
             }
 
-            // calc attack
-            var bufAttrs = _combatComp.bufAttrs.ToArray();
-            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
-            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            LocalBaseInfo bi = cmGame.baseInfo.getData() as LocalBaseInfo;
-            float extraAtkMul = bi.buffs.doubleAtk > nowMillisecond ? 1f : 0;
-            _gun.onRecalcAttributes(bufAttrs, extraAtkMul);
+            //// calc attack
+            //var bufAttrs = _combatComp.bufAttrs.ToArray();
+            //long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            //ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            //LocalBaseInfo bi = cmGame.baseInfo.getData() as LocalBaseInfo;
+            //float extraAtkMul = bi.buffs.doubleAtk > nowMillisecond ? 1f : 0;
+            //_gun.onRecalcAttributes(bufAttrs, extraAtkMul);
         }
 
         protected override void _initPosition(UnityEngine.GameObject unityHeroObj, LocalHeroInfo heroInfo)
