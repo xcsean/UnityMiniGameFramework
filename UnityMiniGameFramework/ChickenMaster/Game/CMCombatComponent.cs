@@ -54,7 +54,7 @@ namespace UnityMiniGameFramework
             _maxHP = (int) (_ccConf.hpMax * (1 + hpMul) + hpAdd);
             _Def = (int) (_ccConf.def * (1 + defMul) + defAdd);
 
-            _HP = prevHP * _maxHP / prevMaxHP;
+            _HP = prevHP * (_maxHP / prevMaxHP);
 
             OnRecalcAttributes();
         }

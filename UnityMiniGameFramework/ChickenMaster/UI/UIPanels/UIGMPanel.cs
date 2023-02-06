@@ -106,7 +106,8 @@ namespace UnityMiniGameFramework
                 new GMItem(){ name = "武器范围", resID = "", count = 10 },
                 new GMItem(){ name = "Log", resID = "", count = 10 },
                 new GMItem(){ name = "FPS", resID = "", count = 10 },
-                new GMItem(){ name = "添加道具", resID = "", count = 100 }
+                new GMItem(){ name = "添加道具", resID = "", count = 100 },
+                new GMItem(){ name = "直接通关", resID = "", count = 100 }
              };
 
             FindUI();
@@ -326,6 +327,9 @@ namespace UnityMiniGameFramework
                     string itemName = GetItemID();
                     cmGame.Self.AddBackpackItem(itemName, amount);
                     break;
+                case "直接通关":
+                    onEndLevel();
+                    break;
                 default:
                     isPrint = false;
                     break;
@@ -435,6 +439,7 @@ namespace UnityMiniGameFramework
                     (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, _level);
 
                     level.Start();
+                    cmGame.Egg.eggUI.clearRecoverTime();
                 }
             }
             else if (!UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
@@ -445,7 +450,17 @@ namespace UnityMiniGameFramework
                     (level as CMShootingLevel).SetDefenseLevelConf(lvlConf, _level);
 
                     level.Start();
+                    cmGame.Egg.eggUI.clearRecoverTime();
                 }
+            }
+        }
+
+        protected void onEndLevel()
+        {
+            var level = UnityGameApp.Inst.MainScene.map.currentLevel;
+            if (level != null)
+            {
+                (level as CMShootingLevel).GM_EndLevel();
             }
         }
 

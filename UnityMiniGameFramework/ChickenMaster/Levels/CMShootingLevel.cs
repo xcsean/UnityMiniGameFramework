@@ -291,5 +291,15 @@ namespace UnityMiniGameFramework
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Defeat!");
         }
+
+        /// <summary>
+        /// GM工具：直接通关
+        /// </summary>
+        public void GM_EndLevel()
+        {
+            _OnWin();
+            Finish();
+            MiniGameFramework.Debug.DebugOutput(MiniGameFramework.DebugTraceType.DTT_Debug, "GM Finish level.");
+        }
     }
 }
