@@ -210,6 +210,10 @@ namespace UnityMiniGameFramework
         private UITipsPanel _uiTips;
         public void ShowTips(CMGNotifyType type, string tipsStr)
         {
+            if (UnityGameApp.Inst.UI == null)
+            {
+                return;
+            }
             if (_uiTips == null)
             {
                 UnityEngine.Transform scaneParent = null;
