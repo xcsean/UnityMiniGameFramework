@@ -96,6 +96,7 @@ namespace UnityMiniGameFramework
 
         protected float _hitForce;
         protected int _Multiple;
+        protected int _BulletCount;
         protected float _shootOffsetAngleBegin;
         protected float _shootOffsetAngleEnd;
         
@@ -104,6 +105,7 @@ namespace UnityMiniGameFramework
 
         protected float _fireCd;
         protected float _baseAttackSpeedRate;
+        protected float _projectilesRotationAngle = 0.0f;
 
         protected static string[] _layers = new string[] { "Hitable", "Default", "Ground" };
 
@@ -173,6 +175,7 @@ namespace UnityMiniGameFramework
 
             _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 0;
             _Multiple = _conf.FireConf.Multiple.HasValue ? _conf.FireConf.Multiple.Value : 1;
+            _BulletCount = _conf.FireConf.bulletCount.HasValue ? _conf.FireConf.bulletCount.Value : 1;
             _shootOffsetAngleBegin = _conf.FireConf.shootOffsetAngleBegin.HasValue
                 ? _conf.FireConf.shootOffsetAngleBegin.Value
                 : 0;
@@ -201,6 +204,7 @@ namespace UnityMiniGameFramework
         public void UpdateFireCd(int weaponLevelAttackSpeed)
         {
             _fireCd = _baseAttackSpeedRate * 1.0f / weaponLevelAttackSpeed;
+            _fireCd = _fireCd / _BulletCount;
         }
         
         /// <summary>
@@ -700,24 +704,26 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            var proj = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.bulletVFX);
-            if(proj == null)
+            for (int i = 0; i < _BulletCount; i++)
             {
-                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Gun ({_name}) create projectile ({_conf.FireConf.bulletVFX}) failed.");
-                return false;
+                var proj = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.bulletVFX);
+                if(proj == null)
+                {
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Gun ({_name}) create projectile ({_conf.FireConf.bulletVFX}) failed.");
+                    return false;
+                }
+
+                proj.unityGameObject.layer = UnityEngine.LayerMask.NameToLayer("Self");
+                var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
+                collider.gunObject = this;
+                collider.projVfxObj = proj;
+
+                proj.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                proj.unityGameObject.transform.position = _gunPos.transform.position;
+                proj.unityGameObject.transform.forward = _gunPos.transform.forward;
+
+                _currentProjectiles[proj] = _currentTarget.unityGameObject;    
             }
-
-            proj.unityGameObject.layer = UnityEngine.LayerMask.NameToLayer("Self");
-            var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
-            collider.gunObject = this;
-            collider.projVfxObj = proj;
-
-            proj.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-            proj.unityGameObject.transform.position = _gunPos.transform.position;
-            proj.unityGameObject.transform.forward = _gunPos.transform.forward;
-
-            _currentProjectiles[proj] = _currentTarget.unityGameObject;
-
             return true;
         }
 
@@ -849,7 +855,11 @@ namespace UnityMiniGameFramework
 
         virtual protected void _onOpenfireProjectile()
         {
-
+            if (_BulletCount > 0)
+            {
+                _projectilesRotationAngle = 0.0f;
+            }
+                
         }
         virtual protected void _onOpenfireMultiProjectile()
         {
@@ -902,7 +912,7 @@ namespace UnityMiniGameFramework
         }
         virtual protected void _onStopfireProjectile()
         {
-
+            _projectilesRotationAngle = 0.0f;
         }
         virtual protected void _onStopfireMultiProjectile()
         {

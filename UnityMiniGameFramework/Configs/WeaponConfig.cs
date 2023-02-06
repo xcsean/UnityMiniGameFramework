@@ -43,6 +43,8 @@ namespace UnityMiniGameFramework
         public float? hitForce { get; set; }
 
         public int? Multiple { get; set; }
+        
+        public int? bulletCount { get; set; }  // 加特林模式
 
         public float? shootOffsetAngleBegin { get; set; }
 
