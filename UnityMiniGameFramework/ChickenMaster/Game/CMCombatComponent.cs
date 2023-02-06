@@ -48,10 +48,10 @@ namespace UnityMiniGameFramework
                 }
             }
 
-            int prevHP = _HP;
-            int prevMaxHP = _maxHP;
+            UInt64 prevHP = _HP;
+            UInt64 prevMaxHP = _maxHP;
 
-            _maxHP = (int) (_ccConf.hpMax * (1 + hpMul) + hpAdd);
+            _maxHP = (UInt64) (_ccConf.hpMax * (1 + hpMul) + hpAdd);
             _Def = (int) (_ccConf.def * (1 + defMul) + defAdd);
 
             _HP = prevHP * (_maxHP / prevMaxHP);
@@ -72,9 +72,9 @@ namespace UnityMiniGameFramework
             base.OnDamageCalculation(weapon);
         }
 
-        protected override int _onDamageCalculation(WeaponObject weapon)
+        protected override UInt64 _onDamageCalculation(WeaponObject weapon)
         {
-            int dmg = base._onDamageCalculation(weapon);
+            UInt64 dmg = base._onDamageCalculation(weapon);
             if (weapon.ActBuffs == null)
                 return dmg;
 
@@ -87,16 +87,16 @@ namespace UnityMiniGameFramework
             return dmg;
         }
 
-        public override int OnDamageCalByConf(List<ActBufAttrConfig> buffAttrs, int dmg = 0)
+        public override UInt64 OnDamageCalByConf(List<ActBufAttrConfig> buffAttrs, UInt64 dmg = 0)
         {
             if (buffAttrs == null)
                 return dmg;
             // 固定伤害
-            int fixedDamage = 0;
+            UInt64 fixedDamage = 0;
             // 百分比伤害
             float perHP = 0;
             // 普通伤害
-            int commonDamage = 0;
+            UInt64 commonDamage = 0;
             float commonPerHp = 0;
             foreach (var attr in buffAttrs)
             {
@@ -105,19 +105,19 @@ namespace UnityMiniGameFramework
                     if (attr.name == BuffAttrNameDefine.FIXED_DAMAGE)
                     {
                         _isIgnoreArmor = true;
-                        fixedDamage += (int) attr.addValue;
+                        fixedDamage += (UInt64) attr.addValue;
                         perHP += attr.mulValue;
                     }
                     else if (attr.name == BuffAttrNameDefine.ATTACK_DAMAGE)
                     {
-                        commonDamage += (int) attr.addValue;
+                        commonDamage += (UInt64) attr.addValue;
                         commonPerHp += attr.mulValue;
                     }
                 }
 
                 if (_isIgnoreArmor)
-                    dmg = (int) (_maxHP * perHP) + fixedDamage + dmg + _Def;
-                dmg = dmg + (int) (_maxHP * commonPerHp) + commonDamage;
+                    dmg = (UInt64)(_maxHP * perHP) + fixedDamage + dmg + (UInt64)_Def;
+                dmg = dmg + (UInt64) (_maxHP * commonPerHp) + commonDamage;
             }
 
             return dmg;
@@ -144,7 +144,7 @@ namespace UnityMiniGameFramework
 
         private Dictionary<int, string> damageDesDic = new Dictionary<int, string>() {{1, "普通"}, {2, "暴击"}, {3, "dot"}};
 
-        override protected void _onDamage(ActorObject actor, int dmg, DamageTypeEnum damageType)
+        override protected void _onDamage(ActorObject actor, UInt64 dmg, DamageTypeEnum damageType)
         {
             // TO DO : show damage text
 

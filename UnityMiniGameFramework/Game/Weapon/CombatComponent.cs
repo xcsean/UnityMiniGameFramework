@@ -160,8 +160,8 @@ namespace UnityMiniGameFramework
         protected HealthBar _hpBar;
         public HealthBar hpBar => _hpBar;
 
-        protected int _HP;
-        protected int _maxHP;
+        protected UInt64 _HP;
+        protected UInt64 _maxHP;
 
         protected int _Def;
 
@@ -181,9 +181,12 @@ namespace UnityMiniGameFramework
 
             _ccConf = config as CombatConf;
 
-            _HP = _ccConf.hpMax;
-            _maxHP = _ccConf.hpMax;
-            _Def = _ccConf.def;
+            if (_ccConf != null)
+            {
+                _HP = (UInt64) _ccConf.hpMax;
+                _maxHP = (UInt64) _ccConf.hpMax;
+                _Def = _ccConf.def;
+            }
 
             // for Debug ...
             // init hp bar
@@ -241,38 +244,39 @@ namespace UnityMiniGameFramework
         protected virtual void OnDamageCalculation(WeaponObject weapon)
         {
             // rand dmg
-            int dmg = _onDamageCalculation(weapon);
+            UInt64 dmg = _onDamageCalculation(weapon);
 
             bool critical = false;
             if (UnityGameApp.Inst.Rand.IsRandomHit(weapon.attackInfo.criticalHitRate))
             {
                 // critical
-                dmg = (int) (dmg * weapon.attackInfo.criticalHitPer);
+                dmg = (UInt64) (dmg * weapon.attackInfo.criticalHitPer);
                 critical = true;
             }
 
             OnDamageBy(weapon.holder, dmg, critical ? DamageTypeEnum.Critical : DamageTypeEnum.Attack);
         }
 
-        protected virtual int _onDamageCalculation(WeaponObject weapon)
+        protected virtual UInt64 _onDamageCalculation(WeaponObject weapon)
         {
-            return UnityGameApp.Inst.Rand.RandomBetween(weapon.attackInfo.attackMin, weapon.attackInfo.attackMax);
+            return (UInt64) UnityGameApp.Inst.Rand.RandomBetween(weapon.attackInfo.attackMin,
+                weapon.attackInfo.attackMax);
         }
 
-        public virtual int OnDamageCalByConf(List<ActBufAttrConfig> buffAttrs, int dmg = 0)
+        public virtual UInt64 OnDamageCalByConf(List<ActBufAttrConfig> buffAttrs, UInt64 dmg = 0)
         {
             return 0;
         }
 
 
-        virtual public void OnDamageBy(ActorObject actor, int dmg, DamageTypeEnum damageType)
+        public virtual void OnDamageBy(ActorObject actor, UInt64 dmg, DamageTypeEnum damageType)
         {
             if (_isDie)
             {
                 return;
             }
 
-            dmg = dmg - _Def;
+            dmg = dmg - (UInt64) _Def;
 
             _onDamage(actor, dmg, damageType);
 
@@ -315,7 +319,7 @@ namespace UnityMiniGameFramework
         {
         }
 
-        virtual protected void _onDamage(ActorObject actor, int dmg, DamageTypeEnum damageTypeEnum)
+        virtual protected void _onDamage(ActorObject actor, UInt64 dmg, DamageTypeEnum damageTypeEnum)
         {
         }
 

@@ -192,7 +192,7 @@ namespace UnityMiniGameFramework
             if (_dotTimeLeft <= 0)
             {
                 _dotTimeLeft += _conf.dot.time;
-                int dmg = combatComp.OnDamageCalByConf(new List<ActBufAttrConfig>() {_conf.dot.config});
+                UInt64 dmg = combatComp.OnDamageCalByConf(new List<ActBufAttrConfig>() {_conf.dot.config});
                 combatComp.OnDamageBy(_fromActor, dmg, DamageTypeEnum.Dot);
             }
         }

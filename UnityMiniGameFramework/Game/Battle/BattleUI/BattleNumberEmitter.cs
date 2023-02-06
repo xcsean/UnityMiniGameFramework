@@ -7,9 +7,9 @@ namespace UnityMiniGameFramework
     public class BattleNumberEmitter : MonoBehaviour
     {
         public Canvas parentCanvas;
-        private static UnityAction<GameObject, int, DamageTypeEnum> _createNumAction;
+        private static UnityAction<GameObject, UInt64, DamageTypeEnum> _createNumAction;
 
-        public static UnityAction<GameObject, int, DamageTypeEnum> CreateNumAction
+        public static UnityAction<GameObject, UInt64, DamageTypeEnum> CreateNumAction
         {
             get => _createNumAction;
         }
@@ -25,7 +25,7 @@ namespace UnityMiniGameFramework
         }
 
 
-        private void CreateBattleNum(GameObject targetGo, int dmg, DamageTypeEnum damageType)
+        private void CreateBattleNum(GameObject targetGo, UInt64 dmg, DamageTypeEnum damageType)
         {
             var go = UnityGameApp.Inst.UnityResource.LoadUnityPrefabObject(
                 "Battle/BattleEffect/BattleDamageNumber/Prefabs/BattleNumber");
