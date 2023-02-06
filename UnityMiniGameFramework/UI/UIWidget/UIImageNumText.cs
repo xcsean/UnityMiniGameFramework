@@ -19,8 +19,7 @@ namespace UnityMiniGameFramework
         public override string text
         {
             get => base.text;
-            //set => base.text = StringUtil.StringNumFormat(value)
-            set => base.text = value;
+            set => base.text = StringUtil.StringToNumFormat(value);
         }
 
         public void SetUIPos(GameObject targetObj = null)

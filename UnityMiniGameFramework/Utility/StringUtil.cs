@@ -45,7 +45,17 @@ namespace UnityMiniGameFramework
 
             return str.Substring(0, len - index * unitDigits) + units[index - 1];
         }
-
+        
+        // 三位计数，忽略小数点
+        public static string StringToNumFormat(string str)
+        {
+            int len = str.Length;
+            int index = Math.Min(units.Count, (len - 1) / unitDigits);
+            if (index <= 0)
+                return str;
+            return str.Substring(0, len - index * unitDigits) + units[index - 1];
+        }
+        
         public static string StringNumFormatWithDot(string str)
         {
             int len = str.Length;
