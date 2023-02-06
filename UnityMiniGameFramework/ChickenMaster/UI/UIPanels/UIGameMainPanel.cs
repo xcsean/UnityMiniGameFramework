@@ -343,7 +343,7 @@ namespace UnityMiniGameFramework
         {
             //_exp.text = $"Exp:{exp}/{nextLevelExp}";
             //_exp_ProgressBar.title = $"{exp}/{nextLevelExp}";
-            _expBar.style.width = new StyleLength(new Length(_expBarWidth * exp / nextLevelExp));
+            _expBar.style.width = new StyleLength(new Length(_expBarWidth * (1.0f * exp / nextLevelExp)));
         }
 
         public void addGold(int n)

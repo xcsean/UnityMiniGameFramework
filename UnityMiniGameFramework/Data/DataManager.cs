@@ -36,6 +36,16 @@ namespace UnityMiniGameFramework
             _restfulDataProvider.Init();
         }
 
+        public void DelLocalSaveFile(string dataName)
+        {
+            string fileName = "/localStorage/" + dataName;
+            if (!UnityGameApp.Inst.File.isLocalSaveFileExist(fileName))
+            {
+                return;
+            }
+            UnityGameApp.Inst.File.delLocalSaveFile(fileName);
+        }
+
         public async Task CreateLocalUserDataAsync()
         {
             _localUserData = _localDataProvider.CreateData("user") as LocalUserData;
@@ -81,10 +91,9 @@ namespace UnityMiniGameFramework
                     // 手动拷贝到手机【内部存储/Android/data/com.ltgames.android.roostergang/files】
                     fileName = "/UserConfig.json";
                 }
-
-                if (GameApp.Inst.File.isFileExist(fileName))
+                if (UnityGameApp.Inst.File.isFileExist(fileName))
                 {
-                    string jsonStr = GameApp.Inst.File.readStringFrom(fileName);
+                    string jsonStr = UnityGameApp.Inst.File.readStringFrom(fileName);
                     var jsonObj = JsonUtil.FromJson<LocalUserConfig>(jsonStr);
                     if (jsonObj != null)
                     {

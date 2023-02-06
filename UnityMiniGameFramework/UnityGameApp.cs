@@ -190,6 +190,8 @@ namespace UnityMiniGameFramework
 
         public UnityEngine.GameObject CachePoolRoot;
 
+        public bool isClearUserData = false;
+
         protected float _panelScale;
 
         public void regNextFramePostUpdateCall(Action a)
@@ -320,10 +322,15 @@ namespace UnityMiniGameFramework
                 // 在线时间打点
                 RESTFulClient.Report(AnalysisMgr.GetPointData1($"退出时间", 4));
             }
-
             if (RESTFulClient != null)
             {
                 RESTFulClient.Fin();
+            }
+            if (isClearUserData)
+            {
+                isClearUserData = false;
+                Inst.Datas.DelLocalSaveFile("user");
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"Clear LocalStorage User Data.");
             }
         }
 
