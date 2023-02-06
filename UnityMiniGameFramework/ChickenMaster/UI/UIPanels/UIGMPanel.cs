@@ -46,6 +46,7 @@ namespace UnityMiniGameFramework
         protected VisualElement _btnList;
         protected Label _labStats;
         protected Label _labFPS;
+        protected Toggle _toggleClearData;
 
         ProfilerRecorder drawcall;
         ProfilerRecorder batches;
@@ -124,11 +125,18 @@ namespace UnityMiniGameFramework
             _btnList = this._uiObjects["btnList"].unityVisualElement;
             _countTextField = this._uiObjects["countTextField"].unityVisualElement as TextField;
             _idTextField = this._uiObjects["idTextField"].unityVisualElement as TextField;
+            _toggleClearData = this._uiObjects["ToggleClearData"].unityVisualElement as Toggle;
 
             _labFPS.text = "";
             _labStats.text = "";
             // 不能代码修改，导致输入框无法使用？
             //_countTextField.label = "";
+
+            // 退出游戏清档
+            _toggleClearData.RegisterValueChangedCallback(evt =>
+            {
+                UnityGameApp.Inst.isClearUserData = evt.newValue;
+            });
 
             batches = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Batches Count");
             drawcall = ProfilerRecorder.StartNew(ProfilerCategory.Render, "SetPass Calls Count");

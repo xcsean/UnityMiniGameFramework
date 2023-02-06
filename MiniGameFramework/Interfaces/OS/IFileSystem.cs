@@ -12,6 +12,7 @@ namespace MiniGameFramework
         bool isFileExist(string filename);
         bool isLocalSaveFileExist(string filename);
         void delFile(string filename);
+        void delLocalSaveFile(string filename);
 
         StreamReader getFileReadStream(string filename);
         StreamWriter getFileWriteStream(string filename);

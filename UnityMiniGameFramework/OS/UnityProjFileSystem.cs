@@ -25,6 +25,18 @@ namespace UnityMiniGameFramework
             }
         }
 
+        private string getLocalSaveFilePath(string fileName)
+        {
+            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
+            {
+                return Application.persistentDataPath + fileName;
+            }
+            else
+            {
+                return Application.dataPath + fileName;
+            }
+        }
+
         public StreamReader getFileReadStream(string fileName)
         {
             string path = _getFullPath(fileName);
@@ -66,29 +78,22 @@ namespace UnityMiniGameFramework
             return File.Exists(path);
         }
 
-        private string getLocalSaveFilePath(string fileName)
-        {
-            if (UnityGameApp.Inst.Platform == PlatformEnum.PlatformAndroid || UnityGameApp.Inst.Platform == PlatformEnum.PlatformIPhone)
-            {
-                return Application.persistentDataPath + fileName;
-            }
-            else
-            {
-                return Application.dataPath + fileName;
-            }
-        }
-
         public bool isLocalSaveFileExist(string fileName)
         {
             string path = getLocalSaveFilePath(fileName);
             return File.Exists(path);
         }
         
-
         public void delFile(string fileName)
         {
             string path = _getFullPath(fileName);
-            File.Delete(fileName);
+            File.Delete(path);
+        }
+
+        public void delLocalSaveFile(string fileName)
+        {
+            string path = getLocalSaveFilePath(fileName);
+            File.Delete(path);
         }
 
         public byte[] readRawDataFrom(string fileName)
