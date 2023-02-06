@@ -68,7 +68,10 @@ namespace UnityMiniGameFramework
             MiniGameFramework.Debug.Init(dbgOutput, dbgError);
 
             UnityGameApp.setInst(new UnityGameApp());
-            initGameAppPlatform();
+
+            InitGameAppPlatform();
+            UnityGameApp.Inst.isPublish = IsPublish();
+
             UnityEngine.GameObject.DontDestroyOnLoad(GameObjectCachePool);
             DontDestroyOnLoad(AudioSourceRoot);
             UnityGameApp.Inst.unityUIPanelSettings = unityUIPanelSettings;
@@ -83,11 +86,9 @@ namespace UnityMiniGameFramework
             Application.targetFrameRate = 60;
 
             Application.quitting += UnityGameApp.Inst.OnAppExit;
-
-            InitSDK();
         }
 
-        protected virtual void initGameAppPlatform()
+        protected virtual void InitGameAppPlatform()
         {
             GameApp.Inst.Platform = PlatformEnum.PlatformEditor;
         }
@@ -95,6 +96,10 @@ namespace UnityMiniGameFramework
         protected virtual void InitSDK()
         {
             
+        }
+        protected virtual bool IsPublish()
+        {
+            return false;
         }
 
         protected virtual void Start()
@@ -191,6 +196,7 @@ namespace UnityMiniGameFramework
         public UnityEngine.GameObject CachePoolRoot;
 
         public bool isClearUserData = false;
+        public bool isPublish = false;
 
         protected float _panelScale;
 
@@ -510,7 +516,14 @@ namespace UnityMiniGameFramework
                 if (conf.netConf.restfulConf != null)
                 {
                     _restfulClient = new UnityRESTFulClient();
-                    _restfulClient.Init(conf.netConf.restfulConf.url);
+                    if (isPublish)
+                    {
+                        _restfulClient.Init(conf.netConf.restfulConf.url);
+                    }
+                    else
+                    {
+                        _restfulClient.Init(conf.netConf.restfulConf.testUrl);
+                    }
                 }
 
                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"network initialized.");

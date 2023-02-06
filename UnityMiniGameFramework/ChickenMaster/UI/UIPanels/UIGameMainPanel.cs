@@ -543,7 +543,9 @@ namespace UnityMiniGameFramework
         public void refreshTrainTime(long time)
         {
             TimeSpan t = new TimeSpan(time * 10000);
-            _TrainTime.text = $"{t.Minutes}:{t.Seconds}";
+            string t1 = t.Minutes > 9 ? $"{t.Minutes}" : $"0{t.Minutes}";
+            string t2 = t.Seconds > 9 ? $"{t.Seconds}" : $"0{t.Seconds}";
+            _TrainTime.text = $"{t1}:{t2}";
         }
 
         private XMoveToParams mtp = null;

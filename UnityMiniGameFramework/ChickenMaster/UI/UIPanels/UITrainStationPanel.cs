@@ -155,7 +155,7 @@ namespace UnityMiniGameFramework
             _NextStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[nextLevel].maxSellCountPerRound)}";
             _NextStationStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[nextLevel].MaxstoreCount)}";
             UpgradePrice.text = $"{numChange(_trainStation.currentLevelConf.upgradeGoldCost)}";
-            UpgradeBtn.text = isMaxLevel ? "OK" : "Upgrade";
+            UpgradeBtn.text = isMaxLevel ? "OK" : "UPGRADE";
 
             //TimeSpan t = new TimeSpan(_trainStation.train.timeToTrainArrival * 10000);
             //string info =

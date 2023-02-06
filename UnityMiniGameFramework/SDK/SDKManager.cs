@@ -33,16 +33,11 @@ namespace UnityMiniGameFramework
                 {
                     if (args.type == AdEventType.RewardEvent)
                     {
-                        //TODO 看完视频下发奖励
+                        // 看完视频下发奖励
                         MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
                         UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
                         callball();
                     }
-                    //else if (args.type == AdEventType.AdLoadFailureEvent)
-                    //{
-                    //    ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-                    //    cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "ad load failure!");
-                    //}
                 });
             }
             catch (Exception ex)

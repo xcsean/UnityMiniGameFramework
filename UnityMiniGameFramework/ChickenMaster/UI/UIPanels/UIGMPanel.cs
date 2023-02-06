@@ -47,6 +47,7 @@ namespace UnityMiniGameFramework
         protected Label _labStats;
         protected Label _labFPS;
         protected Toggle _toggleClearData;
+        protected VisualElement _heroPanel;
 
         ProfilerRecorder drawcall;
         ProfilerRecorder batches;
@@ -109,6 +110,7 @@ namespace UnityMiniGameFramework
                 new GMItem(){ name = "FPS", resID = "", count = 10 },
                 new GMItem(){ name = "添加道具", resID = "", count = 100 },
                 new GMItem(){ name = "直接通关", resID = "", count = 100 }
+                //new GMItem(){ name = "设置英雄", resID = "", count = 100 }
              };
 
             FindUI();
@@ -126,6 +128,9 @@ namespace UnityMiniGameFramework
             _countTextField = this._uiObjects["countTextField"].unityVisualElement as TextField;
             _idTextField = this._uiObjects["idTextField"].unityVisualElement as TextField;
             _toggleClearData = this._uiObjects["ToggleClearData"].unityVisualElement as Toggle;
+            _heroPanel = this._uiObjects["heroPanel"].unityVisualElement;
+
+            _heroPanel.style.display = DisplayStyle.None;
 
             _labFPS.text = "";
             _labStats.text = "";
@@ -338,6 +343,9 @@ namespace UnityMiniGameFramework
                 case "直接通关":
                     onEndLevel();
                     break;
+                case "设置英雄":
+                    openHeroPanel();
+                    break;
                 default:
                     isPrint = false;
                     break;
@@ -466,10 +474,64 @@ namespace UnityMiniGameFramework
         protected void onEndLevel()
         {
             var level = UnityGameApp.Inst.MainScene.map.currentLevel;
-            if (level != null)
+            if (level != null && level.isStarted)
             {
                 (level as CMShootingLevel).GM_EndLevel();
             }
+        }
+
+        private List<string> disableHeroGuns;
+        protected void openHeroPanel()
+        {
+            if (disableHeroGuns == null)
+            {
+                disableHeroGuns = new List<string>();
+            }
+            _heroPanel.style.display = DisplayStyle.Flex;
+
+            var heroDDF = _heroPanel.Q<DropdownField>("hero_DropdownField");
+            var heroInfoList = _heroPanel.Q<VisualElement>("heroInfoList");
+            var closeBtn = _heroPanel.Q<Button>("btnCloseHeroPanel");
+
+            for (int i = 0; i < heroInfoList.childCount; i++)
+            {
+                heroInfoList.ElementAt(i).style.display = DisplayStyle.None;
+            }
+
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var defHeros = cmGame.GetDefAreaHeros().Values.ToArray();
+            for (int i = 0; i < defHeros.Length; i++)
+            {
+                heroInfoList.ElementAt(i).style.display = DisplayStyle.Flex;
+                string name = defHeros[i].heroInfo.mapHeroName;
+                (heroInfoList.ElementAt(i) as Toggle).label = $"{name}";
+                (heroInfoList.ElementAt(i) as Toggle).value = disableHeroGuns.Contains(name) ? true : false;
+                (heroInfoList.ElementAt(i) as Toggle).RegisterValueChangedCallback(evt => {
+                    if (evt.newValue)
+                    {
+                        if (!disableHeroGuns.Contains(name))
+                        {
+                            disableHeroGuns.Add(name);
+                        }
+                    }
+                    else
+                    {
+                        if (disableHeroGuns.Contains(name))
+                        {
+                            disableHeroGuns.Remove(name);
+                        }
+                    }
+                });
+            }
+
+            closeBtn.clicked += () =>
+            {
+                closeHeroPanel();
+            };
+        }
+        protected void closeHeroPanel()
+        {
+            _heroPanel.style.display = DisplayStyle.None;
         }
 
     }
