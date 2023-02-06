@@ -466,7 +466,7 @@ namespace UnityMiniGameFramework
         protected void onEndLevel()
         {
             var level = UnityGameApp.Inst.MainScene.map.currentLevel;
-            if (level != null)
+            if (level != null && level.isStarted)
             {
                 (level as CMShootingLevel).GM_EndLevel();
             }
