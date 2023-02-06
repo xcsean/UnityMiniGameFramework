@@ -19,6 +19,8 @@ namespace UnityMiniGameFramework
         public float actbufMul { get; set; }
 
         public float rangeAdd { get; set; }
+        public int? bulletCount { get; set; }
+        public int? pierceCount { get; set; }
 
         [CanBeNull] public Dictionary<string, List<string>> buffAttrs { get; set; }
 

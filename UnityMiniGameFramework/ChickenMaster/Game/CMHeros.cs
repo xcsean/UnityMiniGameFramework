@@ -213,6 +213,8 @@ namespace UnityMiniGameFramework
                 }
 
                 _gun.UpdateFireCd(gunLevelConf.IncreasedAttackSpeed);
+                _gun.UpdateBulletCount(gunLevelConf.bulletCount);
+                _gun.UpdatePierceCount(gunLevelConf.pierceCount);
             }
             else
             {

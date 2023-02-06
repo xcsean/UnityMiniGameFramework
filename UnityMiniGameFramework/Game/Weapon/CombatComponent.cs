@@ -281,10 +281,12 @@ namespace UnityMiniGameFramework
             _onDamage(actor, dmg, damageType);
 
             _HP -= dmg;
-            if (_HP < 0)
+            if (_HP <= dmg)
             {
                 _HP = 0;
             }
+            else
+                _HP -= dmg;
 
             _hpBar.setHp((float) _HP / _maxHP);
 

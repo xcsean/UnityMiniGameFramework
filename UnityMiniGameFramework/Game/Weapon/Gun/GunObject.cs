@@ -15,6 +15,7 @@ namespace UnityMiniGameFramework
     {
         public GunObject gunObject;
         public VFXObjectBase projVfxObj;
+        public int pierceCount;
 
         private void Start()
         {
@@ -97,6 +98,7 @@ namespace UnityMiniGameFramework
         protected float _hitForce;
         protected int _Multiple;
         protected int _BulletCount;
+        protected int _PierceCount;
         protected float _shootOffsetAngleBegin;
         protected float _shootOffsetAngleEnd;
         
@@ -106,6 +108,7 @@ namespace UnityMiniGameFramework
         protected float _fireCd;
         protected float _baseAttackSpeedRate;
         protected float _projectilesRotationAngle = 0.0f;
+        protected int _gunPosIndex = 0;
 
         protected static string[] _layers = new string[] { "Hitable", "Default", "Ground" };
 
@@ -173,9 +176,10 @@ namespace UnityMiniGameFramework
             _gunPos = tr.gameObject;
             _name = _conf.name;
 
-            _hitForce = _conf.FireConf.hitForce.HasValue ? _conf.FireConf.hitForce.Value : 0;
-            _Multiple = _conf.FireConf.Multiple.HasValue ? _conf.FireConf.Multiple.Value : 1;
-            _BulletCount = _conf.FireConf.bulletCount.HasValue ? _conf.FireConf.bulletCount.Value : 1;
+            _hitForce = _conf.FireConf.hitForce ?? 0;
+            _Multiple = _conf.FireConf.Multiple ?? 1;
+            _BulletCount = _conf.FireConf.bulletCount ?? 1;
+            _PierceCount = _conf.FireConf.pierceCount ?? 0;
             _shootOffsetAngleBegin = _conf.FireConf.shootOffsetAngleBegin.HasValue
                 ? _conf.FireConf.shootOffsetAngleBegin.Value
                 : 0;
@@ -204,7 +208,19 @@ namespace UnityMiniGameFramework
         public void UpdateFireCd(int weaponLevelAttackSpeed)
         {
             _fireCd = _baseAttackSpeedRate * 1.0f / weaponLevelAttackSpeed;
-            _fireCd = _fireCd / _BulletCount;
+            _fireCd /= _BulletCount;
+        }
+
+        public void UpdateBulletCount(int? count)
+        {
+            if (count != null)
+                _BulletCount = count.Value;
+        }
+
+        public void UpdatePierceCount(int? count)
+        {
+            if (count != null)
+                _PierceCount = count.Value;
         }
         
         /// <summary>
@@ -693,37 +709,51 @@ namespace UnityMiniGameFramework
                 }
             }
 
+            bool isRotationFire = _BulletCount > 1 && _gunPos.transform.childCount > 0;
+
+            Transform gunPosTransform = isRotationFire ? _gunPos.transform : _gunPos.transform.GetChild(_gunPosIndex);
+
+            Vector3 gunPosition = gunPosTransform.position;
+            if (isRotationFire)
+            {
+                gunPosition.x = (float) (gunPosition.x * Math.Cos(_projectilesRotationAngle) +
+                                         gunPosition.y * Math.Sin(_projectilesRotationAngle));
+                gunPosition.y = (float) (gunPosition.y * Math.Cos(_projectilesRotationAngle) - gunPosition.x *
+                                         Math.Sin(_projectilesRotationAngle));
+                _gunPosIndex++;
+                if (_gunPosIndex >= _gunPos.transform.childCount)
+                    _gunPosIndex = 0;
+            }
+                 
+            
             if (_conf.FireConf.shootVFX != null)
             {
                 var shootVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.shootVFX);
                 if (shootVfx != null)
                 {
                     shootVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                    shootVfx.unityGameObject.transform.position = _gunPos.transform.position;
-                    shootVfx.unityGameObject.transform.rotation = _gunPos.transform.rotation;
+                    shootVfx.unityGameObject.transform.position = gunPosition;
+                    shootVfx.unityGameObject.transform.rotation = gunPosTransform.rotation;
                 }
             }
 
-            for (int i = 0; i < _BulletCount; i++)
+            var proj = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.bulletVFX);
+            if(proj == null)
             {
-                var proj = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.bulletVFX);
-                if(proj == null)
-                {
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Gun ({_name}) create projectile ({_conf.FireConf.bulletVFX}) failed.");
-                    return false;
-                }
-
-                proj.unityGameObject.layer = UnityEngine.LayerMask.NameToLayer("Self");
-                var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
-                collider.gunObject = this;
-                collider.projVfxObj = proj;
-
-                proj.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
-                proj.unityGameObject.transform.position = _gunPos.transform.position;
-                proj.unityGameObject.transform.forward = _gunPos.transform.forward;
-
-                _currentProjectiles[proj] = _currentTarget.unityGameObject;    
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Gun ({_name}) create projectile ({_conf.FireConf.bulletVFX}) failed.");
+                return false;
             }
+
+            proj.unityGameObject.layer = UnityEngine.LayerMask.NameToLayer("Self");
+            var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
+            collider.gunObject = this;
+            collider.projVfxObj = proj;
+
+            proj.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+            proj.unityGameObject.transform.position = gunPosition;
+            proj.unityGameObject.transform.forward = _gunPos.transform.forward;
+
+            _currentProjectiles[proj] = _currentTarget.unityGameObject;  
             return true;
         }
 
@@ -858,6 +888,7 @@ namespace UnityMiniGameFramework
             if (_BulletCount > 0)
             {
                 _projectilesRotationAngle = 0.0f;
+                _gunPosIndex = 0;
             }
                 
         }
@@ -913,6 +944,7 @@ namespace UnityMiniGameFramework
         virtual protected void _onStopfireProjectile()
         {
             _projectilesRotationAngle = 0.0f;
+            _gunPosIndex = 0;
         }
         virtual protected void _onStopfireMultiProjectile()
         {

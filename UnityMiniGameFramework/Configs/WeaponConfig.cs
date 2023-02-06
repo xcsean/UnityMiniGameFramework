@@ -44,7 +44,8 @@ namespace UnityMiniGameFramework
 
         public int? Multiple { get; set; }
         
-        public int? bulletCount { get; set; }  // 加特林模式
+        public int? bulletCount { get; set; }   // 加特林模式
+        public int? pierceCount { get; set; }   // 穿透数量
 
         public float? shootOffsetAngleBegin { get; set; }
 
