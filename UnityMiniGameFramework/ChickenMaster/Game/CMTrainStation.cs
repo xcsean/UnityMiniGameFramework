@@ -54,6 +54,8 @@ namespace UnityMiniGameFramework
         private Vector3 _boxInitPos;
         private UITrainStationCapatityPanel _uiTrainstationCapatityPanel;
 
+        private bool callBackBuff = false; // 火车召回后，火车运载力翻倍（仅一次）
+
         public CMTrainStation()
         {
             _train = new CMTrain();
@@ -292,8 +294,13 @@ namespace UnityMiniGameFramework
                         // error, ignore
                         continue;
                     }
-
-                    int putCount = _currentLevelConf.maxSellCountPerRound - useSpace;
+                    int maxSellCountPerRound = _currentLevelConf.maxSellCountPerRound;
+                    if (callBackBuff)
+                    {
+                        maxSellCountPerRound *= 2;
+                        callBackBuff = false;
+                    }
+                    int putCount = maxSellCountPerRound - useSpace;
                     if(putCount >= prod.count)
                     {
                         putCount = prod.count;
@@ -314,7 +321,7 @@ namespace UnityMiniGameFramework
 
                     goldAdd += putCount * prodConf.price;
 
-                    if(useSpace >= _currentLevelConf.maxSellCountPerRound)
+                    if(useSpace >= maxSellCountPerRound)
                     {
                         break;
                     }
@@ -408,6 +415,7 @@ namespace UnityMiniGameFramework
             var nowTickMillsecond = (DateTime.Now.Ticks / 10000);
             trainStationInfo.NextTrainArrivalTime = nowTickMillsecond;
             train.CallTrainBack();
+            callBackBuff = true;
             return true;
         }
 
