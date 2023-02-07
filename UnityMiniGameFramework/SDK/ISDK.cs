@@ -23,5 +23,7 @@ namespace UnityMiniGameFramework
         void onAdClick(string placementId);
 
         void onAdLoadFail(string placementId);
+
+        void FBInit();
     }
 }
