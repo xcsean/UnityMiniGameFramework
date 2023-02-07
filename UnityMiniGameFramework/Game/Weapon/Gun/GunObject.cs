@@ -711,7 +711,7 @@ namespace UnityMiniGameFramework
 
             bool isRotationFire = _BulletCount > 1 && _gunPos.transform.childCount > 0;
 
-            Transform gunPosTransform = isRotationFire ? _gunPos.transform : _gunPos.transform.GetChild(_gunPosIndex);
+            Transform gunPosTransform = isRotationFire ? _gunPos.transform.GetChild(_gunPosIndex) : _gunPos.transform;
 
             Vector3 gunPosition = gunPosTransform.position;
             if (isRotationFire)
