@@ -35,6 +35,8 @@ namespace UnityMiniGameFramework
             {
                 MiniGameFramework.Debug.DebugOutput(MiniGameFramework.DebugTraceType.DTT_Debug, "VideoComponent VideoGameObject is null.");
             }
+            // 宽适配下
+            transform.localScale = new Vector3(Screen.width / 750f, Screen.width / 750f, 1);
         }
 
         public void Hide()
@@ -70,7 +72,7 @@ namespace UnityMiniGameFramework
             _videoPlayer.Play();
 
             playCb = endCb;
-            
+
             Invoke("DelayShow", 0.2f);
         }
 
