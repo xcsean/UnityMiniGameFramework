@@ -279,8 +279,7 @@ namespace UnityMiniGameFramework
             dmg = dmg - (UInt64) _Def;
 
             _onDamage(actor, dmg, damageType);
-
-            _HP -= dmg;
+            
             if (_HP <= dmg)
             {
                 _HP = 0;
