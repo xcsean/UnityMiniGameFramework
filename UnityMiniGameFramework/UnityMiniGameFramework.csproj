@@ -102,6 +102,9 @@
     <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.VideoModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChickenMaster\Configs\CMGameConfig.cs" />
@@ -228,6 +231,8 @@
     <Compile Include="Game\Scene\UnitySceneManager.cs" />
     <Compile Include="ChickenMaster\Game\SelfControl.cs" />
     <Compile Include="Game\UnityGameObject.cs" />
+    <Compile Include="Game\Video\VideoComponent.cs" />
+    <Compile Include="Game\Video\VideoManager.cs" />
     <Compile Include="Game\Weapon\CombatComponent.cs" />
     <Compile Include="Game\Weapon\ExplosiveObject.cs" />
     <Compile Include="Game\Weapon\Gun\GunObject.cs" />

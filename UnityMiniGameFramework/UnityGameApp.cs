@@ -70,7 +70,6 @@ namespace UnityMiniGameFramework
             UnityGameApp.setInst(new UnityGameApp());
 
             InitGameAppPlatform();
-            UnityGameApp.Inst.isPublish = IsPublish();
 
             UnityEngine.GameObject.DontDestroyOnLoad(GameObjectCachePool);
             DontDestroyOnLoad(AudioSourceRoot);
@@ -183,6 +182,9 @@ namespace UnityMiniGameFramework
         protected UIInputManager _uiInputManager;
         public UIInputManager UIInputManager => _uiInputManager;
 
+        protected VideoManager _videoManager;
+        public VideoManager videoMgr => _videoManager;
+
         protected UnityNetworkClient _netClient;
         public UnityNetworkClient NetClient => _netClient;
 
@@ -196,7 +198,6 @@ namespace UnityMiniGameFramework
         public UnityEngine.GameObject CachePoolRoot;
 
         public bool isClearUserData = false;
-        public bool isPublish = false;
 
         protected float _panelScale;
 
@@ -358,6 +359,7 @@ namespace UnityMiniGameFramework
             _weaponManager = new WeaponManager();
             _aiStateManager = new AIStateManager();
             _uiInputManager = new UIInputManager();
+            _videoManager = new VideoManager();
 
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_System, $"app managers created.");
         }
@@ -447,6 +449,7 @@ namespace UnityMiniGameFramework
             _mapManager.Init();
             _vfxManager.Init();
             _weaponManager.Init();
+            _videoManager.Init();
         }
 
         override protected void _initUI(string uiConfigName)
@@ -516,7 +519,7 @@ namespace UnityMiniGameFramework
                 if (conf.netConf.restfulConf != null)
                 {
                     _restfulClient = new UnityRESTFulClient();
-                    if (isPublish)
+                    if (SDKManager.isPublish)
                     {
                         _restfulClient.Init(conf.netConf.restfulConf.url);
                     }

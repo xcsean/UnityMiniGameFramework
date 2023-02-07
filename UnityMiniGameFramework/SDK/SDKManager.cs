@@ -10,6 +10,13 @@ namespace UnityMiniGameFramework
 {
     public class SDKManager
     {
+#if UNITY_ANDROID
+        // 提审包需改为true
+        public static bool isPublish = false;
+#else
+        public static bool isPublish = false;
+#endif
+
         protected static ISDK _sdk;
 
         public static ISDK sdk => _sdk;
@@ -29,15 +36,22 @@ namespace UnityMiniGameFramework
             UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData9($"{eventName}"));
             try
             {
-                _sdk.showAutoAd((SdkEvent args) =>
+                //_sdk.showAutoAd((SdkEvent args) =>
+                //{
+                //    if (args.type == AdEventType.RewardEvent)
+                //    {
+                //        // 看完视频下发奖励
+                //        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
+                //        UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
+                //        callball();
+                //    }
+                //});
+                UnityGameApp.Inst.videoMgr.PlayVideo(() =>
                 {
-                    if (args.type == AdEventType.RewardEvent)
-                    {
-                        // 看完视频下发奖励
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"Callback AdEventArgs." + args.type.ToString());
-                        UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
-                        callball();
-                    }
+                    // 看完视频下发奖励
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, $"showAutoAd play video finish.");
+                    UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData10($"{eventName}"));
+                    callball();
                 });
             }
             catch (Exception ex)
