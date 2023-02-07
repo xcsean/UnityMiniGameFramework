@@ -88,7 +88,17 @@ namespace UnityMiniGameFramework
                 _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                 return;
             }
-            
+
+            if ((UnityGameApp.Inst.Game as ChickenMasterGame).uiGMPanel() != null &&
+                (UnityGameApp.Inst.Game as ChickenMasterGame).uiGMPanel().IsDisableHero(_actor.name)
+            )
+            {
+                // GM: No shooting
+                _gunObj?.StopFire();
+                _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
+                return;
+            }
+
             if (_currentTargetMon == null)
             {
                 // try seek monster

@@ -71,6 +71,8 @@ namespace UnityMiniGameFramework
             // 初始化游戏信息
             await UnityGameApp.Inst.Game.InitAsync();
 
+            SDKManager.sdk.FBInit();
+
             //login
             //UnityGameApp.Inst.RESTFulClient.Login(
             //    new RESTFulAPI.C2S_LoginParam()

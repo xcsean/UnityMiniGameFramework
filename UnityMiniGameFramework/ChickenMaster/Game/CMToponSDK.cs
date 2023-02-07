@@ -56,5 +56,9 @@ namespace UnityMiniGameFramework
                 cmGame.ShowTips(CMGNotifyType.CMG_ERROR, str);
             }
         }
+
+        public virtual void FBInit()
+        {
+        }
     }
 }

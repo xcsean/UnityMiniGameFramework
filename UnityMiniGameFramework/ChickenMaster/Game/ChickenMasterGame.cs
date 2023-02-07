@@ -879,5 +879,15 @@ namespace UnityMiniGameFramework
 
             _mainSceneHUDs[npcName] = panel;
         }
+
+        public UIGMPanel uiGMPanel()
+        {
+            var panel = UnityGameApp.Inst.UI.getUIPanel("GMUI");
+            if (panel != null)
+            {
+                return (panel as UIGMPanel);
+            }
+            return null;
+        }
     }
 }
