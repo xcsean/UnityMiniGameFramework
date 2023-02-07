@@ -17,20 +17,17 @@ namespace UnityMiniGameFramework
         public VFXObjectBase projVfxObj;
         public int pierceCount;
 
-        private void Start()
-        {
-        }
+        // private void OnCollisionEnter(UnityEngine.Collision collision)
+        // {
+        //     var contact = collision.GetContact(0);
+        //     gunObject.onProjectileHit(this, contact.point, collision.gameObject);
+        // }
+        
 
-        private void OnCollisionEnter(UnityEngine.Collision collision)
+        private void OnTriggerEnter(UnityEngine.Collider other)
         {
-            var contact = collision.GetContact(0);
-            gunObject.onProjectileHit(this, contact.point, collision.gameObject);
+            gunObject.onProjectileHit(this, other.ClosestPoint(this.gameObject.transform.position), other.gameObject);
         }
-
-        //private void OnTriggerEnter(UnityEngine.Collider other)
-        //{
-        //    gunObject.onProjectileHit(this, other.ClosestPoint(this.gameObject.transform.position), other.gameObject);
-        //}
 
     }
     public class UnityEmmiterCollider : UnityEngine.MonoBehaviour
@@ -123,6 +120,7 @@ namespace UnityMiniGameFramework
         {
             _attackRange = GetBaseAttackRange();
             _attackRange += rangeAdd;
+            _attackRange = 30;
         }
         
         public void SetAttackRange(float range)
@@ -179,7 +177,7 @@ namespace UnityMiniGameFramework
             _hitForce = _conf.FireConf.hitForce ?? 0;
             _Multiple = _conf.FireConf.Multiple ?? 1;
             _BulletCount = _conf.FireConf.bulletCount ?? 1;
-            _PierceCount = _conf.FireConf.pierceCount ?? 0;
+            _PierceCount = _conf.FireConf.pierceCount ?? 1;
             _shootOffsetAngleBegin = _conf.FireConf.shootOffsetAngleBegin.HasValue
                 ? _conf.FireConf.shootOffsetAngleBegin.Value
                 : 0;
@@ -395,7 +393,6 @@ namespace UnityMiniGameFramework
 
             base.OnPostUpdate(timeElasped);
         }
-
         
         
         virtual public void onProjectileHit(UnityProjectileCollider projectileObject, UnityEngine.Vector3 hitPoint, UnityEngine.GameObject other)
@@ -408,6 +405,7 @@ namespace UnityMiniGameFramework
                 {
                     hitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                     hitVfx.unityGameObject.transform.position = hitPoint;
+                    UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(hitVfx.unityGameObject);
                     //hitVfx.unityGameObject.transform.forward = contact.normal;
                 }
             }
@@ -423,15 +421,13 @@ namespace UnityMiniGameFramework
                         {
                             buffHitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                             buffHitVfx.unityGameObject.transform.position = hitPoint;
+                            UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(buffHitVfx.unityGameObject);
                         }
                     }
                 }
                 
             }
             
-            
-            
-
             // do hit result
             var ugbGameObj = other.GetComponent<UnityGameObjectBehaviour>();
             if (ugbGameObj != null)
@@ -443,17 +439,14 @@ namespace UnityMiniGameFramework
                     combComp.OnHitByWeapon(this);
                 }
             }
-
-            //var rigiBody = other.GetComponent<UnityEngine.Rigidbody>();
-            //if (rigiBody != null)
-            //{
-            //    //rigiBody.AddForce(collision.impulse.normalized * _hitForce);
-            //    rigiBody.AddForce(projectileObject.gameObject.transform.forward * _hitForce);
-            //}
-
-            UnityGameApp.Inst.VFXManager.onVFXDestory(projectileObject.projVfxObj);
-            _currentProjectiles.Remove(projectileObject.projVfxObj);
-
+            
+            projectileObject.pierceCount--;
+            if (projectileObject.pierceCount <= 0)
+            {
+                UnityGameApp.Inst.VFXManager.onVFXDestory(projectileObject.projVfxObj);
+                _currentProjectiles.Remove(projectileObject.projVfxObj);    
+            }
+            
             if (_conf.FireConf.collideExplosive != null && _currentTarget != null)
             {
                 var explosiveObj =
@@ -461,6 +454,7 @@ namespace UnityMiniGameFramework
                 if (explosiveObj != null && explosiveObj.explosiveVFX != null)
                 {
                     explosiveObj.setGunObject(this);
+                    UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(explosiveObj.explosiveVFX.unityGameObject);
                     explosiveObj.explosiveVFX.unityGameObject.transform.position = other.transform.position;
                         explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(
                         ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
@@ -515,6 +509,7 @@ namespace UnityMiniGameFramework
                 {
                     hitVfx.unityGameObject.transform.SetParent(o.transform);
                     hitVfx.unityGameObject.transform.localPosition = UnityEngine.Vector3.zero;
+                    UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(hitVfx.unityGameObject);
                 }
             }
             
@@ -532,6 +527,7 @@ namespace UnityMiniGameFramework
                                 ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                             buffHitVfx.unityGameObject.transform.position = Vector3.zero;
                             UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(buffHitVfx, ugbGameObj.mgGameObject);
+                            UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(buffHitVfx.unityGameObject);
                         }
                     }
                 }
@@ -550,6 +546,7 @@ namespace UnityMiniGameFramework
                 if(hitVfx != null)
                 {
                     UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(hitVfx, ugbGameObj.mgGameObject);
+                    UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(hitVfx.unityGameObject);
                 }
             }
 
@@ -748,12 +745,19 @@ namespace UnityMiniGameFramework
             var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
             collider.gunObject = this;
             collider.projVfxObj = proj;
-
+            collider.pierceCount = _PierceCount;
+            UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(proj.unityGameObject);
+            
             proj.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
             proj.unityGameObject.transform.position = gunPosition;
-            proj.unityGameObject.transform.forward = _gunPos.transform.forward;
+            Vector3 gunForward = _gunPos.transform.forward;
+            gunForward = (new Vector3(gunForward.x, 0, gunForward.z)).normalized;
 
-            _currentProjectiles[proj] = _currentTarget.unityGameObject;  
+            proj.unityGameObject.transform.forward = gunForward;
+
+            _currentProjectiles[proj] = _currentTarget.unityGameObject;
+            if (_PierceCount > 1)
+                _currentProjectiles[proj] = null;    
             return true;
         }
 
@@ -779,11 +783,7 @@ namespace UnityMiniGameFramework
             }
             
             Vector3 gunForward = _gunPos.transform.forward;
-            // if (_currentTarget != null)
-            // {
-            //     gunForward = _currentTarget.unityGameObject.transform.position - _gunPos.transform.position;
-            // }
-            
+
             gunForward = (new Vector3(gunForward.x, 0, gunForward.z)).normalized;
 
             float _base = _shootOffsetAngleBegin;
@@ -799,10 +799,12 @@ namespace UnityMiniGameFramework
                     return false;
                 }
 
+                UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(proj.unityGameObject);
                 proj.unityGameObject.layer = UnityEngine.LayerMask.NameToLayer("Self");
                 var collider = proj.unityGameObject.AddComponent<UnityProjectileCollider>();
                 collider.gunObject = this;
                 collider.projVfxObj = proj;
+                collider.pierceCount =  _PierceCount;
 
                 proj.unityGameObject.transform.SetParent(((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj)
                     .unityGameObject.transform);
@@ -830,6 +832,7 @@ namespace UnityMiniGameFramework
                 {
                     hitVfx.unityGameObject.transform.SetParent(_currentRayHitObject.transform);
                     hitVfx.unityGameObject.transform.localPosition = UnityEngine.Vector3.zero;
+                    UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(hitVfx.unityGameObject);
                 }
             }
             
@@ -847,6 +850,7 @@ namespace UnityMiniGameFramework
                                 ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                             buffHitVfx.unityGameObject.transform.position = Vector3.zero;
                             UnityGameApp.Inst.VFXManager.onVFXAttachToGameObj(buffHitVfx, ugbGameObj.mgGameObject);
+                            UnityGameApp.Inst.VFXManager.setVFXColliderIsTrigger(buffHitVfx.unityGameObject);
                         }
                     }
                 }

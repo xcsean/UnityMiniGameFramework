@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
+using GameObject = UnityEngine.GameObject;
 
 namespace UnityMiniGameFramework
 {
@@ -66,6 +69,15 @@ namespace UnityMiniGameFramework
                 return;
             }
 
+        }
+
+        public void setVFXColliderIsTrigger(GameObject gameObject)
+        {
+            if(!gameObject)
+                return;
+            var collider = gameObject.GetComponent<Collider>();
+            if (collider)
+                collider.isTrigger = true;
         }
         public VFXObjectBase createVFXObject(string vfxName)
         {
