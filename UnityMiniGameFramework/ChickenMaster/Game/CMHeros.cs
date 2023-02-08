@@ -257,7 +257,9 @@ namespace UnityMiniGameFramework
             if (cmGame.mainSceneHUDs.ContainsKey(heroInfo.mapHeroName))
             {
                 var panel = cmGame.mainSceneHUDs[heroInfo.mapHeroName] as UITowerHeroLockHudPanel;
-                panel.hideUI();
+                //panel.hideUI();
+                panel.activeLabLock(false);
+                panel.activeSprLock(false);
             }
         }
     }

@@ -558,6 +558,14 @@ namespace UnityMiniGameFramework
         {
             _self.OnUpdate();
 
+            foreach (var npc in cmNPCHeros)
+            {
+                if (_mainSceneHUDs.ContainsKey(npc.Key))
+                {
+                    (_mainSceneHUDs[npc.Key] as UITowerHeroLockHudPanel).setNameInfo(npc.Key, npc.Value.heroInfo.level);
+                }
+            }
+
             foreach (var fac in _cmFactories)
             {
                 fac.Value.OnUpdate();
@@ -875,6 +883,7 @@ namespace UnityMiniGameFramework
             var panel = UnityGameApp.Inst.UI.createNewUIPanel("TowerHeroLockHudUI") as UITowerHeroLockHudPanel;
             panel.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
             panel.RefreshInfo(_conf.userLevelRequire);
+            panel.setNameInfo(npcName);
             panel.SetFollowTarget(gObj.unityGameObject.transform);
             panel.showUI();
             panel.activeSprLock(false);

@@ -22,6 +22,7 @@ namespace UnityMiniGameFramework
         }
 
         protected Label _labLockTip;
+        protected Label _labName;
         protected VisualElement _sprLock;
         protected VisualElement _labLockBg;
 
@@ -30,6 +31,7 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             _labLockTip = this._uiObjects["labLockTip"].unityVisualElement as Label;
+            _labName = this._uiObjects["labName"].unityVisualElement as Label;
             _sprLock = this._uiObjects["sprLock"].unityVisualElement;
             _labLockBg = this._uiObjects["labLockBg"].unityVisualElement;
         }
@@ -53,6 +55,17 @@ namespace UnityMiniGameFramework
             }
             _labLockBg.style.display = DisplayStyle.Flex;
             _sprLock.style.display = DisplayStyle.Flex;
+        }
+
+        public void setNameInfo(string name, int level = 0)
+        {
+            if (level == 0)
+            {
+                _labName.text = $"{name}";
+                return;
+            }
+            _labName.text = $"{name} Lv.{level}";
+            _labName.style.display = DisplayStyle.Flex;
         }
 
         public void activeLabLock(bool isShow)
