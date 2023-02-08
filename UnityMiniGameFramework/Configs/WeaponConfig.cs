@@ -18,6 +18,7 @@ namespace UnityMiniGameFramework
         public float? keepTime { get; set; }
 
         public float? hitForce { get; set; }
+        public float? blastRange { get; set; }          // 利用特效缩放来控制爆炸范围
     }
 
     public class GunFireConf
@@ -46,6 +47,7 @@ namespace UnityMiniGameFramework
         
         public int? bulletCount { get; set; }   // 加特林模式
         public int? pierceCount { get; set; }   // 穿透数量
+        public int? blastRange { get; set; }    // 投掷物爆炸范围 
 
         public float? shootOffsetAngleBegin { get; set; }
 

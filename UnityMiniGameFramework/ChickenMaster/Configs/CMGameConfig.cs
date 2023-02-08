@@ -21,6 +21,7 @@ namespace UnityMiniGameFramework
         public float rangeAdd { get; set; }
         public int? bulletCount { get; set; }
         public int? pierceCount { get; set; }
+        public float? blastRange { get; set; }
 
         [CanBeNull] public Dictionary<string, List<string>> buffAttrs { get; set; }
 

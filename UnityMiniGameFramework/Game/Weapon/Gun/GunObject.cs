@@ -96,6 +96,7 @@ namespace UnityMiniGameFramework
         protected int _Multiple;
         protected int _BulletCount;
         protected int _PierceCount;
+        protected float _BlastRange; //投掷物的爆炸范围
         protected float _shootOffsetAngleBegin;
         protected float _shootOffsetAngleEnd;
         
@@ -178,6 +179,7 @@ namespace UnityMiniGameFramework
             _Multiple = _conf.FireConf.Multiple ?? 1;
             _BulletCount = _conf.FireConf.bulletCount ?? 1;
             _PierceCount = _conf.FireConf.pierceCount ?? 1;
+            _BlastRange = _conf.FireConf.blastRange ?? 0.45f;
             _shootOffsetAngleBegin = _conf.FireConf.shootOffsetAngleBegin.HasValue
                 ? _conf.FireConf.shootOffsetAngleBegin.Value
                 : 0;
@@ -219,6 +221,12 @@ namespace UnityMiniGameFramework
         {
             if (count != null)
                 _PierceCount = count.Value;
+        }
+
+        public void UpdateBlastRange(float?range)
+        {
+            if (range != null)
+                _BlastRange = range.Value;
         }
         
         /// <summary>
@@ -458,6 +466,9 @@ namespace UnityMiniGameFramework
                     explosiveObj.explosiveVFX.unityGameObject.transform.position = other.transform.position;
                         explosiveObj.explosiveVFX.unityGameObject.transform.SetParent(
                         ((MGGameObject) UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
+                        explosiveObj.explosiveVFX.unityGameObject.transform.localScale =
+                            new Vector3(_BlastRange, _BlastRange, _BlastRange);
+
                 }
             }
         }
