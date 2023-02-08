@@ -24,6 +24,7 @@ namespace UnityMiniGameFramework
         }
 
         private Dictionary<string, List<ObjectSaveInfo>> _dictionary = new Dictionary<string, List<ObjectSaveInfo>>();
+        private static Renderer[] _renderers = new Renderer[] { };
 
         public static UnityGameObjectPool GetInstance()
         {
@@ -73,9 +74,14 @@ namespace UnityMiniGameFramework
                 ObjectSaveInfo info = pool[pool.Count - 1];
                 go = info.go;
                 pool.RemoveAt(pool.Count - 1);
-                var render = info.go.GetComponent<Renderer>();
-                if (render != null)
-                    render.enabled = true;
+                _renderers = info.go.GetComponentsInChildren<Renderer>();
+                if (_renderers != null)
+                {
+                    foreach (var render in _renderers)
+                    {
+                        render.enabled = true;
+                    }
+                }
                 else
                     go.SetActive(true);
                 return go;
@@ -92,9 +98,14 @@ namespace UnityMiniGameFramework
 
             if (!m_Instance._dictionary.ContainsKey(nameKey))
                 m_Instance._dictionary.Add(nameKey, new List<ObjectSaveInfo>());
-            var render = go.GetComponent<Renderer>();
-            if (render != null)
-                render.enabled = false;
+            _renderers = go.GetComponentsInChildren<Renderer>();
+            if (_renderers != null)
+            {
+                foreach (var render in _renderers)
+                {
+                    render.enabled = false;
+                }
+            }
             else
                 go.SetActive(false);
             m_Instance._dictionary[nameKey].Add(new ObjectSaveInfo(go, Time.unscaledTime));
