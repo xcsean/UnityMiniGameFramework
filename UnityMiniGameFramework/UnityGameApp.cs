@@ -96,10 +96,6 @@ namespace UnityMiniGameFramework
         {
             
         }
-        protected virtual bool IsPublish()
-        {
-            return false;
-        }
 
         protected virtual void Start()
         {

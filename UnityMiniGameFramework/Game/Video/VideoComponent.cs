@@ -45,6 +45,7 @@ namespace UnityMiniGameFramework
             transform.localPosition = new Vector3(-10000, 0, 0);
 
             Time.timeScale = 1;
+            UnityGameApp.Inst.AudioManager.ResumeAll();
         }
 
         public void Show()
@@ -53,6 +54,7 @@ namespace UnityMiniGameFramework
             transform.localPosition = new Vector3(0, 0, 0);
 
             Time.timeScale = 0;
+            UnityGameApp.Inst.AudioManager.PauseAll();
         }
 
         public void Play(Action endCb = null)
