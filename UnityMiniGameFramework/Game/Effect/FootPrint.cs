@@ -26,7 +26,7 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            if (other.gameObject.layer != UnityEngine.LayerMask.NameToLayer("Ground"))
+            if (other.gameObject.layer != UnityEngine.LayerMask.NameToLayer("Map"))
             {
                 return;
             }

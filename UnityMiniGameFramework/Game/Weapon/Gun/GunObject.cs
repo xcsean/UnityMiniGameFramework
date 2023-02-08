@@ -110,7 +110,7 @@ namespace UnityMiniGameFramework
         protected float _projectilesRotationAngle = 0.0f;
         protected int _gunPosIndex = 0;
 
-        protected static string[] _layers = new string[] { "Hitable", "Default", "Ground" };
+        protected static List<string> _layers = new List<string>() { "Hitable", "Default", "Ground" };
 
         public GunObject()
         {
@@ -535,6 +535,9 @@ namespace UnityMiniGameFramework
 
         virtual public void onEmmiterHitEnter(UnityEngine.Collider other)
         {
+            string layerName = LayerMask.LayerToName(other.gameObject.layer);
+            if (_layers.IndexOf(layerName) == -1)
+                return;
             _emmiterHitObjectsTime[other.gameObject] = UnityEngine.Time.time;
             _onEmmiterHit(other.gameObject);
 
@@ -682,7 +685,7 @@ namespace UnityMiniGameFramework
             _currentRay.origin = _gunPos.transform.position;
 
             var rayLength = _attackRange;
-            if (UnityEngine.Physics.Raycast(_currentRay, out _currentHitPoint, _attackRange, UnityEngine.LayerMask.GetMask(_layers)))
+            if (UnityEngine.Physics.Raycast(_currentRay, out _currentHitPoint, _attackRange, UnityEngine.LayerMask.GetMask(_layers.ToArray())))
             {
                 rayLength = UnityEngine.Vector3.Distance(_gunPos.transform.position, _currentHitPoint.point);
 
