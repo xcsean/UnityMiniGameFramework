@@ -21,6 +21,9 @@ namespace UnityMiniGameFramework
         protected MGGameObject _uiRootObj;
         public IGameObject uiRootObject => _uiRootObj;
 
+        protected UnityEngine.GameObject _videoCanvasObj;
+        public UnityEngine.GameObject videoCanvasObj => _videoCanvasObj;
+
         // unity cached objects root
         protected UnityEngine.GameObject _cachedRootObj;
         public UnityEngine.GameObject cachedRootObj => _cachedRootObj;
@@ -133,6 +136,10 @@ namespace UnityMiniGameFramework
 
             string cachedRootName = "CachedRoot";
 
+            string videoCanvasName = "VideoCanvas";
+
+            string uguiRootName = "UGUIRoot";
+
 
             // fetch objects
             UnityEngine.GameObject[] objs = _unityScene.GetRootGameObjects();
@@ -237,6 +244,18 @@ namespace UnityMiniGameFramework
                 {
                     _cachedRootObj = objs[i];
                 }
+                else if(objs[i].name == uguiRootName)
+                {
+                    var tr = objs[i].transform.Find(videoCanvasName);
+                    if (tr == null)
+                    {
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Load Scene {_name} rootobj {videoCanvasName} is null.");
+                    }
+                    else
+                    {
+                        _videoCanvasObj = tr.gameObject;
+                    }
+                }
             }
 
             if(_conf.changeOnLoaded.HasValue && _conf.changeOnLoaded.Value)
@@ -340,6 +359,18 @@ namespace UnityMiniGameFramework
             _map = map;
 
             _map.OnEnter();
+        }
+
+        public void SetObjToVideoCanvas(UnityEngine.GameObject o)
+        {
+            if (videoCanvasObj != null)
+            {
+                o.transform.SetParent(videoCanvasObj.transform);
+            }
+            else
+            {
+                o.transform.SetParent(null);
+            }
         }
     }
 }

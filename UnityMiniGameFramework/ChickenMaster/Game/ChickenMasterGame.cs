@@ -443,6 +443,8 @@ namespace UnityMiniGameFramework
             {
                 npc.Value.combatComp.RecalcAttributes();
             }
+
+            UnityGameApp.Inst.videoMgr.PreLoadVideo();
         }
 
         protected void _checkOfflineAwards()

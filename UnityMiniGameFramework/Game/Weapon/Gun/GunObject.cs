@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Profiling;
+using Debug = MiniGameFramework.Debug;
 using GameObject = MiniGameFramework.GameObject;
 using Matrix4x4 = UnityEngine.Matrix4x4;
 
@@ -209,6 +210,7 @@ namespace UnityMiniGameFramework
         {
             _fireCd = _baseAttackSpeedRate * 1.0f / weaponLevelAttackSpeed;
             _fireCd /= _BulletCount;
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{holder.name}的开火CD为:{_fireCd}s");
         }
 
         public void UpdateBulletCount(int? count)
@@ -388,6 +390,7 @@ namespace UnityMiniGameFramework
                 return;
             }
 
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"doFireTime:{Time.time}");
             if(_doFire())
             {
                 _doFireAudio();
