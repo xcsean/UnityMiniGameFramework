@@ -77,6 +77,11 @@ namespace UnityMiniGameFramework
                 // upgrade 
                 _recalcAttack();
 
+                if (cmGame.mainSceneHUDs.ContainsKey(_heroInfo.mapHeroName))
+                {
+                    (cmGame.mainSceneHUDs[_heroInfo.mapHeroName] as UITowerHeroLockHudPanel).setNameInfo(_heroInfo.mapHeroName, _heroInfo.level);
+                }
+
                 cmGame.baseInfo.markDirty();
             }
             else

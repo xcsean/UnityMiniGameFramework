@@ -372,6 +372,10 @@ namespace UnityMiniGameFramework
                 cmHero.Init(bi.defenseHeros[i]);
 
                 _cmNPCHeros[cmHero.heroInfo.mapHeroName] = cmHero;
+                if (_mainSceneHUDs.ContainsKey(cmHero.heroInfo.mapHeroName))
+                {
+                    (_mainSceneHUDs[cmHero.heroInfo.mapHeroName] as UITowerHeroLockHudPanel).setNameInfo(cmHero.heroInfo.mapHeroName, cmHero.heroInfo.level);
+                }
             }
 
             // init factories
@@ -558,14 +562,6 @@ namespace UnityMiniGameFramework
         {
             _self.OnUpdate();
 
-            foreach (var npc in cmNPCHeros)
-            {
-                if (_mainSceneHUDs.ContainsKey(npc.Key))
-                {
-                    (_mainSceneHUDs[npc.Key] as UITowerHeroLockHudPanel).setNameInfo(npc.Key, npc.Value.heroInfo.level);
-                }
-            }
-
             foreach (var fac in _cmFactories)
             {
                 fac.Value.OnUpdate();
@@ -649,6 +645,11 @@ namespace UnityMiniGameFramework
             // modify data
             (_baseInfo.getData() as LocalBaseInfo).defenseHeros.Add(cmHero.heroInfo);
             _baseInfo.markDirty();
+
+            if (_mainSceneHUDs.ContainsKey(cmHero.heroInfo.mapHeroName))
+            {
+                (_mainSceneHUDs[cmHero.heroInfo.mapHeroName] as UITowerHeroLockHudPanel).setNameInfo(cmHero.heroInfo.mapHeroName, cmHero.heroInfo.level);
+            }
 
             UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData6($"解锁英雄[{heroInfo.mapHeroName}]"));
 
