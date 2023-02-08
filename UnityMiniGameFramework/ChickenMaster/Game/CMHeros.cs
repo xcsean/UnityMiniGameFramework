@@ -262,6 +262,7 @@ namespace UnityMiniGameFramework
                 //panel.hideUI();
                 panel.activeLabLock(false);
                 panel.activeSprLock(false);
+                panel.SetFollowTarget(_mapHeroObj.unityGameObject.transform);
             }
         }
     }

@@ -59,15 +59,13 @@ namespace UnityMiniGameFramework
 
         public void setNameInfo(string name, int level = 0)
         {
-            //if (level == 0)
-            //{
-            //    _labName.text = $"{name}";
-            //    return;
-            //}
-            //_labName.text = $"{name} Lv.{level}";
-            //_labName.style.display = DisplayStyle.Flex;
-
-            _labName.style.display = DisplayStyle.None;
+            if (level == 0)
+            {
+                _labName.text = $"{name}";
+                return;
+            }
+            _labName.text = $"{name} Lv.{level}";
+            _labName.style.display = DisplayStyle.Flex;
         }
 
         public void activeLabLock(bool isShow)
