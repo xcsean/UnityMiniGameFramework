@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEngine.Video;
@@ -14,6 +10,7 @@ namespace UnityMiniGameFramework
     /// </summary>
     public class VideoComponent : MonoBehaviour
     {
+        [SerializeField] protected GameObject _closeBtn;
         public GameObject _videoObj;
         protected VideoPlayer _videoPlayer;
         protected RenderTexture _rt;
@@ -44,8 +41,9 @@ namespace UnityMiniGameFramework
             //gameObject.SetActive(false);
             transform.localPosition = new Vector3(-10000, 0, 0);
 
-            Time.timeScale = 1;
             UnityGameApp.Inst.AudioManager.ResumeAll();
+
+            Time.timeScale = 1;
         }
 
         public void Show()
@@ -53,8 +51,9 @@ namespace UnityMiniGameFramework
             //gameObject.SetActive(true);
             transform.localPosition = new Vector3(0, 0, 0);
 
-            Time.timeScale = 0;
             UnityGameApp.Inst.AudioManager.PauseAll();
+
+            Time.timeScale = 0;
         }
 
         public void Play(Action endCb = null)
@@ -75,6 +74,11 @@ namespace UnityMiniGameFramework
 
             playCb = endCb;
 
+            if (_closeBtn != null)
+            {
+                _closeBtn.SetActive(false);
+            }
+
             Invoke("DelayShow", 0.2f);
         }
 
@@ -83,9 +87,34 @@ namespace UnityMiniGameFramework
             Show();
         }
 
+        protected void DelayShowCloseBtn()
+        {
+            if (_closeBtn == null || _closeBtn.activeSelf)
+            {
+                return;
+            }
+            if (_videoPlayer != null && _videoPlayer.isPlaying)
+            {
+                _closeBtn.SetActive(true);
+            }
+        }
+
+        protected void Update()
+        {
+            if (_closeBtn == null || _closeBtn.activeSelf)
+            {
+                return;
+            }
+            if (_videoPlayer.time > 11f)
+            {
+                DelayShowCloseBtn();
+            }
+        }
+
         protected void OnPlayVideoCb(VideoPlayer vp)
         {
             //vp.playbackSpeed = 0.1f;
+            DelayShowCloseBtn();
         }
 
         public void Stop()

@@ -185,7 +185,7 @@ namespace UnityMiniGameFramework
         }
 
         /// <summary>
-        /// 所有点击广告分类打点
+        /// 广告点击
         /// </summary>
         public CS_ReportParam GetPointData9(string _msg = "")
         {
@@ -199,7 +199,7 @@ namespace UnityMiniGameFramework
         }
 
         /// <summary>
-        /// 看广告次数累计
+        /// 广告看完
         /// </summary>
         public CS_ReportParam GetPointData10(string _msg = "")
         {
