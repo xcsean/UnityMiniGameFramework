@@ -35,6 +35,7 @@ namespace UnityMiniGameFramework
         private VisualElement layout;
         private Label _labCapacity;
         private Label _labPopup;
+        private Label _labLv;
         public CapacityPopup popupNumber;
 
         protected Color _red = new Color(237f / 255f, 77f / 255f, 10f / 255f);
@@ -51,10 +52,11 @@ namespace UnityMiniGameFramework
 
         protected void FindUI()
         {
-            layout = _uiObjects["GridLayout"].unityVisualElement as VisualElement;
+            layout = _uiObjects["GridLayout"].unityVisualElement;
             var grid = layout.Q<VisualElement>("grid");
             _labCapacity = grid.Q<Label>("labCapacity");
             _labPopup = grid.Q<Label>("labPopup");
+            _labLv = grid.Q<Label>("labLv");
             popupNumber = null;
         }
 
@@ -64,10 +66,17 @@ namespace UnityMiniGameFramework
             if (_CMTrainStation == null)
             {
                 DoUpdateInputStore(0, 0);
+                RefreshLv(1);
 
                 return;
             }
+            RefreshLv(_CMTrainStation.trainStationInfo.level);
             DoUpdateInputStore(_CMTrainStation.trainStationInfo.storeProducts.Count, 0);
+        }
+
+        public void RefreshLv(int lv)
+        {
+            _labLv.text = $"Lv.{lv}";
         }
 
         public void DoUpdateInputStore(int totalCnt, int changeCnt)

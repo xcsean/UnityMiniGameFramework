@@ -739,6 +739,15 @@ namespace UnityMiniGameFramework
             _atkBuff.text = GetTimeStr(bi.buffs.doubleAtk);
             _expBuff.text = GetTimeStr(bi.buffs.doubleExp);
             long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+
+            if (bi.buffs.doubleAtk < nowMillisecond && _atkBuff.style.display.Equals(DisplayStyle.Flex))
+            {
+                // run one times
+                foreach (var npc in cmGame.cmNPCHeros)
+                {
+                    npc.Value.combatComp.RecalcAttributes();
+                }
+            }
             _atkBuff.style.display = bi.buffs.doubleAtk > nowMillisecond ? DisplayStyle.Flex : DisplayStyle.None;
             _expBuff.style.display = bi.buffs.doubleExp > nowMillisecond ? DisplayStyle.Flex : DisplayStyle.None;
         }

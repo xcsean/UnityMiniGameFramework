@@ -75,7 +75,12 @@ namespace UnityMiniGameFramework
                 UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData6($"英雄[{_heroInfo.mapHeroName}]等级{_heroInfo.level}"));
 
                 // upgrade 
-                _recalcAttack();
+                //_recalcAttack();
+                // 重新计算攻击力
+                if (combatComp != null)
+                {
+                    combatComp.RecalcAttributes();
+                }
 
                 if (cmGame.mainSceneHUDs.ContainsKey(_heroInfo.mapHeroName))
                 {
@@ -277,7 +282,12 @@ namespace UnityMiniGameFramework
 
                         if(weaponId == _heroInfo.holdWeaponId)
                         {
-                            _recalcAttack();
+                            //_recalcAttack();
+                            // 重新计算攻击力
+                            if (combatComp != null)
+                            {
+                                combatComp.RecalcAttributes();
+                            }
                         }
 
                         return true;
@@ -332,7 +342,12 @@ namespace UnityMiniGameFramework
 
             if (weaponId == heroInfo.holdWeaponId)
             {
-                _recalcAttack();
+                //_recalcAttack();
+                // 重新计算攻击力
+                if (combatComp != null)
+                {
+                    combatComp.RecalcAttributes();
+                }
             }
         }
     }

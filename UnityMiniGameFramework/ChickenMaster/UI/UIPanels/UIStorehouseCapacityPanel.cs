@@ -34,6 +34,7 @@ namespace UnityMiniGameFramework
         protected VisualTreeAsset _flyIconUxml;
         protected Label _labCapacity;
         protected Label _labPopup;
+        protected Label _labLv;
 
         protected CapacityPopupNumber popupNumber;
 
@@ -55,6 +56,7 @@ namespace UnityMiniGameFramework
         {
             _labCapacity = this._uiObjects["labCapacity"].unityVisualElement as Label;
             _labPopup = this._uiObjects["labPopup"].unityVisualElement as Label;
+            _labLv = this._uiObjects["labLv"].unityVisualElement as Label;
 
             _flyIconUxml = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadUXML($"UI/Controls/FlyIcon");
         }
@@ -65,10 +67,17 @@ namespace UnityMiniGameFramework
             if (_CMStoreHouse == null)
             {
                 DoUpdateInputStore(0, 0);
+                RefreshLv(1);
 
                 return;
             }
+            RefreshLv(_CMStoreHouse.storeHouseInfo.level);
             DoUpdateInputStore(_CMStoreHouse.storeHouseInfo.storeCount, 0);
+        }
+
+        public void RefreshLv(int lv)
+        {
+            _labLv.text = $"Lv.{lv}";
         }
 
         public void DoUpdateInputStore(int totalCnt, int changeCnt)
