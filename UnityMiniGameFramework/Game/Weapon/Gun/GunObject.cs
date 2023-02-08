@@ -791,7 +791,8 @@ namespace UnityMiniGameFramework
                 _curBulletCount++;
                 if (_curBulletCount >= _BulletCount)
                 {
-                    UpdateFireCd(_weaponLevelAttackSpeed);
+                    _fireCd = getFireCd();
+                    _fireCd = _fireCd - _fireCd / 4;
                     _curBulletCount = 0;
                 }
                 
