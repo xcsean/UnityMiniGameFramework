@@ -180,7 +180,10 @@ namespace UnityMiniGameFramework
             _Multiple = _conf.FireConf.Multiple ?? 1;
             _BulletCount = _conf.FireConf.bulletCount ?? 1;
             _PierceCount = _conf.FireConf.pierceCount ?? 1;
-            _BlastRange = _conf.FireConf.blastRange ?? 0.45f;
+            _BlastRange =
+                (_conf.FireConf.collideExplosive != null && _conf.FireConf.collideExplosive.blastRange != null)
+                    ? _conf.FireConf.collideExplosive.blastRange.Value
+                    : 0.45f;
             _shootOffsetAngleBegin = _conf.FireConf.shootOffsetAngleBegin.HasValue
                 ? _conf.FireConf.shootOffsetAngleBegin.Value
                 : 0;
