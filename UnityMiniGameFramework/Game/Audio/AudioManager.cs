@@ -53,6 +53,24 @@ namespace UnityMiniGameFramework
             m_CachedAudioAssets.Clear();
         }
 
+        public void PauseAll()
+        {
+            if (m_bgmSource.isPlaying)
+            {
+                m_bgmSource.Pause();
+            }
+            for (int i = 0; i < m_activeAduioSources.Count; i++)
+            {
+                m_activeAduioSources[i].Stop();
+            }
+        }
+
+        public void ResumeAll()
+        {
+            m_bgmSource.UnPause();
+
+        }
+
         public void PlayBGM(string clipName)
         {
             if (string.IsNullOrEmpty(clipName))

@@ -70,6 +70,8 @@ namespace UnityMiniGameFramework
             UnityGameApp.setInst(new UnityGameApp());
 
             InitGameAppPlatform();
+            UnityGameApp.Inst.isPublish = IsPublish();
+            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, "------ isPublish ------" + UnityGameApp.Inst.isPublish);
 
             UnityEngine.GameObject.DontDestroyOnLoad(GameObjectCachePool);
             DontDestroyOnLoad(AudioSourceRoot);
@@ -82,6 +84,7 @@ namespace UnityMiniGameFramework
                 preloaderUIConfName = preloaderUIConfName
             };
             UnityGameApp.Inst.Init(InitParameter);
+
             Application.targetFrameRate = 60;
 
             Application.quitting += UnityGameApp.Inst.OnAppExit;
@@ -96,9 +99,10 @@ namespace UnityMiniGameFramework
         {
             
         }
+        
         protected virtual bool IsPublish()
         {
-            return false;
+            return false; 
         }
 
         protected virtual void Start()
@@ -198,6 +202,7 @@ namespace UnityMiniGameFramework
         public UnityEngine.GameObject CachePoolRoot;
 
         public bool isClearUserData = false;
+        public bool isPublish = false;
 
         protected float _panelScale;
 
@@ -519,7 +524,7 @@ namespace UnityMiniGameFramework
                 if (conf.netConf.restfulConf != null)
                 {
                     _restfulClient = new UnityRESTFulClient();
-                    if (SDKManager.isPublish)
+                    if (isPublish)
                     {
                         _restfulClient.Init(conf.netConf.restfulConf.url);
                     }
