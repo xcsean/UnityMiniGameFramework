@@ -180,7 +180,7 @@ namespace UnityMiniGameFramework
             }
 
             // init gun level
-            _recalcAttack();
+            //_recalcAttack();
 
             // 重新计算攻击力
             if (combatComp != null)
