@@ -10,13 +10,6 @@ namespace UnityMiniGameFramework
 {
     public class SDKManager
     {
-#if UNITY_ANDROID
-        // 提审包需改为true
-        public static bool isPublish = false;
-#else
-        public static bool isPublish = false;
-#endif
-
         protected static ISDK _sdk;
 
         public static ISDK sdk => _sdk;

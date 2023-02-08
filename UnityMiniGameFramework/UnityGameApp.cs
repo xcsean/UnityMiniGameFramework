@@ -82,6 +82,7 @@ namespace UnityMiniGameFramework
                 preloaderUIConfName = preloaderUIConfName
             };
             UnityGameApp.Inst.Init(InitParameter);
+            UnityGameApp.Inst.isPublish = IsPublish();
             Application.targetFrameRate = 60;
 
             Application.quitting += UnityGameApp.Inst.OnAppExit;
@@ -95,6 +96,11 @@ namespace UnityMiniGameFramework
         protected virtual void InitSDK()
         {
             
+        }
+        
+        protected virtual bool IsPublish()
+        {
+            return false; 
         }
 
         protected virtual void Start()
@@ -194,6 +200,7 @@ namespace UnityMiniGameFramework
         public UnityEngine.GameObject CachePoolRoot;
 
         public bool isClearUserData = false;
+        public bool isPublish = false;
 
         protected float _panelScale;
 
@@ -515,7 +522,7 @@ namespace UnityMiniGameFramework
                 if (conf.netConf.restfulConf != null)
                 {
                     _restfulClient = new UnityRESTFulClient();
-                    if (SDKManager.isPublish)
+                    if (isPublish)
                     {
                         _restfulClient.Init(conf.netConf.restfulConf.url);
                     }
