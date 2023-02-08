@@ -392,6 +392,11 @@ namespace UnityMiniGameFramework
                     worker.OnUpgradeLevel(_trainStationInfo.level);
                 }
 
+                if (_uiTrainstationCapatityPanel != null)
+                {
+                    _uiTrainstationCapatityPanel.RefreshLv(_trainStationInfo.level);
+                }
+
                 cmGame.baseInfo.markDirty();
 
                 UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData12($"建筑[{_conf.mapBuildName}]等级{_trainStationInfo.level}"));

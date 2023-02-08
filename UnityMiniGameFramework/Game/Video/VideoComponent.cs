@@ -16,6 +16,11 @@ namespace UnityMiniGameFramework
         protected RenderTexture _rt;
 
         protected Action playCb;
+#if UNITY_ANDROID
+        protected float delayTime = 11f;
+#else
+        protected float delayTime = 3f;
+#endif
 
         protected void Awake()
         {
@@ -105,7 +110,7 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
-            if (_videoPlayer.time > 11f)
+            if (_videoPlayer.time > delayTime)
             {
                 DelayShowCloseBtn();
             }
