@@ -96,11 +96,12 @@ namespace UnityMiniGameFramework
         protected float _hitForce;
         protected int _Multiple;
         protected int _BulletCount;
+        protected int _curBulletCount;
         protected int _PierceCount;
         protected float _BlastRange; //投掷物的爆炸范围
         protected float _shootOffsetAngleBegin;
         protected float _shootOffsetAngleEnd;
-        
+        protected int _weaponLevelAttackSpeed;
         protected float _attackRange;
         public float attackRange => _attackRange;
 
@@ -179,6 +180,7 @@ namespace UnityMiniGameFramework
             _hitForce = _conf.FireConf.hitForce ?? 0;
             _Multiple = _conf.FireConf.Multiple ?? 1;
             _BulletCount = _conf.FireConf.bulletCount ?? 1;
+            _curBulletCount = 0;
             _PierceCount = _conf.FireConf.pierceCount ?? 1;
             _BlastRange =
                 (_conf.FireConf.collideExplosive != null && _conf.FireConf.collideExplosive.blastRange != null)
@@ -196,6 +198,7 @@ namespace UnityMiniGameFramework
             _baseAttackSpeedRate = _conf.FireConf.baseattackspeedrate.HasValue
                 ? _conf.FireConf.baseattackspeedrate.Value
                 : 100.0f;
+            _weaponLevelAttackSpeed = (int) _baseAttackSpeedRate;
             //默认初始值，最后由UpdateFireCd负责更新
             _fireCd = _conf.FireConf.fireCdTime;
             if (_conf.AnimatorConf != null)
@@ -211,9 +214,14 @@ namespace UnityMiniGameFramework
 
         public void UpdateFireCd(int weaponLevelAttackSpeed)
         {
-            _fireCd = _baseAttackSpeedRate * 1.0f / weaponLevelAttackSpeed;
-            _fireCd /= _BulletCount;
+            _weaponLevelAttackSpeed = weaponLevelAttackSpeed;
+            _fireCd = getFireCd();
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"{holder.name}的开火CD为:{_fireCd}s");
+        }
+
+        float getFireCd()
+        {
+            return _baseAttackSpeedRate * 1.0f / _weaponLevelAttackSpeed;
         }
 
         public void UpdateBulletCount(int? count)
@@ -278,6 +286,47 @@ namespace UnityMiniGameFramework
                     _onOpenfireMultiProjectile();
                     break;
             }
+        }
+
+        public virtual void ResetFire()
+        {
+            switch (_conf.FireConf.fireType)
+            {
+                case "projectile":
+                    _onResetFireProjectile();
+                    break;
+                case "ray":
+                    _onResetFireRay();
+                    break;
+                case "emmiter":
+                    _onResetFireEmmiter();
+                    break;
+                case "multiprojectile":
+                    _onResetFireMultiProjectile();
+                    break;
+            }
+        }
+
+        protected virtual void _onResetFireProjectile()
+        {
+            _curBulletCount = 0;
+            _projectilesRotationAngle = 0.0f;
+            _gunPosIndex = 0;
+        }
+
+        protected virtual void _onResetFireRay()
+        {
+            
+        }
+
+        protected virtual void _onResetFireEmmiter()
+        {
+            
+        }
+
+        protected virtual void _onResetFireMultiProjectile()
+        {
+            
         }
 
         virtual public void StopFire()
@@ -392,8 +441,7 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
-
-            Debug.DebugOutput(DebugTraceType.DTT_Debug, $"doFireTime:{Time.time}");
+            
             if(_doFire())
             {
                 _doFireAudio();
@@ -734,6 +782,19 @@ namespace UnityMiniGameFramework
                                          gunPosition.y * Math.Sin(_projectilesRotationAngle));
                 gunPosition.y = (float) (gunPosition.y * Math.Cos(_projectilesRotationAngle) - gunPosition.x *
                                          Math.Sin(_projectilesRotationAngle));
+                
+                if (_curBulletCount == 0)
+                {
+                    _fireCd = getFireCd();
+                    _fireCd /= 4;
+                }
+                _curBulletCount++;
+                if (_curBulletCount >= _BulletCount)
+                {
+                    UpdateFireCd(_weaponLevelAttackSpeed);
+                    _curBulletCount = 0;
+                }
+                
                 _gunPosIndex++;
                 if (_gunPosIndex >= _gunPos.transform.childCount)
                     _gunPosIndex = 0;
@@ -906,12 +967,7 @@ namespace UnityMiniGameFramework
 
         virtual protected void _onOpenfireProjectile()
         {
-            if (_BulletCount > 0)
-            {
-                _projectilesRotationAngle = 0.0f;
-                _gunPosIndex = 0;
-            }
-                
+            
         }
         virtual protected void _onOpenfireMultiProjectile()
         {
@@ -964,8 +1020,7 @@ namespace UnityMiniGameFramework
         }
         virtual protected void _onStopfireProjectile()
         {
-            _projectilesRotationAngle = 0.0f;
-            _gunPosIndex = 0;
+            
         }
         virtual protected void _onStopfireMultiProjectile()
         {

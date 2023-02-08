@@ -13,6 +13,7 @@ namespace UnityMiniGameFramework
         protected GunObject _gunObj;
         protected Map _map;
         protected MapMonsterObject _currentTargetMon;
+        protected bool _levelFinish = false;
 
         public AIGunFireTarget(ActorObject actor) : base(actor)
         {
@@ -27,6 +28,7 @@ namespace UnityMiniGameFramework
         public void clearTarget()
         {
             _currentTargetMon = null;
+            _levelFinish = true;
         }
 
         virtual protected bool _checkMonsterAttackable(MapMonsterObject m)
@@ -149,6 +151,11 @@ namespace UnityMiniGameFramework
                 forward = UnityEngine.Quaternion.AngleAxis(angle, UnityEngine.Vector3.up) * forward;
                 _actor.unityGameObject.transform.forward = forward;
                 _gunObj.Fire(_currentTargetMon);
+            }
+            else if (_levelFinish)
+            {
+                _gunObj.ResetFire();
+                _levelFinish = false;
             }
             else
             {
