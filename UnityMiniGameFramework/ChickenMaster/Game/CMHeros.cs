@@ -181,6 +181,12 @@ namespace UnityMiniGameFramework
 
             // init gun level
             _recalcAttack();
+
+            // 重新计算攻击力
+            if (combatComp != null)
+            {
+                combatComp.RecalcAttributes();
+            }
         }
 
         protected virtual void _recalcAttack()
