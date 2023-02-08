@@ -29,6 +29,7 @@ namespace UnityMiniGameFramework
             return new UIProduceProgressPanel();
         }
 
+        protected Label _labLv;
         protected Label _labLeftPopup;
         protected Label _labRightPopup;
         protected Label _labStockCnt;
@@ -64,6 +65,7 @@ namespace UnityMiniGameFramework
 
         protected void FindUI()
         {
+            _labLv = this._uiObjects["labLv"].unityVisualElement as Label;
             _labLeftPopup = this._uiObjects["labLeftPopup"].unityVisualElement as Label;
             _labRightPopup = this._uiObjects["labRightPopup"].unityVisualElement as Label;
             _labStockCnt = this._uiObjects["labStockCnt"].unityVisualElement as Label;
@@ -94,12 +96,14 @@ namespace UnityMiniGameFramework
                 _unlock.style.display = DisplayStyle.None;
                 DoUpdateInputStore(0, 0);
                 DoUpdatePruduceGoods(0, 0);
+                RefreshLv(1);
                 return;
             }
             _unlock.style.display = DisplayStyle.Flex;
 
             _lastUpdateProduceVer = _CMFactory.produceVer;
-
+            
+            RefreshLv(_CMFactory.localFacInfo.level);
             DoUpdateInputStore(_CMFactory.currentProductInputStore, 0);
             DoUpdatePruduceGoods(_CMFactory.currentProductOutputStore, 0);
 
@@ -120,6 +124,11 @@ namespace UnityMiniGameFramework
                     _sprProduceGoods.style.backgroundImage = tx;
                 }
             }
+        }
+
+        public void RefreshLv(int lv)
+        {
+            _labLv.text = $"Lv.{lv}";
         }
 
         /// <summary>

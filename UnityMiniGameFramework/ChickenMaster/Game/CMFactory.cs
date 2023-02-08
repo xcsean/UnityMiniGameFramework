@@ -206,6 +206,12 @@ namespace UnityMiniGameFramework
                 // upgrade 
                 _localFacInfo.level = _localFacInfo.level + 1;
                 _factoryLevelConf = _factoryConf.levelConfs[_localFacInfo.level];
+
+                if (_produceProgressPanel != null)
+                {
+                    _produceProgressPanel.RefreshLv(_localFacInfo.level);
+                }
+
                 cmGame.baseInfo.markDirty();
 
                 UnityGameApp.Inst.RESTFulClient.Report(

@@ -246,6 +246,8 @@ namespace UnityMiniGameFramework
 
             // calc speed
             _mapHeroObj.moveAct.onRecalcAttributes(bufAttrs);
+
+            Debug.DebugOutput(DebugTraceType.DTT_Debug, "------ _combatComp_OnRecalcAttributes ------");
         }
 
         /// <summary>
