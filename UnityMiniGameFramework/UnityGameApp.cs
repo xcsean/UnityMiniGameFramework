@@ -70,6 +70,8 @@ namespace UnityMiniGameFramework
             UnityGameApp.setInst(new UnityGameApp());
 
             InitGameAppPlatform();
+            UnityGameApp.Inst.isPublish = IsPublish();
+            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, "------ isPublish ------" + UnityGameApp.Inst.isPublish);
 
             UnityEngine.GameObject.DontDestroyOnLoad(GameObjectCachePool);
             DontDestroyOnLoad(AudioSourceRoot);
@@ -82,7 +84,7 @@ namespace UnityMiniGameFramework
                 preloaderUIConfName = preloaderUIConfName
             };
             UnityGameApp.Inst.Init(InitParameter);
-            UnityGameApp.Inst.isPublish = IsPublish();
+
             Application.targetFrameRate = 60;
 
             Application.quitting += UnityGameApp.Inst.OnAppExit;
