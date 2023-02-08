@@ -45,7 +45,11 @@ namespace UnityMiniGameFramework
             {
                 var sp = _iconRootTransform.GetChild(i).GetComponent<SpriteRenderer>();
                 if (sp != null)
+                {
                     _cacheStack.Push(sp);
+                    sp.enabled = false;
+                }
+                    
             }
             setHp(1);
         }
