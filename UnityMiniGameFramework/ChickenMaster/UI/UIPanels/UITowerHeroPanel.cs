@@ -254,9 +254,6 @@ namespace UnityMiniGameFramework
                 gunItem.Q<Label>("labGunStar").text = $"{gunInfo.level}";
                 btnArmed.style.display = DisplayStyle.Flex;
             }
-
-            // 重新计算武器伤害
-            _hero.combatComp.RecalcAttributes();
         }
 
         protected void _refreshGunUpgrade(LocalWeaponInfo gunInfo, int gunIndex)
