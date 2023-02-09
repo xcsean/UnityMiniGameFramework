@@ -8,12 +8,6 @@ using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
-
-    //public class Format
-    //{
-    //    public double value { get; set; }
-    //    public string symbol { get; set; }
-    //}
     public class UITrainStationPanel : UIPopupPanel
     {
         override public string type => "UITrainStationPanel";
@@ -109,35 +103,6 @@ namespace UnityMiniGameFramework
         private string numChange(int num)
         {
             return StringUtil.StringNumFormat(num.ToString());
-            //try
-            //{
-            //    List<Format> numDatas = new List<Format>()
-            //    {
-            //        new Format() {value = 1, symbol = ""},
-            //        //new Format() {value = 1e2, symbol = "H"},
-            //        new Format() {value = 1e3, symbol = "K"},
-            //        new Format() {value = 1e6, symbol = "M"},
-            //        new Format() {value = 1e9, symbol = "G"},
-            //        new Format() {value = 1e12, symbol = "T"},
-            //        new Format() {value = 1e15, symbol = "P"},
-            //        new Format() {value = 1e18, symbol = "E"}
-            //    };
-
-            //    int i = 0;
-            //    for (i = numDatas.Count - 1; i > 0; i--)
-            //    {
-            //        if (num >= numDatas[i].value)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //    return Math.Round(num / numDatas[i].value) + numDatas[i].symbol;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw (ex);
-            //}
-            ////return num.ToString();
         }
 
         public void refreshInfo()
