@@ -123,6 +123,8 @@ namespace UnityMiniGameFramework
 
         public void OnMouseDown(PointerDownEvent e)
         {
+            OnPutEnd();
+
             _defAreaHeros = (UnityGameApp.Inst.Game as ChickenMasterGame).GetDefAreaHeros();
             if (OnCheckPut() != null)
             {
