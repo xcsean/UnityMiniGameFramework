@@ -275,7 +275,7 @@ namespace UnityMiniGameFramework
             //cmGame.baseInfo.markDirty();
 
             // for Debug ...
-            cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Victory!");
+            //cmGame.ShowTips(CMGNotifyType.CMG_Notify, "Victory!");
 
             if (hasPassReward)
             {
