@@ -491,7 +491,13 @@ namespace UnityMiniGameFramework
             {
                 // not active
                 Debug.DebugOutput(DebugTraceType.DTT_Debug, "检查武器碎片是否足够");
-                return _hero.TryActiveWeapon(gunId);
+                if (_hero.TryActiveWeapon(gunId))
+                {
+                    OnChangeGun(gunIndex);
+                    return true;
+                }
+
+                return false;
             }
             else
             {
