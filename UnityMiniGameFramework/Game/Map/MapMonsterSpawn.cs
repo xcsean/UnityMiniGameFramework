@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
+using GameObject = MiniGameFramework.GameObject;
 
 namespace UnityMiniGameFramework
 {
@@ -168,7 +171,7 @@ namespace UnityMiniGameFramework
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"init monster spawn monster [{_conf.monsterConfName}] prefab [{_monConf.prefabName}] not MapMonsterObject");
                 return;
             }
-
+            unityMonsterObj.layer = LayerMask.NameToLayer($"Monster");
             string str = $"level[{_spawnMonsterLevel}] hp[{combatConf.hpMax}] def[{combatConf.def}] att[{combatConf.attackBase}]";
             Debug.DebugOutput(DebugTraceType.DTT_Debug, $"spawn monster [{_conf.monsterConfName}] {str}");
 

@@ -110,7 +110,8 @@ namespace UnityMiniGameFramework
         protected float _projectilesRotationAngle = 0.0f;
         protected int _gunPosIndex = 0;
 
-        protected static List<string> _layers = new List<string>() { "Hitable", "Default", "Ground" };
+        protected static List<string> _layers = new List<string>() {"Monster", "Wall"};
+        protected static string _MonsterLayer = "Monster"; 
 
         public GunObject()
         {
@@ -463,7 +464,7 @@ namespace UnityMiniGameFramework
             if (_conf.FireConf.hitVFX != null)
             {
                 var hitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(_conf.FireConf.hitVFX);
-                if (hitVfx != null)
+                if (hitVfx != null && other.layer == LayerMask.NameToLayer(_MonsterLayer))
                 {
                     hitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                     hitVfx.unityGameObject.transform.position = hitPoint;
@@ -479,7 +480,7 @@ namespace UnityMiniGameFramework
                     if (actBuffConfig.isVaild() && !string.IsNullOrEmpty(actBuffConfig.bufVFXName))
                     {
                         var buffHitVfx = UnityGameApp.Inst.VFXManager.createVFXObject(actBuffConfig.bufVFXName);
-                        if (buffHitVfx != null)
+                        if (buffHitVfx != null && other.layer == LayerMask.NameToLayer(_MonsterLayer))
                         {
                             buffHitVfx.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.sceneRootObj).unityGameObject.transform);
                             buffHitVfx.unityGameObject.transform.position = hitPoint;
@@ -508,6 +509,9 @@ namespace UnityMiniGameFramework
                 UnityGameApp.Inst.VFXManager.onVFXDestory(projectileObject.projVfxObj);
                 _currentProjectiles.Remove(projectileObject.projVfxObj);    
             }
+            
+            if(other.layer != LayerMask.NameToLayer(_MonsterLayer))
+                return;
             
             if (_conf.FireConf.collideExplosive != null && _currentTarget != null)
             {
@@ -569,6 +573,9 @@ namespace UnityMiniGameFramework
 
         virtual protected void _onEmmiterHit(UnityEngine.GameObject o)
         {
+            if(o.layer != LayerMask.NameToLayer(_MonsterLayer))
+                return;
+            
             VFXObjectBase hitVfx = null;
             if (_conf.FireConf.hitVFX != null)
             {
@@ -905,6 +912,9 @@ namespace UnityMiniGameFramework
             {
                 return false;
             }
+
+            if (_currentRayHitObject.layer != LayerMask.NameToLayer(_MonsterLayer))
+                return false;
 
             VFXObjectBase hitVfx = null;
             if (_conf.FireConf.hitVFX != null)
