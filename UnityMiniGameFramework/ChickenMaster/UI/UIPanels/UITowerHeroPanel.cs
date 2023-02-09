@@ -166,8 +166,6 @@ namespace UnityMiniGameFramework
                 _sprHeroIcon.style.backgroundImage = tx;
                 _sprHeroIcon.style.width = tx.width;
                 _sprHeroIcon.style.height = tx.height;
-                _sprHeroIcon.style.left = 161.5f - tx.width / 2;
-                _sprHeroIcon.style.top = -36 - tx.height;
             }
             if (_hero == null)
             {
