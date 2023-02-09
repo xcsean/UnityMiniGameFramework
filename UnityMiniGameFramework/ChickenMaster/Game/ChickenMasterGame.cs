@@ -98,6 +98,7 @@ namespace UnityMiniGameFramework
 
             await UnityGameApp.Inst.Datas.CreateLocalUserDataAsync();
             UnityGameApp.Inst.Datas.GetLocalUserConfig();
+            UnityGameApp.Inst.onListenerLogMessage();
 
             bool newDataAdded = false;
             _userInfo = UnityGameApp.Inst.Datas.localUserData.getData("userInfo");

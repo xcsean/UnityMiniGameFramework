@@ -248,18 +248,16 @@ namespace UnityMiniGameFramework
 
             _initNetwork();
 
-            onListenerLogMessage();
-
             _loadStartScene();
 
             return true;
         }
 
         public List<GMLogInfo> logs;
-        private void onListenerLogMessage()
+        public void onListenerLogMessage()
         {
             logs = new List<GMLogInfo>();
-            if (UnityGameApp.Inst.Datas.localUserConfig != null && UnityGameApp.Inst.Datas.localUserConfig.ShowGm)
+            if (Datas.localUserConfig != null && Datas.localUserConfig.ShowGm)
             {
                 Application.logMessageReceivedThreaded += (string condition, string stackTrace, LogType type) =>
                 {
