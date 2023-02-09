@@ -24,6 +24,7 @@ namespace UnityMiniGameFramework
         public Label nextlevel;
         public Label nextcapacity;
         public Label nextstorage;
+        public Label labBuffTime;
 
 
         protected Label _UpgradePrice;
@@ -51,6 +52,7 @@ namespace UnityMiniGameFramework
             nextstorage = this._uiObjects["NextStorage"].unityVisualElement as Label;
             nextcapacity = this._uiObjects["NextCapacity"].unityVisualElement as Label;
             _UpgradePrice = this._uiObjects["upgradePrice"].unityVisualElement as Label;
+            labBuffTime = this._uiObjects["buffTime"].unityVisualElement as Label;
 
             _UpgradeBtn = this._uiObjects["UpgradeBtn"].unityVisualElement as Button;
             _VideoBtn = this._uiObjects["VideoBtn"].unityVisualElement as Button;
@@ -85,6 +87,7 @@ namespace UnityMiniGameFramework
                 nextstorage.text = StringUtil.StringNumFormat($"{_storeHouse.storeHouseConf.levelConfs[CurLevel + 1].MaxstoreCount}");
                 nextcapacity.text = StringUtil.StringNumFormat($"{_storeHouse.storeHouseConf.workerConf.levelCarryCount[CurLevel + 1]}");
             }
+            labBuffTime.text = "00:00";
         }
 
         public void onUpgradeClick()
@@ -163,6 +166,39 @@ namespace UnityMiniGameFramework
 
                     refreshInfo();
                 }
+            }
+            UnityGameApp.Inst.addUpdateCall(onUpdate);
+        }
+
+        public override void hideUI()
+        {
+            base.hideUI();
+            UnityGameApp.Inst.removeUpdateCall(onUpdate);
+        }
+
+        private void onUpdate()
+        {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var bi = cmGame.baseInfo.getData() as LocalBaseInfo;
+            long buffTime = bi.buffs.storehouseProterSpeed;
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+
+            if (buffTime >= nowMillisecond)
+            {
+                int time = (int)(buffTime - nowMillisecond) / 1000;
+
+                int hours = time / 60 / 60;
+                int mins = (time - hours * 60 * 60) / 60;
+                int secs = time - hours * 60 * 60 - mins * 60;
+                var str = hours >= 10 ? $"{hours}:" : hours == 0 ? "" : $"0{hours}:";
+                str += mins >= 10 ? $"{mins}:" : $"0{mins}:";
+                str += secs >= 10 ? $"{secs}" : $"0{secs}";
+
+                labBuffTime.text = str;
+            }
+            else
+            {
+                labBuffTime.text = "00:00";
             }
         }
     }
