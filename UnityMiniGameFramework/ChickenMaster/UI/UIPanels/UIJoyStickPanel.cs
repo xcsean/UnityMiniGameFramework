@@ -131,6 +131,9 @@ namespace UnityMiniGameFramework
                 // 点击英雄了不处理摇杆
                 return;
             }
+
+            OnMouseUp(null);
+
             _btn.style.visibility = Visibility.Visible;
             _back.style.visibility = Visibility.Visible;
 
