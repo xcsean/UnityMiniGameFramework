@@ -16,11 +16,8 @@ namespace UnityMiniGameFramework
         protected RenderTexture _rt;
 
         protected Action playCb;
-#if UNITY_ANDROID
+
         protected float delayTime = 11f;
-#else
-        protected float delayTime = 3f;
-#endif
 
         protected void Awake()
         {
@@ -82,6 +79,13 @@ namespace UnityMiniGameFramework
             if (_closeBtn != null)
             {
                 _closeBtn.SetActive(false);
+            }
+
+            if (Application.platform == RuntimePlatform.WindowsEditor ||
+                Application.platform == RuntimePlatform.OSXEditor
+                )
+            {
+                delayTime = 2f;
             }
 
             Invoke("DelayShow", 0.2f);

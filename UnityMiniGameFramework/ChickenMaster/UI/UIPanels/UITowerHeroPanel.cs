@@ -166,8 +166,6 @@ namespace UnityMiniGameFramework
                 _sprHeroIcon.style.backgroundImage = tx;
                 _sprHeroIcon.style.width = tx.width;
                 _sprHeroIcon.style.height = tx.height;
-                _sprHeroIcon.style.left = 161.5f - tx.width / 2;
-                _sprHeroIcon.style.top = -36 - tx.height;
             }
             if (_hero == null)
             {
@@ -491,7 +489,13 @@ namespace UnityMiniGameFramework
             {
                 // not active
                 Debug.DebugOutput(DebugTraceType.DTT_Debug, "检查武器碎片是否足够");
-                return _hero.TryActiveWeapon(gunId);
+                if (_hero.TryActiveWeapon(gunId))
+                {
+                    OnChangeGun(gunIndex);
+                    return true;
+                }
+
+                return false;
             }
             else
             {

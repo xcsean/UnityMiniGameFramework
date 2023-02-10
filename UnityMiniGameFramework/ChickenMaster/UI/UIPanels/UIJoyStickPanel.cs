@@ -123,12 +123,17 @@ namespace UnityMiniGameFramework
 
         public void OnMouseDown(PointerDownEvent e)
         {
+            OnPutEnd();
+
             _defAreaHeros = (UnityGameApp.Inst.Game as ChickenMasterGame).GetDefAreaHeros();
             if (OnCheckPut() != null)
             {
                 // 点击英雄了不处理摇杆
                 return;
             }
+
+            OnMouseUp(null);
+
             _btn.style.visibility = Visibility.Visible;
             _back.style.visibility = Visibility.Visible;
 
@@ -456,7 +461,7 @@ namespace UnityMiniGameFramework
                 hitInfos = UnityEngine.Physics.RaycastAll(
                     UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
                     1000.0f,
-                    UnityEngine.LayerMask.GetMask("Ground"));
+                    UnityEngine.LayerMask.GetMask("Map"));
 
                 if (hitInfos.Length > 0)
                 {

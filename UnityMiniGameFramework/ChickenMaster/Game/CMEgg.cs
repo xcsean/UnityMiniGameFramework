@@ -103,8 +103,6 @@ namespace UnityMiniGameFramework
                 // wait increase
                 if (_incHpTime <= nowTickMilliseconds)
                 {
-                    _eggInfo.lastIncHpTime = nowTickMilliseconds;
-                    _incHpTime = _eggInfo.lastIncHpTime + _conf.hpIncTime;
 
                     _eggInfo.hp += 1 + (int)((nowTickMilliseconds - _incHpTime) / _conf.hpIncTime);
                     if (_eggInfo.hp > _conf.maxHp)
@@ -112,10 +110,13 @@ namespace UnityMiniGameFramework
                         _eggInfo.hp = _conf.maxHp;
                     }
 
-                    ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-                    cmGame.baseInfo.markDirty();
 
                     _updateHpBar();
+
+                    _eggInfo.lastIncHpTime = nowTickMilliseconds;
+                    _incHpTime = _eggInfo.lastIncHpTime + _conf.hpIncTime;
+                    ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+                    cmGame.baseInfo.markDirty();
                 }
             }
             else

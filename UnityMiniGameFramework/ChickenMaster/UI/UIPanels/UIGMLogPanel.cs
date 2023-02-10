@@ -75,6 +75,10 @@ namespace UnityMiniGameFramework
             _btnWarn.clicked += onClickBtnWarn;
             _btnError.clicked += onClickBtnError;
             _btnClear.clicked += onClickBtnClear;
+
+            logInfoCnt = 0;
+            logWarnCnt = 0;
+            logErrorCnt = 0;
         }
 
         public override void showUI()

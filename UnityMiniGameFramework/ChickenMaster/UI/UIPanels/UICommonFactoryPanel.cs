@@ -34,6 +34,7 @@ namespace UnityMiniGameFramework
         protected Label labEfficiencyCur;
         protected Label labEfficiencyNext;
         protected Label labCostCoin;
+        protected Label labBuffTime;
         protected VisualElement sprChicken;
 
         protected Button nBtnEfficiency;
@@ -67,6 +68,7 @@ namespace UnityMiniGameFramework
             labCostCoin = this._uiObjects["labCostCoin"].unityVisualElement as Label;
             nBtnEfficiency = this._uiObjects["nBtnEfficiency"].unityVisualElement as Button;
             nBtnUpgrade = this._uiObjects["nBtnUpgrade"].unityVisualElement as Button;
+            labBuffTime = this._uiObjects["buffTime"].unityVisualElement as Label;
 
             nBtnEfficiency.clicked += OnEfficiencyBtnClick;
             nBtnUpgrade.clicked += OnUpgradeBtnClick;
@@ -265,11 +267,71 @@ namespace UnityMiniGameFramework
             base.showUI();
 
             RefreshInfo();
+            UnityGameApp.Inst.addUpdateCall(onUpdate);
         }
 
         public override void hideUI()
         {
             base.hideUI();
+            UnityGameApp.Inst.removeUpdateCall(onUpdate);
+        }
+
+        private void onUpdate()
+        {
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+
+            long buffTime = GetBuffTime();
+            if (buffTime >= nowMillisecond)
+            {
+                int time = (int)(buffTime - nowMillisecond) / 1000;
+
+                int hours = time / 60 / 60;
+                int mins = (time - hours * 60 * 60) / 60;
+                int secs = time - hours * 60 * 60 - mins * 60;
+                var str = hours >= 10 ? $"{hours}:" : hours == 0 ? "" : $"0{hours}:";
+                str += mins >= 10 ? $"{mins}:" : $"0{mins}:";
+                str += secs >= 10 ? $"{secs}" : $"0{secs}";
+
+                labBuffTime.text = str;
+            }
+            else
+            {
+                labBuffTime.text = "00:00";
+            }
+        }
+
+        private long GetBuffTime()
+        {
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var bi = cmGame.baseInfo.getData() as LocalBaseInfo;
+            long buffTime = 0;
+            switch (_factoryConf.mapBuildName)
+            {
+                case "factoryBuilding1":
+                    buffTime = bi.buffs.factory1Productivity;
+                    break;
+                case "factoryBuilding2":
+                    buffTime = bi.buffs.factory2Productivity;
+                    break;
+                case "factoryBuilding3":
+                    buffTime = bi.buffs.factory3Productivity;
+                    break;
+                case "factoryBuilding4":
+                    buffTime = bi.buffs.factory4Productivity;
+                    break;
+                case "factoryBuilding5":
+                    buffTime = bi.buffs.factory5Productivity;
+                    break;
+                case "factoryBuilding6":
+                    buffTime = bi.buffs.factory6Productivity;
+                    break;
+
+                default:
+
+                    break;
+            }
+
+            return buffTime;
         }
 
     }

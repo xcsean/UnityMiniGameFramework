@@ -110,6 +110,10 @@ namespace UnityMiniGameFramework
 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             cmGame.uiMainPanel.changeBattleStartByEggState(isFighting, _hp);
+            if (_hp > 0)
+            {
+                _recoveryTime.text = "READY";
+            }
         }
 
         public void onEggDie()

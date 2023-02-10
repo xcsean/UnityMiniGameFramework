@@ -260,7 +260,7 @@ namespace UnityMiniGameFramework
                 hitInfos = UnityEngine.Physics.RaycastAll(
                     UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(UnityEngine.Input.mousePosition),
                     1000.0f,
-                    UnityEngine.LayerMask.GetMask("Ground"));
+                    UnityEngine.LayerMask.GetMask("Map"));
 
                 if (hitInfos.Length > 0)
                 {

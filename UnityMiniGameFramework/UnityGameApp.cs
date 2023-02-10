@@ -248,7 +248,7 @@ namespace UnityMiniGameFramework
 
             _initNetwork();
 
-            onListenerLogMessage();
+            onListenerLogMessage(true);
 
             _loadStartScene();
 
@@ -256,30 +256,40 @@ namespace UnityMiniGameFramework
         }
 
         public List<GMLogInfo> logs;
-        private void onListenerLogMessage()
+        public void onListenerLogMessage(bool bind)
         {
-            logs = new List<GMLogInfo>();
-            if (UnityGameApp.Inst.Datas.localUserConfig != null && UnityGameApp.Inst.Datas.localUserConfig.ShowGm)
+            if (logs == null)
             {
-                Application.logMessageReceivedThreaded += (string condition, string stackTrace, LogType type) =>
-                {
-                    if (logs.Count > 50000)
-                    {
-                        return;
-                    }
-                    if (type != LogType.Log && type != LogType.Error && type != LogType.Warning)
-                    {
-                        return;
-                    }
-                    logs.Add(new GMLogInfo() 
-                    {
-                        time = $"[{DateTime.Now.ToString("hh:mm:ss")}]",
-                        condition = condition,
-                        stackTrace = stackTrace,
-                        type = type
-                    });
-                };
+                logs = new List<GMLogInfo>();
             }
+
+            if (bind)
+            {
+                Application.logMessageReceivedThreaded += logMessageReceived;
+            }
+            else
+            {
+                Application.logMessageReceivedThreaded -= logMessageReceived;
+            }
+        }
+
+        private void logMessageReceived(string condition, string stackTrace, LogType type)
+        {
+            if (logs.Count > 50000)
+            {
+                return;
+            }
+            if (type != LogType.Log && type != LogType.Error && type != LogType.Warning)
+            {
+                return;
+            }
+            logs.Add(new GMLogInfo()
+            {
+                time = $"[{DateTime.Now.ToString("hh:mm:ss")}]",
+                condition = condition,
+                stackTrace = stackTrace,
+                type = type
+            });
         }
 
         override public void OnUpdate()

@@ -8,12 +8,6 @@ using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
 {
-
-    //public class Format
-    //{
-    //    public double value { get; set; }
-    //    public string symbol { get; set; }
-    //}
     public class UITrainStationPanel : UIPopupPanel
     {
         override public string type => "UITrainStationPanel";
@@ -65,6 +59,7 @@ namespace UnityMiniGameFramework
         public Button SpeedUpBtn => _SpeedUpBtn;
 
         private Boolean isMaxLevel = false;
+        protected Label labBuffTime;
 
         override public void Init(UIPanelConf conf)
         {
@@ -82,6 +77,7 @@ namespace UnityMiniGameFramework
             _NextStorage = this._uiObjects["nextStorage"].unityVisualElement as Label;
             _NextStationStorage = this._uiObjects["nextStationStorage"].unityVisualElement as Label;
             _UpgradePrice = this._uiObjects["UpgradePrice"].unityVisualElement as Label;
+            labBuffTime = this._uiObjects["buffTime"].unityVisualElement as Label;
 
             _UpgradeBtn = this._uiObjects["UpgradeBtn"].unityVisualElement as Button;
             _UpgradeBtn.clicked += onUpgradeClick;
@@ -104,40 +100,18 @@ namespace UnityMiniGameFramework
             base.showUI();
 
             refreshInfo();
+            UnityGameApp.Inst.addUpdateCall(onUpdate);
+        }
+
+        public override void hideUI()
+        {
+            base.hideUI();
+            UnityGameApp.Inst.removeUpdateCall(onUpdate);
         }
 
         private string numChange(int num)
         {
             return StringUtil.StringNumFormat(num.ToString());
-            //try
-            //{
-            //    List<Format> numDatas = new List<Format>()
-            //    {
-            //        new Format() {value = 1, symbol = ""},
-            //        //new Format() {value = 1e2, symbol = "H"},
-            //        new Format() {value = 1e3, symbol = "K"},
-            //        new Format() {value = 1e6, symbol = "M"},
-            //        new Format() {value = 1e9, symbol = "G"},
-            //        new Format() {value = 1e12, symbol = "T"},
-            //        new Format() {value = 1e15, symbol = "P"},
-            //        new Format() {value = 1e18, symbol = "E"}
-            //    };
-
-            //    int i = 0;
-            //    for (i = numDatas.Count - 1; i > 0; i--)
-            //    {
-            //        if (num >= numDatas[i].value)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //    return Math.Round(num / numDatas[i].value) + numDatas[i].symbol;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw (ex);
-            //}
-            ////return num.ToString();
         }
 
         public void refreshInfo()
@@ -156,6 +130,7 @@ namespace UnityMiniGameFramework
             _NextStationStorage.text = $"{numChange(_trainStation.trainStaionConf.levelConfs[nextLevel].MaxstoreCount)}";
             UpgradePrice.text = $"{numChange(_trainStation.currentLevelConf.upgradeGoldCost)}";
             UpgradeBtn.text = isMaxLevel ? "OK" : "UPGRADE";
+            labBuffTime.text = "00:00";
 
             //TimeSpan t = new TimeSpan(_trainStation.train.timeToTrainArrival * 10000);
             //string info =
@@ -223,6 +198,32 @@ namespace UnityMiniGameFramework
 
             bi.buffs.trainProterSpeed = buffTime;
             cmGame.baseInfo.markDirty();
+        }
+
+        private void onUpdate()
+        {
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            var bi = cmGame.baseInfo.getData() as LocalBaseInfo;
+            long buffTime = bi.buffs.trainProterSpeed;
+            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+
+            if (buffTime >= nowMillisecond)
+            {
+                int time = (int)(buffTime - nowMillisecond) / 1000;
+
+                int hours = time / 60 / 60;
+                int mins = (time - hours * 60 * 60) / 60;
+                int secs = time - hours * 60 * 60 - mins * 60;
+                var str = hours >= 10 ? $"{hours}:" : hours == 0 ? "" : $"0{hours}:";
+                str += mins >= 10 ? $"{mins}:" : $"0{mins}:";
+                str += secs >= 10 ? $"{secs}" : $"0{secs}";
+
+                labBuffTime.text = str;
+            }
+            else
+            {
+                labBuffTime.text = "00:00";
+            }
         }
 
         private void onCallVideoCb()
