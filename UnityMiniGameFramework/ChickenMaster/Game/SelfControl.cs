@@ -25,11 +25,19 @@ namespace UnityMiniGameFramework
         protected UITowerHeroPanel _heroUI;
         public UITowerHeroPanel heroUI => _heroUI;
         protected Dictionary<string, int> _heroNearState;
+        protected Dictionary<string, HeroPosInfo> _heroPosInfo;
 
         public SelfControl()
         {
             _isInited = false;
             _heroNearState = new Dictionary<string, int>();
+            _heroPosInfo = new Dictionary<string, HeroPosInfo>();
+        }
+
+        protected struct HeroPosInfo
+        {
+            public Transform transform;
+            public CMNPCHeros npcHero;
         }
 
         public void Init()
@@ -56,9 +64,12 @@ namespace UnityMiniGameFramework
 
             foreach (var npcPair in (UnityGameApp.Inst.MainScene.map as Map).npcs)
             {
-                npcPair.Value.OnMapNPCTriggerEnter += _OnMapNPCTriggerEnter;
-                npcPair.Value.OnMapNPCTriggerStay += _OnMapNPCTriggerStay;
-                npcPair.Value.OnMapNPCTriggerExit += _OnMapNPCTriggerExit;
+                // npcPair.Value.OnMapNPCTriggerEnter += _OnMapNPCTriggerEnter;
+                // npcPair.Value.OnMapNPCTriggerStay += _OnMapNPCTriggerStay;
+                // npcPair.Value.OnMapNPCTriggerExit += _OnMapNPCTriggerExit;
+                
+                var posInfo = new HeroPosInfo {transform = npcPair.Value.unityGameObject.transform};
+                _heroPosInfo[npcPair.Value.name] = posInfo;
             }
         }
 
@@ -406,7 +417,23 @@ namespace UnityMiniGameFramework
 
             foreach (var heroPair in _cmGame.cmNPCHeros)
             {
-                var vec = (heroPair.Value.mapHero.unityGameObject.transform.position - this.mapHero.unityGameObject.transform.position);
+                string heroName = heroPair.Value.heroInfo.mapHeroName;
+                if (_heroPosInfo.ContainsKey(heroName))
+                {
+                    var heroPosInfo = _heroPosInfo[heroName];
+                    heroPosInfo.transform = heroPair.Value.mapHero.unityGameObject.transform;
+                    heroPosInfo.npcHero = heroPair.Value;
+                    _heroPosInfo[heroName] = heroPosInfo;
+                }   
+            }
+
+            foreach (var heroPair in _heroPosInfo)
+            {
+                Transform heroPos = heroPair.Value.transform;
+                CMNPCHeros npcHero = heroPair.Value.npcHero;
+                string heroName = heroPair.Key;
+
+                var vec = (heroPos.position - this.mapHero.unityGameObject.transform.position);
                 if (vec.magnitude > 1.0)
                 {
                     // not near by
@@ -426,7 +453,7 @@ namespace UnityMiniGameFramework
                 else
                 {
                     // 选中拖动中
-                    if (heroPair.Value.isPicked)
+                    if (npcHero != null && npcHero.isPicked)
                     {
                         continue;
                     }
@@ -447,7 +474,10 @@ namespace UnityMiniGameFramework
 
                         if (!_heroUI.isShow)
                         {
-                            _heroUI.ShowHero(heroPair.Value.heroInfo.mapHeroName);
+                            var heroConf = _cmGameConf.getCMHeroConf(heroName);
+                            if (heroConf.userLevelRequire > 0 && _baseInfo.currentLevel < heroConf.userLevelRequire)
+                                continue;
+                            _heroUI.ShowHero(heroName);
                             break;
                         }
                     }
