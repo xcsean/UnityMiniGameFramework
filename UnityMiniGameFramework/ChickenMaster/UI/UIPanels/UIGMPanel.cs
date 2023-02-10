@@ -171,10 +171,10 @@ namespace UnityMiniGameFramework
         protected float fpsInterval = 0;
         protected void onUpdateGameStats()
         {
-            fpsMs += (Time.unscaledDeltaTime - fpsMs) * 0.1f;
+            fpsMs = Time.unscaledDeltaTime;
 
-            fpsInterval += Time.deltaTime;
-            if (fpsInterval > 0.07f)
+            fpsInterval += 1;
+            if (fpsInterval > 5f)
             {
                 fpsInterval = 0;
                 UpdateFPS();
