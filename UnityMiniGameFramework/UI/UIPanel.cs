@@ -151,12 +151,6 @@ namespace UnityMiniGameFramework
             //_unityUIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
             //_unityUIDocument.rootVisualElement.style.opacity = 1f;
 
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            if (cmGame.haveExPanel)
-            {
-                return;
-            }
-
             if (onShowStartHandle != null)
             {
                 onShowStartHandle();

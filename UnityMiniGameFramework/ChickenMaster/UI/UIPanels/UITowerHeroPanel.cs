@@ -545,8 +545,6 @@ namespace UnityMiniGameFramework
         /// </summary>
         private void GunAscendSuccess(LocalWeaponInfo gunInfo)
         {
-            (UnityGameApp.Inst.Game as ChickenMasterGame).hideAllUI();
-
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             var cmGunConf = cmGame.gameConf.getCMGunConf(gunInfo.id);
             UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData7($"武器[{cmGunConf.name}]，星级[{gunInfo.level}]"));
