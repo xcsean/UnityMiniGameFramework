@@ -8,6 +8,11 @@ using MiniGameFramework;
 
 namespace UnityMiniGameFramework
 {
+    public enum CMGNotifyType
+    {
+        CMG_Notify,
+        CMG_ERROR
+    }
     public class ChickenMasterGame : IGame
     {
         public static IGame create()

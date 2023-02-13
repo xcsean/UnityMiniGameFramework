@@ -473,18 +473,12 @@ namespace UnityMiniGameFramework
 
             // reg ui panel creator
             _ui.regUIPanelCreator("preloader", UIPreloaderPanel.create);
-            _ui.regUIPanelCreator("UIMainPanel", UIMainPanel.create);
             _ui.regUIPanelCreator("UIPanelStartMain", UIPanelStartMain.create);
-            _ui.regUIPanelCreator("UIUpgradePanel", UIUpgradePanel.create);
-            _ui.regUIPanelCreator("UILevelEntryPanel", UILevelEntryPanel.create);
             _ui.regUIPanelCreator("UILevelMainPanel", UILevelMainPanel.create);
             _ui.regUIPanelCreator("UIEggPanel", UIEggPanel.create);
-            _ui.regUIPanelCreator("UIHeroPanel", UIHeroPanel.create);
             _ui.regUIPanelCreator("UITrainStationPanel", UITrainStationPanel.create);
             _ui.regUIPanelCreator("UIStoreHousePanel", UIStoreHousePanel.create);
             _ui.regUIPanelCreator("UIFlagMainPanel", UIFlagMainPanel.create);
-            _ui.regUIPanelCreator("UIFactory1Panel", UIFactory1Panel.create);
-            _ui.regUIPanelCreator("UIFactory2Panel", UIFactory2Panel.create);
 
             _ui.regUIPanelCreator("UICommonFactoryPanel", UICommonFactoryPanel.create);
             _ui.regUIPanelCreator("UIProduceProgressPanel", UIProduceProgressPanel.create);
@@ -513,8 +507,6 @@ namespace UnityMiniGameFramework
             _ui.regUIObjectCreator("UIObject", UIObject.create);
             _ui.regUIObjectCreator("UIJoyStickControl", UIJoyStickControl.create);
             _ui.regUIObjectCreator("UILevelStateControl", UILevelStateControl.create);
-            _ui.regUIObjectCreator("UIFactoryControl", UIFactoryControl.create);
-            _ui.regUIObjectCreator("UIHeroControl", UIHeroControl.create);
         }
 
         protected void _initNetwork()
