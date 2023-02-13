@@ -13,6 +13,8 @@ namespace UnityMiniGameFramework
     {
         protected Button _closeBtn;
 
+        public bool mutex = false;
+
         override public void Init(UIPanelConf conf)
         {
             base.Init(conf);
@@ -20,6 +22,7 @@ namespace UnityMiniGameFramework
             _closeBtn = this._uiObjects["CloseButton"].unityVisualElement as Button;
 
             _closeBtn.clicked += onCloseClick;
+            mutex = conf.mutex;
 
         }
         //override public void hideUI()

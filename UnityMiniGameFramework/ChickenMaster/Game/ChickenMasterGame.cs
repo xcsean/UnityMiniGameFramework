@@ -251,24 +251,9 @@ namespace UnityMiniGameFramework
         }
 
         private List<UIPopupPanel> panels = new List<UIPopupPanel>();
-        private List<string> exPanels = new List<string>()
-        {
-            "UIPassRewardPanel",
-            "UIWeaponAscendPanel"
-        };
         public bool haveExPanel = false;
         public void addUI(UIPopupPanel ui)
         {
-            if (
-                ui.type == "UIStorehouseCapacityPanel"
-                || ui.type == "UITrainstationCapacityPanel"
-                || ui.type == "UIProduceProgressPanel"
-                || ui.type == "UIOpeningCartoonPanel"
-                || ui.type == "UITrainStationGoldPopupPanel"
-                )
-            {
-                return;
-            }
             if (!panels.Contains(ui))
             {
                 panels.Add(ui);
@@ -293,7 +278,7 @@ namespace UnityMiniGameFramework
             for (int i = 0; i < panels.Count; i++)
             {
                 var ui = panels[i];
-                if (exIndex == -1 && exPanels.Contains(ui.type))
+                if (exIndex == -1 && ui.mutex)
                 {
                     exIndex = i;
                 }
@@ -324,7 +309,7 @@ namespace UnityMiniGameFramework
             {
                 var ui = panels[i];
 
-                if (exIndex == -1 && exPanels.Contains(ui.type))
+                if (exIndex == -1 && ui.mutex)
                 {
                     exIndex = i;
                 }

@@ -27,6 +27,7 @@ namespace MiniGameFramework
 
         public int sortOrder { get; set; }
         public bool needMask { get; set; }
+        public bool mutex { get; set; }
 
         public List<UIControlConf> controls { get; set; }
 
