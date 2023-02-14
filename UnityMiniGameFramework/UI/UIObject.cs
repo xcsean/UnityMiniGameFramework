@@ -93,5 +93,7 @@ namespace UnityMiniGameFramework
         {
             _unityVE.transform.position = new UnityEngine.Vector2(x, y);
         }
+
+        public void display(bool b) { }
     }
 }

@@ -49,9 +49,6 @@ namespace UnityMiniGameFramework
 
         protected Dictionary<string, CMFactory> _cmFactories;
 
-        protected CMMutexPopPanels _cmMutexPopPanels;
-        public CMMutexPopPanels MutexPopPanels => _cmMutexPopPanels;
-
         protected IGameObject _levelCenterObject;
         public IGameObject levelCenterObject => _levelCenterObject;
 
@@ -75,7 +72,6 @@ namespace UnityMiniGameFramework
             _egg = new CMEgg();
             _storeHouse = new CMStoreHouse();
             _trainStation = new CMTrainStation();
-            _cmMutexPopPanels = new CMMutexPopPanels();
             _cmNPCHeros = new Dictionary<string, CMNPCHeros>();
             _cmFactories = new Dictionary<string, CMFactory>();
             _mainSceneHUDs = new Dictionary<string, UIPanel>();

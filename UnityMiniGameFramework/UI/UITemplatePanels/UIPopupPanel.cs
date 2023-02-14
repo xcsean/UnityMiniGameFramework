@@ -55,17 +55,11 @@ namespace UnityMiniGameFramework
         override public void showUI()
         {
             base.showUI();
-
-            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.MutexPopPanels.addUI(this);
         }
 
         override public void hideUI()
         {
             base.hideUI();
-
-            ChickenMasterGame cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
-            cmGame.MutexPopPanels.removeUI(this);
         }
     }
 }

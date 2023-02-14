@@ -105,10 +105,18 @@ namespace MiniGameFramework
                     {
                         showMask(conf);
                     }
+                    if (conf.mutex)
+                    {
+                        addMutexUI(panel);
+                    }
                 };
                 panel.onHideEndHandle = () =>
                 {
                     closeMask(conf);
+                    if (conf.mutex)
+                    {
+                        removeMutexUI(panel);
+                    }
                 };
 
                 if (conf.name == "preloader")
@@ -147,13 +155,13 @@ namespace MiniGameFramework
         /// </summary>
         public IUIPanel createUIPanel(string panelName)
         {
-            if (getUIPanel(panelName) != null)
+            IUIPanel panel = getUIPanel(panelName);
+            if (panel == null)
             {
-                // 显示之前创建界面
-                return getUIPanel(panelName);
+                panel = createNewUIPanel(panelName);
             }
 
-            return createNewUIPanel(panelName);
+            return panel;
         }
 
         public void DisposeUIPanel(IUIPanel p)
@@ -237,6 +245,33 @@ namespace MiniGameFramework
             _maskPanel.showUI();
 
             return _maskPanel;
+        }
+
+        private List<IUIPanel> mutexPanels = new List<IUIPanel>();
+        public void addMutexUI(IUIPanel panel)
+        {
+            foreach (var ui in mutexPanels)
+            {
+                ui.display(false);
+            }
+
+            if (!mutexPanels.Contains(panel))
+            {
+                mutexPanels.Add(panel);
+            }
+        }
+
+        public void removeMutexUI(IUIPanel panel)
+        {
+            if (mutexPanels.Contains(panel))
+            {
+                mutexPanels.Remove(panel);
+            }
+
+            if (mutexPanels.Count > 0)
+            {
+                mutexPanels[mutexPanels.Count - 1].display(true);
+            }
         }
 
     }

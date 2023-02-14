@@ -21,6 +21,7 @@ namespace MiniGameFramework
 
         void showUI();
         void hideUI();
+        void display(bool b);
 
         // TO DO : add interfaces
     }
