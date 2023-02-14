@@ -75,6 +75,7 @@ namespace UnityMiniGameFramework
             sp.enabled = true;
             sp.transform.localPosition = new Vector3(0.32f * _childList.Count, 0, 0);
             sp.sprite = sprite;
+            sp.sortingOrder = 2;
             _childList.Add(sp);
         }
 
