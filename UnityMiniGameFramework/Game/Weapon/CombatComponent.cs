@@ -58,7 +58,7 @@ namespace UnityMiniGameFramework
         {
             if (string.IsNullOrEmpty(iconPath))
                 return;
-            Sprite sprite = UnityGameApp.Inst.UnityResource.LoadSprite(iconPath);
+            Sprite sprite = UnityGameApp.Inst.UnityResource.LoadSpriteByAtlas(iconPath, "icons/BuffIconSpriteAtlas");
             if (!sprite)
                 return;
             SpriteRenderer sp = _cacheStack.Count != 0 ? _cacheStack.Pop() : null;
