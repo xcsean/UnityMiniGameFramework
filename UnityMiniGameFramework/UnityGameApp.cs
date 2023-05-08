@@ -394,11 +394,13 @@ namespace UnityMiniGameFramework
             _conf.regConfigCreator("AnalysisConfig", AnalysisConfig.create);
             _conf.regConfigCreator("AudionConfig", AudionConfig.create);
             _conf.regConfigCreator("BuffConfig", BuffConfig.create);
+            _conf.regConfigCreator("BakeClipConfig", BakeClipConfig.create);
 
             // reg component
             GameObjectManager.registerGameObjectComponentCreator("ActionComponent", ActionComponent.create);
             GameObjectManager.registerGameObjectComponentCreator("AnimatorComponent", AnimatorComponent.create);
             GameObjectManager.registerGameObjectComponentCreator("AIActorControllerComp", AIActorControllerComp.create);
+            GameObjectManager.registerGameObjectComponentCreator("BakeAnimationComponent",BakeAnimationComponent.create);
 
             // reg object
             GameObjectManager.registerGameObjectCreator("MGGameObject", MGGameObject.create);

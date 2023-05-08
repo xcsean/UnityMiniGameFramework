@@ -151,6 +151,7 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UIWeaponAscendPanel.cs" />
     <Compile Include="Configs\AnalysisConfig.cs" />
     <Compile Include="Configs\AudionConfig.cs" />
+    <Compile Include="Configs\BakeClipConfig.cs" />
     <Compile Include="Configs\BuffConfig.cs" />
     <Compile Include="Configs\CharacterConfig.cs" />
     <Compile Include="Configs\MapActorObjectConfigs.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Game\Animation\AnimationManager.cs" />
     <Compile Include="Configs\AnimationConfig.cs" />
     <Compile Include="Game\Animation\AnimatorComponent.cs" />
+    <Compile Include="Game\Animation\BakeAnimationComponent.cs" />
     <Compile Include="Game\Animation\Skelton.cs" />
     <Compile Include="Game\Actors\Avatar.cs" />
     <Compile Include="Game\Actors\AvatarParts.cs" />

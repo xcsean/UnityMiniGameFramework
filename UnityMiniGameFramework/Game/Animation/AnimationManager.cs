@@ -6,19 +6,22 @@ using System.Threading.Tasks;
 
 namespace UnityMiniGameFramework
 {
-
     public class AnimationManager
     {
-
         protected AnimationConfig _aniConf;
         public AnimationConfig AnimationConfs => _aniConf;
 
-        public void Init()
+        private BakeClipConfig _clipConfig;
+
+        public BakeClipConfig ClipConfig
         {
-            _aniConf = (AnimationConfig)UnityGameApp.Inst.Conf.getConfig("animations");
+            get => _clipConfig;
         }
 
-
-
+        public void Init()
+        {
+            _aniConf = (AnimationConfig) UnityGameApp.Inst.Conf.getConfig("animations");
+            _clipConfig = (BakeClipConfig) UnityGameApp.Inst.Conf.getConfig("bakeClips");
+        }
     }
 }

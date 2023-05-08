@@ -41,7 +41,7 @@ namespace UnityMiniGameFramework
             {
                 _isFinished = true;
             }
-            else if (actor.animatorComponent.unityAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99)
+            else if (actor.animatorComponent.getAnimatorStateInfoNormalizedTime() >= 0.99)
             {
                 _isFinished = true;
             }

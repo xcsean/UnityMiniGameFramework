@@ -129,7 +129,8 @@ namespace UnityMiniGameFramework
             //                                                    ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
             //                                                    .currentLevelConf
             //                                                    .fetchPackCount, _inputStorePosition);
-            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore / _factoryLevelConf.fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath,
+                (float) currentProductInputStore / _factoryLevelConf.fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
                 (float) currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             setBuildGray(false);
@@ -282,7 +283,8 @@ namespace UnityMiniGameFramework
             //                                                    ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
             //                                                    .currentLevelConf
             //                                                    .fetchPackCount, _inputStorePosition);
-            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore / factoryLevelConf.fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath,
+                (float) currentProductInputStore / factoryLevelConf.fetchPackCount, _inputStorePosition);
 
             Debug.DebugOutput(DebugTraceType.DTT_Debug,
                 $"仓库到工厂，增加原料数量：{toFill}，原料总数量：{_localFacInfo.buildingInputProduct.count}");
@@ -397,7 +399,8 @@ namespace UnityMiniGameFramework
             //                                                    ((ChickenMasterGame) UnityGameApp.Inst.Game).StoreHouse
             //                                                    .currentLevelConf
             //                                                    .fetchPackCount, _inputStorePosition);
-            _updateProductBox(factoryConf.inputStorePrefabPath, (float) currentProductInputStore / _factoryLevelConf.fetchPackCount, _inputStorePosition);
+            _updateProductBox(factoryConf.inputStorePrefabPath,
+                (float) currentProductInputStore / _factoryLevelConf.fetchPackCount, _inputStorePosition);
             _updateProductBox(factoryConf.outputStorePrefabPath,
                 (float) currentProductOutputStore / _factoryLevelConf.fetchPackCount, _outputStorePosition);
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
@@ -471,8 +474,7 @@ namespace UnityMiniGameFramework
 
             if (currentProductInputStore <= 0)
             {
-                if (_mapBuildingObj.animatorComponent.currBaseAnimation != null &&
-                    _mapBuildingObj.animatorComponent.currBaseAnimation.aniName == ActAnis.BuildWorking)
+                if (_mapBuildingObj.animatorComponent.isCurrBaseAnimation(ActAnis.BuildWorking))
                 {
                     _mapBuildingObj.animatorComponent.stopAnimation(ActAnis.BuildWorking);
 
@@ -486,8 +488,7 @@ namespace UnityMiniGameFramework
             }
 
 
-            if (_mapBuildingObj.animatorComponent.currBaseAnimation == null ||
-                _mapBuildingObj.animatorComponent.currBaseAnimation.aniName != ActAnis.BuildWorking)
+            if (_mapBuildingObj.animatorComponent.isCurrBaseAnimation(ActAnis.BuildWorking))
             {
                 _mapBuildingObj.animatorComponent.playAnimation(ActAnis.BuildWorking);
 

@@ -20,8 +20,8 @@ namespace UnityMiniGameFramework
         protected ActionComponent _actionComponent;
         public ActionComponent actionComponent => _actionComponent;
 
-        protected AnimatorComponent _animatorComponent;
-        public AnimatorComponent animatorComponent => _animatorComponent;
+        protected IAnimation _animatorComponent;
+        public IAnimation animatorComponent => _animatorComponent;
 
         protected ActorControllerComponent _ctrlComponent;
         public ActorControllerComponent controllerComponent => _ctrlComponent;
@@ -60,7 +60,7 @@ namespace UnityMiniGameFramework
 
             if(conf.AnimatorConf != null)
             {
-                _animatorComponent = (AnimatorComponent)GameObjectManager.createGameObjectComponent(conf.AnimatorConf.componentType);
+                _animatorComponent = (IAnimation)GameObjectManager.createGameObjectComponent(conf.AnimatorConf.componentType);
                 this.AddComponent(_animatorComponent);
                 _animatorComponent.Init(conf.AnimatorConf);
             }

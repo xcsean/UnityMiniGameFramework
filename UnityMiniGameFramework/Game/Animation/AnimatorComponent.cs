@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using MiniGameFramework;
 
 namespace UnityMiniGameFramework
@@ -14,9 +13,10 @@ namespace UnityMiniGameFramework
         public string AnimatorName { get; set; }
     }
 
-    public class AnimatorComponent : GameObjectComponent
+    public class AnimatorComponent : GameObjectComponent, IAnimation
     {
         override public string type => "AnimatorComponent";
+
         public static AnimatorComponent create()
         {
             return new AnimatorComponent();
@@ -45,20 +45,15 @@ namespace UnityMiniGameFramework
                 {
                     return _currAnis[""];
                 }
+
                 return null;
             }
         }
 
         public float playSpeed
         {
-            get
-            {
-                return _unityAnimator.speed;
-            }
-            set
-            {
-                _unityAnimator.speed = value;
-            }
+            get { return _unityAnimator.speed; }
+            set { _unityAnimator.speed = value; }
         }
 
         public bool isCurrBaseAnimation(string aniName)
@@ -72,14 +67,15 @@ namespace UnityMiniGameFramework
             {
                 return _currAnis[aniSlotName];
             }
+
             return null;
         }
 
-        public Animation playAnimation(string aniName, float speed = 1.0f)
+        public void playAnimation(string aniName, float speed = 1.0f)
         {
-            if(!_anis.ContainsKey(aniName))
+            if (!_anis.ContainsKey(aniName))
             {
-                return null;
+                return;
             }
 
             Animation ani = _anis[aniName];
@@ -95,8 +91,6 @@ namespace UnityMiniGameFramework
             _unityAnimator.speed = speed;
 
             _currAnis[ani.aniSlotName] = ani;
-
-            return ani;
         }
 
         public void stopAnimation(string aniName)
@@ -111,6 +105,7 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
+
             _currAnis.Remove(ani.aniSlotName);
 
             // stop playing
@@ -124,25 +119,31 @@ namespace UnityMiniGameFramework
 
             AnimatorComponentConfig acConf = config as AnimatorComponentConfig;
 
-            AnimatorConf animatorConf = UnityGameApp.Inst.AniManager.AnimationConfs.getAnimatorConf(acConf.AnimatorName);
-            if(animatorConf == null)
+            AnimatorConf animatorConf =
+                UnityGameApp.Inst.AniManager.AnimationConfs.getAnimatorConf(acConf.AnimatorName);
+            if (animatorConf == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init [{_gameObject.name}] Animator component with animator name [{acConf.AnimatorName}] config not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Init [{_gameObject.name}] Animator component with animator name [{acConf.AnimatorName}] config not exist");
                 return;
             }
 
-            UnityEngine.Transform skelTrans = ((MGGameObject)_gameObject).unityGameObject.transform.Find(animatorConf.SkeltonRootName);
-            if(skelTrans == null)
-            {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init [{_gameObject.name}] Animator component [{acConf.AnimatorName}] skelton [{animatorConf.SkeltonRootName}] not exist");
-                return;
-            }
-            _skel = new Skelton(skelTrans.gameObject);
-
-            _unityAnimator = ((MGGameObject)_gameObject).unityGameObject.GetComponent<UnityEngine.Animator>();
+            UnityEngine.Transform skelTrans =
+                ((MGGameObject) _gameObject).unityGameObject.transform.Find(animatorConf.SkeltonRootName);
             if (skelTrans == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init [{_gameObject.name}] Animator component [{acConf.AnimatorName}] animator not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Init [{_gameObject.name}] Animator component [{acConf.AnimatorName}] skelton [{animatorConf.SkeltonRootName}] not exist");
+                return;
+            }
+
+            _skel = new Skelton(skelTrans.gameObject);
+
+            _unityAnimator = ((MGGameObject) _gameObject).unityGameObject.GetComponent<UnityEngine.Animator>();
+            if (skelTrans == null)
+            {
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Init [{_gameObject.name}] Animator component [{acConf.AnimatorName}] animator not exist");
                 return;
             }
 
@@ -152,11 +153,12 @@ namespace UnityMiniGameFramework
                 clips[clipInfo.name] = clipInfo;
             }
 
-            foreach(var pair in animatorConf.Animations)
+            foreach (var pair in animatorConf.Animations)
             {
-                if(!clips.ContainsKey(pair.Value.aniFile))
+                if (!clips.ContainsKey(pair.Value.aniFile))
                 {
-                    Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init [{_gameObject.name}] Animator component [{acConf.AnimatorName}] aniclip [{pair.Value.aniFile}] not exist");
+                    Debug.DebugOutput(DebugTraceType.DTT_Error,
+                        $"Init [{_gameObject.name}] Animator component [{acConf.AnimatorName}] aniclip [{pair.Value.aniFile}] not exist");
                     continue;
                 }
 
@@ -164,12 +166,12 @@ namespace UnityMiniGameFramework
                 try
                 {
                     slot = _unityAnimator.GetLayerIndex(pair.Value.aniSlot); // TO DO : use slot above in clipInfos;
-                    if(slot < 0)
+                    if (slot < 0)
                     {
                         slot = 0;
                     }
                 }
-                catch(Exception )
+                catch (Exception)
                 {
                     slot = 0;
                 }
@@ -177,9 +179,9 @@ namespace UnityMiniGameFramework
                 var ani = new Animation(pair.Value, clips[pair.Value.aniFile], slot);
                 _anis[ani.aniName] = ani;
 
-                if(pair.Value.evetns != null)
+                if (pair.Value.evetns != null)
                 {
-                    foreach(var evt in pair.Value.evetns)
+                    foreach (var evt in pair.Value.evetns)
                     {
                         ani.aniClip.AddEvent(new UnityEngine.AnimationEvent()
                         {
@@ -190,35 +192,41 @@ namespace UnityMiniGameFramework
                 }
             }
         }
+
         override public void Dispose()
         {
             base.Dispose();
         }
-        
+
+        public float getAnimatorStateInfoNormalizedTime()
+        {
+            return _unityAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        }
+
         override public void OnUpdate(float timeElasped)
         {
             List<string> toRemoveCurrAnis = new List<string>();
-            foreach(var pair in _currAnis)
+            foreach (var pair in _currAnis)
             {
                 var ani = pair.Value;
                 var stateInfo = _unityAnimator.GetCurrentAnimatorStateInfo(ani.slotIndex);
                 if (!stateInfo.loop)
                 {
-                    if(stateInfo.normalizedTime >= 1 && !_unityAnimator.IsInTransition(ani.slotIndex))
+                    if (stateInfo.normalizedTime >= 1 && !_unityAnimator.IsInTransition(ani.slotIndex))
                     {
                         toRemoveCurrAnis.Add(pair.Key);
                     }
                 }
             }
 
-            foreach(var key in toRemoveCurrAnis)
+            foreach (var key in toRemoveCurrAnis)
             {
                 _currAnis.Remove(key);
             }
         }
+
         override public void OnPostUpdate(float timeElasped)
         {
-
         }
     }
 }

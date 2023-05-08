@@ -334,7 +334,7 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    if (_actor.animatorComponent.unityAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
+                    if (_actor.animatorComponent.getAnimatorStateInfoNormalizedTime() >= 0.99f)
                     {
                         _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                         _isPlayedActAni = true;
@@ -409,7 +409,7 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    if (_actor.animatorComponent.unityAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
+                    if (_actor.animatorComponent.getAnimatorStateInfoNormalizedTime() >= 0.99f)
                     {
                         _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                         _isPlayedActAni = true;
@@ -505,7 +505,7 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    if(_actor.animatorComponent.unityAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
+                    if(_actor.animatorComponent.getAnimatorStateInfoNormalizedTime() >= 0.99f)
                     {
                         _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                         _isPlayedActAni = true;
@@ -646,7 +646,7 @@ namespace UnityMiniGameFramework
                 }
                 else
                 {
-                    if (_actor.animatorComponent.unityAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
+                    if (_actor.animatorComponent.getAnimatorStateInfoNormalizedTime() >= 0.99f)
                     {
                         _actor.animatorComponent.playAnimation(ActAnis.IdleAni);
                         _isPlayedActAni = true;
