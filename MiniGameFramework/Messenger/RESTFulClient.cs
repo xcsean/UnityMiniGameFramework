@@ -47,7 +47,7 @@ namespace MiniGameFramework
         {
             Debug.DebugOutput(DebugTraceType.DTT_System, $"start RESTFul Client post act routine");
 
-            while (false)
+            while (true)
             {
                 _actsEvent.WaitOne();
 
