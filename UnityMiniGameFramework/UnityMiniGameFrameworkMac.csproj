@@ -273,7 +273,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>cp $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
-cp $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
+      copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
   </PropertyGroup>
 </Project>
