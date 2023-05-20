@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using MiniGameFramework;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -45,6 +47,10 @@ namespace UnityMiniGameFramework
         public Dictionary<string, UIPanel> mainSceneHUDs => _mainSceneHUDs;
 
         protected Dictionary<string, CMNPCHeros> _cmNPCHeros;
+        private Dictionary<Vector2Int, IMapLogicObject> _mapLogicObjects;
+
+        public Dictionary<Vector2Int, IMapLogicObject> MapLogicObjects => _mapLogicObjects;
+
         public Dictionary<string, CMNPCHeros> cmNPCHeros => _cmNPCHeros;
 
         protected Dictionary<string, CMFactory> _cmFactories;
@@ -75,6 +81,7 @@ namespace UnityMiniGameFramework
             _cmNPCHeros = new Dictionary<string, CMNPCHeros>();
             _cmFactories = new Dictionary<string, CMFactory>();
             _mainSceneHUDs = new Dictionary<string, UIPanel>();
+            _mapLogicObjects = new Dictionary<Vector2Int, IMapLogicObject>();
         }
 
         public async Task InitAsync()

@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using UnityEngine;
 using UnityEngine.UIElements;
 using MiniGameFramework;
+using Debug = UnityEngine.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -16,10 +16,12 @@ namespace UnityMiniGameFramework
     public class UIJoyStickPanel : UIPanel
     {
         override public string type => "UIJoyStickPanel";
+
         public static UIJoyStickPanel create()
         {
             return new UIJoyStickPanel();
         }
+
         // 摇杆相关
         protected float _panelWidth;
         protected Vector2 _panelInitPos;
@@ -81,7 +83,6 @@ namespace UnityMiniGameFramework
             //_clickArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             //_clickArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
             //_clickArea.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
-
         }
 
         protected Vector2 _transMousePosition(VisualElement ve, Vector2 mousePos)
@@ -151,12 +152,14 @@ namespace UnityMiniGameFramework
         }
 
         protected Vector2 posDelta = Vector2.zero;
+
         public void OnMouseMove(PointerMoveEvent e)
         {
             if (!this._click)
             {
                 return;
             }
+
             this._moving = true;
 
             // posDelta = e.mouseDelta;
@@ -197,6 +200,7 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
+
             _content.transform.position = _panelInitPos;
             _btn.transform.position = _btnInitPos;
 
@@ -283,15 +287,18 @@ namespace UnityMiniGameFramework
                     _currentPickNPCHero.isPicked = true;
                     _currentPickNPCHero.mapHero.actionComponent.addState(ActStates.STATE_KEY_NO_ATK);
 
-                    _currentPickHeroInitPos = _currentPickNPCHero.mapHero.unityGameObject.transform.position;
-                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = new Vector3(
-                        _currentPickNPCHero.mapHero.unityGameObject.transform.position.x,
-                        _currentPickNPCHero.mapHero.unityGameObject.transform.position.y + 0.5f,
-                        _currentPickNPCHero.mapHero.unityGameObject.transform.position.z
+                    var position = _currentPickNPCHero.mapHero.unityGameObject.transform.position;
+                    _currentPickHeroInitPos = position;
+                    position = new Vector3(
+                        position.x,
+                        position.y + 0.5f,
+                        position.z
                     );
+                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = position;
 
                     _atkRangeCircleVFX.unityGameObject.SetActive(true);
-                    _atkRangeCircleVFX.unityGameObject.transform.SetParent(_currentPickNPCHero.mapHero.unityGameObject.transform);
+                    _atkRangeCircleVFX.unityGameObject.transform.SetParent(_currentPickNPCHero.mapHero.unityGameObject
+                        .transform);
                     _atkRangeCircleVFX.unityGameObject.transform.localPosition = new Vector3(0, 0.5f, 0);
 
                     _atkRangeCircleVFX.SetCircleRange(_currentPickNPCHero.gun.attackRange);
@@ -314,6 +321,7 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
+            
 
             _atkRangeCircleVFX.unityGameObject.SetActive(false);
             _atkRangeCircleVFX.unityGameObject.transform.SetParent(null);
@@ -321,52 +329,92 @@ namespace UnityMiniGameFramework
             _currentPickNPCHero.isPicked = false;
             _currentPickNPCHero.mapHero.actionComponent.subState(ActStates.STATE_KEY_NO_ATK);
 
-            if (_currentPickAreaName == null)
-            {
-                // no pick area, put back
-
-                _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
-
-                _currentPickNPCHero = null;
-                return;
-            }
+            // if (_currentPickAreaName == null)
+            // {
+            //     // no pick area, put back
+            //
+            //     _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
+            //
+            //     _currentPickNPCHero = null;
+            //     return;
+            // }
 
             // put hero
-            if (_defAreaHeros.ContainsKey(_currentPickAreaName))
+            // if (_defAreaHeros.ContainsKey(_currentPickAreaName))
+            // {
+            //     var toSwapHero = _defAreaHeros[_currentPickAreaName];
+            //     if (toSwapHero == _currentPickNPCHero)
+            //     {
+            //         // same def area, just put
+            //
+            //         _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickPosition;
+            //         _currentPickNPCHero.heroInfo.position.x = _currentPickPosition.x;
+            //         _currentPickNPCHero.heroInfo.position.y = _currentPickPosition.y;
+            //         _currentPickNPCHero.heroInfo.position.z = _currentPickPosition.z;
+            //     }
+            //     else
+            //     {
+            //         // swap
+            //         toSwapHero.heroInfo.defAreaName = _currentPickNPCHero.heroInfo.defAreaName;
+            //         _defAreaHeros[toSwapHero.heroInfo.defAreaName] = toSwapHero;
+            //
+            //         toSwapHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
+            //         toSwapHero.heroInfo.position.x = _currentPickHeroInitPos.x;
+            //         toSwapHero.heroInfo.position.y = _currentPickHeroInitPos.y;
+            //         toSwapHero.heroInfo.position.z = _currentPickHeroInitPos.z;
+            //
+            //         _currentPickNPCHero.heroInfo.defAreaName = _currentPickAreaName;
+            //         _defAreaHeros[_currentPickNPCHero.heroInfo.defAreaName] = _currentPickNPCHero;
+            //         _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickPosition;
+            //         _currentPickNPCHero.heroInfo.position.x = _currentPickPosition.x;
+            //         _currentPickNPCHero.heroInfo.position.y = _currentPickPosition.y;
+            //         _currentPickNPCHero.heroInfo.position.z = _currentPickPosition.z;
+            //     }
+            // }
+            // 
+            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            if (UnityGameApp.Inst.MainScene.implMap.isInActiveRect(_currentPickNPCHero.mapHero.unityGameObject
+                .transform
+                .position))
             {
-                var toSwapHero = _defAreaHeros[_currentPickAreaName];
-                if (toSwapHero == _currentPickNPCHero)
+                // pick ground position
+                UnityEngine.RaycastHit[] hitInfos = UnityEngine.Physics.RaycastAll(
+                    UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
+                    1000.0f,
+                    UnityEngine.LayerMask.GetMask("Map"));
+
+                if (hitInfos.Length > 0)
                 {
-                    // same def area, just put
+                    Vector3 updatePos = new Vector3(
+                        hitInfos[0].point.x,
+                        _currentPickHeroInitPos.y,
+                        hitInfos[0].point.z
+                    );
+                    //_currentPickNPCHero.UpdateUnityGoPos();
+                    if (_currentPickNPCHero.TryUpdateUnityGoPos(updatePos))
+                    {
+                        _currentPickNPCHero.UpdateUnityGoPos(updatePos);
+                    }
+                    else
+                    {
+                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "需要保留一条通路!");
+                        // 无法放下
+                        //_currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
+                        _currentPickNPCHero.UpdateUnityGoPos(_currentPickHeroInitPos);
+                        _currentPickNPCHero = null;
 
-                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickPosition;
-                    _currentPickNPCHero.heroInfo.position.x = _currentPickPosition.x;
-                    _currentPickNPCHero.heroInfo.position.y = _currentPickPosition.y;
-                    _currentPickNPCHero.heroInfo.position.z = _currentPickPosition.z;
+                        return;        
+                    }
                 }
-                else
-                {
-                    // swap
-                    toSwapHero.heroInfo.defAreaName = _currentPickNPCHero.heroInfo.defAreaName;
-                    _defAreaHeros[toSwapHero.heroInfo.defAreaName] = toSwapHero;
 
-                    toSwapHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
-                    toSwapHero.heroInfo.position.x = _currentPickHeroInitPos.x;
-                    toSwapHero.heroInfo.position.y = _currentPickHeroInitPos.y;
-                    toSwapHero.heroInfo.position.z = _currentPickHeroInitPos.z;
-
-                    _currentPickNPCHero.heroInfo.defAreaName = _currentPickAreaName;
-                    _defAreaHeros[_currentPickNPCHero.heroInfo.defAreaName] = _currentPickNPCHero;
-                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickPosition;
-                    _currentPickNPCHero.heroInfo.position.x = _currentPickPosition.x;
-                    _currentPickNPCHero.heroInfo.position.y = _currentPickPosition.y;
-                    _currentPickNPCHero.heroInfo.position.z = _currentPickPosition.z;
-                }
+                var pos = _currentPickNPCHero.mapHero.unityGameObject.transform.position;
+                _currentPickNPCHero.heroInfo.position.Set(pos.x, pos.y, pos.z);
             }
             else
             {
                 // 未解锁英雄区域不能摆放
-                _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
+                //_currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
+                _currentPickNPCHero.UpdateUnityGoPos(_currentPickHeroInitPos);
                 _currentPickNPCHero = null;
 
                 return;
@@ -374,7 +422,7 @@ namespace UnityMiniGameFramework
 
             _currentPickNPCHero = null;
 
-            var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
+            
             cmGame.baseInfo.markDirty();
         }
 
@@ -403,7 +451,6 @@ namespace UnityMiniGameFramework
                     area.Value.HideArea();
                 }
             }
-
         }
 
         protected void OnUpdate()
@@ -415,6 +462,9 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
+
+            //Debug.Log("OnUpdate" + $"{_currentPickNPCHero.mapHero.unityGameObject.transform.position}");
+
 
             if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -453,33 +503,31 @@ namespace UnityMiniGameFramework
                 break;
             }
 
-            if (_currentPickAreaName == null || !_defAreaHeros.ContainsKey(_currentPickAreaName))
+
+            //if (_currentPickAreaName == null || !_defAreaHeros.ContainsKey(_currentPickAreaName))
+            if (!UnityGameApp.Inst.MainScene.implMap.isInActiveRect(_currentPickNPCHero.mapHero.unityGameObject
+                .transform
+                .position))
             {
                 _atkRangeCircleVFX.ShowAttackRange(false); // can't put
-
-                // pick ground position
-                hitInfos = UnityEngine.Physics.RaycastAll(
-                    UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
-                    1000.0f,
-                    UnityEngine.LayerMask.GetMask("Map"));
-
-                if (hitInfos.Length > 0)
-                {
-                    _currentPickNPCHero.mapHero.unityGameObject.transform.position = new Vector3(
-                       hitInfos[0].point.x,
-                       hitInfos[0].point.y + 0.5f,
-                       hitInfos[0].point.z
-                   );
-                }
             }
             else
             {
                 _atkRangeCircleVFX.ShowAttackRange(true); // can put
+            }
 
+            // pick ground position
+            hitInfos = UnityEngine.Physics.RaycastAll(
+                UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
+                1000.0f,
+                UnityEngine.LayerMask.GetMask("Map"));
+
+            if (hitInfos.Length > 0)
+            {
                 _currentPickNPCHero.mapHero.unityGameObject.transform.position = new Vector3(
-                    _currentPickPosition.x,
-                    _currentPickPosition.y + 0.5f,
-                    _currentPickPosition.z
+                    hitInfos[0].point.x,
+                    hitInfos[0].point.y + 0.5f,
+                    hitInfos[0].point.z
                 );
             }
         }
@@ -495,6 +543,5 @@ namespace UnityMiniGameFramework
         {
             base.hideUI();
         }
-
     }
 }

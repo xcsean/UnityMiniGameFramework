@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
@@ -40,6 +42,10 @@ namespace UnityMiniGameFramework
         protected Dictionary<string, List<UnityEngine.Vector3>> _paths;
 
         protected HashSet<MapActorObject> _mapActors;
+
+        protected Rect _activeRect;
+
+        public Rect ActiveRect => _activeRect;
 
         public Map()
         {
@@ -118,6 +124,13 @@ namespace UnityMiniGameFramework
                 }
                 _monsterSpawns[pair.Key] = ms;
             }
+
+            float _x = _conf.activeArea[0][0];
+            float _y = _conf.activeArea[0][1];
+            float _width = Math.Abs(_conf.activeArea[3][0] - _x);
+            float _height = Math.Abs(_conf.activeArea[3][1] - _y);
+
+            _activeRect = new Rect(_x, _y, _width, _height);
 
             // init paths
             if(_conf.paths != null)
@@ -436,6 +449,12 @@ namespace UnityMiniGameFramework
             }
 
             return _mapLevel;
+        }
+
+        public bool isInActiveRect(Vector3 pos)
+        {
+
+            return _activeRect.Contains(new Vector2(pos.x, pos.z));
         }
     }
 

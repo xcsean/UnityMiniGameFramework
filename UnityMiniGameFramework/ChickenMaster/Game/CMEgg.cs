@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
-    public class CMEgg
+    public class CMEgg: IMapLogicObject
     {
         protected CMEggConf _conf;
         protected LocalEggInfo _eggInfo;
@@ -22,6 +24,7 @@ namespace UnityMiniGameFramework
         protected long _incHpTime;
 
         protected bool _isInited;
+        protected ChickenMasterGame _cmGame;
 
         public CMEgg()
         {
@@ -30,9 +33,9 @@ namespace UnityMiniGameFramework
 
         public void Init(LocalEggInfo eggInfo)
         {
-            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            _cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             _eggInfo = eggInfo;
-            _conf = cmGame.gameConf.gameConfs.eggConf;
+            _conf = _cmGame.gameConf.gameConfs.eggConf;
 
             _incHpTime = _eggInfo.lastIncHpTime + _conf.hpIncTime;
 
@@ -69,6 +72,7 @@ namespace UnityMiniGameFramework
             // init egg UI
             _eggUI = UnityGameApp.Inst.UI.createUIPanel("EggUI") as UIEggPanel;
             _eggUI.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            UpdateUnityGoPos(tr.position);
         }
 
         protected void _updateHpBar()
@@ -216,6 +220,14 @@ namespace UnityMiniGameFramework
             // recovery
             long nowTickMilliseconds = DateTime.Now.Ticks / 10000;
             _eggInfo.nextRecoverTime = nowTickMilliseconds;
+        }
+
+        public Vector2Int LogicPos { get; set; }
+        public void UpdateUnityGoPos(Vector3 pos)
+        {
+            _cmGame.MapLogicObjects.Remove(LogicPos);
+            LogicPos = AstarUtility.GetLogicPos(pos);
+            _cmGame.MapLogicObjects[LogicPos] = this;
         }
     }
 }

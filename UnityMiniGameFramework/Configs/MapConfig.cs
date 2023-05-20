@@ -45,6 +45,8 @@ namespace UnityMiniGameFramework
         public List<string> randomBornObjectList { get; set; }
         public Dictionary<string, string> namedBornObjects { get; set; }
 
+        public List<List<int>> activeArea { get; set; }
+
         public List<MapZoneConf> zones { get; set; }
 
         public List<string> npcs { get; set; }

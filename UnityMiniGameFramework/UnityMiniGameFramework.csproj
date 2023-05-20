@@ -224,9 +224,14 @@
     <Compile Include="Game\Map\MapMonsterObject.cs" />
     <Compile Include="Game\Map\MapRoleObject.cs" />
     <Compile Include="Game\Map\MapVehicleObject.cs" />
+    <Compile Include="Game\Pathfinding\AStarPathFinding.cs" />
+    <Compile Include="Game\Pathfinding\BinaryHeap.cs" />
+    <Compile Include="Game\Pathfinding\PointManager.cs" />
+    <Compile Include="Game\Pathfinding\Utility\AstarUtility.cs" />
     <Compile Include="Game\Scene\Scene.cs" />
     <Compile Include="Game\Scene\UnitySceneManager.cs" />
     <Compile Include="ChickenMaster\Game\SelfControl.cs" />
+    <Compile Include="Game\TotalManager.cs" />
     <Compile Include="Game\UnityGameObject.cs" />
     <Compile Include="Game\Video\VideoComponent.cs" />
     <Compile Include="Game\Video\VideoManager.cs" />
@@ -236,7 +241,13 @@
     <Compile Include="Game\Weapon\WeaponManager.cs" />
     <Compile Include="Game\Weapon\WeaponObject.cs" />
     <Compile Include="Interface\Game\IHeightMap.cs" />
+    <Compile Include="Interface\Game\IMapLogicObject.cs" />
+    <Compile Include="Network\ByteBuffer.cs" />
+    <Compile Include="Network\ClientSocket.cs" />
+    <Compile Include="Network\NetManager.cs" />
     <Compile Include="Network\NetworkDatas\UserDatas.cs" />
+    <Compile Include="Network\ProtoBytes.cs" />
+    <Compile Include="Network\ProtoMsg.cs" />
     <Compile Include="Network\RESTFulAPIStructs.cs" />
     <Compile Include="Network\UnityNetworkClient.cs" />
     <Compile Include="Network\UnityRESTFulClient.cs" />
@@ -260,6 +271,7 @@
     <Compile Include="UI\UIWidget\UIImageNumText.cs" />
     <Compile Include="UI\UIWidget\UIImageText.cs" />
     <Compile Include="UnityGameApp.cs" />
+    <Compile Include="Utility\MyPool.cs" />
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="Utility\TransformHelper.cs" />
   </ItemGroup>
@@ -281,7 +293,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
-copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\AsProject\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
+copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\AsProject\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
   </PropertyGroup>
 </Project>

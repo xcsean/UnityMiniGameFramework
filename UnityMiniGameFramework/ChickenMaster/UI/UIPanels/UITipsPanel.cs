@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UIElements;
-
 using UnityEngine;
 using MiniGameFramework;
 
@@ -13,10 +12,12 @@ namespace UnityMiniGameFramework
     public class UITipsPanel : UIPanel
     {
         override public string type => "UITipsPanel";
+
         public static UITipsPanel create()
         {
             return new UITipsPanel();
         }
+
         protected class NotifyMessage
         {
             public CMGNotifyType t;
@@ -36,7 +37,7 @@ namespace UnityMiniGameFramework
             base.Init(conf);
 
             _NotifyBg = this._uiObjects["NotifyBg"].unityVisualElement;
-            vts_tips = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadUXML("UI/Controls/Tips");
+            vts_tips = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadUXML("UI/Controls/Tips");
             _notifyMessages = new List<NotifyMessage>();
         }
 
@@ -67,17 +68,22 @@ namespace UnityMiniGameFramework
                 tipsObj = tipObjs[0];
                 tipObjs.RemoveAt(0);
             }
+
             tipsObj.transform.position = new Vector3(0, 0);
             tipsObj.style.display = DisplayStyle.Flex;
-            tipsObj.Q<Label>("tipLabel").text = $"{tip}";
+            byte[] utf8Bytes = System.Text.Encoding.UTF8.GetBytes(tip);
+            string utf8String = Encoding.UTF8.GetString(utf8Bytes);
+            tipsObj.Q<Label>("tipLabel").text = $"{utf8String}";
             return tipsObj;
         }
+
         public void NofityMessage(CMGNotifyType t, string msg)
         {
             if (vts_tips == null)
             {
                 return;
             }
+
             var notify = new NotifyMessage()
             {
                 t = t,
@@ -95,6 +101,7 @@ namespace UnityMiniGameFramework
                 _notifyMessages.RemoveAt(0);
             }
         }
+
         public void OnUpdate()
         {
             if (_notifyMessages == null)

@@ -17,6 +17,13 @@ namespace MiniGameFramework
         public float x { get; set; }
         public float y { get; set; }
         public float z { get; set; }
+
+        public void Set(float newX, float newY, float newZ)
+        {
+            x = newX;
+            y = newY;
+            z = newZ;
+        }
     }
     public class JsonConfVector4
     {

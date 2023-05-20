@@ -4,14 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Debug = MiniGameFramework.Debug;
 
 namespace UnityMiniGameFramework
 {
-    public class CMNPCHeros : CMHeros
+    public class CMNPCHeros : CMHeros, IMapLogicObject
     {
         protected CMHeroConf _conf;
         public CMHeroConf conf => _conf;
+
         protected AIGunFireTarget _fireTargetAI;
+
         // 选中拖动
         public bool isPicked;
 
@@ -19,20 +23,22 @@ namespace UnityMiniGameFramework
         {
             _cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             _conf = _cmGame.gameConf.getCMHeroConf(heroInfo.mapHeroName);
-            if(_conf == null)
+            if (_conf == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMNPCHeros init with [{heroInfo.mapHeroName}] config not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"CMNPCHeros init with [{heroInfo.mapHeroName}] config not exist");
                 return;
             }
 
             _Init(heroInfo);
 
-            if(heroInfo.defAreaName == null)
+            if (heroInfo.defAreaName == null)
             {
                 heroInfo.defAreaName = _conf.initDefAreaName;
             }
 
             _mapHeroObj.OnMapLevelFinish += _mapHeroObj_OnMapLevelFinish;
+            UpdateUnityGoPos(new Vector3(heroInfo.position.x, heroInfo.position.y, heroInfo.position.z));
         }
 
         private void _mapHeroObj_OnMapLevelFinish()
@@ -43,10 +49,11 @@ namespace UnityMiniGameFramework
         public int getUpgradeGoldCost()
         {
             CMHeroLevelConf conf;
-            if(_conf.levelConf.TryGetValue(_heroInfo.level, out conf))
+            if (_conf.levelConf.TryGetValue(_heroInfo.level, out conf))
             {
                 return conf.upgradeGoldCost;
             }
+
             return 0;
         }
 
@@ -61,7 +68,7 @@ namespace UnityMiniGameFramework
             //}
 
             int upgradeGold = getUpgradeGoldCost();
-            if(upgradeGold <= 0)
+            if (upgradeGold <= 0)
             {
                 // no more level
                 return false;
@@ -72,7 +79,8 @@ namespace UnityMiniGameFramework
                 // add level
                 _heroInfo.level = _heroInfo.level + 1;
 
-                UnityGameApp.Inst.RESTFulClient.Report(UnityGameApp.Inst.AnalysisMgr.GetPointData6($"英雄[{_heroInfo.mapHeroName}]等级{_heroInfo.level}"));
+                UnityGameApp.Inst.RESTFulClient.Report(
+                    UnityGameApp.Inst.AnalysisMgr.GetPointData6($"英雄[{_heroInfo.mapHeroName}]等级{_heroInfo.level}"));
 
                 // upgrade 
                 //_recalcAttack();
@@ -84,7 +92,8 @@ namespace UnityMiniGameFramework
 
                 if (cmGame.mainSceneHUDs.ContainsKey(_heroInfo.mapHeroName))
                 {
-                    (cmGame.mainSceneHUDs[_heroInfo.mapHeroName] as UITowerHeroLockHudPanel).setNameInfo(_heroInfo.mapHeroName, _heroInfo.level);
+                    (cmGame.mainSceneHUDs[_heroInfo.mapHeroName] as UITowerHeroLockHudPanel).setNameInfo(
+                        _heroInfo.mapHeroName, _heroInfo.level);
                 }
 
                 cmGame.baseInfo.markDirty();
@@ -107,7 +116,7 @@ namespace UnityMiniGameFramework
             _conf.levelConf.TryGetValue(_heroInfo.level, out conf);
             return conf;
         }
-        
+
         public CMHeroLevelConf getNextHeroLevelConf()
         {
             CMHeroLevelConf conf;
@@ -135,7 +144,8 @@ namespace UnityMiniGameFramework
             }
             else
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"CMNPCHeros init with [{heroInfo.mapHeroName}] level [{_heroInfo.level}] config not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"CMNPCHeros init with [{heroInfo.mapHeroName}] level [{_heroInfo.level}] config not exist");
             }
         }
 
@@ -174,17 +184,20 @@ namespace UnityMiniGameFramework
                 {
                     unityHeroObj.transform.position = npc.unityGameObject.transform.position;
                 }
+
+                var position = unityHeroObj.transform.position;
                 heroInfo.position = new JsonConfVector3()
                 {
-                    x = unityHeroObj.transform.position.x,
-                    y = unityHeroObj.transform.position.y,
-                    z = unityHeroObj.transform.position.z,
+                    x = position.x,
+                    y = position.y,
+                    z = position.z,
                 };
             }
             else
             {
                 // restore position
-                unityHeroObj.transform.position = new UnityEngine.Vector3(heroInfo.position.x, unityHeroObj.transform.position.y, heroInfo.position.z);
+                unityHeroObj.transform.position = new UnityEngine.Vector3(heroInfo.position.x,
+                    unityHeroObj.transform.position.y, heroInfo.position.z);
             }
         }
 
@@ -204,9 +217,10 @@ namespace UnityMiniGameFramework
         public void ChangeWeapon(int weaponId)
         {
             var gunInfo = _cmGame.GetWeaponInfo(weaponId);
-            if(gunInfo == null)
+            if (gunInfo == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Npc hero [{this._heroInfo.mapHeroName}] change weapon id[{weaponId}] not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Npc hero [{this._heroInfo.mapHeroName}] change weapon id[{weaponId}] not exist");
                 return;
             }
 
@@ -225,7 +239,8 @@ namespace UnityMiniGameFramework
                 // try active
                 if (itemInfo.count >= cmGunConf.activateItemCost)
                 {
-                    if (cmGunConf.activateItemCost == _cmGame.Self.SubBackpackItem(cmGunConf.upgradeItemName, cmGunConf.activateItemCost))
+                    if (cmGunConf.activateItemCost ==
+                        _cmGame.Self.SubBackpackItem(cmGunConf.upgradeItemName, cmGunConf.activateItemCost))
                     {
                         // sub success
 
@@ -256,8 +271,8 @@ namespace UnityMiniGameFramework
             var gunInfo = _cmGame.GetWeaponInfo(weaponId);
             var cmGunConf = _cmGame.gameConf.getCMGunConf(weaponId);
             var gunLevelConf = cmGunConf.gunLevelConf[gunInfo.level];
-            
-            if(!cmGunConf.gunLevelConf.ContainsKey(gunInfo.level+1))
+
+            if (!cmGunConf.gunLevelConf.ContainsKey(gunInfo.level + 1))
             {
                 // max level
 
@@ -273,14 +288,15 @@ namespace UnityMiniGameFramework
                 // try upgrade
                 if (itemInfo.count >= gunLevelConf.upgrageCostItemCost)
                 {
-                    if (gunLevelConf.upgrageCostItemCost == _cmGame.Self.SubBackpackItem(cmGunConf.upgradeItemName, gunLevelConf.upgrageCostItemCost))
+                    if (gunLevelConf.upgrageCostItemCost ==
+                        _cmGame.Self.SubBackpackItem(cmGunConf.upgradeItemName, gunLevelConf.upgrageCostItemCost))
                     {
                         // sub success
 
                         // upgrade
                         gunInfo.level++;
 
-                        if(weaponId == _heroInfo.holdWeaponId)
+                        if (weaponId == _heroInfo.holdWeaponId)
                         {
                             //_recalcAttack();
                             // 重新计算攻击力
@@ -323,32 +339,51 @@ namespace UnityMiniGameFramework
             {
                 gunInfo = _cmGame.AddNewWeaponInfo(weaponId);
             }
+
             var cmGunConf = _cmGame.gameConf.getCMGunConf(weaponId);
-            
+
             int setLv = level;
             while (level >= 0 && !cmGunConf.gunLevelConf.ContainsKey(setLv))
             {
                 setLv--;
             }
+
             if (setLv <= 0)
             {
                 return;
             }
+
             if (gunInfo.level == setLv)
             {
                 return;
             }
+
             gunInfo.level = setLv;
 
             if (weaponId == heroInfo.holdWeaponId)
             {
                 //_recalcAttack();
                 // 重新计算攻击力
-                if (combatComp != null)
-                {
-                    combatComp.RecalcAttributes();
-                }
+                combatComp?.RecalcAttributes();
             }
+        }
+
+        public Vector2Int LogicPos { get; set; }
+
+        public void UpdateUnityGoPos(Vector3 pos)
+        {
+            mapHero.unityGameObject.transform.position = pos;
+            _cmGame.MapLogicObjects.Remove(LogicPos);
+            LogicPos = AstarUtility.GetLogicPos(pos);
+            _cmGame.MapLogicObjects[LogicPos] = this;
+        }
+
+        public bool TryUpdateUnityGoPos(Vector3 pos)
+        {
+            _cmGame.MapLogicObjects.Remove(LogicPos);
+            LogicPos = AstarUtility.GetLogicPos(pos);
+            _cmGame.MapLogicObjects[LogicPos] = this;
+            return AstarUtility.isNodeAtEdge(_cmGame.Egg.LogicPos);
         }
     }
 }
