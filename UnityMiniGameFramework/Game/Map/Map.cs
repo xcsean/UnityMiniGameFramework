@@ -68,6 +68,7 @@ namespace UnityMiniGameFramework
             {
                 return null;
             }
+
             return UnityGameApp.Inst.MapManager.MapConf.getMapConf(confname);
         }
 
@@ -78,29 +79,34 @@ namespace UnityMiniGameFramework
             _conf = _getMapConf(confname);
             if (_conf == null)
             {
-                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({confname}) not exist.");
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Init map config({confname}) not exist.");
                 return;
             }
+
             _name = _conf.name;
 
             // init born pos
-            foreach(var b in _conf.randomBornObjectList)
+            foreach (var b in _conf.randomBornObjectList)
             {
                 SpawnPos sp = getSpawnPosByObjectName(b);
-                if(sp == null)
+                if (sp == null)
                 {
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({confname}) spawn pos ({b}) not exist.");
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                        $"Init map config({confname}) spawn pos ({b}) not exist.");
                     continue;
                 }
 
                 _randBornPos.Add(sp);
             }
-            foreach(var pair in _conf.namedBornObjects)
+
+            foreach (var pair in _conf.namedBornObjects)
             {
                 SpawnPos sp = getSpawnPosByObjectName(pair.Value);
-                if(sp == null)
+                if (sp == null)
                 {
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({confname}) spawn pos ({pair.Value}) not exist.");
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                        $"Init map config({confname}) spawn pos ({pair.Value}) not exist.");
                     continue;
                 }
 
@@ -108,20 +114,22 @@ namespace UnityMiniGameFramework
             }
 
             // init monster spawn
-            foreach(var pair in _conf.monsterSpawns)
+            foreach (var pair in _conf.monsterSpawns)
             {
                 SpawnPos sp = getSpawnPosByObjectName(pair.Value.spawnObjectName);
                 if (sp == null)
                 {
-                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({confname}) spawn pos ({pair.Value.spawnObjectName}) not exist.");
+                    MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                        $"Init map config({confname}) spawn pos ({pair.Value.spawnObjectName}) not exist.");
                     continue;
                 }
 
                 MapMonsterSpawn ms = new MapMonsterSpawn(this, sp);
-                if(!ms.Init(pair.Value))
+                if (!ms.Init(pair.Value,pair.Key))
                 {
                     continue;
                 }
+
                 _monsterSpawns[pair.Key] = ms;
             }
 
@@ -133,32 +141,32 @@ namespace UnityMiniGameFramework
             _activeRect = new Rect(_x, _y, _width, _height);
 
             // init paths
-            if(_conf.paths != null)
-            {
-                foreach(var pathPair in _conf.paths)
-                {
-                    var tr = this._unityGameObject.transform.Find(pathPair.Value.pathNode);
-                    if (tr == null)
-                    {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) path ({pathPair.Value.pathNode}) not exist.");
-                        continue;
-                    }
-
-                    var pathList = new List<UnityEngine.Vector3>();
-                    for(int i=1; i<= pathPair.Value.pathNodeCount; ++i)
-                    {
-                        var trn = tr.Find((i).ToString());
-                        if (trn == null)
-                        {
-                            MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) path node({i}) not exist.");
-                            continue;
-                        }
-
-                        pathList.Add(trn.position);
-                    }
-                    _paths[pathPair.Key] = pathList;
-                }
-            }
+            // if(_conf.paths != null)
+            // {
+            //     foreach(var pathPair in _conf.paths)
+            //     {
+            //         var tr = this._unityGameObject.transform.Find(pathPair.Value.pathNode);
+            //         if (tr == null)
+            //         {
+            //             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) path ({pathPair.Value.pathNode}) not exist.");
+            //             continue;
+            //         }
+            //     
+            //         var pathList = new List<UnityEngine.Vector3>();
+            //         for(int i=1; i<= pathPair.Value.pathNodeCount; ++i)
+            //         {
+            //             var trn = tr.Find((i).ToString());
+            //             if (trn == null)
+            //             {
+            //                 MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) path node({i}) not exist.");
+            //                 continue;
+            //             }
+            //     
+            //             pathList.Add(trn.position);
+            //         }
+            //         _paths[pathPair.Key] = pathList;
+            //     }
+            // }
         }
 
         public override void PostInit()
@@ -173,21 +181,24 @@ namespace UnityMiniGameFramework
                     var tr = this._unityGameObject.transform.Find(npcObjName);
                     if (tr == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) npc ({npcObjName}) not exist.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) npc ({npcObjName}) not exist.");
                         continue;
                     }
 
                     var ugo = tr.gameObject.GetComponent<UnityGameObjectBehaviour>();
                     if (ugo == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) npc ({npcObjName}) no UnityGameObjectBehaviour.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) npc ({npcObjName}) no UnityGameObjectBehaviour.");
                         continue;
                     }
 
                     var npcObj = ugo.mgGameObject as MapNPCObject;
                     if (npcObj == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) npc ({npcObjName}) not MapNPCObject.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) npc ({npcObjName}) not MapNPCObject.");
                         continue;
                     }
 
@@ -196,28 +207,31 @@ namespace UnityMiniGameFramework
             }
 
             // init buildings
-            if(_conf.buildings != null)
+            if (_conf.buildings != null)
             {
                 foreach (var buildObjName in _conf.buildings)
                 {
                     var tr = this._unityGameObject.transform.Find(buildObjName);
                     if (tr == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) building ({buildObjName}) not exist.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) building ({buildObjName}) not exist.");
                         continue;
                     }
 
                     var ugo = tr.gameObject.GetComponent<UnityGameObjectBehaviour>();
                     if (ugo == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) building ({buildObjName}) no UnityGameObjectBehaviour.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) building ({buildObjName}) no UnityGameObjectBehaviour.");
                         continue;
                     }
 
                     var buildingObj = ugo.mgGameObject as MapBuildingObject;
                     if (buildingObj == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) building ({buildObjName}) not MapBuildingObject.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) building ({buildObjName}) not MapBuildingObject.");
                         continue;
                     }
 
@@ -226,30 +240,34 @@ namespace UnityMiniGameFramework
             }
 
             // init defAreas
-            if(_conf.defAreas != null)
+            if (_conf.defAreas != null)
             {
                 foreach (var areaObjName in _conf.defAreas)
                 {
                     var tr = this._unityGameObject.transform.Find(areaObjName);
                     if (tr == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) defArea ({areaObjName}) not exist.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) defArea ({areaObjName}) not exist.");
                         continue;
                     }
 
                     var ugo = tr.gameObject.GetComponent<UnityGameObjectBehaviour>();
                     if (ugo == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) defArea ({areaObjName}) no UnityGameObjectBehaviour.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) defArea ({areaObjName}) no UnityGameObjectBehaviour.");
                         continue;
                     }
 
                     var defareaObj = ugo.mgGameObject as MapDefAreaObject;
                     if (defareaObj == null)
                     {
-                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"Init map config({_conf.name}) defArea ({areaObjName}) not MapBuildingObject.");
+                        MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                            $"Init map config({_conf.name}) defArea ({areaObjName}) not MapBuildingObject.");
                         continue;
                     }
+
                     this._defAreas[defareaObj.unityGameObject.name] = defareaObj;
                 }
             }
@@ -279,16 +297,18 @@ namespace UnityMiniGameFramework
         public SpawnPos getSpawnPosByObjectName(string objName)
         {
             UnityEngine.Transform tr = _unityGameObject.transform.Find(objName);
-            if(tr == null)
+            if (tr == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] _getSpawnPosByObjectName [{objName}] not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Map [{_name}] _getSpawnPosByObjectName [{objName}] not exist");
                 return null;
             }
 
             UnityEngine.BoxCollider bc = tr.gameObject.GetComponent<UnityEngine.BoxCollider>();
             if (bc == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] _getSpawnPosByObjectName [{objName}] box collider not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Map [{_name}] _getSpawnPosByObjectName [{objName}] box collider not exist");
                 return null;
             }
 
@@ -302,7 +322,7 @@ namespace UnityMiniGameFramework
 
         public UnityEngine.Vector3 getRandomBornPos()
         {
-            if(_randBornPos.Count <= 0)
+            if (_randBornPos.Count <= 0)
             {
                 Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] random pos count <= 0");
                 return new UnityEngine.Vector3(0, 0, 0);
@@ -334,31 +354,64 @@ namespace UnityMiniGameFramework
 
         public List<UnityEngine.Vector3> getPath(string pathName)
         {
-            List<UnityEngine.Vector3> n = null;
+            List<UnityEngine.Vector3> n;
             _paths.TryGetValue(pathName, out n);
             return n;
         }
 
-        public virtual void OnMapBuildingTriggerEnter(string tirggerObjName, MapBuildingObject buildingObj, UnityEngine.Collider other)
+        public void OnInitPath(Vector2Int eggPos)
         {
-            if(_mapLevel != null)
+            _paths.Clear();
+            Dictionary<Vector2Int, List<Vector3>> pathByStartPos = new Dictionary<Vector2Int, List<Vector3>>();
+            foreach (var sp in _monsterSpawns)
+            {
+                Vector2Int spInitPos = AstarUtility.GetLogicPos(sp.Value.SpawnPos.spawnObject.transform.position);
+                if (pathByStartPos.ContainsKey(spInitPos))
+                {
+                    _paths[sp.Key] = pathByStartPos[spInitPos];
+                }
+                else
+                {
+                    List<AStarPathFinding.ResultPoint> resultPoints =
+                        AStarPathFinding.GetInstance().GoToTargetPosSync(spInitPos, eggPos);
+                    List<Vector3> pathPos = new List<Vector3>();
+                    foreach (var point in resultPoints)
+                    {
+                        var logicPos = new Vector2Int(point.x, point.y);
+                        pathPos.Add(AstarUtility.GetRendererPos(logicPos));
+                    }
+
+                    pathByStartPos.Add(spInitPos, pathPos);
+                    _paths[sp.Key] = pathPos;
+                }
+            }
+        }
+
+        public virtual void OnMapBuildingTriggerEnter(string tirggerObjName, MapBuildingObject buildingObj,
+            UnityEngine.Collider other)
+        {
+            if (_mapLevel != null)
             {
                 _mapLevel.OnMapBuildingTriggerEnter(tirggerObjName, buildingObj, other);
             }
         }
-        public virtual void OnMapBuildingTriggerExit(string tirggerObjName, MapBuildingObject buildingObj, UnityEngine.Collider other)
+
+        public virtual void OnMapBuildingTriggerExit(string tirggerObjName, MapBuildingObject buildingObj,
+            UnityEngine.Collider other)
         {
             if (_mapLevel != null)
             {
                 _mapLevel.OnMapBuildingTriggerExit(tirggerObjName, buildingObj, other);
             }
         }
+
         public virtual void OnMapLevelFinish()
         {
-            foreach(var mapActor in _mapActors)
+            foreach (var mapActor in _mapActors)
             {
                 mapActor.DispatchMapLevelFinish();
             }
+
             _mapActors.Clear();
         }
 
@@ -369,6 +422,7 @@ namespace UnityMiniGameFramework
                 _mapLevel.OnMapNPCTriggerEnter(tirggerObjName, npcObj, other);
             }
         }
+
         public virtual void OnMapNPCTriggerExit(string tirggerObjName, MapNPCObject npcObj, UnityEngine.Collider other)
         {
             if (_mapLevel != null)
@@ -381,6 +435,7 @@ namespace UnityMiniGameFramework
         {
             _mapActors.Add(mapActor);
         }
+
         public virtual void OnRemoveMapActor(MapActorObject mapActor)
         {
             _mapActors.Remove(mapActor);
@@ -404,16 +459,17 @@ namespace UnityMiniGameFramework
                 ms.Value.OnUpdate();
             }
 
-            if(_mapLevel != null)
+            if (_mapLevel != null)
             {
                 _mapLevel.OnUpdate(timeElasped);
             }
         }
+
         override public void OnPostUpdate(float timeElasped)
         {
             base.OnPostUpdate(timeElasped);
 
-            if(_mapLevel != null)
+            if (_mapLevel != null)
             {
                 _mapLevel.OnPostUpdate(timeElasped);
             }
@@ -421,25 +477,28 @@ namespace UnityMiniGameFramework
 
         public IMapLevel CreateLevel(string levelName)
         {
-            if(_mapLevel != null)
+            if (_mapLevel != null)
             {
                 _mapLevel.Clear();
                 _mapLevel = null;
             }
 
             var levelConf = UnityGameApp.Inst.MapManager.MapConf.getMapLevelConf(levelName);
-            if(levelConf == null)
+            if (levelConf == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] create level [{levelName}] config not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Map [{_name}] create level [{levelName}] config not exist");
                 return null;
             }
 
             _mapLevel = UnityGameApp.Inst.MapManager.createMapLevel(levelConf.levelType) as MapLevel;
-            if(_mapLevel == null)
+            if (_mapLevel == null)
             {
-                Debug.DebugOutput(DebugTraceType.DTT_Error, $"Map [{_name}] create level [{levelName}] type [{levelConf.levelType}] not exist");
+                Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"Map [{_name}] create level [{levelName}] type [{levelConf.levelType}] not exist");
                 return null;
             }
+
             _mapLevel.setMap(this);
 
             if (!_mapLevel.Init(levelName))
@@ -453,7 +512,6 @@ namespace UnityMiniGameFramework
 
         public bool isInActiveRect(Vector3 pos)
         {
-
             return _activeRect.Contains(new Vector2(pos.x, pos.z));
         }
     }
@@ -468,12 +526,12 @@ namespace UnityMiniGameFramework
 
         public UnityEngine.Vector3 randSpawnPos()
         {
-            int x = (int)(spawnHalfSize.x * 1000);
-            float xf = (float)UnityGameApp.Inst.Rand.RandomBetween(-x, x) / 1000.0f;
-            int y = (int)(spawnHalfSize.y * 1000);
-            float yf = (float)UnityGameApp.Inst.Rand.RandomBetween(-y, y) / 1000.0f;
-            int z = (int)(spawnHalfSize.z * 1000);
-            float zf = (float)UnityGameApp.Inst.Rand.RandomBetween(-z, z) / 1000.0f;
+            int x = (int) (spawnHalfSize.x * 1000);
+            float xf = (float) UnityGameApp.Inst.Rand.RandomBetween(-x, x) / 1000.0f;
+            int y = (int) (spawnHalfSize.y * 1000);
+            float yf = (float) UnityGameApp.Inst.Rand.RandomBetween(-y, y) / 1000.0f;
+            int z = (int) (spawnHalfSize.z * 1000);
+            float zf = (float) UnityGameApp.Inst.Rand.RandomBetween(-z, z) / 1000.0f;
 
             return spawnCenter + new UnityEngine.Vector3(xf, yf, zf);
         }
@@ -483,21 +541,33 @@ namespace UnityMiniGameFramework
             var list = new List<UnityEngine.Vector3>();
             if (ignoreY)
             {
-                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y, spawnCenter.z - spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y, spawnCenter.z + spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y, spawnCenter.z + spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y, spawnCenter.z - spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y,
+                    spawnCenter.z - spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y,
+                    spawnCenter.z + spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y,
+                    spawnCenter.z + spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y,
+                    spawnCenter.z - spawnHalfSize.z));
             }
             else
             {
-                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y - spawnHalfSize.y, spawnCenter.z - spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y - spawnHalfSize.y, spawnCenter.z + spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y - spawnHalfSize.y, spawnCenter.z + spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y - spawnHalfSize.y, spawnCenter.z - spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y + spawnHalfSize.y, spawnCenter.z - spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y + spawnHalfSize.y, spawnCenter.z + spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y + spawnHalfSize.y, spawnCenter.z + spawnHalfSize.z));
-                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y + spawnHalfSize.y, spawnCenter.z - spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y - spawnHalfSize.y,
+                    spawnCenter.z - spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y - spawnHalfSize.y,
+                    spawnCenter.z + spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y - spawnHalfSize.y,
+                    spawnCenter.z + spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y - spawnHalfSize.y,
+                    spawnCenter.z - spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y + spawnHalfSize.y,
+                    spawnCenter.z - spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x - spawnHalfSize.x, spawnCenter.y + spawnHalfSize.y,
+                    spawnCenter.z + spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y + spawnHalfSize.y,
+                    spawnCenter.z + spawnHalfSize.z));
+                list.Add(new UnityEngine.Vector3(spawnCenter.x + spawnHalfSize.x, spawnCenter.y + spawnHalfSize.y,
+                    spawnCenter.z - spawnHalfSize.z));
             }
 
             float minDist = float.MaxValue;
@@ -520,15 +590,17 @@ namespace UnityMiniGameFramework
             if (ignoreY)
             {
                 return (pos.x >= spawnCenter.x - spawnHalfSize.x) && (pos.x <= spawnCenter.x + spawnHalfSize.x)
-                    && (pos.z >= spawnCenter.z - spawnHalfSize.z) && (pos.z <= spawnCenter.z + spawnHalfSize.z);
+                                                                  && (pos.z >= spawnCenter.z - spawnHalfSize.z) &&
+                                                                  (pos.z <= spawnCenter.z + spawnHalfSize.z);
             }
             else
             {
                 return (pos.x >= spawnCenter.x - spawnHalfSize.x) && (pos.x <= spawnCenter.x + spawnHalfSize.x)
-                    && (pos.y >= spawnCenter.y - spawnHalfSize.y) && (pos.y <= spawnCenter.y + spawnHalfSize.y)
-                    && (pos.z >= spawnCenter.z - spawnHalfSize.z) && (pos.z <= spawnCenter.z + spawnHalfSize.z);
+                                                                  && (pos.y >= spawnCenter.y - spawnHalfSize.y) &&
+                                                                  (pos.y <= spawnCenter.y + spawnHalfSize.y)
+                                                                  && (pos.z >= spawnCenter.z - spawnHalfSize.z) &&
+                                                                  (pos.z <= spawnCenter.z + spawnHalfSize.z);
             }
         }
     }
-
 }

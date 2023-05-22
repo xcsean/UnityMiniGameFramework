@@ -28,6 +28,13 @@ namespace UnityMiniGameFramework
             return new Vector2Int((int) Math.Round(realPos.x) - (int) pos.x, (int) Math.Round(realPos.z) - (int) pos.y);
         }
 
+        public static Vector3 GetRendererPos(Vector2Int logicPos)
+        {
+            var rect = UnityGameApp.Inst.MainScene.implMap.ActiveRect;
+            var pos = rect.position;
+            return new Vector3(logicPos.x + pos.x, 0, logicPos.y + pos.y);
+        }
+
         internal static bool isNodeAtEdge(Vector2Int logicPos)
         {
             Dictionary<Vector2Int, bool> visited = new Dictionary<Vector2Int, bool>();
@@ -57,7 +64,7 @@ namespace UnityMiniGameFramework
                 return true;
             if (dfs(logicPos + Vector2Int.left, visited, width, height, startPos))
                 return true;
-            if (dfs(logicPos + Vector2Int.up, visited, width, height, startPos))
+            if (dfs(logicPos + Vector2Int.right, visited, width, height, startPos))
                 return true;
             return false;
         }

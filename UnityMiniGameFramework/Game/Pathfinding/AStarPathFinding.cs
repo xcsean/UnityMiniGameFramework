@@ -10,7 +10,12 @@ namespace UnityMiniGameFramework
 
         public static AStarPathFinding GetInstance()
         {
-            return instance ?? new AStarPathFinding();
+            
+            if (instance == null)
+            {
+                instance = new AStarPathFinding();
+            }
+            return instance;
         }
 
         public struct ResultPoint
@@ -54,9 +59,9 @@ namespace UnityMiniGameFramework
 
         private AStarPathFinding()
         {
-            instance.MazeArray = AstarUtility.GetGrids();
-            instance.CloseList = new BinaryHeap(instance.MazeArray.Length);
-            instance.OpenList = new BinaryHeap(instance.MazeArray.Length);
+            MazeArray = AstarUtility.GetGrids();
+            CloseList = new BinaryHeap(MazeArray.Length);
+            OpenList = new BinaryHeap(MazeArray.Length);
         }
 
         private void FoundPoint(Point tempStart, Point point)

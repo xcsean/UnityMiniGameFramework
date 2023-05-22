@@ -16,6 +16,14 @@ namespace UnityMiniGameFramework
         protected Map _map;
         protected SpawnPos _spawnPos;
 
+        public SpawnPos SpawnPos
+        {
+            get
+            {
+                return _spawnPos;
+            }
+        }
+
         protected bool _isSpawning;
         public bool isSpawning => _isSpawning;
 
@@ -26,6 +34,7 @@ namespace UnityMiniGameFramework
         public List<MapMonsterObject> monsters => _monsters;
 
         protected MonsterSpawnConf _conf;
+        protected string _spawnName;
         public MonsterSpawnConf conf => _conf;
 
         protected MapMonsterObjectConf _monConf;
@@ -40,13 +49,13 @@ namespace UnityMiniGameFramework
         {
             _map = map;
             _spawnPos = sp;
-
             _monsters = new List<MapMonsterObject>();
         }
 
-        public bool Init(MonsterSpawnConf conf)
+        public bool Init(MonsterSpawnConf conf,string spawnName)
         {
             _conf = conf;
+            _spawnName = spawnName;
             _isSpawning = false;
             _isFinishSpawn = false;
             _totalSpawned = 0;
@@ -185,6 +194,10 @@ namespace UnityMiniGameFramework
 
             var aiControlComp = new AIActorControllerComp();
             mapMonsterObj.AddComponent(aiControlComp);
+            for (int i = 0; i < _monConf.aiStates.Count; i++)
+            {
+                _monConf.aiStates[i].targetName = _spawnName;
+            }
             aiControlComp.Init(_monConf.aiStates);
 
             // add to scene

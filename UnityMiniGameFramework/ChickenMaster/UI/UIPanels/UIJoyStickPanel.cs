@@ -321,7 +321,7 @@ namespace UnityMiniGameFramework
             {
                 return;
             }
-            
+
 
             _atkRangeCircleVFX.unityGameObject.SetActive(false);
             _atkRangeCircleVFX.unityGameObject.transform.SetParent(null);
@@ -390,20 +390,28 @@ namespace UnityMiniGameFramework
                         _currentPickHeroInitPos.y,
                         hitInfos[0].point.z
                     );
-                    //_currentPickNPCHero.UpdateUnityGoPos();
+                    
+                    if (!cmGame.MapLogicObjects.ContainsKey(AstarUtility.GetLogicPos(updatePos)))
+                    {
+                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "此位置已被占用,无法摆放!");
+                        _currentPickNPCHero.UpdateUnityGoPos(_currentPickHeroInitPos);
+                        _currentPickNPCHero = null;
+                        return;
+                    }
+
                     if (_currentPickNPCHero.TryUpdateUnityGoPos(updatePos))
                     {
                         _currentPickNPCHero.UpdateUnityGoPos(updatePos);
                     }
                     else
                     {
-                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "需要保留一条通路!");
+                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "需要保留一条通道!");
                         // 无法放下
                         //_currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
                         _currentPickNPCHero.UpdateUnityGoPos(_currentPickHeroInitPos);
                         _currentPickNPCHero = null;
 
-                        return;        
+                        return;
                     }
                 }
 
@@ -422,7 +430,7 @@ namespace UnityMiniGameFramework
 
             _currentPickNPCHero = null;
 
-            
+
             cmGame.baseInfo.markDirty();
         }
 
