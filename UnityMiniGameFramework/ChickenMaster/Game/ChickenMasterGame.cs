@@ -323,7 +323,7 @@ namespace UnityMiniGameFramework
             // init egg
             _egg.Init(bi.egg);
 
-            UnityGameApp.Inst.MainScene.implMap.OnInitPath(_egg.LogicPos);
+            //UnityGameApp.Inst.MainScene.implMap.OnInitPath(_egg.LogicPos);
             // init storehouse
             _storeHouse.Init(bi.storeHouse);
 

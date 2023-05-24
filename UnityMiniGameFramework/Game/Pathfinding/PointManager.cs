@@ -11,8 +11,8 @@ namespace UnityMiniGameFramework
         static PointManager instance;
 
         public static PointManager GetInstance()
-        {
-            return instance ?? new PointManager();
+        { 
+            return instance ?? (instance = new PointManager());
         }
 
         private PointManager()

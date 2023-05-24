@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UIElements;
-
 using UnityEngine;
 using MiniGameFramework;
 
@@ -22,6 +21,7 @@ namespace UnityMiniGameFramework
             public float timeLeft;
             public TemplateContainer tipObj;
         }
+
         public class FlyNumParam
         {
             public int index;
@@ -29,6 +29,7 @@ namespace UnityMiniGameFramework
             public string type;
             public VisualElement obj;
         }
+
         protected class XMoveToParams
         {
             public int dir; // x:-1-左,1-右
@@ -40,6 +41,7 @@ namespace UnityMiniGameFramework
         }
 
         override public string type => "UIGameMainPanel";
+
         public static UIGameMainPanel create()
         {
             return new UIGameMainPanel();
@@ -95,6 +97,7 @@ namespace UnityMiniGameFramework
 
         protected List<NotifyMessage> _notifyMessages;
         private List<FlyNumParam> flyAnis = new List<FlyNumParam>() { };
+
         private List<TemplateContainer> tipObjs = new List<TemplateContainer>() { };
         // TO DO 做成一个通用组件
 
@@ -104,12 +107,14 @@ namespace UnityMiniGameFramework
 
             // 摇杆单独拆为一个界面
             _joystick = UnityGameApp.Inst.UI.createUIPanel("JoyStickUI") as UIJoyStickPanel;
-            _joystick.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _joystick.unityGameObject.transform.SetParent(((MGGameObject) UnityGameApp.Inst.MainScene.uiRootObject)
+                .unityGameObject.transform);
             _joystick.showUI();
             //_joystick = this._uiObjects["JoyStick"] as UIJoyStickControl;
 
             UIMaskPanel mask = UnityGameApp.Inst.UI.getMaskUI() as UIMaskPanel;
-            mask.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            mask.unityGameObject.transform.SetParent(((MGGameObject) UnityGameApp.Inst.MainScene.uiRootObject)
+                .unityGameObject.transform);
             mask.hideUI();
 
             _meatNum = this._uiObjects["MeatNum"].unityVisualElement as Label;
@@ -160,8 +165,8 @@ namespace UnityMiniGameFramework
             _btnUseSkill.style.display = DisplayStyle.None;
 
             _notifyMessages = new List<NotifyMessage>();
-            vts = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadUXML("UI/Controls/FlyNumIcon");
-            vts_tips = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadUXML("UI/Controls/Tips");
+            vts = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadUXML("UI/Controls/FlyNumIcon");
+            vts_tips = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadUXML("UI/Controls/Tips");
 
             _battleStartInfo.transform.position = new Vector3(-240, 0, 0);
         }
@@ -183,7 +188,8 @@ namespace UnityMiniGameFramework
             var lvlConf = cmGame.GetCurrentDefenseLevelConf();
             if (lvlConf == null)
             {
-                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error, $"GetCurrentDefenseLevelConf [{bi.currentLevel}] not exist");
+                MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Error,
+                    $"GetCurrentDefenseLevelConf [{bi.currentLevel}] not exist");
                 return;
             }
 
@@ -213,13 +219,14 @@ namespace UnityMiniGameFramework
                     level.Start();
                     cmGame.Egg.eggUI.clearRecoverTime();
 
-                    if(IsBossLevel(bi.currentLevel)) // boss提示
+                    if (IsBossLevel(bi.currentLevel)) // boss提示
                     {
                         ShowBossWarning();
                     }
                 }
             }
         }
+
         private bool IsBossLevel(int currLevel)
         {
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
@@ -227,12 +234,14 @@ namespace UnityMiniGameFramework
             {
                 if (lvlConf.mapLevelName.Contains("BigBoss"))
                 {
-                    if (currLevel >= lvlConf.levelRangeMin && currLevel <= lvlConf.levelRangeMax && lvlConf.levelDivide > 0)
+                    if (currLevel >= lvlConf.levelRangeMin && currLevel <= lvlConf.levelRangeMax &&
+                        lvlConf.levelDivide > 0)
                     {
                         return (currLevel % lvlConf.levelDivide) == 0;
                     }
                 }
             }
+
             return false;
         }
 
@@ -276,7 +285,8 @@ namespace UnityMiniGameFramework
         {
             // 此处需要判断技能次数： 有则释放技能，无则打开视频获取技能界面
             UIGetSkillPanel _ui = UnityGameApp.Inst.UI.createUIPanel("GetSkillUI") as UIGetSkillPanel;
-            _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _ui.unityGameObject.transform.SetParent(((MGGameObject) UnityGameApp.Inst.MainScene.uiRootObject)
+                .unityGameObject.transform);
             _ui.showUI();
         }
 
@@ -286,7 +296,8 @@ namespace UnityMiniGameFramework
         protected void OnDoubleExpBtnClick()
         {
             UIDoubleExpPanel _ui = UnityGameApp.Inst.UI.createUIPanel("DoubleExpUI") as UIDoubleExpPanel;
-            _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _ui.unityGameObject.transform.SetParent(((MGGameObject) UnityGameApp.Inst.MainScene.uiRootObject)
+                .unityGameObject.transform);
             _ui.showUI();
         }
 
@@ -296,7 +307,8 @@ namespace UnityMiniGameFramework
         protected void OnDoubleAttBtnClick()
         {
             UIDoubleAttackPanel _ui = UnityGameApp.Inst.UI.createUIPanel("DoubleAttackUI") as UIDoubleAttackPanel;
-            _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+            _ui.unityGameObject.transform.SetParent(((MGGameObject) UnityGameApp.Inst.MainScene.uiRootObject)
+                .unityGameObject.transform);
             _ui.showUI();
         }
 
@@ -315,7 +327,8 @@ namespace UnityMiniGameFramework
             if (UnityGameApp.Inst.Datas.localUserConfig != null && UnityGameApp.Inst.Datas.localUserConfig.ShowGm)
             {
                 var _ui = UnityGameApp.Inst.UI.createUIPanel("GMUI") as UIGMPanel;
-                _ui.unityGameObject.transform.SetParent(((MGGameObject)UnityGameApp.Inst.MainScene.uiRootObject).unityGameObject.transform);
+                _ui.unityGameObject.transform.SetParent(((MGGameObject) UnityGameApp.Inst.MainScene.uiRootObject)
+                    .unityGameObject.transform);
                 _ui.showUI();
             }
         }
@@ -335,10 +348,12 @@ namespace UnityMiniGameFramework
         {
             _goldNum.text = StringUtil.StringNumFormat($"{gold}");
         }
+
         public void refreshLevel(int level)
         {
             _level.text = $"Lv.{level}";
         }
+
         public void refreshExp(int exp, int nextLevelExp)
         {
             //_exp.text = $"Exp:{exp}/{nextLevelExp}";
@@ -366,7 +381,7 @@ namespace UnityMiniGameFramework
         {
             if (flyAnis.Count == 0)
             {
-                var tx1 = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/common/icon_jinbi");
+                var tx1 = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadTexture($"icons/common/icon_jinbi");
                 for (var i = 0; i < 5; i++)
                 {
                     TemplateContainer temp = vts.CloneTree();
@@ -375,6 +390,7 @@ namespace UnityMiniGameFramework
                     {
                         temp.Q<VisualElement>("icon").style.backgroundImage = tx1;
                     }
+
                     temp.style.display = DisplayStyle.None;
                     flyAnis.Add(new FlyNumParam()
                     {
@@ -385,7 +401,7 @@ namespace UnityMiniGameFramework
                     });
                 }
 
-                var tx2 = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/products/icon_meat");
+                var tx2 = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadTexture($"icons/products/icon_meat");
                 for (var i = 5; i < 10; i++)
                 {
                     TemplateContainer temp = vts.CloneTree();
@@ -394,6 +410,7 @@ namespace UnityMiniGameFramework
                     {
                         temp.Q<VisualElement>("icon").style.backgroundImage = tx2;
                     }
+
                     temp.style.display = DisplayStyle.None;
                     flyAnis.Add(new FlyNumParam()
                     {
@@ -414,7 +431,9 @@ namespace UnityMiniGameFramework
                     {
                         string sign = n > 0 ? "+" : "";
                         var _add = ani.obj.Q<Label>("numLabel");
-                        var color = n > 0 ? new Color(141f / 255, 229f / 255, 70f / 255) : new Color(235f / 255, 76f / 255, 14f / 255);
+                        var color = n > 0
+                            ? new Color(141f / 255, 229f / 255, 70f / 255)
+                            : new Color(235f / 255, 76f / 255, 14f / 255);
                         _add.style.color = new StyleColor(color);
                         //var color = n > 0 ? "#8DE847FF" : "#E34A18FF";
                         //_add.text = $"<color={color}>{sign}{StringUtil.StringNumFormat(n.ToString())}</color><br>";
@@ -442,11 +461,13 @@ namespace UnityMiniGameFramework
                 tipsObj = tipObjs[0];
                 tipObjs.RemoveAt(0);
             }
+
             tipsObj.transform.position = new Vector3(0, 0);
             tipsObj.style.display = DisplayStyle.Flex;
             tipsObj.Q<Label>("tipLabel").text = $"{tip}";
             return tipsObj;
         }
+
         /// <summary>
         /// 当前关卡
         /// </summary>
@@ -461,7 +482,8 @@ namespace UnityMiniGameFramework
             {
                 if (lvlConf.mapLevelName.Contains("BigBoss"))
                 {
-                    if (currLevel >= lvlConf.levelRangeMin && currLevel <= lvlConf.levelRangeMax && lvlConf.levelDivide > 0)
+                    if (currLevel >= lvlConf.levelRangeMin && currLevel <= lvlConf.levelRangeMax &&
+                        lvlConf.levelDivide > 0)
                     {
                         bossLevel = ((currLevel - 1) / lvlConf.levelDivide + 1) * lvlConf.levelDivide;
                         foreach (var item in lvlConf.monsterLvRanges)
@@ -474,6 +496,7 @@ namespace UnityMiniGameFramework
                     }
                 }
             }
+
             for (int i = 0; i < 3; i++)
             {
                 var item = _levelsNodes.Q<VisualElement>($"Item{i + 1}");
@@ -488,6 +511,7 @@ namespace UnityMiniGameFramework
                     {
                         labLevel.text = "Max";
                     }
+
                     sprIcon.style.display = currLevel == bossLevel ? DisplayStyle.Flex : DisplayStyle.None;
                     labLevel.style.display = currLevel == bossLevel ? DisplayStyle.None : DisplayStyle.Flex;
                 }
@@ -497,13 +521,15 @@ namespace UnityMiniGameFramework
                     labLevel.style.display = DisplayStyle.Flex;
                 }
             }
+
             var labBoss = _bossInfo.Q<Label>("labLevel");
             if (labBoss != null)
             {
                 labBoss.text = $"{bossLevel - currLevel} level";
             }
+
             VisualElement sprBoss = _bossInfo.Q<VisualElement>("bossHead");
-            var tx = ((UnityResourceManager)UnityGameApp.Inst.Resource).LoadTexture($"icons/boss/{bossIcon}");
+            var tx = ((UnityResourceManager) UnityGameApp.Inst.Resource).LoadTexture($"icons/boss/{bossIcon}");
             if (tx != null)
             {
                 sprBoss.style.backgroundImage = tx;
@@ -511,7 +537,7 @@ namespace UnityMiniGameFramework
                 sprBoss.style.height = tx.height;
             }
         }
-        
+
         /// <summary>
         /// 关卡战斗日志
         /// </summary>
@@ -539,6 +565,7 @@ namespace UnityMiniGameFramework
                 _meatNum.text = StringUtil.StringNumFormat($"{meatInfo.count}");
             }
         }
+
         public void refreshTrainTime(long time)
         {
             TimeSpan t = new TimeSpan(time * 10000);
@@ -548,10 +575,11 @@ namespace UnityMiniGameFramework
         }
 
         private XMoveToParams mtp = null;
+
         // 战斗开始提示图标
         public void ShowBattleStartInfo(bool isShow = true)
         {
-            if(mtp != null)
+            if (mtp != null)
             {
                 if (mtp.arrive)
                 {
@@ -662,7 +690,8 @@ namespace UnityMiniGameFramework
             }
 
             mtp.speed += 1200f * Time.deltaTime * mtp.dir;
-            _battleStartInfo.transform.position += new Vector3((mtp.speed - 600f * Time.deltaTime * mtp.dir) * Time.deltaTime, 0);
+            _battleStartInfo.transform.position +=
+                new Vector3((mtp.speed - 600f * Time.deltaTime * mtp.dir) * Time.deltaTime, 0);
             float dis = mtp.endPosX - _battleStartInfo.transform.position.x;
             if ((mtp.dir * dis <= 0))
             {
@@ -674,9 +703,10 @@ namespace UnityMiniGameFramework
         }
 
         private float counting = 0;
+
         private void onUpdateBossWarning()
         {
-            if(counting <= 0)
+            if (counting <= 0)
             {
                 _bossIncoming.style.display = DisplayStyle.None;
                 return;
@@ -737,7 +767,7 @@ namespace UnityMiniGameFramework
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
             _atkBuff.text = GetTimeStr(bi.buffs.doubleAtk);
             _expBuff.text = GetTimeStr(bi.buffs.doubleExp);
-            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            long nowMillisecond = (long) (DateTime.Now.Ticks / 10000);
 
             if (bi.buffs.doubleAtk < nowMillisecond && _atkBuff.style.display.Equals(DisplayStyle.Flex))
             {
@@ -747,6 +777,7 @@ namespace UnityMiniGameFramework
                     npc.Value.combatComp.RecalcAttributes();
                 }
             }
+
             _atkBuff.style.display = bi.buffs.doubleAtk > nowMillisecond ? DisplayStyle.Flex : DisplayStyle.None;
             _expBuff.style.display = bi.buffs.doubleExp > nowMillisecond ? DisplayStyle.Flex : DisplayStyle.None;
         }
@@ -756,20 +787,21 @@ namespace UnityMiniGameFramework
             var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
             var bi = (cmGame.baseInfo.getData() as LocalBaseInfo);
             _eggRecover.text = GetTimeStr(bi.egg.nextRecoverTime);
-            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            long nowMillisecond = (long) (DateTime.Now.Ticks / 10000);
             _eggRecover.style.display = bi.egg.nextRecoverTime > nowMillisecond ? DisplayStyle.Flex : DisplayStyle.None;
         }
+
         private string GetTimeStr(long buffTime)
         {
-            long nowMillisecond = (long)(DateTime.Now.Ticks / 10000);
+            long nowMillisecond = (long) (DateTime.Now.Ticks / 10000);
             if (buffTime > nowMillisecond)
             {
-                int time = (int)(buffTime - nowMillisecond) / 1000;
+                int time = (int) (buffTime - nowMillisecond) / 1000;
 
                 int hours = time / 60 / 60;
                 int mins = (time - hours * 60 * 60) / 60;
                 int secs = time - hours * 60 * 60 - mins * 60;
-                var str = hours >= 10 ? $"{ hours}:" : hours == 0 ? "" : $"0{hours}:";
+                var str = hours >= 10 ? $"{hours}:" : hours == 0 ? "" : $"0{hours}:";
                 str += mins >= 10 ? $"{mins}:" : $"0{mins}:";
                 str += secs >= 10 ? $"{secs}" : $"0{secs}";
 

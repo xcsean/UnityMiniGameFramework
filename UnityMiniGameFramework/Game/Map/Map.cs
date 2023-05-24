@@ -125,7 +125,7 @@ namespace UnityMiniGameFramework
                 }
 
                 MapMonsterSpawn ms = new MapMonsterSpawn(this, sp);
-                if (!ms.Init(pair.Value,pair.Key))
+                if (!ms.Init(pair.Value, pair.Key))
                 {
                     continue;
                 }
@@ -355,36 +355,47 @@ namespace UnityMiniGameFramework
         public List<UnityEngine.Vector3> getPath(string pathName)
         {
             List<UnityEngine.Vector3> n;
+            if (!_paths.ContainsKey(pathName))
+            {
+                OnInitPath(pathName);
+            }
+
             _paths.TryGetValue(pathName, out n);
             return n;
         }
 
-        public void OnInitPath(Vector2Int eggPos)
+        public void ClearPath()
         {
             _paths.Clear();
-            Dictionary<Vector2Int, List<Vector3>> pathByStartPos = new Dictionary<Vector2Int, List<Vector3>>();
-            foreach (var sp in _monsterSpawns)
+        }
+        private void OnInitPath(string pathName)
+        {
+            if (!_monsterSpawns.ContainsKey(pathName))
+                return;
+            var cmGame = (UnityGameApp.Inst.Game as ChickenMasterGame);
+            var sp = _monsterSpawns[pathName];
+            Vector2Int spInitPos = AstarUtility.GetLogicPos(sp.SpawnPos.spawnObject.transform.position);
+            List<AStarPathFinding.ResultPoint> resultPoints =
+                AStarPathFinding.GetInstance().GoToTargetPosSync(spInitPos, cmGame.Egg.LogicPos);
+            List<Vector3> pathPos = new List<Vector3>();
+            int n = resultPoints.Count;
+            // 出生点会随机，所以去掉第一个路径点
+            for (int i = n - 2; i >= 0; i--)
             {
-                Vector2Int spInitPos = AstarUtility.GetLogicPos(sp.Value.SpawnPos.spawnObject.transform.position);
-                if (pathByStartPos.ContainsKey(spInitPos))
+                var point = resultPoints[i];
+                var logicPos = new Vector2Int(point.x, point.y);
+                if (i != 0)
                 {
-                    _paths[sp.Key] = pathByStartPos[spInitPos];
+                    pathPos.Add(AstarUtility.GetRendererPos(logicPos) + new Vector3(0.5f, 0, 0.5f));
                 }
                 else
                 {
-                    List<AStarPathFinding.ResultPoint> resultPoints =
-                        AStarPathFinding.GetInstance().GoToTargetPosSync(spInitPos, eggPos);
-                    List<Vector3> pathPos = new List<Vector3>();
-                    foreach (var point in resultPoints)
-                    {
-                        var logicPos = new Vector2Int(point.x, point.y);
-                        pathPos.Add(AstarUtility.GetRendererPos(logicPos));
-                    }
-
-                    pathByStartPos.Add(spInitPos, pathPos);
-                    _paths[sp.Key] = pathPos;
+                    pathPos.Add(AstarUtility.GetRendererPos(logicPos));    
                 }
+                
             }
+
+            _paths[pathName] = pathPos;
         }
 
         public virtual void OnMapBuildingTriggerEnter(string tirggerObjName, MapBuildingObject buildingObj,

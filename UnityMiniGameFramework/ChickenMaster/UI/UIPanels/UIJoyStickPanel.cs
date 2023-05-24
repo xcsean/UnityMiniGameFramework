@@ -247,7 +247,7 @@ namespace UnityMiniGameFramework
         public CMNPCHeros OnCheckPut()
         {
             _currentPickNPCHero = null;
-
+            
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
 
             UnityEngine.RaycastHit[] hitInfos = UnityEngine.Physics.RaycastAll(
@@ -284,6 +284,13 @@ namespace UnityMiniGameFramework
 
                 if (_currentPickNPCHero != null)
                 {
+                    if (UnityGameApp.Inst.MainScene.map.currentLevel != null &&
+                        UnityGameApp.Inst.MainScene.map.currentLevel.isStarted)
+                    {
+                        _currentPickNPCHero = null;
+                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "Unable to Drag!");
+                        return null;
+                    }
                     _currentPickNPCHero.isPicked = true;
                     _currentPickNPCHero.mapHero.actionComponent.addState(ActStates.STATE_KEY_NO_ATK);
 
@@ -328,50 +335,6 @@ namespace UnityMiniGameFramework
 
             _currentPickNPCHero.isPicked = false;
             _currentPickNPCHero.mapHero.actionComponent.subState(ActStates.STATE_KEY_NO_ATK);
-
-            // if (_currentPickAreaName == null)
-            // {
-            //     // no pick area, put back
-            //
-            //     _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
-            //
-            //     _currentPickNPCHero = null;
-            //     return;
-            // }
-
-            // put hero
-            // if (_defAreaHeros.ContainsKey(_currentPickAreaName))
-            // {
-            //     var toSwapHero = _defAreaHeros[_currentPickAreaName];
-            //     if (toSwapHero == _currentPickNPCHero)
-            //     {
-            //         // same def area, just put
-            //
-            //         _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickPosition;
-            //         _currentPickNPCHero.heroInfo.position.x = _currentPickPosition.x;
-            //         _currentPickNPCHero.heroInfo.position.y = _currentPickPosition.y;
-            //         _currentPickNPCHero.heroInfo.position.z = _currentPickPosition.z;
-            //     }
-            //     else
-            //     {
-            //         // swap
-            //         toSwapHero.heroInfo.defAreaName = _currentPickNPCHero.heroInfo.defAreaName;
-            //         _defAreaHeros[toSwapHero.heroInfo.defAreaName] = toSwapHero;
-            //
-            //         toSwapHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
-            //         toSwapHero.heroInfo.position.x = _currentPickHeroInitPos.x;
-            //         toSwapHero.heroInfo.position.y = _currentPickHeroInitPos.y;
-            //         toSwapHero.heroInfo.position.z = _currentPickHeroInitPos.z;
-            //
-            //         _currentPickNPCHero.heroInfo.defAreaName = _currentPickAreaName;
-            //         _defAreaHeros[_currentPickNPCHero.heroInfo.defAreaName] = _currentPickNPCHero;
-            //         _currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickPosition;
-            //         _currentPickNPCHero.heroInfo.position.x = _currentPickPosition.x;
-            //         _currentPickNPCHero.heroInfo.position.y = _currentPickPosition.y;
-            //         _currentPickNPCHero.heroInfo.position.z = _currentPickPosition.z;
-            //     }
-            // }
-            // 
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
             if (UnityGameApp.Inst.MainScene.implMap.isInActiveRect(_currentPickNPCHero.mapHero.unityGameObject
                 .transform
@@ -391,9 +354,9 @@ namespace UnityMiniGameFramework
                         hitInfos[0].point.z
                     );
                     
-                    if (!cmGame.MapLogicObjects.ContainsKey(AstarUtility.GetLogicPos(updatePos)))
+                    if (cmGame.MapLogicObjects.ContainsKey(AstarUtility.GetLogicPos(updatePos)))
                     {
-                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "此位置已被占用,无法摆放!");
+                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "Location occupied!");
                         _currentPickNPCHero.UpdateUnityGoPos(_currentPickHeroInitPos);
                         _currentPickNPCHero = null;
                         return;
@@ -401,11 +364,12 @@ namespace UnityMiniGameFramework
 
                     if (_currentPickNPCHero.TryUpdateUnityGoPos(updatePos))
                     {
+                        UnityGameApp.Inst.MainScene.implMap.ClearPath();
                         _currentPickNPCHero.UpdateUnityGoPos(updatePos);
                     }
                     else
                     {
-                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "需要保留一条通道!");
+                        cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "Need to reserve access!");
                         // 无法放下
                         //_currentPickNPCHero.mapHero.unityGameObject.transform.position = _currentPickHeroInitPos;
                         _currentPickNPCHero.UpdateUnityGoPos(_currentPickHeroInitPos);

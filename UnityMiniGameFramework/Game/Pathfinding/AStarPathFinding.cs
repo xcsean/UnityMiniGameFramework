@@ -10,11 +10,11 @@ namespace UnityMiniGameFramework
 
         public static AStarPathFinding GetInstance()
         {
-            
             if (instance == null)
             {
                 instance = new AStarPathFinding();
             }
+
             return instance;
         }
 
@@ -72,6 +72,7 @@ namespace UnityMiniGameFramework
                 point.SetParentPoint(tempStart.GetId());
                 point.G = G;
                 point.CalcF();
+                PointManager.GetInstance().CachePoint(point);
             }
         }
 
@@ -87,7 +88,7 @@ namespace UnityMiniGameFramework
 
         private int CalcG(Point start, Point point)
         {
-            int G = Mathf.Abs(point.X - start.X) + Mathf.Abs(point.Y - start.Y) == 2 ? STEP : OBLIQUE;
+            int G = (Mathf.Abs(point.X - start.X) + Mathf.Abs(point.Y - start.Y)) == 2 ? OBLIQUE : STEP;
             var parent = point.ParentPoint();
             int parentG = 0;
             if (parent != null)
@@ -101,7 +102,7 @@ namespace UnityMiniGameFramework
             return step * STEP;
         }
 
-        public List<Point> SurrroundPoints(Point point, bool IsIgnoreCorner)
+        public List<Point> SurrroundPoints(Point point)
         {
             instance.surroundPoints.Clear();
             for (int x = point.X - 1; x <= point.X + 1; x++)
@@ -121,7 +122,7 @@ namespace UnityMiniGameFramework
 
         private bool CanArrive(int x, int y)
         {
-            return AstarUtility.CheckGridCanArrived(x, y);
+            return AstarUtility.CheckGridCanArrivedExcludeEgg(x, y);
         }
 
         private bool CanArrive(Point start, int x, int y)
@@ -159,8 +160,9 @@ namespace UnityMiniGameFramework
                     while (instance.OpenList.Count != 0)
                     {
                         var tempStart = PointManager.GetInstance().GetPoint(instance.OpenList.Dequeue()).Value;
+                        //Debug.Log($"{tempStart.GetId()},{tempStart.F},{tempStart.G},{tempStart.H}");
                         instance.CloseList.Enqueue(tempStart.GetId());
-                        instance.SurrroundPoints(tempStart, isIgnoreCorner);
+                        instance.SurrroundPoints(tempStart);
                         foreach (Point point in instance.surroundPoints)
                         {
                             if (instance.OpenList.Exists(point.GetId()))

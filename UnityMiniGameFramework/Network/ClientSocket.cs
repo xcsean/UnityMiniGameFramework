@@ -71,7 +71,7 @@ namespace UnityMiniGameFramework
 
         public static ClientSocket GetInstance()
         {
-            return ClientSocket.instance ?? new ClientSocket();
+            return instance ?? (instance = new ClientSocket());
         }
 
         public bool IsConnected
