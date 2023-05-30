@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using MiniGameFramework;
 using Debug = UnityEngine.Debug;
+using GameObject = UnityEngine.GameObject;
 
 namespace UnityMiniGameFramework
 {
@@ -49,6 +50,7 @@ namespace UnityMiniGameFramework
         protected string _currentPickAreaName;
         protected Vector3 _currentPickPosition;
         protected Dictionary<string, CMNPCHeros> _defAreaHeros;
+        private Vector2 _mapSize;
 
         override public void Init(UIPanelConf conf)
         {
@@ -56,13 +58,20 @@ namespace UnityMiniGameFramework
 
             _btn = this._uiObjects["button"].unityVisualElement;
             _back = this._uiObjects["back"].unityVisualElement;
-            _content = this._uiObjects["Content"].unityVisualElement;
+            // _content = this._uiObjects["Content"].unityVisualElement;
             _clickArea = this._uiObjects["ClickArea"].unityVisualElement;
-
+            //
             _btn.style.visibility = Visibility.Hidden;
             _back.style.visibility = Visibility.Hidden;
+            GameObject mapPanel = GameObject.Find("MapPanel");
+            if (mapPanel)
+            {
+                var size = mapPanel.GetComponent<BoxCollider>().size;
+                _mapSize = new Vector2(size.x, size.z);
+            }
 
-            SetClickArea(true);
+
+            //SetClickArea(true);
 
             UnityGameApp.Inst.regNextFramePostUpdateCall(_postInit);
 
@@ -72,14 +81,14 @@ namespace UnityMiniGameFramework
 
         void _postInit()
         {
-            _btnInitPos = new Vector2(_btn.transform.position.x, _btn.transform.position.y);
-            _panelInitPos = new Vector2(_back.transform.position.x, _back.transform.position.y);
-            _panelWidth = _back.layout.width / 2;
+            // _btnInitPos = new Vector2(_btn.transform.position.x, _btn.transform.position.y);
+            // _panelInitPos = new Vector2(_back.transform.position.x, _back.transform.position.y);
+            // _panelWidth = _back.layout.width / 2;
 
             _clickArea.RegisterCallback<PointerDownEvent>(OnMouseDown);
             _clickArea.RegisterCallback<PointerMoveEvent>(OnMouseMove);
             _clickArea.RegisterCallback<PointerUpEvent>(OnMouseUp);
-
+            _clickArea.RegisterCallback<WheelEvent>(OnMouseRoll);
             //_clickArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             //_clickArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
             //_clickArea.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
@@ -135,18 +144,18 @@ namespace UnityMiniGameFramework
 
             OnMouseUp(null);
 
-            _btn.style.visibility = Visibility.Visible;
-            _back.style.visibility = Visibility.Visible;
+            // _btn.style.visibility = Visibility.Visible;
+            // _back.style.visibility = Visibility.Visible;
 
-            _content.transform.position = _transMousePosition(_content, e.position);
-            _btn.transform.position = _btnInitPos;
+            // _content.transform.position = _transMousePosition(_content, e.position);
+            // _btn.transform.position = _btnInitPos;
 
             //SetClickArea(true);
 
             this._click = true;
             this._moving = false;
 
-            _btn.style.unityBackgroundImageTintColor = new StyleColor(new Color(1, 1, 1, 1));
+            //_btn.style.unityBackgroundImageTintColor = new StyleColor(new Color(1, 1, 1, 1));
 
             _clickArea.CaptureMouse();
         }
@@ -160,38 +169,50 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            this._moving = true;
+            var camera = UnityGameApp.Inst.MainScene.camera as UnityGameCamera;
 
-            // posDelta = e.mouseDelta;
-            posDelta.x = e.deltaPosition.x;
-            posDelta.y = e.deltaPosition.y;
+            camera?.MoveCamera(e.deltaPosition);
 
-            Vector2 btn_pos = _btn.transform.position;
-            btn_pos.x += posDelta.x;
-            btn_pos.y += posDelta.y;
 
-            _btn.transform.position = btn_pos;
-
-            //将小圆限制大圆范围内
-            //Debug.Log("this.btn.transform.position  = " + this.btn.transform.position);
-            float ratio = btn_pos.magnitude / this._panelWidth;
-            if (ratio > 1)
-            {
-                _btn.transform.position = _btn.transform.position / ratio;
-            }
-
-            ////获取向量归一化
-            _dir = _btn.transform.position.normalized;
-            ////获取弧度
-            _degree = Mathf.Atan2(_btn.transform.position.y, _btn.transform.position.x);
-
-            _movVec = new Vector3(-_btn.transform.position.x, 0, _btn.transform.position.y);
+            // this._moving = true;
+            //
+            // // posDelta = e.mouseDelta;
+            // posDelta.x = e.deltaPosition.x;
+            // posDelta.y = e.deltaPosition.y;
+            //
+            // Vector2 btn_pos = _btn.transform.position;
+            // btn_pos.x += posDelta.x;
+            // btn_pos.y += posDelta.y;
+            //
+            // _btn.transform.position = btn_pos;
+            //
+            // //将小圆限制大圆范围内
+            // //Debug.Log("this.btn.transform.position  = " + this.btn.transform.position);
+            // float ratio = btn_pos.magnitude / this._panelWidth;
+            // if (ratio > 1)
+            // {
+            //     _btn.transform.position = _btn.transform.position / ratio;
+            // }
+            //
+            // ////获取向量归一化
+            // _dir = _btn.transform.position.normalized;
+            // ////获取弧度
+            // _degree = Mathf.Atan2(_btn.transform.position.y, _btn.transform.position.x);
+            //
+            // _movVec = new Vector3(-_btn.transform.position.x, 0, _btn.transform.position.y);
         }
 
         public void OnMouseLeave(MouseLeaveEvent e)
         {
             // 真机模拟环境，滑动中触发打开一个界面，在界面上松手会丢失MouseUpEvent
             //OnMouseUp(null);
+        }
+
+        public void OnMouseRoll(WheelEvent e)
+        {
+            var camera = UnityGameApp.Inst.MainScene.camera as UnityGameCamera;
+
+            camera?.ScaleCamera(e.delta.y);
         }
 
         public void OnMouseUp(PointerUpEvent e)
@@ -201,18 +222,18 @@ namespace UnityMiniGameFramework
                 return;
             }
 
-            _content.transform.position = _panelInitPos;
-            _btn.transform.position = _btnInitPos;
+            //_content.transform.position = _panelInitPos;
+            //_btn.transform.position = _btnInitPos;
 
             //SetClickArea(false);
 
             this._click = false;
             this._moving = false;
 
-            _btn.style.unityBackgroundImageTintColor = new StyleColor(new UnityEngine.Color(1, 1, 1, 0.4f));
+            //_btn.style.unityBackgroundImageTintColor = new StyleColor(new UnityEngine.Color(1, 1, 1, 0.4f));
 
-            _btn.style.visibility = Visibility.Hidden;
-            _back.style.visibility = Visibility.Hidden;
+            // _btn.style.visibility = Visibility.Hidden;
+            // _back.style.visibility = Visibility.Hidden;
 
             _clickArea.ReleaseMouse();
         }
@@ -247,7 +268,7 @@ namespace UnityMiniGameFramework
         public CMNPCHeros OnCheckPut()
         {
             _currentPickNPCHero = null;
-            
+
             var cmGame = UnityGameApp.Inst.Game as ChickenMasterGame;
 
             UnityEngine.RaycastHit[] hitInfos = UnityEngine.Physics.RaycastAll(
@@ -291,6 +312,7 @@ namespace UnityMiniGameFramework
                         cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "Unable to Drag!");
                         return null;
                     }
+
                     _currentPickNPCHero.isPicked = true;
                     _currentPickNPCHero.mapHero.actionComponent.addState(ActStates.STATE_KEY_NO_ATK);
 
@@ -353,7 +375,7 @@ namespace UnityMiniGameFramework
                         _currentPickHeroInitPos.y,
                         hitInfos[0].point.z
                     );
-                    
+
                     if (cmGame.MapLogicObjects.ContainsKey(AstarUtility.GetLogicPos(updatePos)))
                     {
                         cmGame.ShowTips(CMGNotifyType.CMG_ERROR, "Location occupied!");

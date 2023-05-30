@@ -48,13 +48,13 @@ namespace UnityMiniGameFramework
             _baseInfo = _cmGame.baseInfo.getData() as LocalBaseInfo;
 
             // init self
-            _Init(_baseInfo.selfHero);
+            //_Init(_baseInfo.selfHero);
 
-            UnityGameApp.Inst.MainScene.camera.follow(_mapHeroObj);
-            _mapHeroObj.markAsSelf();
+            //UnityGameApp.Inst.MainScene.camera.follow(_mapHeroObj);
+            //_mapHeroObj.markAsSelf();
             //todo:需要根据场景变更来切换
-            _mapHeroObj.unityGameObject.AddComponent<AudioListener>();
-            UnityGameApp.Inst.MainScene.unityCamera.gameObject.GetComponent<AudioListener>().enabled = false;
+            //_mapHeroObj.unityGameObject.AddComponent<AudioListener>();
+            //UnityGameApp.Inst.MainScene.unityCamera.gameObject.GetComponent<AudioListener>().enabled = false;
             _isInited = true;
 
             // init hero ui
@@ -379,111 +379,111 @@ namespace UnityMiniGameFramework
             //}
         }
 
-        public void OnUpdate()
-        {
-            if (!_isInited)
-            {
-                return;
-            }
-
-            if (_cmGame.uiMainPanel.Joystick.isMoving)
-            {
-                // TO DO : use rigibody mov
-                //_movAct.moveTo(_selfMapHeroObj.unityGameObject.transform.position + _uiMainPanel.Joystick.movVector3 * 10.0f);
-                _mapHeroObj.moveAct.moveToward(_cmGame.uiMainPanel.Joystick.movVector3);
-
-                _baseInfo.selfHero.position.x = _mapHeroObj.unityGameObject.transform.position.x;
-                _baseInfo.selfHero.position.y = _mapHeroObj.unityGameObject.transform.position.y;
-                _baseInfo.selfHero.position.z = _mapHeroObj.unityGameObject.transform.position.z;
-
-                _cmGame.baseInfo.markDirty();
-
-                //// for Debug ...
-                //if (_gun != null)
-                //{
-                //    _gun.Fire();
-                //}
-            }
-            else if (_mapHeroObj.moveAct.isMoving)
-            {
-                _mapHeroObj.moveAct.stop();
-
-                //// for Debug ...
-                //if (_gun != null)
-                //{
-                //    _gun.StopFire();
-                //}
-            }
-
-            foreach (var heroPair in _cmGame.cmNPCHeros)
-            {
-                string heroName = heroPair.Value.heroInfo.mapHeroName;
-                if (_heroPosInfo.ContainsKey(heroName))
-                {
-                    var heroPosInfo = _heroPosInfo[heroName];
-                    heroPosInfo.transform = heroPair.Value.mapHero.unityGameObject.transform;
-                    heroPosInfo.npcHero = heroPair.Value;
-                    _heroPosInfo[heroName] = heroPosInfo;
-                }   
-            }
-
-            foreach (var heroPair in _heroPosInfo)
-            {
-                Transform heroPos = heroPair.Value.transform;
-                CMNPCHeros npcHero = heroPair.Value.npcHero;
-                string heroName = heroPair.Key;
-
-                var vec = (heroPos.position - this.mapHero.unityGameObject.transform.position);
-                if (vec.magnitude > 1.0)
-                {
-                    // not near by
-                    int nearState = 0;
-                    _heroNearState.TryGetValue(heroPair.Key, out nearState);
-                    if (nearState != 0)
-                    {
-                        // last frame is nearby, exit nearby
-                        _heroNearState[heroPair.Key] = 0;
-
-                        if (_heroUI.isShow)
-                        {
-                            _heroUI.hideUI();
-                        }
-                    }
-                }
-                else
-                {
-                    // 选中拖动中
-                    if (npcHero != null && npcHero.isPicked)
-                    {
-                        continue;
-                    }
-
-                    // 主角移动中不触发打开界面
-                    if (_mapHeroObj.moveAct.isMoving)
-                    {
-                        continue;
-                    }
-
-                    // near by
-                    int nearState = 0;
-                    _heroNearState.TryGetValue(heroPair.Key, out nearState);
-                    if (nearState == 0)
-                    {
-                        // last frame is not nearby, enter nearby
-                        _heroNearState[heroPair.Key] = 1;
-
-                        if (!_heroUI.isShow)
-                        {
-                            var heroConf = _cmGameConf.getCMHeroConf(heroName);
-                            if (heroConf.userLevelRequire > 0 && _baseInfo.currentLevel < heroConf.userLevelRequire)
-                                continue;
-                            _heroUI.ShowHero(heroName);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        // public void OnUpdate()
+        // {
+        //     if (!_isInited)
+        //     {
+        //         return;
+        //     }
+        //
+        //     if (_cmGame.uiMainPanel.Joystick.isMoving)
+        //     {
+        //         // TO DO : use rigibody mov
+        //         //_movAct.moveTo(_selfMapHeroObj.unityGameObject.transform.position + _uiMainPanel.Joystick.movVector3 * 10.0f);
+        //         _mapHeroObj.moveAct.moveToward(_cmGame.uiMainPanel.Joystick.movVector3);
+        //
+        //         _baseInfo.selfHero.position.x = _mapHeroObj.unityGameObject.transform.position.x;
+        //         _baseInfo.selfHero.position.y = _mapHeroObj.unityGameObject.transform.position.y;
+        //         _baseInfo.selfHero.position.z = _mapHeroObj.unityGameObject.transform.position.z;
+        //
+        //         _cmGame.baseInfo.markDirty();
+        //
+        //         //// for Debug ...
+        //         //if (_gun != null)
+        //         //{
+        //         //    _gun.Fire();
+        //         //}
+        //     }
+        //     else if (_mapHeroObj.moveAct.isMoving)
+        //     {
+        //         _mapHeroObj.moveAct.stop();
+        //
+        //         //// for Debug ...
+        //         //if (_gun != null)
+        //         //{
+        //         //    _gun.StopFire();
+        //         //}
+        //     }
+        //
+        //     foreach (var heroPair in _cmGame.cmNPCHeros)
+        //     {
+        //         string heroName = heroPair.Value.heroInfo.mapHeroName;
+        //         if (_heroPosInfo.ContainsKey(heroName))
+        //         {
+        //             var heroPosInfo = _heroPosInfo[heroName];
+        //             heroPosInfo.transform = heroPair.Value.mapHero.unityGameObject.transform;
+        //             heroPosInfo.npcHero = heroPair.Value;
+        //             _heroPosInfo[heroName] = heroPosInfo;
+        //         }   
+        //     }
+        //
+        //     foreach (var heroPair in _heroPosInfo)
+        //     {
+        //         Transform heroPos = heroPair.Value.transform;
+        //         CMNPCHeros npcHero = heroPair.Value.npcHero;
+        //         string heroName = heroPair.Key;
+        //
+        //         var vec = (heroPos.position - this.mapHero.unityGameObject.transform.position);
+        //         if (vec.magnitude > 1.0)
+        //         {
+        //             // not near by
+        //             int nearState = 0;
+        //             _heroNearState.TryGetValue(heroPair.Key, out nearState);
+        //             if (nearState != 0)
+        //             {
+        //                 // last frame is nearby, exit nearby
+        //                 _heroNearState[heroPair.Key] = 0;
+        //
+        //                 if (_heroUI.isShow)
+        //                 {
+        //                     _heroUI.hideUI();
+        //                 }
+        //             }
+        //         }
+        //         else
+        //         {
+        //             // 选中拖动中
+        //             if (npcHero != null && npcHero.isPicked)
+        //             {
+        //                 continue;
+        //             }
+        //
+        //             // 主角移动中不触发打开界面
+        //             if (_mapHeroObj.moveAct.isMoving)
+        //             {
+        //                 continue;
+        //             }
+        //
+        //             // near by
+        //             int nearState = 0;
+        //             _heroNearState.TryGetValue(heroPair.Key, out nearState);
+        //             if (nearState == 0)
+        //             {
+        //                 // last frame is not nearby, enter nearby
+        //                 _heroNearState[heroPair.Key] = 1;
+        //
+        //                 if (!_heroUI.isShow)
+        //                 {
+        //                     var heroConf = _cmGameConf.getCMHeroConf(heroName);
+        //                     if (heroConf.userLevelRequire > 0 && _baseInfo.currentLevel < heroConf.userLevelRequire)
+        //                         continue;
+        //                     _heroUI.ShowHero(heroName);
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         public void AddBackpackProduct(string name, int count)
         {

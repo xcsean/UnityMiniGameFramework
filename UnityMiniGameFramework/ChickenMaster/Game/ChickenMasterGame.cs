@@ -483,7 +483,7 @@ namespace UnityMiniGameFramework
 
         public void OnUpdate()
         {
-            _self.OnUpdate();
+            //_self.OnUpdate();
 
             foreach (var fac in _cmFactories)
             {

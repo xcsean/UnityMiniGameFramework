@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using UnityEngine;
 using MiniGameFramework;
+using Debug = UnityEngine.Debug;
 
 namespace UnityMiniGameFramework
 {
     public class UnityGameCamera : MGGameObject, ICamera
     {
         override public string type => "UnityGameCamera";
+
         new public static UnityGameCamera create()
         {
             return new UnityGameCamera();
@@ -44,14 +45,34 @@ namespace UnityMiniGameFramework
             var vec = _unityCamera.WorldToScreenPoint(pos);
             return new UnityEngine.Vector2(vec.x, Screen.height - vec.y);
         }
+
         public UnityEngine.Vector3 screenToWorldPos(UnityEngine.Vector2 screenPos)
         {
             return _unityCamera.ScreenToWorldPoint(screenPos);
         }
+
         public UnityEngine.Ray screenToWorldRay(UnityEngine.Vector2 screenPos)
         {
             return _unityCamera.ScreenPointToRay(screenPos);
         }
+
+        private float _scale = 1.0f;
+
+        public void MoveCamera(Vector3 deltaPosition)
+        {
+            _unityGameObject.transform.position += deltaPosition * 0.01f;
+        }
+
+
+        public void ScaleCamera(float scale)
+        {
+            var tempScale = _scale + scale;
+            if (tempScale < 0.1f || tempScale > 2)
+                return;
+            _scale = tempScale;
+            _unityCamera.orthographicSize += scale;
+        }
+
 
         override public void OnPostUpdate(float timeElasped)
         {
