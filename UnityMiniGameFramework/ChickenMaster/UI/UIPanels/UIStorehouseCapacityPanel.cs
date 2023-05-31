@@ -216,7 +216,7 @@ namespace UnityMiniGameFramework
 
                 }).StartingIn(50);
 
-                FlyAction();
+                //FlyAction();
             }
         }
 

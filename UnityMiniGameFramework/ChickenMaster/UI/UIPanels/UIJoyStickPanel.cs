@@ -274,12 +274,19 @@ namespace UnityMiniGameFramework
             UnityEngine.RaycastHit[] hitInfos = UnityEngine.Physics.RaycastAll(
                 UnityGameApp.Inst.MainScene.unityCamera.ScreenPointToRay(Input.mousePosition),
                 1000.0f,
-                UnityEngine.LayerMask.GetMask("Self"));
+                UnityEngine.LayerMask.GetMask("Self", "Factory"));
 
             for (int i = 0; i < hitInfos.Length; ++i)
             {
                 var obj = hitInfos[i].collider.gameObject;
 
+                var mapBuild = obj.GetComponent<UnityBuildingColliderTrigger>();
+                if (mapBuild != null)
+                {
+                    mapBuild.ShowBuildingPanel();
+                    break;
+                }
+                
                 var ugComp = obj.GetComponent<UnityGameObjectBehaviour>();
                 if (ugComp == null)
                 {
