@@ -166,6 +166,13 @@
     <Compile Include="ChickenMaster\Data\NetUserData.cs" />
     <Compile Include="Data\Providers\LocalStorageProvider.cs" />
     <Compile Include="Data\Providers\RESTFulDataProvider.cs" />
+    <Compile Include="Events\EventData\PinchEventData.cs" />
+    <Compile Include="Events\EventData\TouchEventData.cs" />
+    <Compile Include="Events\IEventIgnoreHandler.cs" />
+    <Compile Include="Events\InputModuleFallback.cs" />
+    <Compile Include="Events\PinchEventInterfaces.cs" />
+    <Compile Include="Events\PinchExecuteEvents.cs" />
+    <Compile Include="Events\StandaloneFallbackInputModule.cs" />
     <Compile Include="Game\Actors\ActBuf.cs" />
     <Compile Include="Game\Actors\Action.cs" />
     <Compile Include="Game\Actors\ActionComponent.cs" />
@@ -293,7 +300,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
-copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\AsProject\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
+copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\AsProject\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
   </PropertyGroup>
 </Project>
