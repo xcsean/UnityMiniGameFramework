@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using MiniGameFramework;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace UnityMiniGameFramework
@@ -51,7 +52,7 @@ namespace UnityMiniGameFramework
         public string uiConfigName;
         public string preloaderUIConfName;
         public UnityEngine.GameObject GameObjectCachePool;
-        public UnityEngine.GameObject AudioSourceRoot;
+        public UnityEngine.GameObject GameManagerRoot;
         public PanelSettings unityUIPanelSettings;
 
         static void dbgOutput(string msg)
@@ -74,7 +75,7 @@ namespace UnityMiniGameFramework
             MiniGameFramework.Debug.DebugOutput(DebugTraceType.DTT_Debug, "------ isPublish ------" + UnityGameApp.Inst.isPublish);
 
             UnityEngine.GameObject.DontDestroyOnLoad(GameObjectCachePool);
-            DontDestroyOnLoad(AudioSourceRoot);
+            DontDestroyOnLoad(GameManagerRoot);
             UnityGameApp.Inst.unityUIPanelSettings = unityUIPanelSettings;
             UnityGameApp.Inst.CachePoolRoot = GameObjectCachePool;
             GameAPPInitParameter InitParameter = new GameAPPInitParameter

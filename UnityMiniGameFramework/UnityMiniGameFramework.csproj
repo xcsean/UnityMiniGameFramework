@@ -87,6 +87,15 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AddressableAssets">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ResourceManagement">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ResourceManagement">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\Unity.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.UIModule.dll</HintPath>
     </Reference>
@@ -107,6 +116,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChickenMaster\Addressable\IPooledActive.cs" />
+    <Compile Include="ChickenMaster\Addressable\IPooledInstanceActive.cs" />
+    <Compile Include="ChickenMaster\Addressable\IReleaseProvider.cs" />
+    <Compile Include="ChickenMaster\Addressable\PooledInstanceBehaviour.cs" />
     <Compile Include="ChickenMaster\Configs\CMGameConfig.cs" />
     <Compile Include="ChickenMaster\Game\AIState\AIMoveProduct.cs" />
     <Compile Include="ChickenMaster\Game\ChickenMasterGame.cs" />
@@ -149,6 +162,19 @@
     <Compile Include="ChickenMaster\UI\UIPanels\UITowerHeroPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UITrainStationPanel.cs" />
     <Compile Include="ChickenMaster\UI\UIPanels\UIWeaponAscendPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\AspectFullFitter.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\EmptyGraphic.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\SafeLayout.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\SceneManager.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\ScreenAdapter.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\UICanvasLayer.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\UICanvasType.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\UIManager.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\UIMask.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\UIMaskType.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\UIPanel.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\UIRoot.cs" />
+    <Compile Include="ChickenMaster\UI\UISystem\Runtime\UIView.cs" />
     <Compile Include="Configs\AnalysisConfig.cs" />
     <Compile Include="Configs\AudionConfig.cs" />
     <Compile Include="Configs\BakeClipConfig.cs" />
@@ -159,6 +185,14 @@
     <Compile Include="Configs\NetWorkConfig.cs" />
     <Compile Include="Configs\VFXConfig.cs" />
     <Compile Include="Configs\WeaponConfig.cs" />
+    <Compile Include="Core\Runtime\GameManager.cs" />
+    <Compile Include="Core\Runtime\GameState.cs" />
+    <Compile Include="Core\Runtime\Pool\ObjectPool.cs" />
+    <Compile Include="Core\Runtime\Settings\SystemSettings.cs" />
+    <Compile Include="Core\Runtime\Startup\Procedure\ProcedureBase.cs" />
+    <Compile Include="Core\Runtime\Startup\StartupBase.cs" />
+    <Compile Include="Core\Runtime\Startup\System\SystemBase.cs" />
+    <Compile Include="Core\Runtime\Startup\System\SystemStartup.cs" />
     <Compile Include="Data\AnalysisDataManager.cs" />
     <Compile Include="Data\DataManager.cs" />
     <Compile Include="ChickenMaster\Data\LocalUserData.cs" />
@@ -168,6 +202,8 @@
     <Compile Include="Data\Providers\RESTFulDataProvider.cs" />
     <Compile Include="Events\EventData\PinchEventData.cs" />
     <Compile Include="Events\EventData\TouchEventData.cs" />
+    <Compile Include="Events\EventTrigger.cs" />
+    <Compile Include="Events\EventTriggerType.cs" />
     <Compile Include="Events\IEventIgnoreHandler.cs" />
     <Compile Include="Events\InputModuleFallback.cs" />
     <Compile Include="Events\PinchEventInterfaces.cs" />

@@ -157,7 +157,7 @@ namespace UnityMiniGameFramework
 
             //_btn.style.unityBackgroundImageTintColor = new StyleColor(new Color(1, 1, 1, 1));
 
-            _clickArea.CaptureMouse();
+            //_clickArea.CaptureMouse();
         }
 
         protected Vector2 posDelta = Vector2.zero;
