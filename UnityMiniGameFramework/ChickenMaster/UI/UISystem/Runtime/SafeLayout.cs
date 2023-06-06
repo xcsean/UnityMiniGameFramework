@@ -6,7 +6,7 @@ using System;
 namespace UnityMiniGameFramework.UISystem
 {
     [ExecuteInEditMode, RequireComponent(typeof(RectTransform))]
-    public class SafeLayout : UIBehaviour, ILayoutController
+    public class SafeLayout : UIBehaviour, ILayoutSelfController
     {
         [SerializeField] private RectOffset m_Padding;
 
@@ -14,6 +14,16 @@ namespace UnityMiniGameFramework.UISystem
         [NonSerialized] private Canvas m_Canvas;
 
         private DrivenRectTransformTracker m_Tracker;
+
+        public RectOffset Padding
+        {
+            get => m_Padding;
+            set
+            {
+                m_Padding = value;
+                SetDirty();
+            }
+        }
 
         private RectTransform RectTransform
         {

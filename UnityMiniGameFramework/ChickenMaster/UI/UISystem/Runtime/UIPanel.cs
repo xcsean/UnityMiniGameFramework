@@ -69,14 +69,12 @@ namespace UnityMiniGameFramework.UISystem
                 return m_Animation;
             }
         }
-
         /// <summary>点击关闭按钮之后，是否渐隐 Mask </summary>
         public bool BeginHideMaskWhenClose
         {
             get => m_BeginHideMaskWhenClose;
             set => m_BeginHideMaskWhenClose = value;
         }
-
         public AnimationClip OpenAnimClip
         {
             get => m_OpenAnimClip;
@@ -129,13 +127,11 @@ namespace UnityMiniGameFramework.UISystem
                 base.Destroy();
                 return;
             }
-
             if (!Animation.isPlaying)
             {
                 Animation.AddClip(clip, CLOSE_ANIM_NAME);
                 StartCoroutine(WaitForAnimation());
             }
-
             if (BeginHideMaskWhenClose)
                 UIManager.HideMask(this);
         }

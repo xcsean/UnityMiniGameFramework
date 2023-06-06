@@ -1,7 +1,9 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace UnityMiniGameFramework.UISystem
 {
+    [RequireComponent(typeof(CanvasRenderer))]
     public class EmptyGraphic : Graphic
     {
         public override void SetMaterialDirty() { return; }
