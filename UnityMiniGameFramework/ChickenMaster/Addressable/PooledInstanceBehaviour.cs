@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityMiniGameFramework.Addressable
 {
-    public class PooledInstanceBehaviour : MonoBehaviour, IPooledInstanceActive, IPooledActive
+    public class PooledInstanceBehaviour : MonoBehaviour, IPooledInstanceActive
     {
         private Action<GameObject> m_OnDestroy;
         private readonly List<IPooledActive> m_InstanceActives = new List<IPooledActive>();
