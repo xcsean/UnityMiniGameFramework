@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,6 +76,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>..\UnityLibs\2021.3.13f1c1\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
@@ -116,10 +120,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChickenMaster\Addressable\IPooledActive.cs" />
-    <Compile Include="ChickenMaster\Addressable\IPooledInstanceActive.cs" />
-    <Compile Include="ChickenMaster\Addressable\IReleaseProvider.cs" />
-    <Compile Include="ChickenMaster\Addressable\PooledInstanceBehaviour.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\AssetLoader\AssetLoader.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\AssetLoader\AudioClipLoader.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\AssetLoader\IAssetLoader.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\AssetLoader\ImageLoader.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\AssetLoader\RawImageLoader.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\AssetLoader\SpriteLoader.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\AssetLoader\SpriteRendererLoader.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\AssetLoader\SpriteRendererTextureLoader.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\Interface\IReleaseProvider.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\Providers\PooledInstanceBehaviour.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\Providers\PooledInstanceProvider.cs" />
+    <Compile Include="ChickenMaster\Addressable\Rumtime\Providers\PooledInstanceProviderBehaviour.cs" />
     <Compile Include="ChickenMaster\Configs\CMGameConfig.cs" />
     <Compile Include="ChickenMaster\Game\AIState\AIMoveProduct.cs" />
     <Compile Include="ChickenMaster\Game\ChickenMasterGame.cs" />
@@ -343,7 +355,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\AsProject\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
-copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\AsProject\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)bin\Release\UnityMiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework
+copy $(ProjectDir)bin\Release\MiniGameFramework.* $(ProjectDir)..\..\ChickenMaster\RoosetrGang\Assets\Libs\Plugin\MiniGameFramework</PostBuildEvent>
   </PropertyGroup>
 </Project>
